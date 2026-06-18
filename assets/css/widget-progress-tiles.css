@@ -1,0 +1,42 @@
+.widget-progress-tiles{
+  vertical-align: top;
+  position: relative;
+}
+
+.widget-progress-tiles .wrap{
+  /* background-color: #ccc; */
+  display: block;
+  position: relative;
+  z-index: 2;
+  white-space: nowrap;
+  text-align: center;
+}
+
+.widget-progress-tiles .icon-rounded{
+  height: 50px;
+  width: 50px;
+  border-radius: 50%;
+  text-align: center;
+  color: #fff;
+  display: inline-block;
+}
+
+.widget-progress-tiles .icon-rounded svg{
+  height: 100%;
+}
+
+.widget-progress-tiles .tit{
+  font-family: var(--text-font);
+  /* font-size: 18px; */
+  color: var(--text-color);
+  margin-bottom: 5px;
+}
+.widget-progress-tiles .count{
+  display: inline-block;  
+  font-family: var(--heading-font);
+  color: var(--heading-color);
+  line-height: 30px;
+  margin-bottom: 0px !important;
+  margin-block-end: 0;
+}
+

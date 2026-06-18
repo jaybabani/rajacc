@@ -1,0 +1,29 @@
+.w-icon-tit{
+  text-align: left;
+}
+
+.w-icon-tit .icon-rounded{
+  height: 50px;
+  width: 50px;
+  border-radius: 50%;
+  text-align: center;
+  color: #fff;
+  display: inline-block;
+}
+
+.w-icon-tit .icon-rounded svg{
+  height: 100%;
+}
+
+.w-icon-tit .tit{
+  font-family: var(--text-font);
+  /* font-size: 18px; */
+  color: var(--text-color);
+  margin-bottom: 5px;
+}
+.w-icon-tit .tit{
+  display: inline-block;  
+  font-family: var(--heading-font);
+  color: var(--heading-color);
+  line-height: 30px;
+}

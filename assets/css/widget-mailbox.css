@@ -1,0 +1,11 @@
+.widget-mailbox .img-wrap{
+  float: left;
+  padding-top: 12px;
+}
+.widget-mailbox .data-wrap{
+  padding-left: 60px;
+}
+.widget-mailbox .mail-tit{
+  font-family: var(--heading-font);
+  color: var(--heading-color);
+}

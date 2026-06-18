@@ -1,0 +1,32 @@
+.widget-multi-progress .progress-wrap{
+  overflow: hidden;
+}
+.widget-multi-progress .legends{
+  margin-top: 20px;
+  /* white-space: nowrap; */
+}
+.widget-multi-progress .legends span{
+  display: inline-block;
+  margin-right: 10px;
+
+}
+.widget-multi-progress .legends span:before{
+  content: " ";
+  height: 12px;
+  width: 12px;
+  position: relative;
+  top: 1px;
+  display: inline-block;
+  margin: 0px 5px 0 0;
+  border-radius: 7px;
+}
+
+.widget-multi-progress .legends span.primary:before{
+  background-color: var(--primary-color);
+}
+.widget-multi-progress .legends span.accent1:before{
+  background-color: var(--accent1-color);
+}
+.widget-multi-progress .legends span.accent2:before{
+  background-color: var(--accent2-color);
+}

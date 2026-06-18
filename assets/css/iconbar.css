@@ -1,0 +1,25 @@
+.iconbar .avatar-area{
+  padding: 10px;
+  margin-top: 0px;
+  margin-bottom: 17px;
+}
+.iconbar .avatar-area .avatar{
+  margin: 0;
+}
+.icon-link{
+  text-align: center;
+}
+.icon-link a{
+  display: inline-block;
+  color: var(--primary-color);
+  width: 40px;
+  height: 40px;
+  border-radius: 6px;
+  line-height: 33px;
+  margin-bottom: 22px;
+}
+.icon-link svg{
+  width: 22px;
+  height: 22px;
+  line-height: 22px;
+}

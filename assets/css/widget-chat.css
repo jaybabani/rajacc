@@ -1,0 +1,59 @@
+.widget-chat .avatar-row .col .wrap{
+  border-bottom: 1px solid #eee;
+}
+.widget-chat .avatar-row .avatar{
+  margin-bottom: 15px;
+}
+
+.widget-chat .img-wrap{
+    position: absolute;
+    bottom: 40px;
+}
+.widget-chat .right .img-wrap{
+  right: 0;
+}
+.widget-chat .data-wrap{
+  padding-left: 55px;
+}
+.widget-chat .right .data-wrap{
+  padding-right: 55px;
+  padding-left: 0px;
+}
+.widget-chat .bubble{
+  /* background-color: #f5f5f5; */
+  padding: 10px 15px;
+  display: inline-block;
+  border-radius: 10px 10px 10px 0px;
+}
+.widget-chat .list-group-item{
+  border: none !important;
+}
+.widget-chat small{
+  margin-top: 7px;
+  margin-left: 10px;
+  display: inline-block;
+}
+.widget-chat .list-group-item.right{
+  text-align: right;
+}
+.widget-chat .data-wrap svg{
+  height: 18px;
+  stroke:var(--primary-color);
+}
+.widget-chat .data-wrap .icon{
+  /* margin: 0 3px 0 0; */
+  position: absolute;
+  left: 0px;
+  top: 3px;
+  line-height: 15px;
+}
+.widget-chat .data-wrap .icon:last-child{
+  left: -4px;
+}
+.widget-chat .double-check{
+  position: relative;
+  display: inline-block;
+  height: 16px;
+  width: 20px;
+  /* background-color: lightpink; */
+}

@@ -1,0 +1,8 @@
+
+#widget-bar-negative-chart svg,
+#widget-bar-negative-chart foreignObject{
+  overflow: visible;
+}
+#widget-bar-negative-chart .apexcharts-legend {
+  top: -70px !important;
+}

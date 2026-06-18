@@ -1,0 +1,130 @@
+.widget-graph-tiles{
+  vertical-align: top;
+  position: relative;
+}
+
+.wid-wrap{
+  position: relative;
+  /* background-color: #ccc; */
+}
+
+.widget-graph-tiles .wrap{
+  /* background-color: #ccc; */
+  display: inline-block;
+  position: relative;
+  z-index: 2;
+  white-space: nowrap;
+}
+
+.widget-graph-tiles .text-data{
+  display: inline-block;
+  position: absolute;
+  z-index: 1;
+  height: 60px;
+  width: calc(100% - 250px);
+  min-width: 80px;
+  top: 50%;
+  margin-top: -30px;
+  right: 0px;
+  /* background-color: lightgrey; */
+}
+
+.widget-graph-tiles .text-data .title{
+  line-height: 60px;
+  text-align: right;
+}
+
+.widget-graph-tiles .graph{
+  display: inline-block;
+  position: absolute;
+  z-index: 1;
+  height: 60px;
+  width: calc(100% - 250px);
+  min-width: 80px;
+  top: 50%;
+  margin-top: -30px;
+  right: 0px;
+}
+
+.widget-graph-tiles.graph-mt .graph{
+  margin-top: -35px;
+}
+
+.widget-graph-tiles .graph-wrap{
+  /* background-color: lightgrey; */
+  width: 100%;
+  height: 60px;
+  vertical-align: middle;
+}
+.widget-graph-tiles .apexcharts-canvas{
+  margin: 0px 0 0 auto;
+}
+
+
+.widget-graph-tiles .icon-rounded{
+  margin-right: 15px;
+  height: 50px;
+  width: 50px;
+  float: left;
+  border-radius: 50%;
+  text-align: center;
+  color: #fff;
+  margin-top: 5px;
+  /* margin-bottom: 24px; */
+}
+
+.widget-graph-tiles .icon-rounded svg{
+  height: 100%;
+}
+
+.widget-graph-tiles .tit{
+  font-family: var(--text-font);
+  /* font-size: 18px; */
+  color: var(--text-color);
+  margin-bottom: 5px;
+}
+.widget-graph-tiles .count{
+  display: inline-block;  
+  font-family: var(--heading-font);
+  color: var(--heading-color);
+  line-height: 30px;
+  margin-bottom: 0px !important;
+  margin-block-end: 0;
+}
+/* .widget-graph-tiles .icon-rounded{
+} */
+.widget-graph-tiles .info{
+  display: inline-block;
+}
+
+
+.widget-graph-tiles .widget{
+  min-width: 115px !important;
+}
+
+
+@media screen and (max-width: 1550px) and (min-width: 1399.75px) {
+  .widget-graph-tiles .text-data,
+  .widget-graph-tiles .graph{
+    display: none;
+  }
+}
+
+@media screen and (max-width: 1250px) and (min-width: 1199.75px) {
+  .widget-graph-tiles .text-data,
+  .widget-graph-tiles .graph{
+    display: none;
+  }
+}
+@media screen and (max-width: 930px) and (min-width: 766.75px) {
+  .widget-graph-tiles .text-data,
+  .widget-graph-tiles .graph{
+    display: none;
+  }
+}
+@media screen and (max-width: 690px) and (min-width: 569.75px) {
+  .widget-graph-tiles .text-data,
+  .widget-graph-tiles .graph{
+    display: none;
+  }
+}

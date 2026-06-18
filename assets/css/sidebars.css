@@ -1,0 +1,288 @@
+/* layout   */
+
+.side-nav .btn-toggle {
+  width: 100%;
+  display: inline-flex;
+  align-items: center;
+  padding: 8px;
+  /* font-weight: 600; */
+  color: var(--text-color);
+  font-family: var(--text-font);
+  font-weight: 500;
+  font-size: 15px;
+  background-color: transparent;
+  border: 0;
+  position: relative;
+  outline: none;
+  box-shadow: none;
+  margin-bottom: 1px;
+  border-radius: 8px !important;
+  white-space: nowrap;
+  text-align: left;
+}
+
+.side-nav .btn-check:focus+.btn, .side-nav .btn:focus {
+  outline: 0;
+  box-shadow: 0 0 0 0;
+}
+
+.side-nav .btn-toggle::before {
+  position: absolute;
+  /* top: 50%; */
+  right: 5px;
+  width: 1.25em;
+  line-height: 0px;
+  content: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 16 16'%3e%3cpath fill='none' stroke='rgba%280,0,0,.4%29' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M5 14l6-6-6-6'/%3e%3c/svg%3e");
+  transition: transform .25s ease;
+  transform-origin: .5em 50%;
+  margin-top: -2px;
+  opacity: 0.6;
+}
+
+.side-nav .btn-toggle:hover,
+.side-nav .btn-toggle:focus,
+.side-nav .btn-toggle[aria-expanded="true"] {
+  color: var(--heading-color);
+  background-color: var(--primary-color-10);
+}
+.side-nav .btn-toggle[aria-expanded="true"]::before {
+  transform: rotate(90deg);
+}
+.side-nav .btn-toggle-nav li{
+  padding-left: 27px;  
+}
+.side-nav .btn-toggle-nav a {
+  width: 100%;
+  display: inline-flex;
+  text-decoration: none;
+  margin: 1px 0 0 0;
+  color: var(--text-color);
+  font-family: var(--text-font);
+  font-size: 14px;
+  position: relative;
+  z-index: 2;
+}
+.side-nav .btn-toggle-nav a:focus span,
+.side-nav .btn-toggle-nav a:hover span{
+  background-color: var(--primary-color-10);
+  color: var(--heading-color);
+}
+
+
+.side-nav .btn-toggle-nav a span{
+  border-radius: 8px;
+  position: relative;
+  z-index: 2;
+  /* background-color: var(--primary-color-10); */
+  width: 100%;
+  display: inline-block;
+  padding: 7px 0px 7px 20px;
+  white-space: nowrap;
+}
+.side-nav .btn-toggle-nav a:before{
+  content: "";
+  height: 38px;
+  width: 1px;
+  background-color: rgba(var(--bs-primary-rgb),0.2);
+  display: inline-block;
+  position: absolute;
+  left: -9px;
+  z-index: 1;
+  /* border-left: 1px solid #333; */
+}
+.side-nav .btn-toggle-nav li:last-child a:before{
+  height: 15px;
+}
+.side-nav .btn-toggle-nav a:after{
+  z-index: 1;
+  content: "";
+  height: 19px;
+  width: 16px;
+  /* background-color: rgba(var(--bs-primary-rgb),0.7); */
+  display: inline-block;
+  position: absolute;
+  left: -10px;
+  border-bottom: 1px solid rgba(var(--bs-primary-rgb),0.2);
+  border-bottom-left-radius: 8px;
+}
+.side-nav .btn-toggle .icon{
+  line-height: 30px;
+  height: 30px;
+  margin: 0px 5px 0 5px;
+}
+.side-nav .btn-toggle .icon svg{
+  margin: -4px 10px 0 0;
+  height: 30px;
+  width: 20px;
+  stroke: var(--heading-color);
+}
+.side-nav .scrollarea {
+  overflow-y: auto;
+}
+
+.side-nav .logo-area{
+  position: relative;
+  height: 60px;
+  white-space: nowrap;
+  line-height: 50px;
+  padding: 7px 0 10px 24px;
+}
+
+.side-nav .logo-area svg.logo{
+  fill: var(--primary-color);
+  height: 28px;
+  margin: -3px 0 0px 0px;
+}
+.side-nav .logo-area .name{
+  color: var(--heading-color);
+  font-family: var(--heading-font);
+  font-size: 18px;
+  padding-left: 7px;
+  white-space: nowrap;
+  line-height: 30px;
+  display: inline-block;
+  transition: .25s ease;
+  /* display: none; */
+}
+.toggle-side-nav{
+  position: absolute;
+  top: 13px;
+  right: -20px;
+  background-color: var(--bg-color);
+  padding: 0;
+  line-height: 18px;
+  border: 1px solid #eee;
+  text-align: center;
+  border-radius: 50%;
+  display: inline-block;
+  height: 36px;
+  width: 36px;
+  transition: .25s ease;
+}
+.toggle-side-nav .icon{
+  line-height: 1;
+}
+.toggle-side-nav .icon svg{
+  stroke: var(--text-color);
+  height: 18px;
+  width: 18px;
+  margin: 0 0 0 0!important;
+  transition: transform .25s ease;
+}
+.mini:not(.side-nav-on) .toggle-side-nav{
+  left: 63px;
+}
+.mini .toggle-side-nav .icon svg {
+  transform: rotate(180deg);
+}
+
+.mini:not(.side-nav-on) .side-nav .logo-area .name,
+.mini:not(.side-nav-on) .side-nav .btn-toggle .txt,
+.mini:not(.side-nav-on) .side-nav .btn-toggle::before,
+.mini:not(.side-nav-on) .side-nav .collapse{
+  display: none;
+}
+
+.side-nav.side-nav-right ul.side-nav-scrollbar-overlay {
+  width: 100%;
+  height: calc(100vh);
+}
+
+.drawer-overlay{
+  background-color: rgba(0,0,0,.25);
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+  display: none;
+}
+
+.show-side-nav .drawer-overlay,
+.show-side-nav-right .drawer-overlay{
+  display: block;
+}
+
+
+.display-side-nav{
+  left: auto;
+  position: relative;
+  /* top: 14px; */
+  background-color: transparent;
+  padding: 0;
+  line-height: 22px;
+  border: none;
+  text-align: center;
+  border-radius: 50%;
+  display: inline-block;
+  left: 10px;
+  transition: .25s ease;
+}
+.display-side-nav .icon{
+  line-height: 1;
+}
+.display-side-nav .icon svg{
+  stroke: var(--text-color);
+  height: 22px;
+  width: 22px;
+  margin: 0 0 0 0!important;
+}
+
+.display-side-nav .icon-close{
+  display: none;
+}
+
+
+
+/* .show-side-nav .display-side-nav{
+  left: 235px;
+}
+.mini.show-side-nav .display-side-nav{
+  left: 100px;
+} */
+
+
+/* .mini .collapse.show{
+  display: block !important;
+}
+.mini .collapse{
+  position: absolute;
+  width: 220px;
+  background-color: #fff;
+  border-radius: 10px;
+  left: 75px;
+  margin-top: -47px;
+  top: auto;
+  bottom: auto;
+  padding: 8px 5px 0 5px;
+  box-shadow: 0 .225rem .5rem rgba(0,0,0,.15);
+} */
+/* .mini .os-host-overflow>.os-padding{
+  overflow-y: visible !important;
+  overflow-x: visible !important;
+}
+.mini .os-host-overflow{
+  overflow-y: visible !important;
+  overflow-x: visible !important;
+}
+.mini .os-viewport{
+  overflow-y: visible !important;
+  overflow-x: visible !important;
+} */
+/* .mini .side-nav .collapsing{
+  transition: all 0s linear !important;
+} */
+
+/* .show-side-nav .display-side-nav{
+  display: none;
+} */
+
+
+/* .show-side-nav .display-side-nav .icon-menu{
+  display: none;
+}
+
+.show-side-nav .display-side-nav .icon-close{
+  display: block;
+} */

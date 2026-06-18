@@ -1,0 +1,32 @@
+.w-counter-percent{
+  display: inline-block;
+}
+.widget-counter-percent .w-counter-percent{
+  padding-left: 0;
+}
+.w-counter-percent .count{
+  display: inline-block;
+  margin-right: 5px;
+}
+.w-counter-percent .suffix{
+  display: inline-block;
+}
+.w-counter-percent .percent{
+  line-height: 24px;
+  display: inline-block;  
+  font-family: var(--heading-font);
+}
+.w-counter-percent .percent svg{
+  height: 16px;
+  width: 16px;
+  margin: 0 2px 0 0px;
+}
+.w-counter-percent .percent.up{
+  color: var(--success-color);
+}
+.w-counter-percent .percent.down{
+  color: var(--danger-color);
+}
+.w-counter-percent .wrap{
+  white-space: nowrap;
+}

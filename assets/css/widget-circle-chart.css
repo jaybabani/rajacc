@@ -1,0 +1,52 @@
+.widget-circle-chart .inline-counter-tiles{
+  width: 140px;
+  float: left;
+  /* background-color: lightpink; */
+  margin-right: 15px;
+}
+.widget-circle-chart .inline-counter-tiles .wrap{
+  /* background-color: #ccc; */
+  display: inline-block;
+  position: relative;
+  z-index: 2;
+  white-space: nowrap;
+}
+
+.widget-circle-chart .inline-counter-tiles .icon-rounded{
+  margin-right: 15px;
+  height: 40px;
+  width: 40px;
+  float: left;
+  border-radius: 50%;
+  text-align: center;
+  color: #fff;
+  margin-top: 5px;
+  /* margin-bottom: 24px; */
+  line-height: 32px;
+}
+
+.widget-circle-chart .inline-counter-tiles .icon-rounded svg{
+  height: 20px;
+  line-height: 40px;
+}
+
+.widget-circle-chart .inline-counter-tiles .tit{
+  font-family: var(--text-font);
+  /* font-size: 18px; */
+  color: var(--text-color);
+  margin-bottom: 5px;
+}
+.widget-circle-chart .inline-counter-tiles .count{
+  display: inline-block;  
+  font-family: var(--heading-font);
+  color: var(--heading-color);
+  line-height: 24px;
+  margin-bottom: 0px !important;
+  margin-block-end: 0;
+}
+
+@media screen and (max-width: 930px) and (min-width: 766.75px) {
+  .widget-circle-chart .inline-wid{
+    display: none;
+  }
+}
