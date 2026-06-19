@@ -1,4 +1,6 @@
 <?php
+$module = "symbols";
+$pageid = "symbols-read";
 include("../../common/header.php");
 // include("symbol-functions.php");
 ?>

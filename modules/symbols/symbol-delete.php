@@ -1,6 +1,7 @@
 <?php
+$module = "symbols";
+$pageid = "symbols-delete";
 include '../../common/header.php';
-// include("symbol-functions.php");
 ?>
 
 <div class="row row-cols-1 row-cols-sm-1 row-cols-md-1 row-cols-lg-1 row-cols-xl-1 row-cols-xxl-1 g-4 py-3 px-2">
@@ -43,29 +44,22 @@ include '../../common/header.php';
         <div class="col-lg-12">
             <div class="row">
                 <div class="col-md-9 col-sm-10 col-xs-12">
-
                     <div class="form-group">
                         <label class="form-label" for="field-4">Are You sure you want to delete symbol
-
                             <?php echo "ID: <strong>" . get_value($data, 'id') . "</strong>";
-
                             $Symbol = name_title(get_value($data, 'symbol'));
-
                             echo " Symbol: <strong>" . $Symbol . "</strong>"; ?>?</label>
-
                     </div>
-
-
-
                 </div>
             </div>
         </div>
 
+
         <div class="clearfix"></div><br>
 
-        <div class="col-md-12 col-sm-12 col-xs-12 text-center">
-            <input type="submit" name="delete" value="Delete" class="btn btn-success btn-lg">
-        </div>
+        <?php
+        echo form_field(["type" => "submit", "name" => "Delete", "key" => "delete", "class" => "col-md-12 col-sm-12 col-xs-12 text-center"], $data);
+        ?>
 
         <div class="clearfix"></div><br>
 

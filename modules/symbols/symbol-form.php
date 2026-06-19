@@ -1,6 +1,8 @@
 <?php
+$module = "symbols";
+$pageid = "symbols-form";
 include("../../common/header.php");
-include("symbol-functions.php");
+// include("symbol-functions.php");
 ?>
 
 <div class="row row-cols-1 row-cols-sm-1 row-cols-md-1 row-cols-lg-1 row-cols-xl-1 row-cols-xxl-1 g-4 py-3 px-2">
