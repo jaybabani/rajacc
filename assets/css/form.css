@@ -4,9 +4,10 @@
   position: relative;
   top: -3px;
 }
+
 .form-select,
 .form-control{
-  border: 1px solid #f8f7fd;
+  border: 1px solid #dddddd;
   background-color: var(--form-bg);
   padding: 12px 20px;
   border-radius: 10px;
@@ -14,6 +15,20 @@
   font-weight: 500;
   /* margin-bottom: 20px; */
 }
+
+body .dataTables_filter input,
+body .dataTables_length select{
+  border: 1px solid #dddddd !important;
+  background-color: var(--form-bg) !important;
+  padding: 6px 15px !important;
+  border-radius: 5px !important;
+  color: var(--text-color) !important;
+  font-weight: 500 !important;
+  margin-bottom: 10px;
+}
+
+body .dataTables_filter input:focus,
+body .dataTables_length select:focus,
 .form-select:focus,
 .form-control:focus,
 .form-check-input:focus{
@@ -58,7 +73,7 @@
 }
 
 .btn{
-  border-radius: 40px;
+  border-radius: 10px;
 }
 .btn-primary {
   color: #fff;

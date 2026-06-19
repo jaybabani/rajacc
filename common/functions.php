@@ -321,6 +321,12 @@ function crud_read($vars)
             $html .= "<tr data-details='" . $r[$vars["primary_column"]] . "'>";
 
             foreach ($vars["display_columns"] as $dk => $dv) {
+
+                $row_col_class = "";
+                if (isset($dv["class"])) {
+                    $row_col_class = $dv["class"];
+                }
+
                 if (isset($dv["column"]) && $dv["column"] != "") {
 
                     $colval = $r[$dv["column"]];
@@ -331,22 +337,29 @@ function crud_read($vars)
                         }
                     }
 
-                    $row_col_class = "";
-                    if (isset($dv["class"])) {
-                        $row_col_class = $dv["class"];
+                    if (isset($dv["options"])) {
+                        if (is_array($dv["options"]) && isset($dv["options"][$colval])) {
+                            $colval = $dv["options"][$colval];
+                        }
                     }
 
+                    if (isset($dv["badge"])) {
+                        $colval = "<span class='badge badge-" . $r[$dv["column"]] . "'>" . $colval . "</span>";
+                    }
 
                     $html .= "<td class='" . $row_col_class . "'>" . $colval . "</td>";
-                } else {
+                }
+
+                //
+                else {
                     if (isset($dv["type"])) {
                         if ($dv['type'] == "details") {
-                            $html .= "<td class='details-control'><span>&#9660;</span></td>";
+                            $html .= "<td class='details-control " . $row_col_class . "'><span>&#9660;</span></td>";
                         } else if ($dv['type'] == "select") {
-                            $html .= "<td><input type='checkbox' " . $selected . " class='symbol-combination-check form-check-input' data-id='" . $r[$vars["primary_column"]] . "' /></td>";
+                            $html .= "<td class='" . $row_col_class . "'><input type='checkbox' " . $selected . " class='symbol-combination-check form-check-input' data-id='" . $r[$vars["primary_column"]] . "' /></td>";
                         } else if ($dv['type'] == "edit_delete") {
-                            $html .= "<td><a href='" . $vars["module_pages"]["update"] . ".php?id=" . $r[$vars["primary_column"]] . "'><span class='icon'><i data-feather='edit'></i>Edit</span></a> &nbsp; ";
-                            $html .= "<a href='" . $vars["module_pages"]["delete"] . ".php?id=" . $r[$vars["primary_column"]] . "'><span class='icon'><i data-feather='trash'></i>Delete</span></a></td>";
+                            $html .= "<td class='" . $row_col_class . "'><a href='" . $vars["module_pages"]["update"] . ".php?id=" . $r[$vars["primary_column"]] . "'><span class='icon wtxt bg-accent2'><i data-feather='edit'></i>Edit</span></a> &nbsp; ";
+                            $html .= "<a href='" . $vars["module_pages"]["delete"] . ".php?id=" . $r[$vars["primary_column"]] . "'><span class='icon wtxt bg-info'><i data-feather='trash'></i>Delete</span></a></td>";
                         }
                     }
                 }
@@ -654,7 +667,7 @@ function module_submit_delete_form($vars)
         //echo "New firewall inserted at ". decrypt($datetime);
         if ($sql) {
             notify_after_redirect("success", $msg["success_delete"]);
-            echo "<script>window.top.location='".$vars["redirect_to"].".php'</script>";
+            echo "<script>window.top.location='" . $vars["redirect_to"] . ".php'</script>";
         } else {
             notify("error", $msg["error_delete"]);
         }
@@ -662,4 +675,15 @@ function module_submit_delete_form($vars)
     // die();
 
     return true;
+}
+
+
+function get_active_arr()
+{
+    $arr = [
+        'yes' => 'Active',
+        'no' => 'Inactive',
+    ];
+
+    return $arr;
 }

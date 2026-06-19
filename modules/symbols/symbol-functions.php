@@ -429,15 +429,6 @@ function get_symbols()
 }
 
 
-function get_active_arr()
-{
-  $arr = [
-    'yes' => 'Active',
-    'no' => 'Inactive',
-  ];
-
-  return $arr;
-}
 
 function generate_symbol_text($symbol_id, $symbol_var)
 {

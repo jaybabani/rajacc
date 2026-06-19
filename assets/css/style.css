@@ -312,7 +312,14 @@ body {
 /* badge */
 .badge {
 	font-weight: 500;
-	padding: 7px 15px;
+	padding: 5px 10px;
+	font-size: 13px;
+}
+.badge-yes {
+	background-color: rgba(var(--bs-success-rgb), 1);
+}
+.badge-no {
+	background-color: rgba(var(--bs-warning-rgb), 1);
 }
 
 /* typography  */
@@ -348,8 +355,29 @@ h6 {
 	stroke: var(--text-color);
 	height: 20px;
 	width: 20px;
-	opacity: 0.7;
+	opacity: 0.8;
 	margin: 0 0 0 10px;
+}
+
+.icon.wtxt.edit{
+
+}
+.icon.wtxt {
+	display: inline-block;
+	border-radius: 5px;
+	padding: 3px 10px 3px 0px;
+	font-size: 13px;
+	color: #ffffff;
+}
+
+.icon.wtxt svg {
+	stroke: #ffffff;
+	height: 15px;
+	width: 15px;
+	opacity: 1;
+	margin: 0 5px 0 10px;
+	top: -1px;
+	position: relative;
 }
 
 .icon-left-align .icon svg {
@@ -609,7 +637,9 @@ h6 {
 	justify-content: center;
 
 	box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
-	transition: background 0.2s ease, transform 0.2s ease;
+	transition:
+		background 0.2s ease,
+		transform 0.2s ease;
 }
 
 #scrollBtn:hover {
@@ -727,11 +757,11 @@ table .rd {
 	color: var(--danger-color);
 }
 
-.arr-box{
+.arr-box {
 	border: 1px solid #cccccc;
 	width: 500px;
 }
-.databox{
+.databox {
 	border: 1px solid #cccccc;
 	width: 500px;
 	overflow: auto;
@@ -740,7 +770,7 @@ table .rd {
 	padding: 10px;
 }
 
-.buymode{
+.buymode {
 	width: 49%;
 	display: inline-block;
 	border: 1px solid #cccccc;
@@ -748,7 +778,7 @@ table .rd {
 	margin: 1% 1% 0 0;
 	vertical-align: top;
 }
-.sellmode{
+.sellmode {
 	margin: 1% 0 0 0;
 	width: 50%;
 	display: inline-block;
@@ -757,34 +787,34 @@ table .rd {
 	vertical-align: top;
 }
 
-.table.all-transactions tr{
+.table.all-transactions tr {
 	display: none;
 }
 
-.table.all-transactions tr.symbol-summary{
+.table.all-transactions tr.symbol-summary {
 	display: table-row !important;
 }
-.table.all-transactions.show-all tr{
+.table.all-transactions.show-all tr {
 	display: table-row !important;
 }
 
-.varstat{
+.varstat {
 	display: block;
 	margin: 5px;
 }
-.varstat .label{
+.varstat .label {
 	display: inline-block;
 	font-size: 14px;
 	margin-right: 5px;
 }
-.varstat .val{
+.varstat .val {
 	display: inline-block;
 	font-size: 15px;
 	margin-right: 5px;
 	font-weight: bold;
 }
 
-.report-options .opt{
+.report-options .opt {
 	margin: 5px;
 	display: inline-block;
 	background-color: #eeeeee;
@@ -794,20 +824,20 @@ table .rd {
 	font-weight: normal;
 }
 .report-options .opt:hover,
-.report-options .opt.active{
+.report-options .opt.active {
 	background-color: #424242;
 	color: #ffffff;
 }
 .report-options .opt:hover span,
-.report-options .opt.active span{
+.report-options .opt.active span {
 	color: #cccccc;
 }
 
-.report-count{
+.report-count {
 	font-weight: bold;
 }
 
-.report-options .opt span{
+.report-options .opt span {
 	display: inline-block;
 	width: 20px;
 	height: 20px;
@@ -818,36 +848,36 @@ table .rd {
 	line-height: 20px;
 	border-radius: 50%;
 }
-.nowrap{
+.nowrap {
 	white-space: nowrap;
 }
 
-.data-hide{
+.data-hide {
 	visibility: hidden;
 	font-size: 1px;
 	color: transparent;
 }
 
-tr td.details-control span{
+tr td.details-control span {
 	display: inline-block;
 	color: #aaaaaa;
 	font-size: 13px;
 	cursor: pointer;
 }
-tr.shown td.details-control span{
+tr.shown td.details-control span {
 	transform: rotate(180deg);
 }
-tr .no-det{
+tr .no-det {
 	text-align: center;
 }
 
-.showNotification.alert{
+.showNotification.alert {
 	top: 50px;
 	right: 50px;
 	z-index: 22;
 	padding: 10px 35px 10px 15px;
 }
-.showNotification.alert-dismissible .btn-close{
+.showNotification.alert-dismissible .btn-close {
 	padding: 10px;
 	top: 6px;
 	font-size: 11px;

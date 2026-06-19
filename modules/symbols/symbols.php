@@ -37,14 +37,14 @@ include("../../common/header.php");
 
   $primary_column = "id";
   $display_columns = [
-    ["name" => "", "column" => "", "type" => "details", "sorting" => false],
-    ["name" => "Select", "column" => "", "type" => "select", "sorting" => false],
-    ["name" => "ID", "column" => "id"],
+    ["name" => "", "column" => "", "type" => "details", "sorting" => false, "class" => "text-center"],
+    ["name" => "Select", "column" => "", "type" => "select", "sorting" => false, "class" => "text-center"],
+    ["name" => "ID", "column" => "id", "class" => "text-center"],
     ["name" => "Symbol", "column" => "symbol", "class" => "title"],
     ["name" => "Exchange", "column" => "exchange"],
-    ["name" => "Active", "column" => "active"],
+    ["name" => "Active", "column" => "active", "options" => get_active_arr(), "badge" => true],
     ["name" => "Updated", "column" => "updated", "format" => "ts_to_dt"],
-    ["name" => "Actions", "column" => "", "type" => "edit_delete"],
+    ["name" => "Actions", "column" => "", "type" => "edit_delete", "sorting" => false],
   ];
 
   $fetch_columns = [];
