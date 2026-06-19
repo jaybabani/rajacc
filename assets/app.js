@@ -1,6 +1,6 @@
 $(document).ready(function () {
 
-
+  /*
   $(document).on("click", ".report-options .opt", function () {
     // console.log("hi");
     $(this).toggleClass("active");
@@ -156,5 +156,5 @@ $(document).ready(function () {
     $(".table.all-transactions").toggleClass("show-all");
   });
 
-
+  */
 });

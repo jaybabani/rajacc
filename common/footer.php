@@ -43,6 +43,17 @@ echo '<div class="screen-type d-block d-sm-none">xs</div>
     feather.replace()
 </script>
 
+<?php
+
+if (isset($load_datatable) && $load_datatable == true) {
+    echo datatable_scripts();
+    if (isset($module_pages)) {
+        datatable_instance($module_pages);
+    }
+}
+
+?>
+
 </body>
 
 </html>

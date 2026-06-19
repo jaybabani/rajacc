@@ -82,4 +82,8 @@ include_once("includes.php");
                 echo '<div class="content-area container-fluid">';
                 include("topbar.php");
             }
-        } ?>
+        } 
+        
+        display_notifications();
+        
+        ?>

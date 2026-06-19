@@ -821,3 +821,34 @@ table .rd {
 .nowrap{
 	white-space: nowrap;
 }
+
+.data-hide{
+	visibility: hidden;
+	font-size: 1px;
+	color: transparent;
+}
+
+tr td.details-control span{
+	display: inline-block;
+	color: #aaaaaa;
+	font-size: 13px;
+	cursor: pointer;
+}
+tr.shown td.details-control span{
+	transform: rotate(180deg);
+}
+tr .no-det{
+	text-align: center;
+}
+
+.showNotification.alert{
+	top: 50px;
+	right: 50px;
+	z-index: 22;
+	padding: 10px 35px 10px 15px;
+}
+.showNotification.alert-dismissible .btn-close{
+	padding: 10px;
+	top: 6px;
+	font-size: 11px;
+}

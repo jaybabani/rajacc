@@ -653,8 +653,24 @@ function logthis($table, $query, $id, $datetime, $type)
 
 function notify($type = '', $msg = '')
 {
-    echo '<div class="position-fixed showNotification alert alert-' .       $type .        ' text-' .        $type .        '"><strong>' .        $msg .        '</strong></div><br>';
-    // return "";
+    echo '<div class="position-fixed showNotification alert alert-'.$type .' alert-dismissible fade show" role="alert">
+    <strong>'.$msg.'</strong><button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>';
+}
+
+function notify_after_redirect($type = '', $msg = '')
+{
+    $_SESSION["notify"] = [$type, $msg];
+}
+
+function display_notifications()
+{
+    if (isset($_SESSION["notify"]) && sizeof($_SESSION["notify"]) > 0) {
+        $type = $_SESSION["notify"][0];
+        $msg = $_SESSION["notify"][1];
+        notify($type, $msg);
+        $_SESSION["notify"] = [];
+    }
 }
 
 function icheck_list(
