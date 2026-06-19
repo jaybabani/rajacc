@@ -183,7 +183,8 @@ function pagination($pagename)
 
 function ts_to_dt($ts)
 {
-    return date('D, d-M-Y h:i A', $ts);
+    return date('D, d-M-Y', $ts);
+    // return date('D, d-M-Y h:i A', $ts);
 }
 
 function ymdTodmy($dt)
@@ -409,10 +410,10 @@ function datatable_instance($module_pages)
         $(document).ready(function() {
             const table = $('<?php echo $tableid; ?>').DataTable({
                 info: false,
-                //autoWidth: false,
+                autoWidth: true,
                 deferRender: true, // don’t render invisible rows
                 //scrollY: 800, // fixed height (px)
-                //scroller: true, // enables virtual scrolling
+                scroller: true, // enables virtual scrolling
                 pageLength: -1, // special value to show all rows
                 lengthMenu: [
                     [-1, 100, 250, 500, 1000],
