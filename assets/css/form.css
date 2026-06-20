@@ -51,11 +51,15 @@ body .dataTables_length select:focus,
   border-radius: 5px;
 }
 .form-check-input {
-  margin: 2px 8px 2px 0;
+  margin: 4px 10px 4px 0;
   border: 1px solid #f8f7fd;
   background-color: var(--form-bg);
   height: 20px;
   width: 20px;
+  border: 2px solid #cccccc;
+}
+.form-check-input+label{
+  line-height: 28px;
 }
 
 .form-range::-webkit-slider-runnable-track{
@@ -230,4 +234,27 @@ input:checked + .slider:before {
 .flatpickr-current-month .flatpickr-monthDropdown-months,
 .flatpickr-current-month input.cur-year{
   font-size: 15px;
+}
+
+.multi-check-list{
+  width: 100%;
+  display: inline-block;
+  border: 1px solid #dddddd;
+  padding: 10px;
+  border-radius: 10px;
+  height: auto;
+  max-height: 200px;
+  border: 1px solid #dddddd;
+  background-color: var(--form-bg);
+  padding: 12px 20px;
+  border-radius: 10px;
+  color: var(--text-color);
+  font-weight: 500;
+  overflow: auto;
+}
+
+select.form-control{
+    background-image: url(../images/sort_desc.png) !important;
+    background-repeat: no-repeat;
+    background-position: 99% 40%;
 }

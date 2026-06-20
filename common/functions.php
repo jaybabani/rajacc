@@ -304,7 +304,10 @@ function crud_read($vars)
     foreach ($vars["display_columns"] as $dk => $dv) {
         $colclass = "";
         if (isset($dv["sorting"]) && $dv["sorting"] == false) {
-            $colclass = "no-sort";
+            $colclass .= " no-sort ";
+        }
+        if (isset($dv["search"]) && $dv["search"] == false) {
+            $colclass .= " no-search ";
         }
         $html .= "<th class='" . $colclass . "'>" . $dv["name"] . "</th>";
     }
@@ -348,19 +351,61 @@ function crud_read($vars)
                         $colval = "<span class='badge badge-" . $r[$dv["column"]] . "'>" . $colval . "</span>";
                     }
 
+                    if (isset($dv["type"]) && $dv['type'] == "implode" && isset($dv["sep"])) {
+                        $val = $r[$dv["column"]] ?? "";
+                        if ($val != "") {
+                            $selarr = explode($dv["sep"], $val);
+                            $colval = "";
+                            foreach ($dv["options"] as $ok => $ov) {
+                                if (in_array($ov[$dv["option_id"]], $selarr)) {
+                                    $colval .= $ov[$dv["option_label"]] . ", ";
+                                }
+                            }
+
+                            $colval = trim($colval);
+                            if ($colval != "") {
+                                $colval = substr($colval, 0, -1);
+                            }
+                        }
+                    }
+
                     $html .= "<td class='" . $row_col_class . "'>" . $colval . "</td>";
                 }
 
                 //
                 else {
                     if (isset($dv["type"])) {
+                        //
                         if ($dv['type'] == "details") {
                             $html .= "<td class='details-control " . $row_col_class . "'><span>&#9660;</span></td>";
-                        } else if ($dv['type'] == "select") {
+                        }
+                        //
+                        else if ($dv['type'] == "select") {
                             $html .= "<td class='" . $row_col_class . "'><input type='checkbox' " . $selected . " class='symbol-combination-check form-check-input' data-id='" . $r[$vars["primary_column"]] . "' /></td>";
-                        } else if ($dv['type'] == "edit_delete") {
+                        }
+                        //
+                        else if ($dv['type'] == "edit_delete") {
                             $html .= "<td class='" . $row_col_class . "'><a href='" . $vars["module_pages"]["update"] . ".php?id=" . $r[$vars["primary_column"]] . "'><span class='icon wtxt bg-accent2'><i data-feather='edit'></i>Edit</span></a> &nbsp; ";
                             $html .= "<a href='" . $vars["module_pages"]["delete"] . ".php?id=" . $r[$vars["primary_column"]] . "'><span class='icon wtxt bg-info'><i data-feather='trash'></i>Delete</span></a></td>";
+                        }
+                        //
+                        else if ($dv['type'] == "link_table_rows") {
+                            $colval = "";
+                            if (isset($dv["links"][$r[$vars["primary_column"]]])) {
+                                $lnk = $dv["links"][$r[$vars["primary_column"]]];
+
+                                foreach ($dv["options"] as $ok => $ov) {
+                                    // print_arr($ov);
+                                    if (in_array($ov[$dv["option_id"]], $lnk)) {
+                                        $colval .= $ov[$dv["option_label"]] . ", ";
+                                    }
+                                }
+                                $colval = trim($colval);
+                                if ($colval != "") {
+                                    $colval = substr($colval, 0, -1);
+                                }
+                            }
+                            $html .= "<td class='" . $row_col_class . "'>" . $colval . "</td>";
                         }
                     }
                 }
@@ -427,6 +472,10 @@ function datatable_instance($module_pages)
                 columnDefs: [{
                         targets: 'no-sort',
                         orderable: false,
+                    },
+                    {
+                        targets: 'no-search',
+                        searchable: false,
                     },
                     // {
                     //     targets: 1, // column index where checkboxes are
@@ -546,7 +595,7 @@ function form_field($vars, $data)
         }
 
         if ($vars["type"] == "multi-checkbox") {
-            $s .= '<div>';
+            $s .= '<div class="multi-check-list">';
             foreach ($vars["options"] as $k => $v) {
                 $sel = "";
                 $optid = $vars["option_id"];

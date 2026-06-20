@@ -36,15 +36,31 @@ include("../../common/header.php");
   $tablename = "symbols";
 
   $primary_column = "id";
+
+  $tags_arr = fetch_data(["table" => "tags", "columns" => "id, tag", "condition" => "", "order" => "tag ASC", "limit" => ""]);    // print_arr($tags_arr);
+  // print_arr($tags_arr);
+
+  $sectors_arr = fetch_data(["table" => "sectors", "columns" => "id, sector", "condition" => "", "order" => "sector ASC", "limit" => ""]);    // print_arr($sectors_arr);
+  // $data["sectors"] = [];
+  $symbol_sector_link_arr = fetch_data(["table" => "symbol_sector_link", "columns" => "symbol, sector", "condition" => "", "order" => "", "limit" => ""]);
+  $links = [];
+  foreach ($symbol_sector_link_arr as $lk => $lv) {
+    $links[$lv["symbol"]][] = $lv["sector"];
+  }
+  // print_arr($sectors_arr);
+  // print_arr($links);
+
   $display_columns = [
-    ["name" => "", "column" => "", "type" => "details", "sorting" => false, "class" => "text-center nowrap"],
-    ["name" => "Select", "column" => "", "type" => "select", "sorting" => false, "class" => "text-center"],
+    ["name" => "", "column" => "", "type" => "details", "sorting" => false, "search" => false, "class" => "text-center nowrap"],
+    ["name" => "Select", "column" => "", "type" => "select", "sorting" => false, "search" => false, "class" => "text-center"],
     ["name" => "ID", "column" => "id", "class" => "text-center"],
     ["name" => "Symbol", "column" => "symbol", "class" => "title nowrap"],
     ["name" => "Exchange", "column" => "exchange"],
     ["name" => "Active", "column" => "active", "options" => get_active_arr(), "badge" => true],
+    ["name" => "Tags", "column" => "tags", "options" => $tags_arr, "type" => "implode", "sep" => ",", "option_id" => "id", "option_label" => "tag", "sorting" => false],
+    ["name" => "Sectors", "column" => "", "options" => $sectors_arr, "type" => "link_table_rows", "links" => $links, "option_id" => "id", "option_label" => "sector", "sorting" => false],
     ["name" => "Updated", "column" => "updated", "format" => "ts_to_dt", "class" => "nowrap"],
-    ["name" => "Actions", "column" => "", "type" => "edit_delete", "sorting" => false, "class" => "nowrap"],
+    ["name" => "Actions", "column" => "", "type" => "edit_delete", "sorting" => false, "search" => false, "class" => "nowrap"],
   ];
 
   $fetch_columns = [];
