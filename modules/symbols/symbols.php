@@ -60,7 +60,7 @@ include("../../common/header.php");
     ["name" => "Tags", "column" => "tags", "options" => $tags_arr, "type" => "implode", "sep" => ",", "option_id" => "id", "option_label" => "tag", "sorting" => false],
     ["name" => "Sectors", "column" => "", "options" => $sectors_arr, "type" => "link_table_rows", "links" => $links, "option_id" => "id", "option_label" => "sector", "sorting" => false],
     ["name" => "Updated", "column" => "updated", "format" => "ts_to_dt", "class" => "nowrap"],
-    ["name" => "Actions", "column" => "", "type" => "edit_delete", "sorting" => false, "search" => false, "class" => "nowrap"],
+    ["name" => "Actions", "column" => "", "type" => "edit_delete", "sorting" => false, "search" => false, "class" => "nowrap", "acl" => ["edit" => "symbols-update", "delete" => "symbols-delete"]],
   ];
 
   $fetch_columns = [];

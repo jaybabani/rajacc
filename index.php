@@ -1,4 +1,5 @@
 <?php
+$pageid = "index";
 include_once __DIR__ . '/lib/app.php';
 include(__DIR__ . "/common/header.php");
 ?>
@@ -25,7 +26,7 @@ include(__DIR__ . "/common/header.php");
   static array
   fetch array from db
 
-  
+
 
   
   </pre>";  

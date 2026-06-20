@@ -8,6 +8,7 @@ include_once __DIR__ . '/define.php';
 if (isset($page_type) && $page_type == "login") {
 } else {
     include_once ROOT_DIR . '/lib/auth.php';
+    acl_check($pageid ?? "");
 } 
 
 include_once ROOT_DIR . '/lib/functions.php';

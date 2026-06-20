@@ -107,3 +107,9 @@ table.dataTable tbody th, table.dataTable tbody td{
 .dataTables_wrapper .dataTables_paginate .paginate_button.current{
 	background: rgba(var(--bs-primary-rgb), 0.2) !important;
 }
+.dataTables_wrapper{
+  padding: 2px;
+}
+table.dataTable{
+  border-left: 1px dashed #dddddd;
+}

@@ -1,9 +1,16 @@
 <?php
 
+function acl_auth($pageid)
+{
+    if ($pageid != "") {
+    }
+    print_arr($_SESSION);
+}
+
 function widget_start($title = "", $class = "", $widget_title_class = "", $widget_wrapper_class = "", $options = "", $widget_options_class = "")
 {
-    echo '<div class="widgetwrapper col d-flex align-items-start  px-4 py-1 ' . $class . ' ">
- <div class="widget container-fluid py-4 overhide ' . $widget_wrapper_class . '">';
+    echo '<div class="widgetwrapper col d-flex align-items-start  px-2 py-0 ' . $class . ' ">
+ <div class="widget container-fluid py-4 px-3 overhide ' . $widget_wrapper_class . '">';
 
     if ($title != "") {
         echo "<div class='widget-title " . $widget_title_class . "'>";
@@ -385,8 +392,13 @@ function crud_read($vars)
                         }
                         //
                         else if ($dv['type'] == "edit_delete") {
-                            $html .= "<td class='" . $row_col_class . "'><a href='" . $vars["module_pages"]["update"] . ".php?id=" . $r[$vars["primary_column"]] . "'><span class='icon wtxt bg-accent2'><i data-feather='edit'></i>Edit</span></a> &nbsp; ";
-                            $html .= "<a href='" . $vars["module_pages"]["delete"] . ".php?id=" . $r[$vars["primary_column"]] . "'><span class='icon wtxt bg-info'><i data-feather='trash'></i>Delete</span></a></td>";
+                            $html .= "<td class='" . $row_col_class . "'>";
+                            if (isset($dv["acl"]["edit"]) && in_array($dv["acl"]["edit"], $_SESSION["acl"])) {
+                                $html .= "<a href='" . $vars["module_pages"]["update"] . ".php?id=" . $r[$vars["primary_column"]] . "'><span class='icon wtxt bg-accent2'><i data-feather='edit'></i>Edit</span></a> &nbsp; ";
+                            }
+                            if (isset($dv["acl"]["delete"]) && in_array($dv["acl"]["delete"], $_SESSION["acl"])) {
+                                $html .= "<a href='" . $vars["module_pages"]["delete"] . ".php?id=" . $r[$vars["primary_column"]] . "'><span class='icon wtxt bg-info'><i data-feather='trash'></i>Delete</span></a></td>";
+                            }
                         }
                         //
                         else if ($dv['type'] == "link_table_rows") {
@@ -645,7 +657,7 @@ function module_submit_form($vars)
     $ts = getts();
 
     if (isset($_REQ['save']) || isset($_REQ['savenew'])) {
-        print_arr($_REQ);
+        // print_arr($_REQ);
         // die;
 
         $query = '';
@@ -740,12 +752,12 @@ function save_link_table_rows($vars, $primary_id)
         $table = $ltr["table"];
 
         $delsql = " DELETE FROM " . $table . " WHERE " . $single_col . " = '" . $primary_id . "' ";
-        echo $delsql . "<br>";
+        // echo $delsql . "<br>";
         $conn->query($delsql);
 
         foreach ($rows as $k => $r) {
             $inssql = "INSERT INTO " . $table . " (" . $single_col . ", " . $multi_col . ") VALUES ( '" . $primary_id . "' , '" . $r . "') ";
-            echo $inssql . "<br>";
+            // echo $inssql . "<br>";
             $conn->query($inssql);
         }
     }

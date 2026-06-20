@@ -1,6 +1,9 @@
 <?php
 $module = "symbols";
-$pageid = "symbols-form";
+$pageid = "symbols-create";
+if (isset($_GET['id']) && is_numeric($_GET['id']) && trim($_GET['id']) != '') {
+  $pageid = "symbols-update";
+}
 include("../../common/header.php");
 // include("symbol-functions.php");
 ?>
@@ -33,9 +36,9 @@ include("../../common/header.php");
   ];
 
   $link_table_rows = [
-      "table" => "symbol_sector_link",
-      "single_column" => ["column" => "symbol", "field" => $primary_column],
-      "multi_column" => ["column" => "sector", "field" => "sectors"],
+    "table" => "symbol_sector_link",
+    "single_column" => ["column" => "symbol", "field" => $primary_column],
+    "multi_column" => ["column" => "sector", "field" => "sectors"],
   ];
 
   $msg = [
@@ -70,7 +73,7 @@ include("../../common/header.php");
 
     // tag field with implode string in same same table
     $tags_arr = fetch_data(["table" => "tags", "columns" => "id, tag", "condition" => "", "order" => "tag ASC", "limit" => ""]);    // print_arr($tags_arr);
-    $data["tags"] = $data["tags"] != NULL ? explode(",", $data["tags"]) : [];
+    $data["tags"] = (isset($data["tags"]) && $data["tags"] != NULL) ? explode(",", $data["tags"]) : [];
     echo form_field([
       "type" => "multi-checkbox",
       "name" => "Tags",
@@ -86,7 +89,7 @@ include("../../common/header.php");
     // Sector Field with Table Linked rows
     $sectors_arr = fetch_data(["table" => "sectors", "columns" => "id, sector", "condition" => "", "order" => "sector ASC", "limit" => ""]);    // print_arr($sectors_arr);
     $data["sectors"] = [];
-    $symbol_sector_link_arr = fetch_data(["table" => "symbol_sector_link", "columns" => "symbol, sector", "condition" => " symbol = '".$id."' ", "order" => "", "limit" => ""]);
+    $symbol_sector_link_arr = fetch_data(["table" => "symbol_sector_link", "columns" => "symbol, sector", "condition" => " symbol = '" . $id . "' ", "order" => "", "limit" => ""]);
     foreach ($symbol_sector_link_arr as $lk => $lv) {
       $data["sectors"][] = $lv["sector"];
     }

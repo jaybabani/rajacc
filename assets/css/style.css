@@ -882,3 +882,6 @@ tr .no-det {
 	top: 6px;
 	font-size: 11px;
 }
+.pagination{
+	margin-bottom: 0;
+}
