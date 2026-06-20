@@ -432,14 +432,14 @@ function datatable_instance($module_pages)
                     //     targets: 1, // column index where checkboxes are
                     //     orderable: true,
                     //     render: function(data, type, row) {
-                    //         // 'type' can be 'display', 'filter', or 'sort'
-                    //         if (type === 'sort') {
-                    //             let checked = $(data).find('input[type="checkbox"]').prop('checked');
-                    //             return checked ? 1 : 0;
-                    //             // Return 1 if checked, 0 if unchecked
-                    //             //   return $('input[type="checkbox"]', data).prop(':checked') ? 1 : 0;
-                    //         }
-                    //         return data;
+                    //  // 'type' can be 'display', 'filter', or 'sort'
+                    //  if (type === 'sort') {
+                    //      let checked = $(data).find('input[type="checkbox"]').prop('checked');
+                    //      return checked ? 1 : 0;
+                    //      // Return 1 if checked, 0 if unchecked
+                    //      //   return $('input[type="checkbox"]', data).prop(':checked') ? 1 : 0;
+                    //  }
+                    //  return data;
                     //     }
                     // },
                 ]
@@ -534,8 +534,8 @@ function form_field($vars, $data)
 
 
         if ($vars["type"] == "text") {
-            $s .= '<input type="text" class="form-control" name="' . $vars["key"] . '" id="' . $vars["key"] . '" value="' . get_value($data, $vars["key"]) . '" ' . ($required ? "required" : "") . '>
-          <div class="invalid-feedback">Incorrect ' . $vars["name"] . ' value</div>';
+            $s .= '<input type="text" class="form-control" name="' . $vars["key"] . '" id="' . $vars["key"] . '" value="' . get_value($data, $vars["key"]) . '" ' . ($required ? "required" : "") . '>';
+            $s .= '<div class="invalid-feedback">Incorrect ' . $vars["name"] . ' value</div>';
         }
 
         if ($vars["type"] == "select") {
@@ -543,6 +543,20 @@ function form_field($vars, $data)
             $sel = get_value($data, $vars["key"]);
             $s .= select_options($vars["options"], $sel);
             $s .= '</select><div class="invalid-feedback">Incorrect ' . $vars["name"] . ' value</div>';
+        }
+
+        if ($vars["type"] == "multi-checkbox") {
+            $s .= '<div>';
+            foreach ($vars["options"] as $k => $v) {
+                $sel = "";
+                $optid = $vars["option_id"];
+                $optlabel = $vars["option_label"];
+                if (in_array($v[$optid], $data[$vars["key"]])) {
+                    $sel = "checked";
+                }
+                $s .= '<input type="checkbox" ' . $sel . ' class="form-check-input" name="' . $vars["key"] . '[]" id="' . $vars["key"] . '-' . $v[$optid] . '" value="' . $v[$optid] . '"><label for="' . $vars["key"] . '-' . $v[$optid] . '">' . $v[$optlabel] . '</label><br>';
+            }
+            $s .= '</div>';
         }
 
         $s .= '</div>';
@@ -575,19 +589,27 @@ function module_submit_form($vars)
     $_REQ = $vars["submit_data"];
     $table = $vars["tablename"];
     $msg = $vars["messages"];
-    $submit_fields = $vars["submit_fields"];
+    $save_fields = $vars["save_fields"];
+    $link_table_rows = $vars["link_table_rows"];
+    $primary_column = $vars["primary_column"];
 
     $ts = getts();
 
     if (isset($_REQ['save']) || isset($_REQ['savenew'])) {
-        // print_arr($_REQ);
+        print_arr($_REQ);
         // die;
 
         $query = '';
-        foreach ($submit_fields as $sk => $sv) {
+        foreach ($save_fields as $sk => $sv) {
             if (isset($sv["type"]) && $sv["type"] == "time") {
                 $query .= " " . $sv['key'] . " = \"" . $ts . "\", ";
-            } else {
+            }
+            // 
+            else if (isset($sv["type"]) && $sv["type"] == "implode") {
+                $query .= " " . $sv['key'] . " = \"" . implode($sv["sep"], $_REQ[$sv['key']]) . "\", ";
+            }
+            //
+            else {
                 $query .= " " . $sv['key'] . " = \"" . $conn->real_escape_string($_REQ[$sv['key']]) . "\", ";
             }
         }
@@ -612,9 +634,10 @@ function module_submit_form($vars)
 
             //echo "New firewall inserted at ". decrypt($datetime);
             if ($sql) {
-                notify('success', $msg["success_added"]);
 
-                $id = $conn->insert_id;
+                $insert_id = $conn->insert_id;
+                save_link_table_rows($vars, $insert_id);
+                notify('success', $msg["success_added"]);
 
                 redirect_action($_REQ);
 
@@ -626,12 +649,16 @@ function module_submit_form($vars)
 
                 return false;
             }
-        } elseif ($_REQ['mode'] == 'update') {
+        }
+
+        //
+        elseif ($_REQ['mode'] == 'update') {
             // update
             // $query .= " updated = \"" . $ts . "\" ";
-            $sql = $conn->query(" UPDATE $table SET " . $query . " WHERE id = '" . $_REQ['id'] . "' ");
+            $sql = $conn->query(" UPDATE $table SET " . $query . " WHERE " . $primary_column . " = '" . $_REQ[$primary_column] . "' ");
 
             if ($sql) {
+                save_link_table_rows($vars, $_REQ[$primary_column]);
                 notify('success', $msg["success_update"]);
                 redirect_action($_REQ);
 
@@ -645,6 +672,32 @@ function module_submit_form($vars)
         } else {
             // no mode defined
             return false;
+        }
+    }
+}
+
+function save_link_table_rows($vars, $primary_id)
+{
+    global $conn;
+
+    $_REQ = $vars["submit_data"];
+    $ltr = $vars["link_table_rows"];
+    $primary_column = $vars["primary_column"];
+
+    if (sizeof($ltr) > 0) {
+        $rows = $_REQ[$ltr["multi_column"]["field"]];
+        $single_col = $ltr["single_column"]["column"];
+        $multi_col = $ltr["multi_column"]["column"];
+        $table = $ltr["table"];
+
+        $delsql = " DELETE FROM " . $table . " WHERE " . $single_col . " = '" . $primary_id . "' ";
+        echo $delsql . "<br>";
+        $conn->query($delsql);
+
+        foreach ($rows as $k => $r) {
+            $inssql = "INSERT INTO " . $table . " (" . $single_col . ", " . $multi_col . ") VALUES ( '" . $primary_id . "' , '" . $r . "') ";
+            echo $inssql . "<br>";
+            $conn->query($inssql);
         }
     }
 }
@@ -687,4 +740,60 @@ function get_active_arr()
     ];
 
     return $arr;
+}
+
+
+function fetch_data($vars)
+{
+    global $conn;
+
+    $table = $vars["table"];
+    $cols = $vars["columns"];
+    $order = $vars["order"];
+    $limit = $vars["limit"];
+    $condition = $vars["condition"];
+
+    if ($condition != "") {
+        $condition = " WHERE " . $condition;
+    }
+
+    if (trim($order) != '') {
+        if (strpos($order, " DESC") !== false || strpos($order, " ASC") !== false) {
+            $order = ' ORDER BY ' . trim($order) . ' ';
+        } else {
+            $order = ' ORDER BY ' . trim($order) . ' ASC ';
+        }
+    }
+
+    if (trim($limit) != '') {
+        $limit = ' LIMIT ' . trim($limit) . ' ';
+    }
+
+    $singlearr = true;
+
+    $ret = [];
+
+    $sql = ' SELECT ' . $cols . ' FROM ' . $table . ' ' . $condition . ' ' . $order . ' ' . $limit . ' ';
+    // echo $sql."<br>";
+    //if($nonenglish == "true"){
+    //$querystr = $conn->query("SET CHARACTER SET utf8 ");
+    //$querystr = $conn->query("SET NAMES utf8"); //for non english languages
+    //}
+
+    $querystr = $conn->query($sql);
+
+    $totrows = mysqli_num_rows($querystr);
+
+    if ($totrows > 0) {
+        $inc = 0;
+        while ($result = mysqli_fetch_object($querystr)) {
+            // print_arr($result);
+            foreach ($result as $key => $value) {
+                $ret[$inc][$key] = $value;
+            }
+            $inc = $inc + 1;
+        }
+    }
+
+    return $ret;
 }

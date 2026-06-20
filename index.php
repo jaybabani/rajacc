@@ -22,6 +22,11 @@ include(__DIR__ . "/common/header.php");
   download csv or excel
   
   
+  static array
+  fetch array from db
+
+  
+
   
   </pre>";  
 
