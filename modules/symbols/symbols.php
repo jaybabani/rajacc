@@ -75,6 +75,7 @@ include("../../common/header.php");
       "datatable" => true,
       "pagination" => true,
       "pagelimit" => 100,
+      "query" => "",
       "orderby" => "id DESC"
     ]
   );

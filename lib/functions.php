@@ -642,7 +642,7 @@ function getts($d = '0', $m = '0', $y = '0', $h = '0', $min = '0', $s = '0')
 function logthis($table, $query, $id, $datetime, $type)
 {
     /*include("variables.php");
-    $userid = encrypt($_SESSION["adminuserId"]);
+    $userid = encrypt($_SESSION["user_id"]);
     $table= encrypt($table);
     $query= encrypt($query);
     $id = encrypt($id);

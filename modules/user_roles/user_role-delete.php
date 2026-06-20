@@ -1,6 +1,6 @@
 <?php
-$module = "symbols";
-$pageid = "symbols-delete";
+$module = "user_roles";
+$pageid = "user_roles-delete";
 include '../../common/header.php';
 ?>
 
@@ -11,13 +11,13 @@ include '../../common/header.php';
         $id = $_GET['id'];
     }
 
-    $titletag = "Delete Symbol";
+    $titletag = "Delete User Role";
 
-    $tablename = "symbols";
+    $tablename = "user_roles";
 
     $msg = [
-        "success_delete" => "Symbol deleted successfully",
-        "error_delete" => "Error in deleting symbol",
+        "success_delete" => "User Role deleted successfully",
+        "error_delete" => "Error in deleting user_role",
     ];
 
     $primary_column = "id";
@@ -27,7 +27,7 @@ include '../../common/header.php';
         "tablename" => $tablename,
         "messages" => $msg,
         "primary_column" => $primary_column,
-        "redirect_to" => "symbols"
+        "redirect_to" => "user_roles"
     ]);
 
     $data = module_get_data($tablename, $id);
@@ -37,7 +37,7 @@ include '../../common/header.php';
 
     ?>
 
-    <form action="symbol-delete.php" method="post" enctype="multipart/form-data">
+    <form action="user_role-delete.php" method="post" enctype="multipart/form-data">
         <input type="hidden" name="mode" value="<?php echo get_value($data, 'mode'); ?>">
         <input type="hidden" name="id" value="<?php echo get_value($data, 'id'); ?>">
 
@@ -45,10 +45,10 @@ include '../../common/header.php';
             <div class="row">
                 <div class="col-md-9 col-sm-10 col-xs-12">
                     <div class="form-group">
-                        <label class="form-label" for="field-4">Are You sure you want to delete symbol
+                        <label class="form-label" for="field-4">Are You sure you want to delete user role
                             <?php echo "ID: <strong>" . get_value($data, 'id') . "</strong>";
-                            $symbol = name_title(get_value($data, 'symbol'));
-                            echo " Symbol: <strong>" . $symbol . "</strong>"; ?>?</label>
+                            $user_role = name_title(get_value($data, 'user_role'));
+                            echo " User Role: <strong>" . $user_role . "</strong>"; ?>?</label>
                     </div>
                 </div>
             </div>

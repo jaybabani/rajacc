@@ -41,13 +41,13 @@ include("../../common/header.php"); ?>
 
                 <div class="col-md-12 mb-4">
                     <label for="validationCustom01" class="form-label">Username <sup>*</sup></label>
-                    <input type="text" class="form-control" id="validationCustom01" value="" name="adminusername" id="user_login" required>
+                    <input type="text" class="form-control" id="validationCustom01" value="" name="username" id="user_login" required>
                 </div>
 
 
                 <div class="col-md-12 mb-4">
                     <label for="validationCustom01" class="form-label">Password <sup>*</sup></label>
-                    <input type="password" class="form-control" id="validationCustom01" value="" name="adminpassword" id="user_pass" required>
+                    <input type="password" class="form-control" id="validationCustom01" value="" name="password" id="user_pass" required>
                 </div>
 
                 <div class="col-12 mb-4">

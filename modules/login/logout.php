@@ -13,7 +13,7 @@ include ROOT_DIR . '/lib/variables.php';
 
 // update logout time of the sessionid
 $datetime = date("Y-m-d H:i:s");
-$conn->query("UPDATE  $table_ip SET loggedout_on='" . $datetime . "' WHERE sessionid='" . session_id() . "' AND userId='" . $_SESSION["adminuserId"] . "' ");
+$conn->query("UPDATE  $table_ip SET loggedout_on='" . $datetime . "' WHERE sessionid='" . session_id() . "' AND userId='" . $_SESSION["user_id"] . "' ");
 
 // if (isset($_SESSION["id"])) {
   session_destroy();

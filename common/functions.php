@@ -277,7 +277,10 @@ function crud_read($vars)
     }
 
     $query = "";
-
+    if (isset($vars["query"]) && $vars["query"] != "") {
+        $query = " WHERE " . $vars["query"];
+    }
+    
     $cols = "*";
     $cols_arr = [];
 

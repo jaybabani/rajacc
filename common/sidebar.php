@@ -82,7 +82,7 @@
   <?php 
     $show_menu["dashboard"] = "";
     $show_menu["symbols"] = "";
-    
+    $show_menu["users"] = "";
     
     $current_page = str_replace(".php","",basename($_SERVER['PHP_SELF']));
     // echo $current_page;
@@ -91,6 +91,9 @@
     }
     else if(in_array($current_page,array("symbols","symbol-form"))){
       $show_menu["symbols"] = "show";
+    }
+    else if(in_array($current_page,array("users","user-form","user_roles","user_role-form"))){
+      $show_menu["users"] = "show";
     }
     
     
@@ -133,6 +136,22 @@
         </ul>
       </div>
     </li>
+
+
+    <?php $menuid = "users"; ?>
+    <li class="mb-1">
+      <button class="btn btn-toggle align-items-center collapsed" data-bs-toggle="collapse" data-bs-target="#<?php echo $menuid; ?>-collapse"  aria-expanded="<?php echo $show_menu[$menuid] == "show" ? "true" : "false"; ?>">
+        <span class="icon"><i data-feather="home"></i></span> <span class="txt">Users</span>
+      </button>
+      <div class="collapse <?php echo $show_menu[$menuid]; ?>" id="<?php echo $menuid; ?>-collapse" data-bs-parent="#parent-level">
+        <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
+          <li><a href="<?php echo ROOT_PATH; ?>/modules/users/users.php" class="link-dark"><span>All users</span></a></li>
+          <li><a href="<?php echo ROOT_PATH; ?>/modules/users/user-form.php" class="link-dark"><span>Add new user</span></a></li>
+          <li><a href="<?php echo ROOT_PATH; ?>/modules/user_roles/user_roles.php" class="link-dark"><span>All user roles</span></a></li>
+          <li><a href="<?php echo ROOT_PATH; ?>/modules/user_roles/user_role-form.php" class="link-dark"><span>Add new user role</span></a></li>
+        </ul>
+      </div>
+    </li>    
 
     <li class="mb-1">
       <button class="btn btn-toggle align-items-center collapsed" data-bs-toggle="collapse" data-bs-target="#home-collapse" aria-expanded="false">
