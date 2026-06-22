@@ -132,19 +132,6 @@
       </div>
     </li>
 
-    <?php $menuid = "symbols"; ?>
-    <li class="mb-1">
-      <button class="btn btn-toggle align-items-center collapsed" data-bs-toggle="collapse" data-bs-target="#<?php echo $menuid; ?>-collapse"  aria-expanded="<?php echo $show_menu[$menuid] == "show" ? "true" : "false"; ?>">
-        <span class="icon"><i data-feather="home"></i></span> <span class="txt">Symbols</span>
-      </button>
-      <div class="collapse <?php echo $show_menu[$menuid]; ?>" id="<?php echo $menuid; ?>-collapse" data-bs-parent="#parent-level">
-        <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
-          <li><a href="<?php echo ROOT_PATH; ?>/modules/symbols/symbols.php" class="link-dark"><span>All symbols</span></a></li>
-          <li><a href="<?php echo ROOT_PATH; ?>/modules/symbols/symbol-form.php" class="link-dark"><span>Add new symbol</span></a></li>
-        </ul>
-      </div>
-    </li>
-
 
     <?php $menuid = "users"; ?>
     <li class="mb-1">
@@ -188,6 +175,19 @@
         </ul>
       </div>
     </li>    
+
+    <?php $menuid = "symbols"; ?>
+    <li class="mb-1">
+      <button class="btn btn-toggle align-items-center collapsed" data-bs-toggle="collapse" data-bs-target="#<?php echo $menuid; ?>-collapse"  aria-expanded="<?php echo $show_menu[$menuid] == "show" ? "true" : "false"; ?>">
+        <span class="icon"><i data-feather="home"></i></span> <span class="txt">Symbols</span>
+      </button>
+      <div class="collapse <?php echo $show_menu[$menuid]; ?>" id="<?php echo $menuid; ?>-collapse" data-bs-parent="#parent-level">
+        <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
+          <li><a href="<?php echo ROOT_PATH; ?>/modules/symbols/symbols.php" class="link-dark"><span>All symbols</span></a></li>
+          <li><a href="<?php echo ROOT_PATH; ?>/modules/symbols/symbol-form.php" class="link-dark"><span>Add new symbol</span></a></li>
+        </ul>
+      </div>
+    </li>
 
     <li class="mb-1">
       <button class="btn btn-toggle align-items-center collapsed" data-bs-toggle="collapse" data-bs-target="#home-collapse" aria-expanded="false">
