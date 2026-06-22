@@ -1,21 +1,21 @@
 <?php
-$module = "customers";
-$pageid = "customers-read";
+$module = "vendors";
+$pageid = "vendors-read";
 include("../../common/header.php");
-// include("customer-functions.php");
+// include("vendor-functions.php");
 ?>
 
 <div class="row row-cols-1 row-cols-sm-1 row-cols-md-1 row-cols-lg-1 row-cols-xl-1 row-cols-xxl-1 g-4 py-3 px-2">
 
   <?php
   $module_pages = [
-    "read" => "customers",
-    "update" => "customer-form",
-    "create" => "customer-form",
-    "delete" => "customer-delete"
+    "read" => "vendors",
+    "update" => "vendor-form",
+    "create" => "vendor-form",
+    "delete" => "vendor-delete"
   ];
 
-  $pagetitle = T("Customers");
+  $pagetitle = T("Vendors");
   $actions_html = "";
   $actions_html .= download_xlsx($module_pages["read"]);
   $actions_html .= pagination($module_pages["read"] . ".php");
@@ -23,9 +23,19 @@ include("../../common/header.php");
 
   <?php
 
-  $tablename = "customers";
+  $tablename = "vendors";
 
   $primary_column = "id";
+
+  $raw_materials_arr = fetch_data(["table" => "raw_materials", "columns" => "id, raw_material", "condition" => "", "order" => "raw_material ASC", "limit" => ""]);    // print_arr($raw_materials_arr);
+  // $data["raw_materials"] = [];
+  $vendor_raw_material_link_arr = fetch_data(["table" => "vendor_raw_material_link", "columns" => "vendor, raw_material", "condition" => "", "order" => "", "limit" => ""]);
+  $links = [];
+  foreach ($vendor_raw_material_link_arr as $lk => $lv) {
+    $links[$lv["vendor"]][] = $lv["raw_material"];
+  }
+  // print_arr($raw_materials_arr);
+  // print_arr($links);
 
   $display_columns = [
     ["name" => "", "column" => "", "type" => "details", "sorting" => false, "search" => false, "class" => "text-center nowrap"],
@@ -34,20 +44,20 @@ include("../../common/header.php");
     ["name" => "Image", "column" => "image", "type" => "image-file", "sorting" => false, "search" => false, "class" => "text-center"],
     ["name" => "Firm Name", "column" => "firm_name", "class" => "title nowrap"],
     ["name" => "Firm Contact", "column" => ["firm_email", "firm_phone"], "prefix" => ["Firm Email", "Firm Phone"], "sorting" => false],
-    ["name" => "Category", "column" => "category", "options" => get_customer_category_arr(), "badge" => true],
+    ["name" => "Category", "column" => "category", "options" => get_vendor_category_arr(), "badge" => true],
     ["name" => "Owner Name", "column" => "owner_name", "class" => "title nowrap"],
     ["name" => "Owner Contact", "column" => ["owner_email", "owner_phone"], "prefix" => ["Owner Email", "Owner Phone"], "sorting" => false],
-    ["name" => "GST No.", "column" => "gst", "class" => "nowrap"],
-    ["name" => "Zone / Area", "column" => "zone", "class" => "nowrap"],
+    ["name" => "Raw Materials", "column" => "", "options" => $raw_materials_arr, "type" => "link_table_rows", "links" => $links, "option_id" => "id", "option_label" => "raw_material", "sorting" => false],
+    ["name" => "Registrations", "column" => ["gst","pan"], "prefix" => ["GST No.", "PAN"], "sorting" => false],
     ["name" => "Active", "column" => "active", "options" => get_active_arr(), "badge" => true],
-    ["name" => "Actions", "column" => "", "type" => "edit_delete", "sorting" => false, "search" => false, "class" => "nowrap", "acl" => ["edit" => "customers-update", "delete" => "customers-delete"]],
+    ["name" => "Actions", "column" => "", "type" => "edit_delete", "sorting" => false, "search" => false, "class" => "nowrap", "acl" => ["edit" => "vendors-update", "delete" => "vendors-delete"]],
   ];
 
   $fetch_columns = [];
 
   $detail_columns = [
     ["name" => "Firm Name", "column" => "firm_name"],
-    ["name" => "Price Allotment", "column" => "price_allotment"],
+    ["name" => "Payment term", "column" => "payment_term"],
     ["name" => "Firm Address", "column" => "firm_address"],
   ];
 

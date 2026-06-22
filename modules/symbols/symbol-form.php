@@ -76,7 +76,7 @@ include("../../common/header.php");
     $data["tags"] = (isset($data["tags"]) && $data["tags"] != NULL) ? explode(",", $data["tags"]) : [];
     echo form_field([
       "type" => "multi-checkbox",
-      "name" => "Tags",
+      "name" => "Tags (implode as string)",
       "key" => "tags",
       "required" => true,
       "options" => $tags_arr,
@@ -95,7 +95,7 @@ include("../../common/header.php");
     }
     echo form_field([
       "type" => "multi-checkbox",
-      "name" => "Sectors",
+      "name" => "Sectors (Link in tables)",
       "key" => "sectors",
       "required" => true,
       "options" => $sectors_arr,
@@ -103,10 +103,6 @@ include("../../common/header.php");
       "option_label" => "sector",
       "class" => "col-md-6 col-lg-4 mb-3"
     ], $data);
-
-
-
-
 
 
     echo form_field(["type" => "submit", "name" => "Save", "key" => "save", "class" => "col-md-12 col-sm-12 col-xs-12 text-center"], $data);

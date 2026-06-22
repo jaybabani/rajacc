@@ -1,11 +1,11 @@
 <?php
-$module = "customers";
-$pageid = "customers-create";
+$module = "vendors";
+$pageid = "vendors-create";
 if (isset($_GET['id']) && is_numeric($_GET['id']) && trim($_GET['id']) != '') {
-  $pageid = "customers-update";
+  $pageid = "vendors-update";
 }
 include("../../common/header.php");
-// include("customer-functions.php");
+// include("vendor-functions.php");
 ?>
 
 <div class="row row-cols-1 row-cols-sm-1 row-cols-md-1 row-cols-lg-1 row-cols-xl-1 row-cols-xxl-1 g-4 py-3 px-2">
@@ -13,10 +13,10 @@ include("../../common/header.php");
 
   $id = '';
   $mode = "new";
-  $titletag = T('Add New Customer');
+  $titletag = T('Add New Vendor');
   if (isset($_GET['id']) && is_numeric($_GET['id']) && trim($_GET['id']) != '') {
     $mode = 'update';
-    $titletag = T('Edit Customer');
+    $titletag = T('Edit Vendor');
     $id = $_GET['id'];
   }
 
@@ -24,7 +24,7 @@ include("../../common/header.php");
   ?>
   <?php
 
-  $tablename = "customers";
+  $tablename = "vendors";
   $primary_column = "id";
 
   $save_fields = [
@@ -35,23 +35,28 @@ include("../../common/header.php");
     ["key" => "owner_name"],
     ["key" => "owner_email"],
     ["key" => "owner_phone"],
-    ["key" => "zone"],
+    ["key" => "pan"],
     ["key" => "gst"],
     ["key" => "category"],
-    ["key" => "price_allotment"],
+    ["key" => "payment_term"],
     ["key" => "active"],
     ["key" => "image", "type" => "image"],
     ["key" => "updated", "type" => "time"]
   ];
 
   $msg = [
-    "success_update" => "Customer updated successfully",
-    "error_update" => "Error in updating customer",
-    "success_added" => "New customer added successfully",
-    "error_added" => "Error in adding new customer",
+    "success_update" => "Vendor updated successfully",
+    "error_update" => "Error in updating vendor",
+    "success_added" => "New vendor added successfully",
+    "error_added" => "Error in adding new vendor",
   ];
 
-  $link_table_rows = [];
+
+  $link_table_rows = [
+    "table" => "vendor_raw_material_link",
+    "single_column" => ["column" => "vendor", "field" => $primary_column],
+    "multi_column" => ["column" => "raw_material", "field" => "raw_materials"],
+  ];
 
   $submit_result = module_submit_form([
     "submit_data" => $_POST,
@@ -79,10 +84,11 @@ include("../../common/header.php");
     echo form_field(["type" => "text", "name" => "Owner Name", "key" => "owner_name", "required" => true, "class" => "col-md-6 col-lg-4 mb-3"], $data);
     echo form_field(["type" => "text", "name" => "Owner Email", "key" => "owner_email", "class" => "col-md-6 col-lg-4 mb-3"], $data);
     echo form_field(["type" => "textarea", "name" => "Owner Phone", "key" => "owner_phone", "class" => "col-md-6 col-lg-4 mb-3"], $data);
-    echo form_field(["type" => "select", "name" => "Category", "key" => "category", "required" => true, "options" => get_customer_category_arr(), "class" => "col-md-6 col-lg-4 mb-3"], $data);
-    echo form_field(["type" => "text", "name" => "Zone / Area", "key" => "zone", "class" => "col-md-6 col-lg-4 mb-3"], $data);
+    echo form_field(["type" => "select", "name" => "Category", "key" => "category", "required" => true, "options" => get_vendor_category_arr(), "class" => "col-md-6 col-lg-4 mb-3"], $data);
     echo form_field(["type" => "text", "name" => "GST No.", "key" => "gst", "class" => "col-md-6 col-lg-4 mb-3"], $data);
-    echo form_field(["type" => "text", "name" => "Price Allotment", "key" => "price_allotment", "class" => "col-md-6 col-lg-4 mb-3"], $data);
+
+    echo form_field(["type" => "text", "name" => "PAN No.", "key" => "pan", "class" => "col-md-6 col-lg-4 mb-3"], $data);
+    echo form_field(["type" => "text", "name" => "Payment term", "key" => "payment_term", "class" => "col-md-6 col-lg-4 mb-3"], $data);
     echo form_field(["type" => "select", "name" => "Active", "key" => "active", "required" => true, "options" => get_active_arr(), "class" => "col-md-6 col-lg-4 mb-3"], $data);
 
     // Image upload field
@@ -91,6 +97,27 @@ include("../../common/header.php");
       $data["image"] = $image_arr;      // print_arr($data);
     }
     echo form_field(["type" => "image-file", "name" => "Image", "key" => "image", "display_size" => "small", "class" => "col-md-6 col-lg-4 mb-3"], $data);
+
+    // raw_material Field with Table Linked rows
+    $raw_materials_arr = fetch_data(["table" => "raw_materials", "columns" => "id, raw_material", "condition" => "", "order" => "raw_material ASC", "limit" => ""]);    // print_arr($raw_materials_arr);
+    $data["raw_materials"] = [];
+    $vendor_raw_material_link_arr = fetch_data(["table" => "vendor_raw_material_link", "columns" => "vendor, raw_material", "condition" => " vendor = '" . $id . "' ", "order" => "", "limit" => ""]);
+    foreach ($vendor_raw_material_link_arr as $lk => $lv) {
+      $data["raw_materials"][] = $lv["raw_material"];
+    }
+    echo form_field([
+      "type" => "multi-checkbox",
+      "name" => "Raw materials",
+      "key" => "raw_materials",
+      // "required" => true,
+      "options" => $raw_materials_arr,
+      "option_id" => "id",
+      "option_label" => "raw_material",
+      "class" => "col-md-6 col-lg-4 mb-3"
+    ], $data);
+
+
+
 
     echo form_field(["type" => "submit", "name" => "Save", "key" => "save", "class" => "col-md-12 col-sm-12 col-xs-12 text-center"], $data);
 

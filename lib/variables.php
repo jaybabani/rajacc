@@ -26,6 +26,10 @@ function acl_roles($format = "")
 		["customers-update", "Update customers"],
 		["customers-create", "Add new customers"],
 		["customers-delete", "Delete customers"],
+		["vendors-read", "View all vendors"],
+		["vendors-update", "Update vendors"],
+		["vendors-create", "Add new vendors"],
+		["vendors-delete", "Delete vendors"],
 	];
 
 	if ($format == "raw") {
@@ -69,6 +73,19 @@ function get_customer_category_arr()
 		"exporter" => "Expoter",
 		"retailer" => "Retailer"
 	];
+
+	return $arr;
+}
+
+function get_vendor_category_arr()
+{
+	$arr = [
+    "raw_material" => "Raw Material",
+    "packing_material" => "Packing Material",
+    "consumables" => "Consumables",
+    "machine_tools" => "Machine & Tools",
+    "service_provider" => "Service Provider"
+];
 
 	return $arr;
 }
