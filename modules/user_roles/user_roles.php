@@ -51,6 +51,8 @@ include("../../common/header.php");
 
   $fetch_columns = [];
 
+  $detail_columns = [];
+
   $table_html = crud_read(
     [
       "module_pages" => $module_pages,
@@ -58,6 +60,7 @@ include("../../common/header.php");
       "primary_column" => $primary_column,
       "display_columns" => $display_columns,
       "fetch_columns" => $fetch_columns,
+      "detail_columns" => $detail_columns,
       "datatable" => true,
       "pagination" => true,
       "pagelimit" => 100,

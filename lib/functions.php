@@ -7,7 +7,7 @@
 // include_once("functions_resources.php");
 // include_once("functions_analysis.php");
 // include_once("file.php");
-// include_once 'file-functions.php';
+include_once 'file-functions.php';
 
 function get_data($table, $query, $cols, $order = '', $limit = '')
 {
@@ -554,6 +554,15 @@ if (!function_exists('print_arr')) {
     }
 }
 
+if (!function_exists('print_arrbox')) {
+  function print_arrbox($a, $h = 100)
+  {
+    echo '<pre class="arr-box" style="height:' . $h . 'px;overflow:auto;">';
+    print_r($a);
+    echo '</pre>';
+  }
+}
+
 function select_options($arr, $sel)
 {
     $ret = "<option value=''></option>";
@@ -653,8 +662,8 @@ function logthis($table, $query, $id, $datetime, $type)
 
 function notify($type = '', $msg = '')
 {
-    echo '<div class="position-fixed showNotification alert alert-'.$type .' alert-dismissible fade show" role="alert">
-    <strong>'.$msg.'</strong><button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    echo '<div class="position-fixed showNotification alert alert-' . $type . ' alert-dismissible fade show" role="alert">
+    <strong>' . $msg . '</strong><button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
     </div>';
 }
 
@@ -1152,7 +1161,7 @@ function insert_update_data($table, $rows, $index_key)
                 $query .= ' ' . $column . " = \"" . $value . "\", ";
             }
         }
-        //echo "|||". $query."|||<br>";
+        // echo "|||". $query."|||<br>";
 
         // check if row is present or not based on index columns
         // if present, then update else insert
@@ -1161,34 +1170,42 @@ function insert_update_data($table, $rows, $index_key)
         $updateID = '';
 
         $condition = ''; // based on index key columns
+
         $keys = explode(',', $index_key);
         foreach ($keys as $key) {
             //echo $key;
-            $condition .= $key . " = '" . $row[$key] . "' AND ";
+            if (isset($row[$key]) && $row[$key] != "") {
+                $condition .= $key . " = '" . $row[$key] . "' AND ";
+            }
         }
 
         $condition = substr($condition, 0, -4);
-        //echo $condition."<br>";
+        // echo $condition . "<br>";
 
         if (trim($condition) != '') {
             $condition = ' WHERE ' . $condition;
         }
 
-        $check = ' SELECT id FROM ' . $table . ' ' . $condition . ' ';
-        //echo $check;
-        $check_query = $conn->query($check);
-        $totrows = mysqli_num_rows($check_query);
+        if ($condition != "") {
+            $check = ' SELECT id FROM ' . $table . ' ' . $condition . ' ';
+            // echo $check;
+            $check_query = $conn->query($check);
+            $totrows = mysqli_num_rows($check_query);
 
-        if ($totrows > 0) {
-            $update = true;
+            if ($totrows > 0) {
+                $update = true;
 
-            // get id
-            while ($check_result = mysqli_fetch_object($check_query)) {
-                //echo "<pre>";	print_r($check_result);	echo "</pre>";
-                $updateID = $check_result->id;
+                // get id
+                while ($check_result = mysqli_fetch_object($check_query)) {
+                    //echo "<pre>";	print_r($check_result);	echo "</pre>";
+                    $updateID = $check_result->id;
+                }
+                //echo "ID: ".$updateID."<br>";
+                //echo "update<hr>";
+            } else {
+                //echo "insert<hr>";
+                $insert = true;
             }
-            //echo "ID: ".$updateID."<br>";
-            //echo "update<hr>";
         } else {
             //echo "insert<hr>";
             $insert = true;
@@ -1207,8 +1224,8 @@ function insert_update_data($table, $rows, $index_key)
             );
             $return['updated'][] = $updateID;
         } elseif ($insert) {
-            $query .= " created = \"" . $ts . "\" ";
-            //echo $query;
+            $query .= " updated = \"" . $ts . "\" ";
+            // echo $query;
             $sql = $conn->query(
                 'INSERT INTO ' . $table . ' SET ' . $query . ' '
             );

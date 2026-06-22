@@ -280,19 +280,47 @@ function crud_read($vars)
     if (isset($vars["query"]) && $vars["query"] != "") {
         $query = " WHERE " . $vars["query"];
     }
-    
+
     $cols = "*";
     $cols_arr = [];
+    $image_cols = [];
 
     if (isset($vars["display_columns"])) {
         foreach ($vars["display_columns"] as $k => $v) {
+            if (isset($v["column"])) {
+
+                // Merged columns in single cell
+                if (is_array($v["column"])) {
+                    foreach ($v["column"] as $ck => $colv) {
+                        $cols_arr[] = $colv;
+                    }
+                }
+
+                // Single column in single cell
+                else if ($v["column"] != "") {
+                    $cols_arr[] = $v["column"];
+
+                    // Note: Image-file column cannot be merged with other columns
+                    if (isset($v["type"]) && $v["type"] == "image-file") {
+                        $image_cols[] = $v["column"];
+                    }
+                }
+            }
+        }
+    }
+
+    // Extra info to be fetched
+    if (isset($vars["fetch_columns"])) {
+        foreach ($vars["fetch_columns"] as $k => $v) {
             if (isset($v["column"]) && $v["column"] != "") {
                 $cols_arr[] = $v["column"];
             }
         }
     }
-    if (isset($vars["fetch_columns"])) {
-        foreach ($vars["fetch_columns"] as $k => $v) {
+
+    // Columns fetched in detail rows (toggle rows)
+    if (isset($vars["detail_columns"])) {
+        foreach ($vars["detail_columns"] as $k => $v) {
             if (isset($v["column"]) && $v["column"] != "") {
                 $cols_arr[] = $v["column"];
             }
@@ -323,16 +351,28 @@ function crud_read($vars)
     }
     $html .= "</tr></thead><tbody>";
 
+    $details = [];
+
     if ($totrows > 0) {
-        $inc = 0;
+        $fetched_rows = [];
         while ($r = mysqli_fetch_assoc($querystr)) {
+            $fetched_rows[] = $r;
+        }
+
+        $images = fetch_image_rows($fetched_rows, $image_cols);
+
+        $inc = 0;
+
+
+        foreach ($fetched_rows as $rk => $r) {
             // echo "<pre>";	print_r($r);	echo "</pre>";
 
+            // hidden details row data
+
             $inc = $inc + 1;
+            $selected =  "";
 
-            $selected =  ""; //$inc > 6  ? "checked" : "";
-
-            $html .= "<tr data-details='" . $r[$vars["primary_column"]] . "'>";
+            $html .= "<tr data-id='" . $r[$vars["primary_column"]] . "'>";
 
             foreach ($vars["display_columns"] as $dk => $dv) {
 
@@ -341,45 +381,81 @@ function crud_read($vars)
                     $row_col_class = $dv["class"];
                 }
 
+
                 if (isset($dv["column"]) && $dv["column"] != "") {
 
-                    $colval = $r[$dv["column"]];
+                    $prefix = [];
+                    $cell_value = "";
+                    $colindex = 0;
 
-                    if (isset($dv["format"])) {
-                        if ($dv["format"] == "ts_to_dt") {
-                            $colval = "<span class='data-hide'>" . $colval . "</span>" . ts_to_dt($colval);
+                    if (is_array($dv["column"])) {
+                        $colarr = $dv["column"];
+                        $prefix = $dv["prefix"];
+                    } else {
+                        $colarr = [$dv["column"]];
+                    }
+
+                    foreach ($colarr as $ck => $colname) {
+
+                        $colval = $r[$colname];
+
+                        if (isset($dv["format"])) {
+                            if ($dv["format"] == "ts_to_dt") {
+                                $colval = "<span class='data-hide'>" . $colval . "</span>" . ts_to_dt($colval);
+                            }
                         }
-                    }
 
-                    if (isset($dv["options"])) {
-                        if (is_array($dv["options"]) && isset($dv["options"][$colval])) {
-                            $colval = $dv["options"][$colval];
+                        if (isset($dv["options"])) {
+                            if (is_array($dv["options"]) && isset($dv["options"][$colval])) {
+                                $colval = $dv["options"][$colval];
+                            }
                         }
-                    }
 
-                    if (isset($dv["badge"])) {
-                        $colval = "<span class='badge badge-" . $r[$dv["column"]] . "'>" . $colval . "</span>";
-                    }
+                        if (isset($dv["badge"])) {
+                            $colval = "<span class='badge badge-" . $r[$colname] . "'>" . $colval . "</span>";
+                        }
 
-                    if (isset($dv["type"]) && $dv['type'] == "implode" && isset($dv["sep"])) {
-                        $val = $r[$dv["column"]] ?? "";
-                        if ($val != "") {
-                            $selarr = explode($dv["sep"], $val);
-                            $colval = "";
-                            foreach ($dv["options"] as $ok => $ov) {
-                                if (in_array($ov[$dv["option_id"]], $selarr)) {
-                                    $colval .= $ov[$dv["option_label"]] . ", ";
+                        if (isset($dv["type"]) && $dv['type'] == "image-file") {
+                            $val = $r[$colname] ?? "";
+                            if ($val != "" && isset($images[$val])) {
+                                $colval = "<img src='" . ROOT_PATH . "/" . $images[$val]["thumb"] . "' class='table-thumb'>";
+                            }
+                        }
+
+                        if (isset($dv["type"]) && $dv['type'] == "implode" && isset($dv["sep"])) {
+                            $val = $r[$colname] ?? "";
+                            if ($val != "") {
+                                $selarr = explode($dv["sep"], $val);
+                                $colval = "";
+                                foreach ($dv["options"] as $ok => $ov) {
+                                    if (in_array($ov[$dv["option_id"]], $selarr)) {
+                                        $colval .= $ov[$dv["option_label"]] . ", ";
+                                    }
+                                }
+
+                                $colval = trim($colval);
+                                if ($colval != "") {
+                                    $colval = substr($colval, 0, -1);
                                 }
                             }
-
-                            $colval = trim($colval);
-                            if ($colval != "") {
-                                $colval = substr($colval, 0, -1);
-                            }
                         }
+
+
+                        // applies in case of columns array in same cell
+                        if ($cell_value != "") {
+                            $cell_value .= "<br>";
+                        }
+
+                        // Prefix for multiple columns data
+                        if (isset($prefix[$colindex]) && $prefix[$colindex] != "") {
+                            $cell_value .= "<small><i>" . $prefix[$colindex] . ": " . "</i></small>";
+                        }
+
+                        $cell_value .= $colval;
+                        $colindex++; // increment column counter in a cell
                     }
 
-                    $html .= "<td class='" . $row_col_class . "'>" . $colval . "</td>";
+                    $html .= "<td class='" . $row_col_class . "'>" . $cell_value . "</td>";
                 }
 
                 //
@@ -426,11 +502,31 @@ function crud_read($vars)
                 }
             }
 
+            // Details Columns ---------
+            $row_detail = "";
+            foreach ($vars["detail_columns"] as $dk => $dv) {
+                if (isset($dv["column"]) && $dv["column"] != "") {
+                    $colname = $dv["column"];
+                    $colval = "";
+                    if($r[$colname] != NULL){
+                        $colval = nl2br($r[$colname]);
+                    }
+                    $row_detail .= "<small><i>".$dv["name"] . ": </i></small>" . $colval."<br>";
+                }
+            }
+            $details[$r[$vars["primary_column"]]] = $row_detail;
+            // --------
+
+
             $html .= "</tr>";
         }
     }
 
     $html .= "</tbody></table></div></div>";
+
+    foreach ($details as $det_rowid => $str) {
+        $html .= "<input type='hidden' value='" . $str . "' id='details-" . $det_rowid . "'>";
+    }
 
     return $html;
 
@@ -443,6 +539,36 @@ function crud_delete() {}
 
 function crud_create() {}
 
+
+function fetch_image_rows($rows, $cols)
+{
+    $images = [];
+
+    // print_arrbox($rows);
+    // print_arr($cols);
+    $ids = [];
+    foreach ($rows as $rk => $r) {
+        foreach ($cols as $ck => $col) {
+            if (isset($r[$col])) {
+                $ids[] = $r[$col];
+            }
+        }
+    }
+    // print_arr($ids);
+    $condition = "";
+    if (sizeof($ids) > 0) {
+        $condition = " id IN (" . implode(",", $ids) . ") ";
+        $fetched = fetch_data(["table" => "uploads", "columns" => "id, thumb, small", "condition" => $condition, "order" => "", "limit" => ""]);    // print_arr($image_arr);
+        // print_arrbox($fetched, 300);
+        foreach ($fetched as $k => $i) {
+            $images[$i["id"]] = $i;
+        }
+        unset($fetched);
+    }
+
+    // print_arrbox($images, 300);
+    return $images;
+}
 
 function datatable_scripts()
 {
@@ -549,13 +675,19 @@ function datatable_instance($module_pages)
                 const id = tr.data('details'); // e.g. "1"
 
                 // const details = JSON.parse(tr.data('details'));
-                const details = tr.data('details');
+                // const details = tr.data('details');
+                // detailData[id] = details;
+
+                // console.log(details);
 
                 if (row.child.isShown()) {
                     row.child.hide();
                     tr.removeClass('shown');
                 } else {
                     // Get the details HTML by ID from JSON
+                    const id = tr.data('id');
+                    detailData[id] = $("#details-" + id).val();
+
                     const details = detailData[id] || "<div class='no-det'>No more details to display</div>";
                     // Show it
                     row.child(details).show();
@@ -592,7 +724,7 @@ function form_field($vars, $data)
         }
 
         if (isset($vars["eg"]) && $vars["eg"] != "") {
-            $s .= '<small>(eg: ' . $vars["eg"] . ')</small>';
+            $s .= '<small><i>(eg: ' . $vars["eg"] . ')</i></small>';
         }
         $s .= '</label>';
 
@@ -600,16 +732,18 @@ function form_field($vars, $data)
         if ($vars["type"] == "text") {
             $s .= '<input type="text" class="form-control" name="' . $vars["key"] . '" id="' . $vars["key"] . '" value="' . get_value($data, $vars["key"]) . '" ' . ($required ? "required" : "") . '>';
             $s .= '<div class="invalid-feedback">Incorrect ' . $vars["name"] . ' value</div>';
-        }
-
-        if ($vars["type"] == "select") {
+        } else if ($vars["type"] == "textarea") {
+            $s .= '<textarea class="form-control" name="' . $vars["key"] . '" id="' . $vars["key"] . '" ' . ($required ? "required" : "") . '>' . get_value($data, $vars["key"]) . '</textarea>';
+            $s .= '<div class="invalid-feedback">Incorrect ' . $vars["name"] . ' value</div>';
+        } else if ($vars["type"] == "number") {
+            $s .= '<input type="number" class="form-control" name="' . $vars["key"] . '" id="' . $vars["key"] . '" value="' . get_value($data, $vars["key"]) . '" ' . ($required ? "required" : "") . '>';
+            $s .= '<div class="invalid-feedback">Incorrect ' . $vars["name"] . ' value</div>';
+        } else if ($vars["type"] == "select") {
             $s .= '<select class="form-control" name="' . $vars["key"] . '" id="' . $vars["key"] . '" ' . ($required ? "required" : "") . '>';
             $sel = get_value($data, $vars["key"]);
             $s .= select_options($vars["options"], $sel);
             $s .= '</select><div class="invalid-feedback">Incorrect ' . $vars["name"] . ' value</div>';
-        }
-
-        if ($vars["type"] == "multi-checkbox") {
+        } else if ($vars["type"] == "multi-checkbox") {
             $s .= '<div class="multi-check-list">';
             foreach ($vars["options"] as $k => $v) {
                 $sel = "";
@@ -621,6 +755,18 @@ function form_field($vars, $data)
                 $s .= '<input type="checkbox" ' . $sel . ' class="form-check-input" name="' . $vars["key"] . '[]" id="' . $vars["key"] . '-' . $v[$optid] . '" value="' . $v[$optid] . '"><label for="' . $vars["key"] . '-' . $v[$optid] . '">' . $v[$optlabel] . '</label><br>';
             }
             $s .= '</div>';
+        } else if ($vars["type"] == "image-file") {
+            $s .= '<input type="file" class="form-control" name="' . $vars["key"] . '" id="' . $vars["key"] . '" ' . ($required ? "required" : "") . '>';
+            $s .= '<div class="invalid-feedback">Invalid ' . $vars["name"] . '</div>';
+            if (isset($data[$vars["key"]])) {
+                if (is_array($data[$vars["key"]]) && isset($data[$vars["key"]][0])) {
+                    $imgarr = $data[$vars["key"]][0];
+                    if (isset($vars["display_size"]) && $vars["display_size"] != "") {
+                        $imgpath = isset($imgarr[$vars["display_size"]]) ? $imgarr[$vars["display_size"]] : $imgarr["thumb"];
+                        $s .= "<img src='" . ROOT_PATH . "/" . $imgpath . "' class='form-imgbox'>";
+                    }
+                }
+            }
         }
 
         $s .= '</div>';
@@ -661,12 +807,24 @@ function module_submit_form($vars)
 
     if (isset($_REQ['save']) || isset($_REQ['savenew'])) {
         // print_arr($_REQ);
+        // print_arr($_FILES);
+        // print_arr($_SESSION);
         // die;
 
         $query = '';
         foreach ($save_fields as $sk => $sv) {
+
+
             if (isset($sv["type"]) && $sv["type"] == "time") {
                 $query .= " " . $sv['key'] . " = \"" . $ts . "\", ";
+            }
+            //
+            else if (isset($sv["type"]) && $sv["type"] == "image") {
+                $image = single_file_upload($conn, $_REQ, $_FILES, $sv["key"]);
+                // echo "image id: " . $image;
+                if ($image != "") {
+                    $query .= " " . $sv['key'] . " = \"" . $image . "\", ";
+                }
             }
             // 
             else if (isset($sv["type"]) && $sv["type"] == "implode") {

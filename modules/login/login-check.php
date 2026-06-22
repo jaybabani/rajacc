@@ -1,8 +1,10 @@
 <?php
 session_start();
+$page_type = "login";
 include '../../common/define.php';
 include ROOT_DIR . '/lib/connection.php';
 include ROOT_DIR . '/lib/variables.php';
+include("../../common/includes.php");
 
 // print_r($_POST);
 // die;
@@ -14,6 +16,7 @@ $result1 = $conn->query(" SELECT * FROM $table_users WHERE username='" . $userna
 $count = mysqli_num_rows($result1);
 if ($count == 1) {
   $cat = mysqli_fetch_array($result1);
+  // print_arr($cat);
   $_SESSION["user_id"] = $cat['id'];
   $_SESSION["username"] = $cat['username'];
   $_SESSION["name"] = $cat['name'];
@@ -29,28 +32,26 @@ if ($count == 1) {
 
   // find user acl list and store in session here.
 
-  if ($_SESSION["usertype"] == "admin") {
+  // if ($_SESSION["usertype"] == "admin") {
 
-    $_SESSION['acl'] = array(
-      "index",
-      "symbols-read",
-      "symbols-update",
-      "symbols-create",
-      "symbols-delete",
-      "users-read",
-      "users-update",
-      "users-create",
-      "users-delete",
-      "user_roles-read",
-      "user_roles-update",
-      "user_roles-create",
-      "user_roles-delete",
-    );
-  }
+    $user_roles = (isset($cat["user_roles"]) && $cat["user_roles"] != NULL) ? explode(",", $cat["user_roles"]) : [];
+    // print_arr($user_roles);
 
-  if ($_SESSION["usertype"] == "viewer") {
-    $_SESSION['acl'] = array();
-  }
+    $permissions = ["index"]; // default page after login
+
+    $condition = " user_role IN (" . implode(",", $user_roles) . ") ";
+    $user_role_permission_link_arr = fetch_data(["table" => "user_role_permission_link", "columns" => "user_role, permission", "condition" => $condition, "order" => "", "limit" => ""]);
+    foreach ($user_role_permission_link_arr as $lk => $lv) {
+      $permissions[] = $lv["permission"];
+    }
+    // print_arr($permissions);
+
+    // add permission in session
+    $_SESSION['acl'] = $permissions;
+
+    // print_arr($_SESSION);
+    
+  // }
 
   // die;
   echo "<script type='text/javascript'>window.location='" . ROOT_PATH . "/index.php';</script>";

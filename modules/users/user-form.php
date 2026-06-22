@@ -31,6 +31,11 @@ include("../../common/header.php");
     ["key" => "name"],
     ["key" => "email"],
     ["key" => "active"],
+    ["key" => "aadhaar"],
+    ["key" => "phone"],
+    ["key" => "address"],
+    ["key" => "department"],
+    ["key" => "image", "type" => "image"],
     ["key" => "user_roles", "type" => "implode", "sep" => ","],
     ["key" => "updated", "type" => "time"]
   ];
@@ -61,7 +66,7 @@ include("../../common/header.php");
   // print_arr($data);
   ?>
 
-  <form class="row g-3 needs-validation" novalidate method="POST">
+  <form class="row g-3 needs-validation" novalidate method="POST" enctype="multipart/form-data">
     <input type="hidden" name="mode" value="<?php echo $mode; ?>">
     <input type="hidden" name="<?php echo $primary_column; ?>" value="<?php echo $id; ?>">
 
@@ -70,6 +75,18 @@ include("../../common/header.php");
     echo form_field(["type" => "text", "name" => "Name", "key" => "name", "required" => true, "class" => "col-md-6 col-lg-4 mb-3"], $data);
     echo form_field(["type" => "text", "name" => "Email", "key" => "email", "class" => "col-md-6 col-lg-4 mb-3"], $data);
     echo form_field(["type" => "select", "name" => "Active", "key" => "active", "required" => true, "options" => get_active_arr(), "class" => "col-md-6 col-lg-4 mb-3"], $data);
+    echo form_field(["type" => "number", "name" => "Aadhaar No.", "key" => "aadhaar", "class" => "col-md-6 col-lg-4 mb-3"], $data);
+    echo form_field(["type" => "text", "name" => "Department", "key" => "department", "class" => "col-md-6 col-lg-4 mb-3"], $data);
+    echo form_field(["type" => "textarea", "name" => "Phone", "key" => "phone", "class" => "col-md-6 col-lg-4 mb-3"], $data);
+    echo form_field(["type" => "textarea", "name" => "Address", "key" => "address", "class" => "col-md-6 col-lg-4 mb-3"], $data);
+
+    // Image upload field
+    if(isset($data["image"]) && $data["image"] != NULL && $data["image"] != "") {
+      $image_arr = fetch_data(["table" => "uploads", "columns" => "id, thumb, small", "condition" => " id = '".$data["image"]."' ", "order" => "", "limit" => ""]);    // print_arr($image_arr);
+      $data["image"] = $image_arr;      // print_arr($data);
+    }
+    echo form_field(["type" => "image-file", "name" => "Image", "key" => "image", "display_size" => "small", "class" => "col-md-6 col-lg-4 mb-3"], $data);
+
 
     // user roles field with implode string in same same table
     $user_roles_arr = fetch_data(["table" => "user_roles", "columns" => "id, user_role", "condition" => "", "order" => "user_role ASC", "limit" => ""]);    // print_arr($user_roles_arr);

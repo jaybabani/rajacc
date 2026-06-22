@@ -19,36 +19,4 @@ function acl_check($pageid)
 	}
 }
 
-function acl_roles($format = "")
-{
-	$acl_roles = [
-		["index", "View Dashboard"],
-		["symbols-read", "View all symbols"],
-		["symbols-update", "Update symbols"],
-		["symbols-create", "Add new symbols"],
-		["symbols-delete", "Delete symbols"],
-		["users-read", "View all users"],
-		["users-update", "Update users"],
-		["users-create", "Add new users"],
-		["users-delete", "Delete users"],
-		["user_roles-read", "View all user roles"],
-		["user_roles-update", "Update user roles"],
-		["user_roles-create", "Add new user roles"],
-		["user_roles-delete", "Delete user roles"],
-	];
-
-	if ($format == "raw") {
-		return $acl_roles;
-	}
-
-	$r = [];
-	$inc = 0;
-	foreach ($acl_roles as $key => $v) {
-		$inc++;
-		$r[$inc]["id"] = $v[0];
-		$r[$inc]["permission"] = $v[1];
-	}
-	return $r;
-}
-
-include("variables.php");
+include_once("variables.php");

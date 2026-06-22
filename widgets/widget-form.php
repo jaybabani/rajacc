@@ -2,7 +2,8 @@
 
 ?>
 
-<?php include(__DIR__."/../common/header.php"); ?>
+<?php $pageid = "index";
+include(__DIR__."/../common/header.php"); ?>
 
 <div class="row row-cols-1 row-cols-sm-1 row-cols-md-1 row-cols-lg-2 row-cols-xl-2 row-cols-xxl-2 g-4 py-4 px-2">
 </div>

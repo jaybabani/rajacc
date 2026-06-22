@@ -885,3 +885,20 @@ tr .no-det {
 .pagination{
 	margin-bottom: 0;
 }
+.form-imgbox{
+	height: 150px;
+	width: auto;
+	display: inline-block;
+	border: 1px solid #ddd;
+	border-radius: 5px;
+	padding: 5px;	
+	margin: 10px 0;
+}
+.table-thumb{
+	height: 50px;
+	width: auto;
+	display: inline-block;
+	border: 1px solid #ddd;
+	border-radius: 4px;
+	padding: 1px;	
+}
