@@ -22,10 +22,23 @@ function acl_roles($format = "")
 		["user_roles-update", "Update user roles"],
 		["user_roles-create", "Add new user roles"],
 		["user_roles-delete", "Delete user roles"],
+		["customers-read", "View all customers"],
+		["customers-update", "Update customers"],
+		["customers-create", "Add new customers"],
+		["customers-delete", "Delete customers"],
 	];
 
 	if ($format == "raw") {
 		return $acl_roles;
+	}
+
+	//
+	else if ($format == "ids") {
+		$r = [];
+		foreach ($acl_roles as $key => $v) {
+			$r[] = $v[0];
+		}
+		return $r;
 	}
 
 	$r = [];
@@ -37,4 +50,25 @@ function acl_roles($format = "")
 	}
 	return $r;
 }
-?>
+
+function get_active_arr()
+{
+	$arr = [
+		'yes' => 'Active',
+		'no' => 'Inactive',
+	];
+	return $arr;
+}
+
+function get_customer_category_arr()
+{
+	$arr = [
+		"whole_seller" => "Whole Seller",
+		"bulk_buyer" => "Bulk Buyer",
+		"auto_rickshaw_dealer" => "Auto rickshaw Dealer",
+		"exporter" => "Expoter",
+		"retailer" => "Retailer"
+	];
+
+	return $arr;
+}

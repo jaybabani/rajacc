@@ -83,17 +83,21 @@
     $show_menu["dashboard"] = "";
     $show_menu["symbols"] = "";
     $show_menu["users"] = "";
+    $show_menu["customers"] = "";
     
     $current_page = str_replace(".php","",basename($_SERVER['PHP_SELF']));
     // echo $current_page;
     if(in_array($current_page,array("index"))){
       $show_menu["dashboard"] = "show";
     }
-    else if(in_array($current_page,array("symbols","symbol-form"))){
+    else if(in_array($current_page,array("symbols","symbol-form","symbol-delete"))){
       $show_menu["symbols"] = "show";
     }
-    else if(in_array($current_page,array("users","user-form","user_roles","user_role-form"))){
+    else if(in_array($current_page,array("users","user-form","user-delete","user_roles","user_role-form","user_role-delete"))){
       $show_menu["users"] = "show";
+    }
+    else if(in_array($current_page,array("customers","customer-form","customer-delete"))){
+      $show_menu["customers"] = "show";
     }
     
     
@@ -151,7 +155,21 @@
           <li><a href="<?php echo ROOT_PATH; ?>/modules/user_roles/user_role-form.php" class="link-dark"><span>Add new user role</span></a></li>
         </ul>
       </div>
-    </li>    
+    </li> 
+    
+
+    <?php $menuid = "customers"; ?>
+    <li class="mb-1">
+      <button class="btn btn-toggle align-items-center collapsed" data-bs-toggle="collapse" data-bs-target="#<?php echo $menuid; ?>-collapse"  aria-expanded="<?php echo $show_menu[$menuid] == "show" ? "true" : "false"; ?>">
+        <span class="icon"><i data-feather="home"></i></span> <span class="txt">Customers</span>
+      </button>
+      <div class="collapse <?php echo $show_menu[$menuid]; ?>" id="<?php echo $menuid; ?>-collapse" data-bs-parent="#parent-level">
+        <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
+          <li><a href="<?php echo ROOT_PATH; ?>/modules/customers/customers.php" class="link-dark"><span>All customers</span></a></li>
+          <li><a href="<?php echo ROOT_PATH; ?>/modules/customers/customer-form.php" class="link-dark"><span>Add new customer</span></a></li>
+        </ul>
+      </div>
+    </li>     
 
     <li class="mb-1">
       <button class="btn btn-toggle align-items-center collapsed" data-bs-toggle="collapse" data-bs-target="#home-collapse" aria-expanded="false">

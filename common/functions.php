@@ -954,16 +954,6 @@ function module_submit_delete_form($vars)
 }
 
 
-function get_active_arr()
-{
-    $arr = [
-        'yes' => 'Active',
-        'no' => 'Inactive',
-    ];
-
-    return $arr;
-}
-
 
 function fetch_data($vars)
 {

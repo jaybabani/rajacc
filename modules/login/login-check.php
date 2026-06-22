@@ -34,23 +34,32 @@ if ($count == 1) {
 
   // if ($_SESSION["usertype"] == "admin") {
 
-    $user_roles = (isset($cat["user_roles"]) && $cat["user_roles"] != NULL) ? explode(",", $cat["user_roles"]) : [];
-    // print_arr($user_roles);
+  $user_roles = (isset($cat["user_roles"]) && $cat["user_roles"] != NULL) ? explode(",", $cat["user_roles"]) : [];
+  // print_arr($user_roles);
 
+
+  // all roles for admin
+  if ($_SESSION["usertype"] == "admin") {
+    $permissions = acl_roles("ids");
+    $permissions[] = "index";
+  } 
+  
+  // 
+  else {
     $permissions = ["index"]; // default page after login
-
     $condition = " user_role IN (" . implode(",", $user_roles) . ") ";
     $user_role_permission_link_arr = fetch_data(["table" => "user_role_permission_link", "columns" => "user_role, permission", "condition" => $condition, "order" => "", "limit" => ""]);
     foreach ($user_role_permission_link_arr as $lk => $lv) {
       $permissions[] = $lv["permission"];
     }
-    // print_arr($permissions);
+  }
+  // print_arr($permissions);
 
-    // add permission in session
-    $_SESSION['acl'] = $permissions;
+  // add permission in session
+  $_SESSION['acl'] = $permissions;
 
-    // print_arr($_SESSION);
-    
+  // print_arr($_SESSION);
+
   // }
 
   // die;
@@ -87,4 +96,3 @@ function getRealIpAddr()
   }
   return $ip;
 }
-?>
