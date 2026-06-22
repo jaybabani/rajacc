@@ -30,6 +30,10 @@ function acl_roles($format = "")
 		["vendors-update", "Update vendors"],
 		["vendors-create", "Add new vendors"],
 		["vendors-delete", "Delete vendors"],
+		["raw_materials-read", "View all raw materials"],
+		["raw_materials-update", "Update raw materials"],
+		["raw_materials-create", "Add new raw materials"],
+		["raw_materials-delete", "Delete raw materials"],
 	];
 
 	if ($format == "raw") {

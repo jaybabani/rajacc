@@ -85,9 +85,11 @@
     $show_menu["users"] = "";
     $show_menu["customers"] = "";
     $show_menu["vendors"] = "";
+    $show_menu["raw_materials"] = "";
     
     $current_page = str_replace(".php","",basename($_SERVER['PHP_SELF']));
     // echo $current_page;
+
     if(in_array($current_page,array("index"))){
       $show_menu["dashboard"] = "show";
     }
@@ -102,6 +104,9 @@
     }
     else if(in_array($current_page,array("vendors","vendor-form","vendor-delete"))){
       $show_menu["vendors"] = "show";
+    }
+    else if(in_array($current_page,array("raw_materials","raw_material-form","raw_material-delete"))){
+      $show_menu["raw_materials"] = "show";
     }
     
     
@@ -148,6 +153,18 @@
       </div>
     </li> 
     
+    <?php $menuid = "raw_materials"; ?>
+    <li class="mb-1">
+      <button class="btn btn-toggle align-items-center collapsed" data-bs-toggle="collapse" data-bs-target="#<?php echo $menuid; ?>-collapse"  aria-expanded="<?php echo $show_menu[$menuid] == "show" ? "true" : "false"; ?>">
+        <span class="icon"><i data-feather="home"></i></span> <span class="txt">Raw Materials</span>
+      </button>
+      <div class="collapse <?php echo $show_menu[$menuid]; ?>" id="<?php echo $menuid; ?>-collapse" data-bs-parent="#parent-level">
+        <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
+          <li><a href="<?php echo ROOT_PATH; ?>/modules/raw_materials/raw_materials.php" class="link-dark"><span>All raw materials</span></a></li>
+          <li><a href="<?php echo ROOT_PATH; ?>/modules/raw_materials/raw_material-form.php" class="link-dark"><span>Add new raw material</span></a></li>
+        </ul>
+      </div>
+    </li>     
 
     <?php $menuid = "customers"; ?>
     <li class="mb-1">
