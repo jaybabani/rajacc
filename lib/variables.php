@@ -34,6 +34,10 @@ function acl_roles($format = "")
 		["raw_materials-update", "Update raw materials"],
 		["raw_materials-create", "Add new raw materials"],
 		["raw_materials-delete", "Delete raw materials"],
+		["raw_material_lots-read", "View all raw material lots"],
+		["raw_material_lots-update", "Update raw material lots"],
+		["raw_material_lots-create", "Add new raw material lots"],
+		["raw_material_lots-delete", "Delete raw material lots"],
 		["products-read", "View all products"],
 		["products-update", "Update products"],
 		["products-create", "Add new products"],
@@ -84,6 +88,16 @@ function get_attribute_category_arr()
 		"raw_material_category" => "Raw material category",
 		"product_category" => "Product category",
 		"product_quality" => "Product quality",
+	];
+	return $arr;
+}
+
+function get_raw_materail_lot_status_arr(){
+	$arr = [
+		"order_placed" => "Order placed",
+		"received" => "Raw Material Received",
+		"under_process" => "Raw material under processing",
+		"ready" => "Ready for production",
 	];
 	return $arr;
 }

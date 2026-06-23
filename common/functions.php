@@ -428,7 +428,11 @@ function crud_read($vars)
                         if (isset($dv["type"]) && $dv['type'] == "image-file") {
                             $val = $r[$colname] ?? "";
                             if ($val != "" && isset($images[$val])) {
-                                $colval = "<img src='" . ROOT_PATH . "/" . $images[$val]["thumb"] . "' class='table-thumb'>";
+                                if(file_exists(ROOT_DIR . "/" . $images[$val]["thumb"])){
+                                    $colval = "<img src='" . ROOT_PATH . "/" . $images[$val]["thumb"] . "' class='table-thumb'>";
+                                } else {
+                                    $colval = "<img src='" . ROOT_PATH . "/assets/images/notfound.jpg' class='table-thumb'>";
+                                }
                             }
                         }
 
@@ -811,7 +815,11 @@ function form_field($vars, $data)
                     $imgarr = $data[$vars["key"]][0];
                     if (isset($vars["display_size"]) && $vars["display_size"] != "") {
                         $imgpath = isset($imgarr[$vars["display_size"]]) ? $imgarr[$vars["display_size"]] : $imgarr["thumb"];
-                        $s .= "<img src='" . ROOT_PATH . "/" . $imgpath . "' class='form-imgbox'>";
+                        if(file_exists(ROOT_DIR . "/" . $imgpath)){
+                            $s .= "<img src='" . ROOT_PATH . "/" . $imgpath . "' class='form-imgbox'>";
+                        } else {
+                            $s .= "<img src='" . ROOT_PATH . "/assets/images/notfound.jpg' class='form-imgbox'>";
+                        }
                     }
                 }
             }

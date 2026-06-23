@@ -107,7 +107,7 @@
     else if(in_array($current_page,array("vendors","vendor-form","vendor-delete"))){
       $show_menu["vendors"] = "show";
     }
-    else if(in_array($current_page,array("raw_materials","raw_material-form","raw_material-delete"))){
+    else if(in_array($current_page,array("raw_materials","raw_material-form","raw_material-delete","raw_material_lots","raw_material_lot-form","raw_material_lot-delete"))){
       $show_menu["raw_materials"] = "show";
     }
     else if(in_array($current_page,array("products","product-form","product-delete"))){
@@ -182,8 +182,10 @@
         <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
           <li><a href="<?php echo ROOT_PATH; ?>/modules/raw_materials/raw_materials.php" class="link-dark"><span>All raw materials</span></a></li>
           <li><a href="<?php echo ROOT_PATH; ?>/modules/raw_materials/raw_material-form.php" class="link-dark"><span>Add new raw material</span></a></li>
-          <li><a href="<?php echo ROOT_PATH; ?>/modules/attributes/attributes.php?module=raw_material_category" class="link-dark"><span>All Raw material category</span></a></li>
-          <li><a href="<?php echo ROOT_PATH; ?>/modules/attributes/attribute-form.php?module=raw_material_category" class="link-dark"><span>Add new Raw material category</span></a></li>
+          <li><a href="<?php echo ROOT_PATH; ?>/modules/raw_material_lots/raw_material_lots.php" class="link-dark"><span>All raw material lots</span></a></li>
+          <li><a href="<?php echo ROOT_PATH; ?>/modules/raw_material_lots/raw_material_lot-form.php" class="link-dark"><span>Add new raw material lot</span></a></li>
+          <li><a href="<?php echo ROOT_PATH; ?>/modules/attributes/attributes.php?module=raw_material_category" class="link-dark"><span>All raw material category</span></a></li>
+          <li><a href="<?php echo ROOT_PATH; ?>/modules/attributes/attribute-form.php?module=raw_material_category" class="link-dark"><span>Add new raw material category</span></a></li>
         </ul>
       </div>
     </li>     
