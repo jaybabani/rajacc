@@ -67,7 +67,7 @@ include("attribute-submodule.php");
       "datatable" => true,
       "pagination" => true,
       "pagelimit" => 100,
-      "orderby" => "id DESC",
+      "orderby" => "attribute ASC",
       "query" => $query,
       "url_param" => $url_param,
     ]
