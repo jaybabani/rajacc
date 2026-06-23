@@ -33,6 +33,12 @@ include '../../common/header.php';
     $data = module_get_data($tablename, $id);
     // print_arr($data);
 
+    $raw_materials_arr = fetch_data(["table" => "raw_materials", "columns" => "id, raw_material", "condition" => " id = '".$data["raw_material"]."' ", "order" => "", "limit" => ""]);
+    // print_arr($raw_materials_arr);
+    if(isset($raw_materials_arr[0]["raw_material"])){
+        $data["raw_material"] = $raw_materials_arr[0]["raw_material"];
+    }
+
     widget_start($titletag);
 
     ?>
@@ -45,10 +51,10 @@ include '../../common/header.php';
             <div class="row">
                 <div class="col-md-9 col-sm-10 col-xs-12">
                     <div class="form-group">
-                        <label class="form-label" for="field-4">Are You sure you want to delete raw_material_lot
-                            <?php echo "ID: <strong>" . get_value($data, 'id') . "</strong>";
-                            $raw_material_lot = name_title(get_value($data, 'raw_material_lot'));
-                            echo " Raw Material Lot: <strong>" . $raw_material_lot . "</strong>"; ?>?</label>
+                        <label class="form-label" for="field-4">Are You sure you want to delete raw material lot?
+                            <?php echo "<br>ID: <strong>" . get_value($data, 'id') . "</strong>";
+                            $raw_material = name_title(get_value($data, 'raw_material'));
+                            echo "<br>Raw Material: <strong>" . $raw_material . "</strong>"; ?></label>
                     </div>
                 </div>
             </div>

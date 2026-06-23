@@ -3,9 +3,9 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1:3306
--- Generation Time: Jun 22, 2026 at 12:57 PM
+-- Generation Time: Jun 23, 2026 at 03:51 PM
 -- Server version: 8.2.0
--- PHP Version: 8.2.13
+-- PHP Version: 8.3.0
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -24,6 +24,60 @@ SET time_zone = "+00:00";
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `attributes`
+--
+
+DROP TABLE IF EXISTS `attributes`;
+CREATE TABLE IF NOT EXISTS `attributes` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `attribute` varchar(100) CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci DEFAULT NULL,
+  `active` varchar(5) DEFAULT NULL,
+  `code` varchar(100) CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci DEFAULT NULL,
+  `category` varchar(200) NOT NULL,
+  `color` varchar(50) CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci DEFAULT NULL,
+  `updated` int DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=48 DEFAULT CHARSET=utf8mb3;
+
+--
+-- Dumping data for table `attributes`
+--
+
+INSERT INTO `attributes` (`id`, `attribute`, `active`, `code`, `category`, `color`, `updated`) VALUES
+(2, 'Whole Seller', 'yes', 'whole_seller', 'customer_category', NULL, 1782196049),
+(3, 'Bulk Buyer', 'yes', 'bulk_buyer', 'customer_category', NULL, 1782196049),
+(4, 'Auto rickshaw Dealer', 'yes', 'auto_rickshaw_dealer', 'customer_category', NULL, 1782196049),
+(5, 'Expoter', 'yes', 'exporter', 'customer_category', NULL, 1782196049),
+(6, 'Retailer', 'yes', 'retailer', 'customer_category', NULL, 1782196049),
+(7, 'Raw Material', 'yes', 'raw_material', 'vendor_category', NULL, 1782196049),
+(8, 'Packing Material', 'yes', 'packing_material', 'vendor_category', NULL, 1782196049),
+(9, 'Consumables', 'yes', 'consumables', 'vendor_category', NULL, 1782196049),
+(10, 'Machine & Tools', 'yes', 'machine_tools', 'vendor_category', NULL, 1782196049),
+(11, 'Service Provider', 'yes', 'service_provider', 'vendor_category', NULL, 1782196049),
+(12, 'M.S Pipes', 'yes', 'ms_pipes', 'raw_material_category', NULL, 1782196049),
+(13, 'S.S Pipes', 'yes', 'ss_pipes', 'raw_material_category', NULL, 1782196049),
+(14, 'Patti', 'yes', 'patti', 'raw_material_category', NULL, 1782196049),
+(15, 'Sheets', 'yes', 'sheets', 'raw_material_category', NULL, 1782196049),
+(16, 'Angles', 'yes', 'angles', 'raw_material_category', NULL, 1782196049),
+(17, 'Saliyas', 'yes', 'saliyas', 'raw_material_category', NULL, 1782196049),
+(18, 'C Channel', 'yes', 'c_channel', 'raw_material_category', NULL, 1782196049),
+(19, 'Other Items', 'yes', 'other_items', 'raw_material_category', NULL, 1782196049),
+(20, 'Gas', 'yes', 'gas', 'raw_material_category', NULL, 1782196049),
+(21, 'Welding Rolls', 'yes', 'welding_rolls', 'raw_material_category', NULL, 1782196049),
+(22, 'Weilding Rods', 'yes', 'welding_rods', 'raw_material_category', NULL, 1782196049),
+(23, 'Pipe Items', 'yes', 'pipes', 'product_category', NULL, 1782196049),
+(24, 'Patra Items', 'yes', 'patra', 'product_category', NULL, 1782196049),
+(25, 'Channel Items', 'yes', 'channel', 'product_category', NULL, 1782196049),
+(26, 'Angle Items', 'yes', 'angle', 'product_category', NULL, 1782196049),
+(27, 'Saliya Items', 'yes', 'saliya', 'product_category', NULL, 1782196049),
+(28, 'SS Saliya Items', 'yes', 'ss_saliya', 'product_category', NULL, 1782196049),
+(29, 'SS Pipes', 'yes', 'ss_pipes', 'product_category', NULL, 1782202749),
+(30, 'MS', 'yes', 'ms', 'product_quality', NULL, 1782196049),
+(31, 'SS', 'yes', 'ss', 'product_quality', NULL, 1782209476);
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `customers`
 --
 
@@ -35,14 +89,14 @@ CREATE TABLE IF NOT EXISTS `customers` (
   `firm_phone` varchar(100) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci DEFAULT NULL,
   `firm_address` text CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci,
   `image` int DEFAULT NULL,
-  `owner_name` varchar(100) COLLATE utf8mb3_unicode_ci DEFAULT NULL,
-  `owner_email` varchar(100) COLLATE utf8mb3_unicode_ci DEFAULT NULL,
-  `owner_phone` varchar(100) COLLATE utf8mb3_unicode_ci DEFAULT NULL,
-  `zone` varchar(100) COLLATE utf8mb3_unicode_ci DEFAULT NULL,
-  `gst` varchar(20) COLLATE utf8mb3_unicode_ci DEFAULT NULL,
-  `category` varchar(30) COLLATE utf8mb3_unicode_ci DEFAULT NULL,
-  `price_allotment` varchar(10) COLLATE utf8mb3_unicode_ci DEFAULT NULL,
-  `active` varchar(5) COLLATE utf8mb3_unicode_ci DEFAULT NULL,
+  `owner_name` varchar(100) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci DEFAULT NULL,
+  `owner_email` varchar(100) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci DEFAULT NULL,
+  `owner_phone` varchar(100) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci DEFAULT NULL,
+  `zone` varchar(100) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci DEFAULT NULL,
+  `gst` varchar(20) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci DEFAULT NULL,
+  `category` varchar(30) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci DEFAULT NULL,
+  `price_allotment` varchar(10) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci DEFAULT NULL,
+  `active` varchar(5) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci DEFAULT NULL,
   `updated` int DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_unicode_ci;
@@ -72,51 +126,89 @@ CREATE TABLE IF NOT EXISTS `ipadd` (
   `sessionid` varchar(255) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
   `accounttype` varchar(255) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=63 DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_unicode_ci;
+) ENGINE=MyISAM AUTO_INCREMENT=68 DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_unicode_ci;
 
 --
 -- Dumping data for table `ipadd`
 --
 
 INSERT INTO `ipadd` (`id`, `ip`, `mac`, `userId`, `logged_on`, `loggedout_on`, `sessionid`, `accounttype`) VALUES
-(48, '::1', '', 1, '2026-06-22 10:53:36', '2026-06-22 12:51:21', 'f3ln87nbgi9iae5pt5o4qe800m', ''),
-(47, '::1', '', 1, '2026-06-22 10:53:32', '2026-06-22 12:51:21', 'f3ln87nbgi9iae5pt5o4qe800m', ''),
-(46, '::1', '', 1, '2026-06-22 10:53:22', '2026-06-22 12:51:21', 'f3ln87nbgi9iae5pt5o4qe800m', ''),
-(45, '::1', '', 1, '2026-06-22 10:52:19', '2026-06-22 12:51:21', 'f3ln87nbgi9iae5pt5o4qe800m', ''),
-(44, '::1', '', 1, '2026-06-22 10:50:46', '2026-06-22 12:51:21', 'f3ln87nbgi9iae5pt5o4qe800m', ''),
-(43, '::1', '', 1, '2026-06-22 10:50:37', '2026-06-22 12:51:21', 'f3ln87nbgi9iae5pt5o4qe800m', ''),
-(42, '::1', '', 1, '2026-06-22 10:50:20', '2026-06-22 12:51:21', 'f3ln87nbgi9iae5pt5o4qe800m', ''),
-(41, '::1', '', 1, '2026-06-22 10:50:05', '2026-06-22 12:51:21', 'f3ln87nbgi9iae5pt5o4qe800m', ''),
-(40, '::1', '', 1, '2026-06-22 10:46:54', '2026-06-22 12:51:21', 'f3ln87nbgi9iae5pt5o4qe800m', ''),
-(39, '::1', '', 1, '2026-06-22 10:46:51', '2026-06-22 12:51:21', 'f3ln87nbgi9iae5pt5o4qe800m', ''),
-(38, '::1', '', 1, '2026-06-22 10:46:15', '2026-06-22 12:51:21', 'f3ln87nbgi9iae5pt5o4qe800m', ''),
-(37, '::1', '', 1, '2026-06-22 10:45:02', '2026-06-22 12:51:21', 'f3ln87nbgi9iae5pt5o4qe800m', ''),
-(36, '::1', '', 1, '2026-06-22 10:44:38', '2026-06-22 12:51:21', 'f3ln87nbgi9iae5pt5o4qe800m', ''),
-(35, '::1', '', 1, '2026-06-22 10:43:53', '2026-06-22 12:51:21', 'f3ln87nbgi9iae5pt5o4qe800m', ''),
-(34, '::1', '', 1, '2026-06-22 10:42:20', '2026-06-22 12:51:21', 'f3ln87nbgi9iae5pt5o4qe800m', ''),
-(33, '::1', '', 1, '2026-06-22 10:41:39', '2026-06-22 12:51:21', 'f3ln87nbgi9iae5pt5o4qe800m', ''),
-(32, '::1', '', 1, '2026-06-22 10:41:26', '2026-06-22 12:51:21', 'f3ln87nbgi9iae5pt5o4qe800m', ''),
-(31, '::1', '', 1, '2026-06-22 10:40:16', '2026-06-22 12:51:21', 'f3ln87nbgi9iae5pt5o4qe800m', ''),
-(30, '::1', '', 1, '2026-06-22 16:09:56', '2026-06-22 12:51:21', 'f3ln87nbgi9iae5pt5o4qe800m', ''),
-(29, '::1', '', 1, '2026-06-22 10:39:05', '2026-06-22 12:51:21', 'f3ln87nbgi9iae5pt5o4qe800m', ''),
-(28, '::1', '', 1, '2026-06-22 07:03:28', '2026-06-22 12:51:21', 'f3ln87nbgi9iae5pt5o4qe800m', ''),
-(27, '::1', '', 1, '2026-06-22 03:02:47', '2026-06-22 12:51:21', 'f3ln87nbgi9iae5pt5o4qe800m', ''),
-(25, '::1', '', 1, '2026-06-20 11:45:48', '2026-06-22 12:51:21', 'f3ln87nbgi9iae5pt5o4qe800m', ''),
-(26, '::1', '', 1, '2026-06-20 12:17:37', '2026-06-22 12:51:21', 'f3ln87nbgi9iae5pt5o4qe800m', ''),
-(49, '::1', '', 1, '2026-06-22 10:54:12', '2026-06-22 12:51:21', 'f3ln87nbgi9iae5pt5o4qe800m', ''),
-(50, '::1', '', 1, '2026-06-22 10:54:46', '2026-06-22 12:51:21', 'f3ln87nbgi9iae5pt5o4qe800m', ''),
-(51, '::1', '', 1, '2026-06-22 11:09:21', '2026-06-22 12:51:21', 'f3ln87nbgi9iae5pt5o4qe800m', ''),
-(52, '::1', '', 1, '2026-06-22 11:11:02', '2026-06-22 12:51:21', 'f3ln87nbgi9iae5pt5o4qe800m', ''),
-(53, '::1', '', 1, '2026-06-22 11:11:17', '2026-06-22 12:51:21', 'f3ln87nbgi9iae5pt5o4qe800m', ''),
-(54, '::1', '', 1, '2026-06-22 11:36:12', '2026-06-22 12:51:21', 'f3ln87nbgi9iae5pt5o4qe800m', ''),
-(55, '::1', '', 1, '2026-06-22 11:37:47', '2026-06-22 12:51:21', 'f3ln87nbgi9iae5pt5o4qe800m', ''),
-(56, '::1', '', 1, '2026-06-22 11:37:54', '2026-06-22 12:51:21', 'f3ln87nbgi9iae5pt5o4qe800m', ''),
-(57, '::1', '', 1, '2026-06-22 11:38:06', '2026-06-22 12:51:21', 'f3ln87nbgi9iae5pt5o4qe800m', ''),
-(58, '::1', '', 1, '2026-06-22 11:38:17', '2026-06-22 12:51:21', 'f3ln87nbgi9iae5pt5o4qe800m', ''),
-(59, '::1', '', 1, '2026-06-22 11:38:23', '2026-06-22 12:51:21', 'f3ln87nbgi9iae5pt5o4qe800m', ''),
-(60, '::1', '', 1, '2026-06-22 11:38:28', '2026-06-22 12:51:21', 'f3ln87nbgi9iae5pt5o4qe800m', ''),
-(61, '::1', '', 1, '2026-06-22 12:14:38', '2026-06-22 12:51:21', 'f3ln87nbgi9iae5pt5o4qe800m', ''),
-(62, '::1', '', 1, '2026-06-22 12:51:24', '', 'f3ln87nbgi9iae5pt5o4qe800m', '');
+(48, '::1', '', 1, '2026-06-22 10:53:36', '2026-06-23 06:17:09', 'f3ln87nbgi9iae5pt5o4qe800m', ''),
+(47, '::1', '', 1, '2026-06-22 10:53:32', '2026-06-23 06:17:09', 'f3ln87nbgi9iae5pt5o4qe800m', ''),
+(46, '::1', '', 1, '2026-06-22 10:53:22', '2026-06-23 06:17:09', 'f3ln87nbgi9iae5pt5o4qe800m', ''),
+(45, '::1', '', 1, '2026-06-22 10:52:19', '2026-06-23 06:17:09', 'f3ln87nbgi9iae5pt5o4qe800m', ''),
+(44, '::1', '', 1, '2026-06-22 10:50:46', '2026-06-23 06:17:09', 'f3ln87nbgi9iae5pt5o4qe800m', ''),
+(43, '::1', '', 1, '2026-06-22 10:50:37', '2026-06-23 06:17:09', 'f3ln87nbgi9iae5pt5o4qe800m', ''),
+(42, '::1', '', 1, '2026-06-22 10:50:20', '2026-06-23 06:17:09', 'f3ln87nbgi9iae5pt5o4qe800m', ''),
+(41, '::1', '', 1, '2026-06-22 10:50:05', '2026-06-23 06:17:09', 'f3ln87nbgi9iae5pt5o4qe800m', ''),
+(40, '::1', '', 1, '2026-06-22 10:46:54', '2026-06-23 06:17:09', 'f3ln87nbgi9iae5pt5o4qe800m', ''),
+(39, '::1', '', 1, '2026-06-22 10:46:51', '2026-06-23 06:17:09', 'f3ln87nbgi9iae5pt5o4qe800m', ''),
+(38, '::1', '', 1, '2026-06-22 10:46:15', '2026-06-23 06:17:09', 'f3ln87nbgi9iae5pt5o4qe800m', ''),
+(37, '::1', '', 1, '2026-06-22 10:45:02', '2026-06-23 06:17:09', 'f3ln87nbgi9iae5pt5o4qe800m', ''),
+(36, '::1', '', 1, '2026-06-22 10:44:38', '2026-06-23 06:17:09', 'f3ln87nbgi9iae5pt5o4qe800m', ''),
+(35, '::1', '', 1, '2026-06-22 10:43:53', '2026-06-23 06:17:09', 'f3ln87nbgi9iae5pt5o4qe800m', ''),
+(34, '::1', '', 1, '2026-06-22 10:42:20', '2026-06-23 06:17:09', 'f3ln87nbgi9iae5pt5o4qe800m', ''),
+(33, '::1', '', 1, '2026-06-22 10:41:39', '2026-06-23 06:17:09', 'f3ln87nbgi9iae5pt5o4qe800m', ''),
+(32, '::1', '', 1, '2026-06-22 10:41:26', '2026-06-23 06:17:09', 'f3ln87nbgi9iae5pt5o4qe800m', ''),
+(31, '::1', '', 1, '2026-06-22 10:40:16', '2026-06-23 06:17:09', 'f3ln87nbgi9iae5pt5o4qe800m', ''),
+(30, '::1', '', 1, '2026-06-22 16:09:56', '2026-06-23 06:17:09', 'f3ln87nbgi9iae5pt5o4qe800m', ''),
+(29, '::1', '', 1, '2026-06-22 10:39:05', '2026-06-23 06:17:09', 'f3ln87nbgi9iae5pt5o4qe800m', ''),
+(28, '::1', '', 1, '2026-06-22 07:03:28', '2026-06-23 06:17:09', 'f3ln87nbgi9iae5pt5o4qe800m', ''),
+(27, '::1', '', 1, '2026-06-22 03:02:47', '2026-06-23 06:17:09', 'f3ln87nbgi9iae5pt5o4qe800m', ''),
+(25, '::1', '', 1, '2026-06-20 11:45:48', '2026-06-23 06:17:09', 'f3ln87nbgi9iae5pt5o4qe800m', ''),
+(26, '::1', '', 1, '2026-06-20 12:17:37', '2026-06-23 06:17:09', 'f3ln87nbgi9iae5pt5o4qe800m', ''),
+(49, '::1', '', 1, '2026-06-22 10:54:12', '2026-06-23 06:17:09', 'f3ln87nbgi9iae5pt5o4qe800m', ''),
+(50, '::1', '', 1, '2026-06-22 10:54:46', '2026-06-23 06:17:09', 'f3ln87nbgi9iae5pt5o4qe800m', ''),
+(51, '::1', '', 1, '2026-06-22 11:09:21', '2026-06-23 06:17:09', 'f3ln87nbgi9iae5pt5o4qe800m', ''),
+(52, '::1', '', 1, '2026-06-22 11:11:02', '2026-06-23 06:17:09', 'f3ln87nbgi9iae5pt5o4qe800m', ''),
+(53, '::1', '', 1, '2026-06-22 11:11:17', '2026-06-23 06:17:09', 'f3ln87nbgi9iae5pt5o4qe800m', ''),
+(54, '::1', '', 1, '2026-06-22 11:36:12', '2026-06-23 06:17:09', 'f3ln87nbgi9iae5pt5o4qe800m', ''),
+(55, '::1', '', 1, '2026-06-22 11:37:47', '2026-06-23 06:17:09', 'f3ln87nbgi9iae5pt5o4qe800m', ''),
+(56, '::1', '', 1, '2026-06-22 11:37:54', '2026-06-23 06:17:09', 'f3ln87nbgi9iae5pt5o4qe800m', ''),
+(57, '::1', '', 1, '2026-06-22 11:38:06', '2026-06-23 06:17:09', 'f3ln87nbgi9iae5pt5o4qe800m', ''),
+(58, '::1', '', 1, '2026-06-22 11:38:17', '2026-06-23 06:17:09', 'f3ln87nbgi9iae5pt5o4qe800m', ''),
+(59, '::1', '', 1, '2026-06-22 11:38:23', '2026-06-23 06:17:09', 'f3ln87nbgi9iae5pt5o4qe800m', ''),
+(60, '::1', '', 1, '2026-06-22 11:38:28', '2026-06-23 06:17:09', 'f3ln87nbgi9iae5pt5o4qe800m', ''),
+(61, '::1', '', 1, '2026-06-22 12:14:38', '2026-06-23 06:17:09', 'f3ln87nbgi9iae5pt5o4qe800m', ''),
+(62, '::1', '', 1, '2026-06-22 12:51:24', '2026-06-23 06:17:09', 'f3ln87nbgi9iae5pt5o4qe800m', ''),
+(63, '::1', '', 1, '2026-06-23 05:01:00', '2026-06-23 06:17:09', 'f3ln87nbgi9iae5pt5o4qe800m', ''),
+(64, '::1', '', 1, '2026-06-23 05:27:08', '2026-06-23 06:17:09', 'f3ln87nbgi9iae5pt5o4qe800m', ''),
+(65, '::1', '', 1, '2026-06-23 06:17:12', '', 'f3ln87nbgi9iae5pt5o4qe800m', ''),
+(66, '::1', '', 1, '2026-06-23 14:09:03', '2026-06-23 14:25:49', 'j7hqruivd767m89j9sk0t6i6tp', ''),
+(67, '::1', '', 1, '2026-06-23 14:25:51', '', 'j7hqruivd767m89j9sk0t6i6tp', '');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `products`
+--
+
+DROP TABLE IF EXISTS `products`;
+CREATE TABLE IF NOT EXISTS `products` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `product` varchar(255) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
+  `code` varchar(100) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
+  `description` text CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
+  `category` varchar(200) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci DEFAULT NULL,
+  `image` int NOT NULL,
+  `quality` varchar(200) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci DEFAULT NULL,
+  `type` varchar(255) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci DEFAULT NULL,
+  `pieces` int DEFAULT NULL,
+  `updated` int NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM AUTO_INCREMENT=13 DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_unicode_ci;
+
+--
+-- Dumping data for table `products`
+--
+
+INSERT INTO `products` (`id`, `product`, `code`, `description`, `category`, `image`, `quality`, `type`, `pieces`, `updated`) VALUES
+(6, 'SS Pipes', '', '', NULL, 0, NULL, NULL, NULL, 1782126673),
+(7, 'MS Pipes', '', '', NULL, 0, NULL, NULL, NULL, 1782126673),
+(8, 'SS Rods', '', '', NULL, 0, NULL, NULL, NULL, 1782126673),
+(10, 'raw m', 'kg', '', NULL, 12, NULL, NULL, NULL, 1782132815),
+(11, 'raw m1', 'kg', 'fteststets', 'ss_pipes', 15, NULL, NULL, NULL, 1782192154),
+(12, 'test prod meteor', 'feb-ee3-22', 'tet desc', 'channel', 17, 'ms', 'type', 2, 1782198401);
 
 -- --------------------------------------------------------
 
@@ -128,8 +220,9 @@ DROP TABLE IF EXISTS `raw_materials`;
 CREATE TABLE IF NOT EXISTS `raw_materials` (
   `id` int NOT NULL AUTO_INCREMENT,
   `raw_material` varchar(255) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
-  `unit` varchar(20) COLLATE utf8mb3_unicode_ci NOT NULL,
-  `description` text COLLATE utf8mb3_unicode_ci NOT NULL,
+  `unit` varchar(20) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
+  `description` text CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
+  `category` varchar(200) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci DEFAULT NULL,
   `image` int NOT NULL,
   `updated` int NOT NULL,
   PRIMARY KEY (`id`)
@@ -139,14 +232,40 @@ CREATE TABLE IF NOT EXISTS `raw_materials` (
 -- Dumping data for table `raw_materials`
 --
 
-INSERT INTO `raw_materials` (`id`, `raw_material`, `unit`, `description`, `image`, `updated`) VALUES
-(6, 'SS Pipes', '', '', 0, 1782126673),
-(7, 'MS Pipes', '', '', 0, 1782126673),
-(8, 'SS Rods', '', '', 0, 1782126673),
-(9, 'MS Rods', '', '', 0, 1782126673),
-(10, 'raw m', 'kg', '', 12, 1782132815),
-(11, 'raw m1', 'kg', 'fteststets', 15, 1782133007),
-(14, '11', '11', '22', 16, 1782133023);
+INSERT INTO `raw_materials` (`id`, `raw_material`, `unit`, `description`, `category`, `image`, `updated`) VALUES
+(6, 'SS Pipes', '', '', NULL, 0, 1782126673),
+(7, 'MS Pipes', '', '', NULL, 0, 1782126673),
+(8, 'SS Rods', '', '', NULL, 0, 1782126673),
+(10, 'raw m', 'kg', '', NULL, 12, 1782132815),
+(11, 'raw m1', 'kg', 'fteststets', 'ss_pipes', 18, 1782223927);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `raw_material_lots`
+--
+
+DROP TABLE IF EXISTS `raw_material_lots`;
+CREATE TABLE IF NOT EXISTS `raw_material_lots` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `raw_material` int NOT NULL,
+  `quantity` int NOT NULL,
+  `notes` text CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci,
+  `status` varchar(255) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
+  `purchase_invoice` int DEFAULT NULL,
+  `updated` int NOT NULL,
+  `vendor` int DEFAULT NULL,
+  `buy_price` decimal(10,2) DEFAULT NULL,
+  `buy_date` bigint DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_unicode_ci;
+
+--
+-- Dumping data for table `raw_material_lots`
+--
+
+INSERT INTO `raw_material_lots` (`id`, `raw_material`, `quantity`, `notes`, `status`, `purchase_invoice`, `updated`, `vendor`, `buy_price`, `buy_date`) VALUES
+(1, 7, 1001, 'test1', 'received', 19, 1782229619, 8, 20.00, 202622223333);
 
 -- --------------------------------------------------------
 
@@ -157,7 +276,7 @@ INSERT INTO `raw_materials` (`id`, `raw_material`, `unit`, `description`, `image
 DROP TABLE IF EXISTS `sectors`;
 CREATE TABLE IF NOT EXISTS `sectors` (
   `id` int NOT NULL AUTO_INCREMENT,
-  `sector` varchar(255) COLLATE utf8mb3_unicode_ci NOT NULL,
+  `sector` varchar(255) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_unicode_ci;
 
@@ -279,7 +398,7 @@ CREATE TABLE IF NOT EXISTS `uploads` (
   `auth_user` int DEFAULT NULL,
   `updated` int DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=17 DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=20 DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_unicode_ci;
 
 --
 -- Dumping data for table `uploads`
@@ -300,7 +419,10 @@ INSERT INTO `uploads` (`id`, `name`, `title`, `brief`, `module`, `module_id`, `t
 (13, 'uploads/1892644299-3.png', NULL, NULL, NULL, NULL, 'image/png', 59487, 'uploads/1892644299-thumb-3.png', 'uploads/1892644299-small-3.png', 1, 1782132847),
 (14, 'uploads/278105047-3.png', NULL, NULL, NULL, NULL, 'image/png', 59487, 'uploads/278105047-thumb-3.png', 'uploads/278105047-small-3.png', 1, 1782132872),
 (15, 'uploads/1992663147-4.png', NULL, NULL, NULL, NULL, 'image/png', 69397, 'uploads/1992663147-thumb-4.png', 'uploads/1992663147-small-4.png', 1, 1782133007),
-(16, 'uploads/1181413689-12.png', NULL, NULL, NULL, NULL, 'image/png', 26780, 'uploads/1181413689-thumb-12.png', 'uploads/1181413689-small-12.png', 1, 1782133023);
+(16, 'uploads/1181413689-12.png', NULL, NULL, NULL, NULL, 'image/png', 26780, 'uploads/1181413689-thumb-12.png', 'uploads/1181413689-small-12.png', 1, 1782133023),
+(17, 'uploads/1913955719-4.png', NULL, NULL, NULL, NULL, 'image/png', 69397, 'uploads/1913955719-thumb-4.png', 'uploads/1913955719-small-4.png', 1, 1782193058),
+(18, 'uploads/1063420079-editmode.png', NULL, NULL, NULL, NULL, 'image/png', 13586, 'uploads/1063420079-thumb-editmode.png', 'uploads/1063420079-small-editmode.png', 1, 1782223927),
+(19, 'uploads/805107694-v.png', NULL, NULL, NULL, NULL, 'image/png', 40755, 'uploads/805107694-thumb-v.png', 'uploads/805107694-small-v.png', 1, 1782227972);
 
 -- --------------------------------------------------------
 
@@ -317,11 +439,11 @@ CREATE TABLE IF NOT EXISTS `users` (
   `name` varchar(200) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
   `image` int DEFAULT NULL,
   `email` varchar(100) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
-  `phone` varchar(100) COLLATE utf8mb3_unicode_ci DEFAULT NULL,
-  `aadhaar` varchar(12) COLLATE utf8mb3_unicode_ci DEFAULT NULL,
-  `address` text COLLATE utf8mb3_unicode_ci,
+  `phone` varchar(100) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci DEFAULT NULL,
+  `aadhaar` varchar(12) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci DEFAULT NULL,
+  `address` text CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci,
   `user_roles` text CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci,
-  `department` varchar(50) COLLATE utf8mb3_unicode_ci DEFAULT NULL,
+  `department` varchar(50) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci DEFAULT NULL,
   `usertype` varchar(100) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
   `created_on` varchar(100) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
   `updated` int DEFAULT NULL,
@@ -368,7 +490,7 @@ DROP TABLE IF EXISTS `user_role_permission_link`;
 CREATE TABLE IF NOT EXISTS `user_role_permission_link` (
   `id` int NOT NULL AUTO_INCREMENT,
   `user_role` int NOT NULL,
-  `permission` varchar(100) COLLATE utf8mb3_unicode_ci NOT NULL,
+  `permission` varchar(100) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM AUTO_INCREMENT=83 DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_unicode_ci;
 

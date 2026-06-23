@@ -321,6 +321,19 @@ body {
 .badge-no {
 	background-color: rgba(var(--bs-warning-rgb), 1);
 }
+.badge-order_placed{
+	background-color: rgba(var(--bs-warning-rgb), 1);
+}
+.badge-received{
+	background-color: rgba(var(--bs-accent1-rgb), 1);
+}
+.badge-under_process{
+	background-color: rgba(var(--bs-accent2-rgb), 1);
+}
+.badge-ready{
+	background-color: rgba(var(--bs-success-rgb), 1);
+}
+
 
 /* typography  */
 

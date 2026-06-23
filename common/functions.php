@@ -409,7 +409,7 @@ function crud_read($vars)
                             }
                         }
 
-                        if (isset($dv["options"])) {
+                        if (isset($dv["options"]) && !isset($dv["type"])) {
                             if (is_array($dv["options"]) && isset($dv["options"][$colval])) {
                                 $colval = $dv["options"][$colval];
                             }
@@ -425,31 +425,46 @@ function crud_read($vars)
                             $colval = "<span class='badge badge-" . $r[$colname] . "'>" . $colval . "</span>";
                         }
 
-                        if (isset($dv["type"]) && $dv['type'] == "image-file") {
-                            $val = $r[$colname] ?? "";
-                            if ($val != "" && isset($images[$val])) {
-                                if(file_exists(ROOT_DIR . "/" . $images[$val]["thumb"])){
-                                    $colval = "<img src='" . ROOT_PATH . "/" . $images[$val]["thumb"] . "' class='table-thumb'>";
-                                } else {
-                                    $colval = "<img src='" . ROOT_PATH . "/assets/images/notfound.jpg' class='table-thumb'>";
-                                }
-                            }
-                        }
 
-                        if (isset($dv["type"]) && $dv['type'] == "implode" && isset($dv["sep"])) {
-                            $val = $r[$colname] ?? "";
-                            if ($val != "") {
-                                $selarr = explode($dv["sep"], $val);
-                                $colval = "";
-                                foreach ($dv["options"] as $ok => $ov) {
-                                    if (in_array($ov[$dv["option_id"]], $selarr)) {
-                                        $colval .= $ov[$dv["option_label"]] . ", ";
+                        if (isset($dv["type"])) {
+                            if ($dv['type'] == "image-file") {
+                                $val = $r[$colname] ?? "";
+                                if ($val != "" && isset($images[$val])) {
+                                    if(file_exists(ROOT_DIR . "/" . $images[$val]["thumb"])){
+                                        $colval = "<img src='" . ROOT_PATH . "/" . $images[$val]["thumb"] . "' class='table-thumb'>";
+                                    } else {
+                                        $colval = "<img src='" . ROOT_PATH . "/assets/images/notfound.jpg' class='table-thumb'>";
                                     }
                                 }
+                            }
 
-                                $colval = trim($colval);
-                                if ($colval != "") {
-                                    $colval = substr($colval, 0, -1);
+                            else if ($dv['type'] == "table_id") {
+                                $val = $r[$colname] ?? "";
+                                if ($val != "") {
+                                    $colval = "";
+                                    foreach ($dv["options"] as $ok => $ov) {
+                                        if ($ov[$dv["option_id"]] == $val) {
+                                            $colval .= $ov[$dv["option_label"]] . "";
+                                        }
+                                    }
+                                }
+                            }
+
+                            else if ($dv['type'] == "implode" && isset($dv["sep"])) {
+                                $val = $r[$colname] ?? "";
+                                if ($val != "") {
+                                    $selarr = explode($dv["sep"], $val);
+                                    $colval = "";
+                                    foreach ($dv["options"] as $ok => $ov) {
+                                        if (in_array($ov[$dv["option_id"]], $selarr)) {
+                                            $colval .= $ov[$dv["option_label"]] . ", ";
+                                        }
+                                    }
+
+                                    $colval = trim($colval);
+                                    if ($colval != "") {
+                                        $colval = substr($colval, 0, -1);
+                                    }
                                 }
                             }
                         }

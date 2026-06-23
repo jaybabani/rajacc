@@ -27,21 +27,40 @@ include("../../common/header.php");
 
   $primary_column = "id";
 
+  $vendors_arr = fetch_data(["table" => "vendors", "columns" => "id, firm_name", "condition" => "", "order" => "firm_name ASC", "limit" => ""]);    // print_arr($vendors_arr);
+  // print_arr($vendors_arr);
+
+  $raw_materials_arr = fetch_data(["table" => "raw_materials", "columns" => "id, raw_material", "condition" => "", "order" => "raw_material ASC", "limit" => ""]);    // print_arr($raw_materials_arr);
+  // print_arr($raw_materials_arr);
+
+echo "todo: <br>buy date field<br>
+auth user (column in db, in datatable in details row - last update: by user and time)<br>
+lot status history on change of rm lot status<br>
+pdf upload along with image (auto detect format)<br>
+image view in new page<br>
+pdf open in new page<br>
+full image display in edit mode or atleast noncropped and 400px wide.<br>
+";
+
   $display_columns = [
     ["name" => "", "column" => "", "type" => "details", "sorting" => false, "search" => false, "class" => "text-center nowrap"],
     ["name" => "Select", "column" => "", "type" => "select", "sorting" => false, "search" => false, "class" => "text-center"],
     ["name" => "ID", "column" => "id", "class" => "text-center"],
-    ["name" => "Image", "column" => "image", "type" => "image-file", "sorting" => false, "search" => false, "class" => "text-center"],
-    ["name" => "Raw Material Lot", "column" => "raw_material_lot", "class" => "title nowrap"],
-    ["name" => "Category", "column" => "category", "attributes" => get_attributes_arr("raw_material_lot_category"), "badge" => true],
-    ["name" => "Unit", "column" => "unit", "class" => "nowrap"],
-    ["name" => "Description", "column" => "description", "class" => "nowrap"],
+    ["name" => "Raw Material", "column" => "raw_material", "options" => $raw_materials_arr, "type" => "table_id", "option_id" => "id", "option_label" => "raw_material"],
+    ["name" => "Quantity", "column" => "quantity", "class" => "nowrap"],
+    ["name" => "Buy Date", "column" => "buy_date", "class" => "nowrap"],
+    ["name" => "Buy Price", "column" => "buy_price", "class" => "nowrap"],
+    ["name" => "Vendor", "column" => "vendor", "options" => $vendors_arr, "type" => "table_id", "option_id" => "id", "option_label" => "firm_name"],
+    ["name" => "Purchase Invoice", "column" => "purchase_invoice", "type" => "image-file", "sorting" => false, "search" => false, "class" => "text-center"],
+    ["name" => "Status", "column" => "status", "options" => get_raw_materail_lot_status_arr(), "badge" => true],
     ["name" => "Actions", "column" => "", "type" => "edit_delete", "sorting" => false, "search" => false, "class" => "nowrap", "acl" => ["edit" => "raw_material_lots-update", "delete" => "raw_material_lots-delete"]],
   ];
 
   $fetch_columns = [];
 
-  $detail_columns = [];
+  $detail_columns = [
+    ["name" => "Notes", "column" => "notes"],
+  ];
 
 
   $table_html = crud_read([
