@@ -2,7 +2,7 @@
 $module = "attributes";
 $pageid = "attributes-read";
 include("../../common/header.php");
-// include("attribute-functions.php");
+include("attribute-submodule.php");
 ?>
 
 <div class="row row-cols-1 row-cols-sm-1 row-cols-md-1 row-cols-lg-1 row-cols-xl-1 row-cols-xxl-1 g-4 py-3 px-2">
@@ -25,7 +25,7 @@ include("../../common/header.php");
     "delete" => "attribute-delete"
   ];
 
-  $pagetitle = T("Attributes");
+  $pagetitle = T($submod["page_title"]);
   $actions_html = "";
   $actions_html .= download_xlsx($module_pages["read"]);
   $actions_html .= pagination($module_pages["read"] . ".php");
@@ -41,9 +41,9 @@ include("../../common/header.php");
     ["name" => "", "column" => "", "type" => "details", "sorting" => false, "search" => false, "class" => "text-center nowrap"],
     ["name" => "Select", "column" => "", "type" => "select", "sorting" => false, "search" => false, "class" => "text-center"],
     ["name" => "ID", "column" => "id", "class" => "text-center"],
-    ["name" => "Attribute", "column" => "attribute", "class" => "title nowrap"],
+    ["name" => $submod["column_title"], "column" => "attribute", "class" => "title nowrap"],
     ["name" => "Code", "column" => "code"],
-    ["name" => "Category", "column" => "category", "options" => get_attribute_category_arr()],
+    ($parent == "default") ? ["name" => "Category", "column" => "category", "options" => get_attribute_category_arr()]:[],
     ["name" => "Active", "column" => "active", "options" => get_active_arr(), "badge" => true],
     ["name" => "Updated", "column" => "updated", "format" => "ts_to_dt", "class" => "nowrap"],
     ["name" => "Actions", "column" => "", "type" => "edit_delete", "sorting" => false, "search" => false, "class" => "nowrap", "acl" => ["edit" => "attributes-update", "delete" => "attributes-delete"]],
@@ -52,6 +52,9 @@ include("../../common/header.php");
   $fetch_columns = [];
 
   $detail_columns = [];
+
+  $url_param = $submod["url_param"];
+  $query = $submod["query"];
 
   $table_html = crud_read(
     [
@@ -64,8 +67,9 @@ include("../../common/header.php");
       "datatable" => true,
       "pagination" => true,
       "pagelimit" => 100,
-      "query" => "",
-      "orderby" => "id DESC"
+      "orderby" => "id DESC",
+      "query" => $query,
+      "url_param" => $url_param,
     ]
   );
 

@@ -113,10 +113,22 @@
     else if(in_array($current_page,array("products","product-form","product-delete"))){
       $show_menu["products"] = "show";
     }
-    else if(in_array($current_page,array("attributes","attribute-form","attribute-delete"))){
-      $show_menu["attributes"] = "show";
+
+    if(in_array($current_page,array("attributes","attribute-form","attribute-delete"))){
+      if(isset($_GET["module"]) && $_GET["module"] == "product_category"){
+        $show_menu["products"] = "show";
+      } else if(isset($_GET["module"]) && $_GET["module"] == "product_quality"){
+        $show_menu["products"] = "show";
+      } else if(isset($_GET["module"]) && $_GET["module"] == "raw_material_category"){
+        $show_menu["raw_materials"] = "show";
+      } else if(isset($_GET["module"]) && $_GET["module"] == "vendor_category"){
+        $show_menu["vendors"] = "show";
+      } else if(isset($_GET["module"]) && $_GET["module"] == "customer_category"){
+        $show_menu["customers"] = "show";
+      } else {
+        $show_menu["attributes"] = "show";
+      }
     }
-    
     
   ?>
 
@@ -170,6 +182,8 @@
         <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
           <li><a href="<?php echo ROOT_PATH; ?>/modules/raw_materials/raw_materials.php" class="link-dark"><span>All raw materials</span></a></li>
           <li><a href="<?php echo ROOT_PATH; ?>/modules/raw_materials/raw_material-form.php" class="link-dark"><span>Add new raw material</span></a></li>
+          <li><a href="<?php echo ROOT_PATH; ?>/modules/attributes/attributes.php?module=raw_material_category" class="link-dark"><span>All Raw material category</span></a></li>
+          <li><a href="<?php echo ROOT_PATH; ?>/modules/attributes/attribute-form.php?module=raw_material_category" class="link-dark"><span>Add new Raw material category</span></a></li>
         </ul>
       </div>
     </li>     
@@ -183,6 +197,10 @@
         <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
           <li><a href="<?php echo ROOT_PATH; ?>/modules/products/products.php" class="link-dark"><span>All products</span></a></li>
           <li><a href="<?php echo ROOT_PATH; ?>/modules/products/product-form.php" class="link-dark"><span>Add new product</span></a></li>
+          <li><a href="<?php echo ROOT_PATH; ?>/modules/attributes/attributes.php?module=product_category" class="link-dark"><span>All product category</span></a></li>
+          <li><a href="<?php echo ROOT_PATH; ?>/modules/attributes/attribute-form.php?module=product_category" class="link-dark"><span>Add new product category</span></a></li>
+          <li><a href="<?php echo ROOT_PATH; ?>/modules/attributes/attributes.php?module=product_quality" class="link-dark"><span>All product quality</span></a></li>
+          <li><a href="<?php echo ROOT_PATH; ?>/modules/attributes/attribute-form.php?module=product_quality" class="link-dark"><span>Add new product quality</span></a></li>
         </ul>
       </div>
     </li>    
@@ -196,6 +214,8 @@
         <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
           <li><a href="<?php echo ROOT_PATH; ?>/modules/customers/customers.php" class="link-dark"><span>All customers</span></a></li>
           <li><a href="<?php echo ROOT_PATH; ?>/modules/customers/customer-form.php" class="link-dark"><span>Add new customer</span></a></li>
+          <li><a href="<?php echo ROOT_PATH; ?>/modules/attributes/attributes.php?module=customer_category" class="link-dark"><span>All customer category</span></a></li>
+          <li><a href="<?php echo ROOT_PATH; ?>/modules/attributes/attribute-form.php?module=customer_category" class="link-dark"><span>Add new customer category</span></a></li>
         </ul>
       </div>
     </li>     
@@ -210,6 +230,8 @@
         <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
           <li><a href="<?php echo ROOT_PATH; ?>/modules/vendors/vendors.php" class="link-dark"><span>All vendors</span></a></li>
           <li><a href="<?php echo ROOT_PATH; ?>/modules/vendors/vendor-form.php" class="link-dark"><span>Add new vendor</span></a></li>
+          <li><a href="<?php echo ROOT_PATH; ?>/modules/attributes/attributes.php?module=vendor_category" class="link-dark"><span>All vendor category</span></a></li>
+          <li><a href="<?php echo ROOT_PATH; ?>/modules/attributes/attribute-form.php?module=vendor_category" class="link-dark"><span>Add new vendor category</span></a></li>
         </ul>
       </div>
     </li>    

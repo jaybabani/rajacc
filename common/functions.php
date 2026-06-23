@@ -285,6 +285,10 @@ function crud_read($vars)
     $cols_arr = [];
     $image_cols = [];
 
+    // remove any empty columns from $vars["display_columns"]
+    $vars["display_columns"] = array_filter($vars["display_columns"]);
+
+    //
     if (isset($vars["display_columns"])) {
         foreach ($vars["display_columns"] as $k => $v) {
             if (isset($v["column"])) {
@@ -413,7 +417,7 @@ function crud_read($vars)
 
                         if (isset($dv["attributes"])) {
                             if (is_array($dv["attributes"]) && isset($dv["attributes"][$colval])) {
-                                $colval = "<span class='badge bg-" . $dv["attributes"][$colval]["color"] . "'>".$dv["attributes"][$colval]["attribute"] . "</span>";
+                                $colval = "<span class='badge bg-" . $dv["attributes"][$colval]["color"] . "'>" . $dv["attributes"][$colval]["attribute"] . "</span>";
                             }
                         }
 
@@ -478,11 +482,16 @@ function crud_read($vars)
                         //
                         else if ($dv['type'] == "edit_delete") {
                             $html .= "<td class='" . $row_col_class . "'>";
+                            $urlparam = "";
+                            if (isset($vars["url_param"]) && $vars["url_param"] != "") {
+                                $urlparam = "&" . $vars["url_param"];
+                            }
+
                             if (isset($dv["acl"]["edit"]) && in_array($dv["acl"]["edit"], $_SESSION["acl"])) {
-                                $html .= "<a href='" . $vars["module_pages"]["update"] . ".php?id=" . $r[$vars["primary_column"]] . "'><span class='icon wtxt bg-accent2'><i data-feather='edit'></i>Edit</span></a> &nbsp; ";
+                                $html .= "<a href='" . $vars["module_pages"]["update"] . ".php?id=" . $r[$vars["primary_column"]] . "" . $urlparam . "'><span class='icon wtxt bg-accent2'><i data-feather='edit'></i>Edit</span></a> &nbsp; ";
                             }
                             if (isset($dv["acl"]["delete"]) && in_array($dv["acl"]["delete"], $_SESSION["acl"])) {
-                                $html .= "<a href='" . $vars["module_pages"]["delete"] . ".php?id=" . $r[$vars["primary_column"]] . "'><span class='icon wtxt bg-info'><i data-feather='trash'></i>Delete</span></a></td>";
+                                $html .= "<a href='" . $vars["module_pages"]["delete"] . ".php?id=" . $r[$vars["primary_column"]] . "" . $urlparam . "'><span class='icon wtxt bg-info'><i data-feather='trash'></i>Delete</span></a></td>";
                             }
                         }
                         //
@@ -722,47 +731,60 @@ function form_field($vars, $data)
     //
     else {
 
-        $s = '<div class="' . $vars["class"] . '"><label for="' . $vars["key"] . '" class="form-label">' . $vars["name"] . '';
-
-        $required = (isset($vars["required"]) && $vars["required"] == true) ? true : false;
-        if ($required) {
-            $s .= '<sup>*</sup>';
+        $show_as_field = true;
+        if ($vars["type"] == "hidden") {
+            $show_as_field = false;
         }
 
-        if (isset($vars["eg"]) && $vars["eg"] != "") {
-            $s .= '<small><i> (eg: ' . $vars["eg"] . ')</i></small>';
+
+        if ($show_as_field) {
+
+            $s = '<div class="' . $vars["class"] . '"><label for="' . $vars["key"] . '" class="form-label">' . $vars["name"] . '';
+
+            $required = (isset($vars["required"]) && $vars["required"] == true) ? true : false;
+            if ($required) {
+                $s .= '<sup>*</sup>';
+            }
+
+            if (isset($vars["eg"]) && $vars["eg"] != "") {
+                $s .= '<small><i> (eg: ' . $vars["eg"] . ')</i></small>';
+            }
+            $s .= '</label>';
         }
-        $s .= '</label>';
 
 
         if ($vars["type"] == "text") {
             $s .= '<input type="text" class="form-control" name="' . $vars["key"] . '" id="' . $vars["key"] . '" value="' . get_value($data, $vars["key"]) . '" ' . ($required ? "required" : "") . '>';
             $s .= '<div class="invalid-feedback">Incorrect ' . $vars["name"] . ' value</div>';
-        } 
+        }
+        //
+        else if ($vars["type"] == "hidden") {
+            $s .= '<input type="hidden" class="form-control" name="' . $vars["key"] . '" id="' . $vars["key"] . '" value="' . get_value($data, $vars["key"]) . '" ' . '>';
+        }
         //
         else if ($vars["type"] == "textarea") {
             $s .= '<textarea class="form-control" name="' . $vars["key"] . '" id="' . $vars["key"] . '" ' . ($required ? "required" : "") . '>' . get_value($data, $vars["key"]) . '</textarea>';
             $s .= '<div class="invalid-feedback">Incorrect ' . $vars["name"] . ' value</div>';
-        } 
+        }
         //
         else if ($vars["type"] == "number") {
             $s .= '<input type="number" class="form-control" name="' . $vars["key"] . '" id="' . $vars["key"] . '" value="' . get_value($data, $vars["key"]) . '" ' . ($required ? "required" : "") . '>';
             $s .= '<div class="invalid-feedback">Incorrect ' . $vars["name"] . ' value</div>';
-        } 
+        }
         //
         else if ($vars["type"] == "select") {
-            $s .= '<select class="form-control" name="' . $vars["key"] . '" id="' . $vars["key"] . '" ' . ($required ? "required" : "") . '>';
+            $s .= '<select class="form-control" readonly name="' . $vars["key"] . '" id="' . $vars["key"] . '" ' . ($required ? "required" : "") . '>';
             $sel = get_value($data, $vars["key"]);
             $s .= select_options($vars["options"], $sel);
             $s .= '</select><div class="invalid-feedback">Incorrect ' . $vars["name"] . ' value</div>';
-        } 
+        }
         //
         else if ($vars["type"] == "select-attribute") {
             $s .= '<select class="form-control" name="' . $vars["key"] . '" id="' . $vars["key"] . '" ' . ($required ? "required" : "") . '>';
             $sel = get_value($data, $vars["key"]);
             $s .= select_attribute_options($vars["attributes"], $sel);
             $s .= '</select><div class="invalid-feedback">Incorrect ' . $vars["name"] . ' value</div>';
-        } 
+        }
         //
         else if ($vars["type"] == "multi-checkbox") {
             $s .= '<div class="multi-check-list">';
@@ -776,7 +798,7 @@ function form_field($vars, $data)
                 $s .= '<input type="checkbox" ' . $sel . ' class="form-check-input" name="' . $vars["key"] . '[]" id="' . $vars["key"] . '-' . $v[$optid] . '" value="' . $v[$optid] . '"><label for="' . $vars["key"] . '-' . $v[$optid] . '">' . $v[$optlabel] . '</label><br>';
             }
             $s .= '</div>';
-        } 
+        }
         //
         else if ($vars["type"] == "image-file") {
             $s .= '<input type="file" class="form-control" name="' . $vars["key"] . '" id="' . $vars["key"] . '" ' . ($required ? "required" : "") . '>';
@@ -792,12 +814,14 @@ function form_field($vars, $data)
             }
         }
 
-        $s .= '</div>';
+        if ($show_as_field) {
+            $s .= '</div>';
+        }
 
         if (isset($vars["restrict"]) && $vars["restrict"] != "") {
             if ($vars["restrict"] == "lowercase|_") {
                 $s .= "<script>
-                        $('#".$vars["key"]."').on('input', function() {
+                        $('#" . $vars["key"] . "').on('input', function() {
                             let val = $(this).val().toLowerCase();
                             $(this).val(val.replace(/[^a-z0-9_]/g, ''));
                         });
@@ -977,7 +1001,11 @@ function module_submit_delete_form($vars)
         //echo "New firewall inserted at ". decrypt($datetime);
         if ($sql) {
             notify_after_redirect("success", $msg["success_delete"]);
-            echo "<script>window.top.location='" . $vars["redirect_to"] . ".php'</script>";
+            $urlparam = "";
+            if (isset($vars["url_param"]) && $vars["url_param"] != "") {
+                $urlparam = $vars["url_param"];
+            }
+            echo "<script>window.top.location='" . $vars["redirect_to"] . ".php?" . $urlparam . "'</script>";
         } else {
             notify("error", $msg["error_delete"]);
         }
