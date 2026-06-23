@@ -30,7 +30,7 @@ include("attribute-submodule.php");
 
   $save_fields = [
     ["key" => "attribute"],
-    ["key" => "code"],
+    // ["key" => "code"],
     ["key" => "active"],
     ["key" => "category"],
     ["key" => "updated", "type" => "time"]
@@ -70,7 +70,7 @@ include("attribute-submodule.php");
     <?php
 
     echo form_field(["type" => "text", "name" => $submod["column_title"], "key" => "attribute", "eg" => "INFY_NSE", "required" => true, "class" => "col-md-6 col-lg-4 mb-3"], $data);
-    echo form_field(["type" => "text", "name" => "Code", "key" => "code", "restrict" => "lowercase|_", "eg" => "Only lowercase & _ allowed", "class" => "col-md-6 col-lg-4 mb-3"], $data);
+    // echo form_field(["type" => "text", "name" => "Code", "key" => "code", "restrict" => "lowercase|_", "eg" => "Only lowercase & _ allowed", "class" => "col-md-6 col-lg-4 mb-3"], $data);
 
     echo ($parent == "default") ?
       form_field([

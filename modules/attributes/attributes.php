@@ -42,11 +42,11 @@ include("attribute-submodule.php");
     ["name" => "Select", "column" => "", "type" => "select", "sorting" => false, "search" => false, "class" => "text-center"],
     ["name" => "ID", "column" => "id", "class" => "text-center"],
     ["name" => $submod["column_title"], "column" => "attribute", "class" => "title nowrap"],
-    ["name" => "Code", "column" => "code"],
+    // ["name" => "Code", "column" => "code"],
     ($parent == "default") ? ["name" => "Category", "column" => "category", "options" => get_attribute_category_arr()]:[],
     ["name" => "Active", "column" => "active", "options" => get_active_arr(), "badge" => true],
     ["name" => "Updated", "column" => "updated", "format" => "ts_to_dt", "class" => "nowrap"],
-    ["name" => "Actions", "column" => "", "type" => "edit_delete", "sorting" => false, "search" => false, "class" => "nowrap", "acl" => ["edit" => "attributes-update", "delete" => "attributes-delete"]],
+    ["name" => "Actions", "column" => "", "type" => "edit", "sorting" => false, "search" => false, "class" => "nowrap", "acl" => ["edit" => "attributes-update", "delete" => "attributes-delete"]],
   ];
 
   $fetch_columns = [];

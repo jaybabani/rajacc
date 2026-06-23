@@ -480,18 +480,21 @@ function crud_read($vars)
                             $html .= "<td class='" . $row_col_class . "'><input type='checkbox' " . $selected . " class='symbol-combination-check form-check-input' data-id='" . $r[$vars["primary_column"]] . "' /></td>";
                         }
                         //
-                        else if ($dv['type'] == "edit_delete") {
+                        else if (in_array($dv['type'], ["edit", "delete", "edit_delete"])) {
                             $html .= "<td class='" . $row_col_class . "'>";
                             $urlparam = "";
                             if (isset($vars["url_param"]) && $vars["url_param"] != "") {
                                 $urlparam = "&" . $vars["url_param"];
                             }
-
-                            if (isset($dv["acl"]["edit"]) && in_array($dv["acl"]["edit"], $_SESSION["acl"])) {
-                                $html .= "<a href='" . $vars["module_pages"]["update"] . ".php?id=" . $r[$vars["primary_column"]] . "" . $urlparam . "'><span class='icon wtxt bg-accent2'><i data-feather='edit'></i>Edit</span></a> &nbsp; ";
+                            if (in_array($dv['type'], ["edit", "edit_delete"])) {
+                                if (isset($dv["acl"]["edit"]) && in_array($dv["acl"]["edit"], $_SESSION["acl"])) {
+                                    $html .= "<a href='" . $vars["module_pages"]["update"] . ".php?id=" . $r[$vars["primary_column"]] . "" . $urlparam . "'><span class='icon wtxt bg-accent2'><i data-feather='edit'></i>Edit</span></a> &nbsp; ";
+                                }
                             }
-                            if (isset($dv["acl"]["delete"]) && in_array($dv["acl"]["delete"], $_SESSION["acl"])) {
-                                $html .= "<a href='" . $vars["module_pages"]["delete"] . ".php?id=" . $r[$vars["primary_column"]] . "" . $urlparam . "'><span class='icon wtxt bg-info'><i data-feather='trash'></i>Delete</span></a></td>";
+                            if (in_array($dv['type'], ["delete", "edit_delete"])) {
+                                if (isset($dv["acl"]["delete"]) && in_array($dv["acl"]["delete"], $_SESSION["acl"])) {
+                                    $html .= "<a href='" . $vars["module_pages"]["delete"] . ".php?id=" . $r[$vars["primary_column"]] . "" . $urlparam . "'><span class='icon wtxt bg-info'><i data-feather='trash'></i>Delete</span></a></td>";
+                                }
                             }
                         }
                         //
