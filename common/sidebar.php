@@ -86,6 +86,8 @@
     $show_menu["customers"] = "";
     $show_menu["vendors"] = "";
     $show_menu["raw_materials"] = "";
+    $show_menu["products"] = "";
+    $show_menu["attributes"] = "";
     
     $current_page = str_replace(".php","",basename($_SERVER['PHP_SELF']));
     // echo $current_page;
@@ -107,6 +109,12 @@
     }
     else if(in_array($current_page,array("raw_materials","raw_material-form","raw_material-delete"))){
       $show_menu["raw_materials"] = "show";
+    }
+    else if(in_array($current_page,array("products","product-form","product-delete"))){
+      $show_menu["products"] = "show";
+    }
+    else if(in_array($current_page,array("attributes","attribute-form","attribute-delete"))){
+      $show_menu["attributes"] = "show";
     }
     
     
@@ -166,6 +174,19 @@
       </div>
     </li>     
 
+    <?php $menuid = "products"; ?>
+    <li class="mb-1">
+      <button class="btn btn-toggle align-items-center collapsed" data-bs-toggle="collapse" data-bs-target="#<?php echo $menuid; ?>-collapse"  aria-expanded="<?php echo $show_menu[$menuid] == "show" ? "true" : "false"; ?>">
+        <span class="icon"><i data-feather="home"></i></span> <span class="txt">Products</span>
+      </button>
+      <div class="collapse <?php echo $show_menu[$menuid]; ?>" id="<?php echo $menuid; ?>-collapse" data-bs-parent="#parent-level">
+        <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
+          <li><a href="<?php echo ROOT_PATH; ?>/modules/products/products.php" class="link-dark"><span>All products</span></a></li>
+          <li><a href="<?php echo ROOT_PATH; ?>/modules/products/product-form.php" class="link-dark"><span>Add new product</span></a></li>
+        </ul>
+      </div>
+    </li>    
+
     <?php $menuid = "customers"; ?>
     <li class="mb-1">
       <button class="btn btn-toggle align-items-center collapsed" data-bs-toggle="collapse" data-bs-target="#<?php echo $menuid; ?>-collapse"  aria-expanded="<?php echo $show_menu[$menuid] == "show" ? "true" : "false"; ?>">
@@ -189,6 +210,19 @@
         <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
           <li><a href="<?php echo ROOT_PATH; ?>/modules/vendors/vendors.php" class="link-dark"><span>All vendors</span></a></li>
           <li><a href="<?php echo ROOT_PATH; ?>/modules/vendors/vendor-form.php" class="link-dark"><span>Add new vendor</span></a></li>
+        </ul>
+      </div>
+    </li>    
+
+    <?php $menuid = "attributes"; ?>
+    <li class="mb-1">
+      <button class="btn btn-toggle align-items-center collapsed" data-bs-toggle="collapse" data-bs-target="#<?php echo $menuid; ?>-collapse"  aria-expanded="<?php echo $show_menu[$menuid] == "show" ? "true" : "false"; ?>">
+        <span class="icon"><i data-feather="home"></i></span> <span class="txt">Attributes</span>
+      </button>
+      <div class="collapse <?php echo $show_menu[$menuid]; ?>" id="<?php echo $menuid; ?>-collapse" data-bs-parent="#parent-level">
+        <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
+          <li><a href="<?php echo ROOT_PATH; ?>/modules/attributes/attributes.php" class="link-dark"><span>All attributes</span></a></li>
+          <li><a href="<?php echo ROOT_PATH; ?>/modules/attributes/attribute-form.php" class="link-dark"><span>Add new attribute</span></a></li>
         </ul>
       </div>
     </li>    

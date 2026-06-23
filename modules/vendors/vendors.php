@@ -44,7 +44,7 @@ include("../../common/header.php");
     ["name" => "Image", "column" => "image", "type" => "image-file", "sorting" => false, "search" => false, "class" => "text-center"],
     ["name" => "Firm Name", "column" => "firm_name", "class" => "title nowrap"],
     ["name" => "Firm Contact", "column" => ["firm_email", "firm_phone"], "prefix" => ["Firm Email", "Firm Phone"], "sorting" => false],
-    ["name" => "Category", "column" => "category", "options" => get_vendor_category_arr(), "badge" => true],
+    ["name" => "Category", "column" => "category", "attributes" => get_attributes_arr("vendor_category"), "badge" => true],
     ["name" => "Owner Name", "column" => "owner_name", "class" => "title nowrap"],
     ["name" => "Owner Contact", "column" => ["owner_email", "owner_phone"], "prefix" => ["Owner Email", "Owner Phone"], "sorting" => false],
     ["name" => "Raw Materials", "column" => "", "options" => $raw_materials_arr, "type" => "link_table_rows", "links" => $links, "option_id" => "id", "option_label" => "raw_material", "sorting" => false],

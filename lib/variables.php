@@ -34,6 +34,14 @@ function acl_roles($format = "")
 		["raw_materials-update", "Update raw materials"],
 		["raw_materials-create", "Add new raw materials"],
 		["raw_materials-delete", "Delete raw materials"],
+		["products-read", "View all products"],
+		["products-update", "Update products"],
+		["products-create", "Add new products"],
+		["products-delete", "Delete products"],
+		["attributes-read", "View all attributes"],
+		["attributes-update", "Update attributes"],
+		["attributes-create", "Add new attributes"],
+		["attributes-delete", "Delete attributes"],
 	];
 
 	if ($format == "raw") {
@@ -68,28 +76,14 @@ function get_active_arr()
 	return $arr;
 }
 
-function get_customer_category_arr()
+function get_attribute_category_arr()
 {
 	$arr = [
-		"whole_seller" => "Whole Seller",
-		"bulk_buyer" => "Bulk Buyer",
-		"auto_rickshaw_dealer" => "Auto rickshaw Dealer",
-		"exporter" => "Expoter",
-		"retailer" => "Retailer"
+		"customer_category" => "Customer category",
+		"vendor_category" => "Vendor category",
+		"raw_material_category" => "Raw material category",
+		"product_category" => "Product category",
+		"product_quality" => "Product quality",
 	];
-
-	return $arr;
-}
-
-function get_vendor_category_arr()
-{
-	$arr = [
-    "raw_material" => "Raw Material",
-    "packing_material" => "Packing Material",
-    "consumables" => "Consumables",
-    "machine_tools" => "Machine & Tools",
-    "service_provider" => "Service Provider"
-];
-
 	return $arr;
 }

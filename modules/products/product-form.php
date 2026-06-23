@@ -1,11 +1,11 @@
 <?php
-$module = "raw_materials";
-$pageid = "raw_materials-create";
+$module = "products";
+$pageid = "products-create";
 if (isset($_GET['id']) && is_numeric($_GET['id']) && trim($_GET['id']) != '') {
-  $pageid = "raw_materials-update";
+  $pageid = "products-update";
 }
 include("../../common/header.php");
-// include("raw_material-functions.php");
+// include("product-functions.php");
 ?>
 
 <div class="row row-cols-1 row-cols-sm-1 row-cols-md-1 row-cols-lg-1 row-cols-xl-1 row-cols-xxl-1 g-4 py-3 px-2">
@@ -13,10 +13,10 @@ include("../../common/header.php");
 
   $id = '';
   $mode = "new";
-  $titletag = T('Add New Raw Material');
+  $titletag = T('Add New Product');
   if (isset($_GET['id']) && is_numeric($_GET['id']) && trim($_GET['id']) != '') {
     $mode = 'update';
-    $titletag = T('Edit Raw Material');
+    $titletag = T('Edit Product');
     $id = $_GET['id'];
   }
 
@@ -24,29 +24,32 @@ include("../../common/header.php");
   ?>
   <?php
 
-  $tablename = "raw_materials";
+  $tablename = "products";
   $primary_column = "id";
 
   $save_fields = [
-    ["key" => "raw_material"],
-    ["key" => "unit"],
+    ["key" => "product"],
+    ["key" => "code"],
     ["key" => "description"],
     ["key" => "category"],
+    ["key" => "quality"],
+    ["key" => "type"],
+    ["key" => "pieces"],
     ["key" => "image", "type" => "image"],
     ["key" => "updated", "type" => "time"]
   ];
 
   $link_table_rows = [
-    // "table" => "raw_material_sector_link",
-    // "single_column" => ["column" => "raw_material", "field" => $primary_column],
+    // "table" => "product_sector_link",
+    // "single_column" => ["column" => "product", "field" => $primary_column],
     // "multi_column" => ["column" => "sector", "field" => "sectors"],
   ];
 
   $msg = [
-    "success_update" => "Raw Material updated successfully",
-    "error_update" => "Error in updating raw_material",
-    "success_added" => "New raw_material added successfully",
-    "error_added" => "Error in adding new raw_material",
+    "success_update" => "Product updated successfully",
+    "error_update" => "Error in updating product",
+    "success_added" => "New product added successfully",
+    "error_added" => "Error in adding new product",
   ];
 
   $submit_result = module_submit_form([
@@ -60,6 +63,7 @@ include("../../common/header.php");
 
   $data = module_get_data($tablename, $id);
   // print_arr($data);
+
   ?>
 
   <form class="row g-3 needs-validation" novalidate method="POST" enctype="multipart/form-data">
@@ -68,9 +72,13 @@ include("../../common/header.php");
 
     <?php
 
-    echo form_field(["type" => "text", "name" => "Raw material", "key" => "raw_material", "required" => true, "class" => "col-md-6 col-lg-4 mb-3"], $data);
-    echo form_field(["type" => "text", "name" => "Unit", "key" => "unit", "required" => true, "class" => "col-md-6 col-lg-4 mb-3"], $data);
-    echo form_field(["type" => "select-attribute", "name" => "Category", "key" => "category", "required" => true, "attributes" => get_attributes_arr("raw_material_category"), "class" => "col-md-6 col-lg-4 mb-3"], $data);
+    echo form_field(["type" => "text", "name" => "Product", "key" => "product", "required" => true, "class" => "col-md-6 col-lg-4 mb-3"], $data);
+    echo form_field(["type" => "text", "name" => "Item Code", "key" => "code", "required" => true, "class" => "col-md-6 col-lg-4 mb-3"], $data);
+    echo form_field(["type" => "select-attribute", "name" => "Category", "key" => "category", "required" => true, "attributes" => get_attributes_arr("product_category"), "class" => "col-md-6 col-lg-4 mb-3"], $data);
+    echo form_field(["type" => "select-attribute", "name" => "Quality", "key" => "quality", "required" => true, "attributes" => get_attributes_arr("product_quality"), "class" => "col-md-6 col-lg-4 mb-3"], $data);
+    echo form_field(["type" => "text", "name" => "Type", "key" => "type", "class" => "col-md-6 col-lg-4 mb-3"], $data);
+    echo form_field(["type" => "number", "name" => "No. of Pieces / Set of", "key" => "pieces", "class" => "col-md-6 col-lg-4 mb-3"], $data);
+
     echo form_field(["type" => "textarea", "name" => "Description", "key" => "description", "class" => "col-md-6 col-lg-4 mb-3"], $data);
 
     // Image upload field

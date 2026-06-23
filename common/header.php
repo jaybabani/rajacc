@@ -20,6 +20,7 @@ include_once("includes.php");
 
     <!-- CORE CSS FRAMEWORK - START -->
 
+    <script src="<?php echo ROOT_PATH; ?>/assets/js/jquery.min.js" type="text/javascript"></script>
     <link href="<?php echo ROOT_PATH; ?>/assets/plugins/bootstrap/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
     <link href="<?php echo ROOT_PATH; ?>/assets/plugins/overlayscrollbars/css/OverlayScrollbars.min.css" rel="stylesheet">
     <script src="<?php echo ROOT_PATH; ?>/assets/icons/feather/feather.min.js"></script>

@@ -555,12 +555,12 @@ if (!function_exists('print_arr')) {
 }
 
 if (!function_exists('print_arrbox')) {
-  function print_arrbox($a, $h = 100)
-  {
-    echo '<pre class="arr-box" style="height:' . $h . 'px;overflow:auto;">';
-    print_r($a);
-    echo '</pre>';
-  }
+    function print_arrbox($a, $h = 100)
+    {
+        echo '<pre class="arr-box" style="height:' . $h . 'px;overflow:auto;">';
+        print_r($a);
+        echo '</pre>';
+    }
 }
 
 function select_options($arr, $sel)
@@ -587,6 +587,28 @@ function select_options($arr, $sel)
             '>' .
             $value .
             '</option>';
+    }
+
+    return $ret;
+}
+
+function select_attribute_options($arr, $sel)
+{
+    $ret = "<option value=''></option>";
+
+    foreach ($arr as $key => $value) {
+
+        $selected = '';
+        if (is_array($sel)) {
+            if (in_array($key, $sel)) {
+                $selected = 'selected';
+            }
+        } else {
+            if ($key == $sel) {
+                $selected = 'selected';
+            }
+        }
+        $ret .= "<option value='" . $key . "' " . $selected . " data-color='" . $value["color"] . "'>" . $value["attribute"] . "</option>";
     }
 
     return $ret;
@@ -1747,4 +1769,29 @@ function goto_url($page)
               window.top.location = '" . $url . "';
           }, 1000);
         </script>";
+}
+
+function get_attributes_arr($cat)
+{
+    $colors = [
+        'accent1',
+        'accent2',
+        'accent3',
+        'warning',
+        'info',
+        'primary',
+        'success',
+        'danger'
+    ];
+    $arr = [];
+    if ($cat != "") {
+        $fetch_arr = fetch_data(["table" => "attributes", "columns" => "id, color, attribute, code", "condition" => " category = '" . $cat . "' AND active = 'yes' ", "order" => "attribute ASC", "limit" => ""]);
+        foreach ($fetch_arr as $lk => $lv) {
+            if($lv["color"] == NULL || $lv["color"] == ""){
+                $lv["color"] = $color = $colors[$lv["id"] % count($colors)];
+            }
+            $arr[$lv["code"]] = $lv;
+        }
+    }
+    return $arr;
 }

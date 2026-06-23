@@ -79,7 +79,7 @@ include("../../common/header.php");
     echo form_field(["type" => "text", "name" => "Owner Name", "key" => "owner_name", "required" => true, "class" => "col-md-6 col-lg-4 mb-3"], $data);
     echo form_field(["type" => "text", "name" => "Owner Email", "key" => "owner_email", "class" => "col-md-6 col-lg-4 mb-3"], $data);
     echo form_field(["type" => "textarea", "name" => "Owner Phone", "key" => "owner_phone", "class" => "col-md-6 col-lg-4 mb-3"], $data);
-    echo form_field(["type" => "select", "name" => "Category", "key" => "category", "required" => true, "options" => get_customer_category_arr(), "class" => "col-md-6 col-lg-4 mb-3"], $data);
+    echo form_field(["type" => "select-attribute", "name" => "Category", "key" => "category", "required" => true, "attributes" => get_attributes_arr("customer_category"), "class" => "col-md-6 col-lg-4 mb-3"], $data);
     echo form_field(["type" => "text", "name" => "Zone / Area", "key" => "zone", "class" => "col-md-6 col-lg-4 mb-3"], $data);
     echo form_field(["type" => "text", "name" => "GST No.", "key" => "gst", "class" => "col-md-6 col-lg-4 mb-3"], $data);
     echo form_field(["type" => "text", "name" => "Price Allotment", "key" => "price_allotment", "class" => "col-md-6 col-lg-4 mb-3"], $data);

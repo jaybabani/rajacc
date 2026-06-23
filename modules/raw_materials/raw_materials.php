@@ -27,18 +27,13 @@ include("../../common/header.php");
 
   $primary_column = "id";
 
-  // $raw_material_roles_arr = fetch_data(["table" => "raw_material_roles", "columns" => "id, raw_material_role", "condition" => "", "order" => "raw_material_role ASC", "limit" => ""]);
-  // print_arr($raw_material_roles_arr);
-
   $display_columns = [
     ["name" => "", "column" => "", "type" => "details", "sorting" => false, "search" => false, "class" => "text-center nowrap"],
     ["name" => "Select", "column" => "", "type" => "select", "sorting" => false, "search" => false, "class" => "text-center"],
     ["name" => "ID", "column" => "id", "class" => "text-center"],
     ["name" => "Image", "column" => "image", "type" => "image-file", "sorting" => false, "search" => false, "class" => "text-center"],
     ["name" => "Raw material", "column" => "raw_material", "class" => "title nowrap"],
-    // ["name" => "Contact", "column" => ["email", "phone"], "prefix" => ["Email", "Phone"], "sorting" => false],
-    // ["name" => "Active", "column" => "active", "options" => get_active_arr(), "badge" => true],
-    // ["name" => "Raw Material roles", "column" => "raw_material_roles", "options" => $raw_material_roles_arr, "type" => "implode", "sep" => ",", "option_id" => "id", "option_label" => "raw_material_role", "sorting" => false],
+    ["name" => "Category", "column" => "category", "attributes" => get_attributes_arr("raw_material_category"), "badge" => true],
     ["name" => "Unit", "column" => "unit", "class" => "nowrap"],
     ["name" => "Description", "column" => "description", "class" => "nowrap"],
     ["name" => "Actions", "column" => "", "type" => "edit_delete", "sorting" => false, "search" => false, "class" => "nowrap", "acl" => ["edit" => "raw_materials-update", "delete" => "raw_materials-delete"]],
@@ -46,11 +41,7 @@ include("../../common/header.php");
 
   $fetch_columns = [];
 
-  $detail_columns = [
-    // ["name" => "Name", "column" => "name"],
-    // ["name" => "Aadhaar No.", "column" => "aadhaar"],
-    // ["name" => "Address", "column" => "address"],
-  ];
+  $detail_columns = [];
 
 
   $table_html = crud_read([

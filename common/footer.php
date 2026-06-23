@@ -5,7 +5,6 @@
 
 </main>
 <!-- CORE JS FRAMEWORK - START -->
-<script src="<?php echo ROOT_PATH; ?>/assets/js/jquery.min.js" type="text/javascript"></script>
 <script src="<?php echo ROOT_PATH; ?>/assets/plugins/bootstrap/js/bootstrap.bundle.min.js" type="text/javascript"></script>
 <script src="<?php echo ROOT_PATH; ?>/assets/js/sidebars.js" type="text/javascript"></script>
 <script src="<?php echo ROOT_PATH; ?>/assets/js/scripts.js" type="text/javascript"></script>

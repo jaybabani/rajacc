@@ -1,21 +1,21 @@
 <?php
-$module = "customers";
-$pageid = "customers-read";
+$module = "products";
+$pageid = "products-read";
 include("../../common/header.php");
-// include("customer-functions.php");
+// include("product-functions.php");
 ?>
 
 <div class="row row-cols-1 row-cols-sm-1 row-cols-md-1 row-cols-lg-1 row-cols-xl-1 row-cols-xxl-1 g-4 py-3 px-2">
 
   <?php
   $module_pages = [
-    "read" => "customers",
-    "update" => "customer-form",
-    "create" => "customer-form",
-    "delete" => "customer-delete"
+    "read" => "products",
+    "update" => "product-form",
+    "create" => "product-form",
+    "delete" => "product-delete"
   ];
 
-  $pagetitle = T("Customers");
+  $pagetitle = T("Products");
   $actions_html = "";
   $actions_html .= download_xlsx($module_pages["read"]);
   $actions_html .= pagination($module_pages["read"] . ".php");
@@ -23,7 +23,7 @@ include("../../common/header.php");
 
   <?php
 
-  $tablename = "customers";
+  $tablename = "products";
 
   $primary_column = "id";
 
@@ -31,24 +31,21 @@ include("../../common/header.php");
     ["name" => "", "column" => "", "type" => "details", "sorting" => false, "search" => false, "class" => "text-center nowrap"],
     ["name" => "Select", "column" => "", "type" => "select", "sorting" => false, "search" => false, "class" => "text-center"],
     ["name" => "ID", "column" => "id", "class" => "text-center"],
+    ["name" => "Item Code", "column" => "code", "class" => "nowrap"],
     ["name" => "Image", "column" => "image", "type" => "image-file", "sorting" => false, "search" => false, "class" => "text-center"],
-    ["name" => "Firm Name", "column" => "firm_name", "class" => "title nowrap"],
-    ["name" => "Firm Contact", "column" => ["firm_email", "firm_phone"], "prefix" => ["Firm Email", "Firm Phone"], "sorting" => false],
-    ["name" => "Category", "column" => "category", "attributes" => get_attributes_arr("customer_category"), "badge" => true],
-    ["name" => "Owner Name", "column" => "owner_name", "class" => "title nowrap"],
-    ["name" => "Owner Contact", "column" => ["owner_email", "owner_phone"], "prefix" => ["Owner Email", "Owner Phone"], "sorting" => false],
-    ["name" => "GST No.", "column" => "gst", "class" => "nowrap"],
-    ["name" => "Zone / Area", "column" => "zone", "class" => "nowrap"],
-    ["name" => "Active", "column" => "active", "options" => get_active_arr(), "badge" => true],
-    ["name" => "Actions", "column" => "", "type" => "edit_delete", "sorting" => false, "search" => false, "class" => "nowrap", "acl" => ["edit" => "customers-update", "delete" => "customers-delete"]],
+    ["name" => "Product", "column" => "product", "class" => "title nowrap"],
+    ["name" => "Type", "column" => "type", "class" => "nowrap"],
+    ["name" => "Category", "column" => "category", "attributes" => get_attributes_arr("product_category"), "badge" => true],
+    ["name" => "Quality", "column" => "quality", "attributes" => get_attributes_arr("product_quality"), "badge" => true],
+    ["name" => "Actions", "column" => "", "type" => "edit_delete", "sorting" => false, "search" => false, "class" => "nowrap", "acl" => ["edit" => "products-update", "delete" => "products-delete"]],
   ];
 
   $fetch_columns = [];
 
   $detail_columns = [
-    ["name" => "Firm Name", "column" => "firm_name"],
-    ["name" => "Price Allotment", "column" => "price_allotment"],
-    ["name" => "Firm Address", "column" => "firm_address"],
+    ["name" => "Product", "column" => "product"],
+    ["name" => "No. of pieces / Set of", "column" => "pieces"],
+    ["name" => "Description", "column" => "description"],
   ];
 
 

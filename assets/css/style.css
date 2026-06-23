@@ -315,27 +315,11 @@ body {
 	padding: 5px 10px;
 	font-size: 13px;
 }
-.badge-packing_material,
-.badge-bulk_buyer,
 .badge-yes {
 	background-color: rgba(var(--bs-success-rgb), 1);
 }
-.badge-raw_material,
-.badge-auto_rickshaw_dealer,
 .badge-no {
 	background-color: rgba(var(--bs-warning-rgb), 1);
-}
-.badge-machine_tools,
-.badge-whole_seller{
-	background-color: rgba(var(--bs-info-rgb), 1);
-}
-.badge-consumables,
-.badge-exporter{
-	background-color: rgba(var(--bs-accent1-rgb), 1);
-}
-.badge-service_provider,
-.badge-retailer{
-	background-color: rgba(var(--bs-accent2-rgb), 1);
 }
 
 /* typography  */

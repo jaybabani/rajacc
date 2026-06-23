@@ -411,6 +411,12 @@ function crud_read($vars)
                             }
                         }
 
+                        if (isset($dv["attributes"])) {
+                            if (is_array($dv["attributes"]) && isset($dv["attributes"][$colval])) {
+                                $colval = "<span class='badge bg-" . $dv["attributes"][$colval]["color"] . "'>".$dv["attributes"][$colval]["attribute"] . "</span>";
+                            }
+                        }
+
                         if (isset($dv["badge"])) {
                             $colval = "<span class='badge badge-" . $r[$colname] . "'>" . $colval . "</span>";
                         }
@@ -508,10 +514,10 @@ function crud_read($vars)
                 if (isset($dv["column"]) && $dv["column"] != "") {
                     $colname = $dv["column"];
                     $colval = "";
-                    if($r[$colname] != NULL){
+                    if ($r[$colname] != NULL) {
                         $colval = nl2br($r[$colname]);
                     }
-                    $row_detail .= "<small><i>".$dv["name"] . ": </i></small>" . $colval."<br>";
+                    $row_detail .= "<small><i>" . $dv["name"] . ": </i></small>" . $colval . "<br>";
                 }
             }
             $details[$r[$vars["primary_column"]]] = $row_detail;
@@ -724,7 +730,7 @@ function form_field($vars, $data)
         }
 
         if (isset($vars["eg"]) && $vars["eg"] != "") {
-            $s .= '<small><i>(eg: ' . $vars["eg"] . ')</i></small>';
+            $s .= '<small><i> (eg: ' . $vars["eg"] . ')</i></small>';
         }
         $s .= '</label>';
 
@@ -732,18 +738,33 @@ function form_field($vars, $data)
         if ($vars["type"] == "text") {
             $s .= '<input type="text" class="form-control" name="' . $vars["key"] . '" id="' . $vars["key"] . '" value="' . get_value($data, $vars["key"]) . '" ' . ($required ? "required" : "") . '>';
             $s .= '<div class="invalid-feedback">Incorrect ' . $vars["name"] . ' value</div>';
-        } else if ($vars["type"] == "textarea") {
+        } 
+        //
+        else if ($vars["type"] == "textarea") {
             $s .= '<textarea class="form-control" name="' . $vars["key"] . '" id="' . $vars["key"] . '" ' . ($required ? "required" : "") . '>' . get_value($data, $vars["key"]) . '</textarea>';
             $s .= '<div class="invalid-feedback">Incorrect ' . $vars["name"] . ' value</div>';
-        } else if ($vars["type"] == "number") {
+        } 
+        //
+        else if ($vars["type"] == "number") {
             $s .= '<input type="number" class="form-control" name="' . $vars["key"] . '" id="' . $vars["key"] . '" value="' . get_value($data, $vars["key"]) . '" ' . ($required ? "required" : "") . '>';
             $s .= '<div class="invalid-feedback">Incorrect ' . $vars["name"] . ' value</div>';
-        } else if ($vars["type"] == "select") {
+        } 
+        //
+        else if ($vars["type"] == "select") {
             $s .= '<select class="form-control" name="' . $vars["key"] . '" id="' . $vars["key"] . '" ' . ($required ? "required" : "") . '>';
             $sel = get_value($data, $vars["key"]);
             $s .= select_options($vars["options"], $sel);
             $s .= '</select><div class="invalid-feedback">Incorrect ' . $vars["name"] . ' value</div>';
-        } else if ($vars["type"] == "multi-checkbox") {
+        } 
+        //
+        else if ($vars["type"] == "select-attribute") {
+            $s .= '<select class="form-control" name="' . $vars["key"] . '" id="' . $vars["key"] . '" ' . ($required ? "required" : "") . '>';
+            $sel = get_value($data, $vars["key"]);
+            $s .= select_attribute_options($vars["attributes"], $sel);
+            $s .= '</select><div class="invalid-feedback">Incorrect ' . $vars["name"] . ' value</div>';
+        } 
+        //
+        else if ($vars["type"] == "multi-checkbox") {
             $s .= '<div class="multi-check-list">';
             foreach ($vars["options"] as $k => $v) {
                 $sel = "";
@@ -755,7 +776,9 @@ function form_field($vars, $data)
                 $s .= '<input type="checkbox" ' . $sel . ' class="form-check-input" name="' . $vars["key"] . '[]" id="' . $vars["key"] . '-' . $v[$optid] . '" value="' . $v[$optid] . '"><label for="' . $vars["key"] . '-' . $v[$optid] . '">' . $v[$optlabel] . '</label><br>';
             }
             $s .= '</div>';
-        } else if ($vars["type"] == "image-file") {
+        } 
+        //
+        else if ($vars["type"] == "image-file") {
             $s .= '<input type="file" class="form-control" name="' . $vars["key"] . '" id="' . $vars["key"] . '" ' . ($required ? "required" : "") . '>';
             $s .= '<div class="invalid-feedback">Invalid ' . $vars["name"] . '</div>';
             if (isset($data[$vars["key"]])) {
@@ -770,6 +793,17 @@ function form_field($vars, $data)
         }
 
         $s .= '</div>';
+
+        if (isset($vars["restrict"]) && $vars["restrict"] != "") {
+            if ($vars["restrict"] == "lowercase|_") {
+                $s .= "<script>
+                        $('#".$vars["key"]."').on('input', function() {
+                            let val = $(this).val().toLowerCase();
+                            $(this).val(val.replace(/[^a-z0-9_]/g, ''));
+                        });
+                        </script>";
+            }
+        }
     }
 
 
