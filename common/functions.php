@@ -193,6 +193,16 @@ function ts_to_dt($ts)
     return date('D, d-M-Y', $ts);
     // return date('D, d-M-Y h:i A', $ts);
 }
+function ymd_to_dt($dt)
+{
+    $dateString = $dt;
+    $date = DateTime::createFromFormat('Ymd', $dateString);
+    $formattedDate = $date->format('d M Y, D');
+    return $formattedDate;
+    // F j, Y (D)
+    // return date('D, d-M-Y', $ts);
+    // return date('D, d-M-Y h:i A', $ts);
+}
 
 function ymdTodmy($dt)
 {
@@ -364,6 +374,7 @@ function crud_read($vars)
         }
 
         $images = fetch_image_rows($fetched_rows, $image_cols);
+        // print_arr($images);
 
         $inc = 0;
 
@@ -407,6 +418,9 @@ function crud_read($vars)
                             if ($dv["format"] == "ts_to_dt") {
                                 $colval = "<span class='data-hide'>" . $colval . "</span>" . ts_to_dt($colval);
                             }
+                            if ($dv["format"] == "date") {
+                                $colval = "<span class='data-hide'>" . $colval . "</span>" . ymd_to_dt($colval);
+                            }
                         }
 
                         if (isset($dv["options"]) && !isset($dv["type"])) {
@@ -430,15 +444,28 @@ function crud_read($vars)
                             if ($dv['type'] == "image-file") {
                                 $val = $r[$colname] ?? "";
                                 if ($val != "" && isset($images[$val])) {
-                                    if(file_exists(ROOT_DIR . "/" . $images[$val]["thumb"])){
-                                        $colval = "<img src='" . ROOT_PATH . "/" . $images[$val]["thumb"] . "' class='table-thumb'>";
+                                    $fullpath = $images[$val]["name"];
+                                    $filetype = get_filetype($images[$val]["type"]);
+                                    
+                                    $iconpath = "";
+                                    if ($filetype == "image" && $images[$val]["thumb"] != "") {
+                                        $iconpath = $images[$val]["thumb"];
+                                    } else {
+                                        $iconpath = "assets/images/file/" . $filetype . ".svg";
+                                    }
+                                    // default file icon
+                                    if (!file_exists(ROOT_DIR . "/" . $iconpath)) {
+                                        $iconpath = "assets/images/file/file.svg";
+                                    }
+
+
+                                    if (file_exists(ROOT_DIR . "/" . $fullpath)) {
+                                        $colval = "<a href='" . ROOT_PATH . "/" . $fullpath . "' target='_blank'><img src='" . ROOT_PATH . "/" . $iconpath . "' class='table-thumb'></a>";
                                     } else {
                                         $colval = "<img src='" . ROOT_PATH . "/assets/images/notfound.jpg' class='table-thumb'>";
                                     }
                                 }
-                            }
-
-                            else if ($dv['type'] == "table_id") {
+                            } else if ($dv['type'] == "table_id") {
                                 $val = $r[$colname] ?? "";
                                 if ($val != "") {
                                     $colval = "";
@@ -448,9 +475,7 @@ function crud_read($vars)
                                         }
                                     }
                                 }
-                            }
-
-                            else if ($dv['type'] == "implode" && isset($dv["sep"])) {
+                            } else if ($dv['type'] == "implode" && isset($dv["sep"])) {
                                 $val = $r[$colname] ?? "";
                                 if ($val != "") {
                                     $selarr = explode($dv["sep"], $val);
@@ -595,7 +620,7 @@ function fetch_image_rows($rows, $cols)
     $condition = "";
     if (sizeof($ids) > 0) {
         $condition = " id IN (" . implode(",", $ids) . ") ";
-        $fetched = fetch_data(["table" => "uploads", "columns" => "id, thumb, small", "condition" => $condition, "order" => "", "limit" => ""]);    // print_arr($image_arr);
+        $fetched = fetch_data(["table" => "uploads", "columns" => "id, thumb, name, type, small", "condition" => $condition, "order" => "", "limit" => ""]);    // print_arr($image_arr);
         // print_arrbox($fetched, 300);
         foreach ($fetched as $k => $i) {
             $images[$i["id"]] = $i;
@@ -606,6 +631,15 @@ function fetch_image_rows($rows, $cols)
     // print_arrbox($images, 300);
     return $images;
 }
+
+function datepicker_scripts()
+{
+    $s = '<link rel="stylesheet" href="' . ROOT_PATH . '/assets/plugins/flatpickr/flatpickr.min.css">
+    <script src="' . ROOT_PATH . '/assets/plugins/flatpickr/flatpickr.js"></script>';
+    // echo $s;
+    return $s;
+}
+
 
 function datatable_scripts()
 {
@@ -620,6 +654,7 @@ function datatable_scripts()
 
     return $s;
 }
+
 
 
 function datatable_instance($module_pages)
@@ -780,6 +815,12 @@ function form_field($vars, $data)
             $s .= '<div class="invalid-feedback">Incorrect ' . $vars["name"] . ' value</div>';
         }
         //
+        else if ($vars["type"] == "date") {
+            $s .= '<input type="text" class="form-control" name="' . $vars["key"] . '" id="' . $vars["key"] . '" value="' . get_value($data, $vars["key"]) . '" ' . ($required ? "required" : "") . '>';
+            $s .= '<div class="invalid-feedback">Incorrect ' . $vars["name"] . ' value</div>';
+            $s .= '<script>flatpickr("#' . $vars["key"] . '", {altInput: true, altFormat: "d M Y, D", dateFormat: "Ymd"}); </script>';
+        }
+        //
         else if ($vars["type"] == "hidden") {
             $s .= '<input type="hidden" class="form-control" name="' . $vars["key"] . '" id="' . $vars["key"] . '" value="' . get_value($data, $vars["key"]) . '" ' . '>';
         }
@@ -828,13 +869,32 @@ function form_field($vars, $data)
             if (isset($data[$vars["key"]])) {
                 if (is_array($data[$vars["key"]]) && isset($data[$vars["key"]][0])) {
                     $imgarr = $data[$vars["key"]][0];
-                    if (isset($vars["display_size"]) && $vars["display_size"] != "") {
-                        $imgpath = isset($imgarr[$vars["display_size"]]) ? $imgarr[$vars["display_size"]] : $imgarr["thumb"];
-                        if(file_exists(ROOT_DIR . "/" . $imgpath)){
-                            $s .= "<img src='" . ROOT_PATH . "/" . $imgpath . "' class='form-imgbox'>";
-                        } else {
-                            $s .= "<img src='" . ROOT_PATH . "/assets/images/notfound.jpg' class='form-imgbox'>";
-                        }
+                    $urlpath = "";
+                    $fullpath = $imgarr["name"];
+                    // print_arr($imgarr);
+                    $filetype = get_filetype($imgarr["type"]);
+
+                    // if image, then display thumb
+                    if ($filetype == "image" && isset($vars["display_size"]) && $vars["display_size"] != "") {
+                        $urlpath = isset($imgarr[$vars["display_size"]]) ? $imgarr[$vars["display_size"]] : $imgarr["thumb"];
+                    }
+                    // choose file icon
+                    else {
+                        $urlpath = "assets/images/file/" . $filetype . ".svg";
+                    }
+
+                    // default file icon
+                    if (!file_exists(ROOT_DIR . "/" . $urlpath)) {
+                        $urlpath = "assets/images/file/file.svg";
+                    }
+
+                    // if file exists, then link it
+                    if (file_exists(ROOT_DIR . "/" . $fullpath)) {
+                        $s .= "<a href='" . ROOT_PATH . "/" . $fullpath . "' target='_blank'><img src='" . ROOT_PATH . "/" . $urlpath . "' class='form-imgbox'></a>";
+                    }
+                    // if file not exists on server
+                    else {
+                        $s .= "<img src='" . ROOT_PATH . "/assets/images/notfound.jpg' class='form-imgbox'>";
                     }
                 }
             }
@@ -909,6 +969,7 @@ function module_submit_form($vars)
                 if ($image != "") {
                     $query .= " " . $sv['key'] . " = \"" . $image . "\", ";
                 }
+                // die;
             }
             // 
             else if (isset($sv["type"]) && $sv["type"] == "implode") {

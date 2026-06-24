@@ -33,7 +33,7 @@ include("../../common/header.php");
   $raw_materials_arr = fetch_data(["table" => "raw_materials", "columns" => "id, raw_material", "condition" => "", "order" => "raw_material ASC", "limit" => ""]);    // print_arr($raw_materials_arr);
   // print_arr($raw_materials_arr);
 
-echo "todo: <br>buy date field<br>
+echo "todo: <br>
 auth user (column in db, in datatable in details row - last update: by user and time)<br>
 lot status history on change of rm lot status<br>
 pdf upload along with image (auto detect format)<br>
@@ -48,7 +48,7 @@ full image display in edit mode or atleast noncropped and 400px wide.<br>
     ["name" => "ID", "column" => "id", "class" => "text-center"],
     ["name" => "Raw Material", "column" => "raw_material", "options" => $raw_materials_arr, "type" => "table_id", "option_id" => "id", "option_label" => "raw_material"],
     ["name" => "Quantity", "column" => "quantity", "class" => "nowrap"],
-    ["name" => "Buy Date", "column" => "buy_date", "class" => "nowrap"],
+    ["name" => "Buy Date", "column" => "buy_date", "format" => "date", "class" => "nowrap"],
     ["name" => "Buy Price", "column" => "buy_price", "class" => "nowrap"],
     ["name" => "Vendor", "column" => "vendor", "options" => $vendors_arr, "type" => "table_id", "option_id" => "id", "option_label" => "firm_name"],
     ["name" => "Purchase Invoice", "column" => "purchase_invoice", "type" => "image-file", "sorting" => false, "search" => false, "class" => "text-center"],

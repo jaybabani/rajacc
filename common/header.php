@@ -1,4 +1,4 @@
-<?php 
+<?php
 include_once("includes.php");
 ?>
 <!DOCTYPE html>
@@ -10,10 +10,10 @@ include_once("includes.php");
     <meta http-equiv="content-type" content="text/html;charset=UTF-8" />
     <meta charset="utf-8" />
     <title>Raj Accessories <?php if (isset($titletag)) {
-                            echo ": " . $titletag;
-                        } else {
-                            echo "";
-                        } ?></title>
+                                echo ": " . $titletag;
+                            } else {
+                                echo "";
+                            } ?></title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
     <meta content="" name="description" />
     <meta content="" name="author" />
@@ -29,7 +29,14 @@ include_once("includes.php");
 
     <?php if (isset($header_scripts)) {
         echo $header_scripts;
-    } ?>
+    }
+
+    if (isset($load_datepicker) && $load_datepicker == true) {
+        echo datepicker_scripts();
+    }
+
+
+    ?>
 
     <link href="<?php echo ROOT_PATH; ?>/assets/css/variables.css" rel="stylesheet" type="text/css" />
     <?php if (isset($layout) && $layout == "layout1") { ?>
@@ -83,8 +90,8 @@ include_once("includes.php");
                 echo '<div class="content-area container-fluid">';
                 include("topbar.php");
             }
-        } 
-        
+        }
+
         display_notifications();
-        
+
         ?>

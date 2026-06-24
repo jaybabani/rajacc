@@ -4,7 +4,7 @@ $table_ip = "ipadd";
 $table_symbols = "symbols";
 $table_trades = "trades";
 
-$GLOBALS['ALLOW_UPLOAD_TYPE'] = ['image/*'];
+$GLOBALS['ALLOW_UPLOAD_TYPE'] = ['image/*','application/pdf'];
 global $ALLOW_UPLOAD_TYPE;
 
 function acl_roles($format = "")

@@ -150,7 +150,8 @@ function single_file_upload($conn, $POST, $FILES, $fieldid)
 {
     $save_uploads = [];
     $attachments = '';
-    //print_arr($FILES);
+    // print_arr($FILES);
+    // die;
 
     // If any file is uploaded then run this
     if (isset($FILES[$fieldid])) {
@@ -160,51 +161,63 @@ function single_file_upload($conn, $POST, $FILES, $fieldid)
         } else {
             //$filename = "uploads/".rand()."-".$FILES[$fieldid]['name'];
             // move_uploaded_file($FILES[$fieldid]['tmp_name'], "../../".$filename);
-            $allowed_file = check_allowed_file(
-                $FILES[$fieldid]['type'],
-                $FILES[$fieldid]['size'],
-                $FILES[$fieldid]['tmp_name']
-            );
-            if ($allowed_file) {
+            $allowed_file = isAllowedFile($FILES[$fieldid]);
+            // die;
+
+            // $allowed_file = check_allowed_file(
+            //     $FILES[$fieldid]['type'],
+            //     $FILES[$fieldid]['size'],
+            //     $FILES[$fieldid]['tmp_name']
+            // );
+            if (is_array($allowed_file) && $allowed_file[0] == true) {
+                // echo "hi";
                 $randno = rand() . '-';
-                $filename =
-                    'uploads/' . $randno . '' . $FILES[$fieldid]['name'];
-                $thumbname =
-                    'uploads/' . $randno . 'thumb-' . $FILES[$fieldid]['name'];
-                $smallname =
-                    'uploads/' . $randno . 'small-' . $FILES[$fieldid]['name'];
+                $filename = 'uploads/' . $randno . '' . $FILES[$fieldid]['name'];
                 $type = $FILES[$fieldid]['type'];
                 $tmp_name = $FILES[$fieldid]['tmp_name'];
+                $thumbname = "";
+                $smallname = "";
 
-                $thumb = ImageResize(
-                    100,
-                    100,
-                    '../../' . $thumbname,
-                    $tmp_name,
-                    $type,
-                    false
-                );
-                if (!$thumb) {
-                    $thumbname = '';
+                // echo " $thumbname, $tmp_name, $type <br>";
+                // die;
+
+                $resize_img = (str_starts_with($allowed_file[2], "image/") && $allowed_file[1] != "svg") ? true : false;
+
+                if ($resize_img) {
+                    $thumbname = 'uploads/' . $randno . 'thumb-' . $FILES[$fieldid]['name'];
+                    $thumb = ImageResize(
+                        100,
+                        100,
+                        '../../' . $thumbname,
+                        $tmp_name,
+                        $type,
+                        false
+                    );
+                    if (!$thumb) {
+                        $thumbname = '';
+                    }
+
+                    $smallname = 'uploads/' . $randno . 'small-' . $FILES[$fieldid]['name'];
+                    $small = ImageResize(
+                        200,
+                        200,
+                        '../../' . $smallname,
+                        $tmp_name,
+                        $type,
+                        true
+                    );
+                    if (!$small) {
+                        $smallname = '';
+                    }
                 }
 
-                $small = ImageResize(
-                    200,
-                    200,
-                    '../../' . $smallname,
-                    $tmp_name,
-                    $type,
-                    true
-                );
-                if (!$small) {
-                    $smallname = '';
-                }
 
                 move_uploaded_file($tmp_name, '../../' . $filename);
 
                 // compress image
-                compress_image('../../' . $filename);
-
+                if ($resize_img) {
+                    compress_image('../../' . $filename);
+                }
 
                 $save_uploads[0]['name'] = $filename;
                 $save_uploads[0]['thumb'] = $thumbname;
@@ -310,7 +323,7 @@ function multi_file_uploader(
                     $i_size,
                     $i_tmp_name
                 );
-                if ($allowed_file) {
+                if ($allowed_file[0]) {
                     $randno = rand() . '-';
                     $filename = 'uploads/' . $randno . '' . $i_name;
                     $thumbname = 'uploads/' . $randno . 'thumb-' . $i_name;
@@ -474,23 +487,130 @@ function ImageResize(
 function check_allowed_file($type, $size, $tmp_name)
 {
     $ret = false;
+    $mime = "";
+
     global $ALLOW_UPLOAD_TYPE;
-    //print_r($ALLOW_UPLOAD_TYPE);
-    //echo mime_content_type($tmp_name); //die();
+    print_r($ALLOW_UPLOAD_TYPE);
+    echo "<br>" . mime_content_type($tmp_name) . "<br>"; //die();
     if ($type != '') {
         $exp = explode('/', mime_content_type($tmp_name));
-        if (
-            in_array($exp[0] . '/*', $ALLOW_UPLOAD_TYPE) ||
-            in_array($type, $ALLOW_UPLOAD_TYPE)
-        ) {
+        print_r($exp);
+        echo "<br>" . $type;
+        if (in_array($exp[0] . '/*', $ALLOW_UPLOAD_TYPE)) {
             $ret = true;
+            $mime = $exp[0] . "/*";
+            //echo "Allowed: ".$type . ' '; echo $size;
+        } else if (in_array($type, $ALLOW_UPLOAD_TYPE)) {
+            $ret = true;
+            $mime = $type;
             //echo "Allowed: ".$type . ' '; echo $size;
         } else {
             //echo 'not allowed';
             $ret = false;
+            $mime = "";
         }
     }
+    die;
+    return [$ret, $mime];
+}
+
+function allowed_files()
+{
+    $allowedFiles = [
+        'pdf' => ['application/pdf'],
+
+        'doc' => [
+            'application/msword',
+            'application/octet-stream'
+        ],
+
+        'docx' => [
+            'application/vnd.openxmlformats-officedocument.wordprocessingml.document'
+        ],
+
+        'csv' => [
+            'text/csv',
+            'application/csv',
+            'text/plain',
+            'application/vnd.ms-excel'
+        ],
+
+        'xls' => [
+            'application/vnd.ms-excel',
+            'application/octet-stream'
+        ],
+
+        'xlsx' => [
+            'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+        ],
+
+        'jpg' => ['image/jpeg'],
+        'jpeg' => ['image/jpeg'],
+        'png' => ['image/png'],
+        'gif' => ['image/gif'],
+        'webp' => ['image/webp'],
+        'svg' => ['image/svg+xml']
+    ];
+
+    return $allowedFiles;
+}
+
+function get_filetype($type)
+{
+    $ret = "";
+    if ((str_starts_with($type, "image/"))) {
+        $ret = "image";
+    } else {
+        $allowedFiles = allowed_files();
+        foreach ($allowedFiles as $ext => $v) {
+            foreach ($v as $k => $f) {
+                if ($f == $type) {
+                    $ret = $ext;
+                }
+            }
+        }
+    }
+    // echo $ret;
     return $ret;
+}
+
+function isAllowedFile($file)
+{
+
+    $allowedFiles = allowed_files();
+
+    // no file uploaded
+    if (empty($file['name']) || empty($file['tmp_name'])) {
+        return false;
+    }
+
+    $ext = strtolower(pathinfo($file['name'], PATHINFO_EXTENSION));
+
+    // extension not allowed
+    if (!isset($allowedFiles[$ext])) {
+        return false;
+    }
+
+    // detect mime
+    $finfo = finfo_open(FILEINFO_MIME_TYPE);
+    $mime = finfo_file($finfo, $file['tmp_name']);
+    finfo_close($finfo);
+
+    // mime not allowed for that extension
+    if (!in_array($mime, $allowedFiles[$ext])) {
+        return false;
+    }
+
+    // extra image validation
+    if (in_array($ext, ['jpg', 'jpeg', 'png', 'gif', 'webp'])) {
+        if (!getimagesize($file['tmp_name'])) {
+            return false;
+        }
+    }
+
+    // print_arr([true, $ext, $mime, $finfo]);
+
+    return [true, $ext, $mime, $finfo];
 }
 
 

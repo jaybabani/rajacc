@@ -4,6 +4,9 @@ $pageid = "raw_material_lots-create";
 if (isset($_GET['id']) && is_numeric($_GET['id']) && trim($_GET['id']) != '') {
   $pageid = "raw_material_lots-update";
 }
+
+$load_datepicker = true;
+
 include("../../common/header.php");
 // include("raw_material_lot-functions.php");
 ?>
@@ -34,7 +37,7 @@ include("../../common/header.php");
     ["key" => "vendor"],
     ["key" => "status"],
     ["key" => "buy_price"],
-    ["key" => "buy_date"],
+    ["key" => "buy_date", "type" => "date"],
     ["key" => "purchase_invoice", "type" => "image"],
     ["key" => "updated", "type" => "time"]
   ];
@@ -88,15 +91,16 @@ include("../../common/header.php");
     echo form_field(["type" => "select", "name" => "Raw Material", "key" => "raw_material", "required" => true, "options" => $raw_materials, "class" => "col-md-6 col-lg-4 mb-3"], $data);
     echo form_field(["type" => "number", "name" => "Quantity", "key" => "quantity", "required" => true, "class" => "col-md-6 col-lg-4 mb-3"], $data);
     echo form_field(["type" => "number", "name" => "Buy Price", "key" => "buy_price", "required" => true, "class" => "col-md-6 col-lg-4 mb-3"], $data);
-    echo form_field(["type" => "text", "name" => "Buy Date", "key" => "buy_date", "required" => true, "class" => "col-md-6 col-lg-4 mb-3"], $data);
+    echo form_field(["type" => "date", "name" => "Buy Date", "key" => "buy_date", "required" => true, "class" => "col-md-6 col-lg-4 mb-3"], $data);
     echo form_field(["type" => "textarea", "name" => "Notes", "key" => "notes", "class" => "col-md-6 col-lg-4 mb-3"], $data);
     echo form_field(["type" => "select", "name" => "Purchased from Vendor", "key" => "vendor", "options" => $vendors, "class" => "col-md-6 col-lg-4 mb-3"], $data);
     echo form_field(["type" => "select", "name" => "Status", "key" => "status", "required" => true, "options" => get_raw_materail_lot_status_arr(), "class" => "col-md-6 col-lg-4 mb-3"], $data);
 
     // Image upload field
     if(isset($data["purchase_invoice"]) && $data["purchase_invoice"] != NULL && $data["purchase_invoice"] != "") {
-      $image_arr = fetch_data(["table" => "uploads", "columns" => "id, thumb, small", "condition" => " id = '".$data["purchase_invoice"]."' ", "order" => "", "limit" => ""]);    // print_arr($image_arr);
-      $data["purchase_invoice"] = $image_arr;      // print_arr($data);
+      $image_arr = fetch_data(["table" => "uploads", "columns" => "id, name, thumb, type, small", "condition" => " id = '".$data["purchase_invoice"]."' ", "order" => "", "limit" => ""]);    // print_arr($image_arr);
+      $data["purchase_invoice"] = $image_arr;      
+      // print_arr($data);
     }
     echo form_field(["type" => "image-file", "name" => "Purchase Invoice", "key" => "purchase_invoice", "display_size" => "small", "class" => "col-md-6 col-lg-4 mb-3"], $data);
 
@@ -110,4 +114,8 @@ include("../../common/header.php");
 
 </div>
 
+<?php
+// $other_scripts = '<link rel="stylesheet" href="'. ROOT_PATH.'/assets/plugins/flatpickr/flatpickr.min.css">
+// <script src="'. ROOT_PATH.'/assets/plugins/flatpickr/flatpickr.js"></script><script>flatpickr("#datepicker", {}); </script>';
+?>
 <?php include '../../common/footer.php'; ?>
