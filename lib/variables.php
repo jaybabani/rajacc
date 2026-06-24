@@ -4,7 +4,7 @@ $table_ip = "ipadd";
 $table_symbols = "symbols";
 $table_trades = "trades";
 
-$GLOBALS['ALLOW_UPLOAD_TYPE'] = ['image/*','application/pdf'];
+$GLOBALS['ALLOW_UPLOAD_TYPE'] = ['image/*', 'application/pdf'];
 global $ALLOW_UPLOAD_TYPE;
 
 function acl_roles($format = "")
@@ -42,6 +42,10 @@ function acl_roles($format = "")
 		["products-update", "Update products"],
 		["products-create", "Add new products"],
 		["products-delete", "Delete products"],
+		["product_lots-read", "View all product lots"],
+		["product_lots-update", "Update product lots"],
+		["product_lots-create", "Add new product lots"],
+		["product_lots-delete", "Delete product lots"],
 		["attributes-read", "View all attributes"],
 		["attributes-update", "Update attributes"],
 		["attributes-create", "Add new attributes"],
@@ -92,12 +96,45 @@ function get_attribute_category_arr()
 	return $arr;
 }
 
-function get_raw_materail_lot_status_arr(){
+function get_raw_material_lot_status_arr()
+{
 	$arr = [
 		"order_placed" => "Order placed",
 		"received" => "Raw Material Received",
 		"under_process" => "Raw material under processing",
 		"ready" => "Ready for production",
+	];
+	return $arr;
+}
+
+function get_product_lot_status_arr($source = "")
+{
+	$int_arr = [
+		"new" => "New lot (production not started)",
+		"under_production" => "Lot Under Production",
+		"production_complete" => "Lot production completed",
+		"under_packaging" => "Product under packaging",
+		"ready" => "Ready for sale",
+	];
+	$ext_arr = [
+		"order_placed" => "Order placed",
+		"received" => "Product Received",
+		"under_process" => "Product under processing",
+		"ready" => "Ready for sale",
+	];
+	if ($source == "internal") {
+		return $int_arr;
+	} else if ($source == "external") {
+		return $ext_arr;
+	}
+	return array_merge($int_arr, $ext_arr);
+}
+
+function get_product_lot_source_arr()
+{
+	$arr = [
+		"internal" => "Produced in factory",
+		"external" => "Purchased from vendor"
 	];
 	return $arr;
 }

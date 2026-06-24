@@ -315,25 +315,34 @@ body {
 	padding: 5px 10px;
 	font-size: 13px;
 }
+
 .badge-yes {
 	background-color: rgba(var(--bs-success-rgb), 1);
 }
+
+.badge-new,
 .badge-no {
 	background-color: rgba(var(--bs-warning-rgb), 1);
 }
+.badge-under_production,
 .badge-order_placed{
 	background-color: rgba(var(--bs-warning-rgb), 1);
 }
+.badge-production_complete,
 .badge-received{
 	background-color: rgba(var(--bs-accent1-rgb), 1);
 }
+.badge-under_packaging,
 .badge-under_process{
 	background-color: rgba(var(--bs-accent2-rgb), 1);
 }
+.badge-internal,
 .badge-ready{
 	background-color: rgba(var(--bs-success-rgb), 1);
 }
-
+.badge-external{
+	background-color: rgba(var(--bs-info-rgb), 1);
+}
 
 /* typography  */
 
@@ -914,4 +923,10 @@ tr .no-det {
 	border: 1px solid #ddd;
 	border-radius: 4px;
 	padding: 1px;	
+}
+.disp-history-row{
+	display: inline-block;
+	width: 100%;
+	padding: 2px;
+	margin-bottom: 5px;
 }

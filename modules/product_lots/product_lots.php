@@ -1,21 +1,24 @@
 <?php
-$module = "raw_material_lots";
-$pageid = "raw_material_lots-read";
+$module = "product_lots";
+$pageid = "product_lots-read";
 include("../../common/header.php");
-// include("raw_material_lot-functions.php");
+// include("product_lot-functions.php");
 ?>
 
 <div class="row row-cols-1 row-cols-sm-1 row-cols-md-1 row-cols-lg-1 row-cols-xl-1 row-cols-xxl-1 g-4 py-3 px-2">
-
+<b>
+todo:<br>
+move buy date, vendor, buy price, invoice in details row.<br>
+</b>
   <?php
   $module_pages = [
-    "read" => "raw_material_lots",
-    "update" => "raw_material_lot-form",
-    "create" => "raw_material_lot-form",
-    "delete" => "raw_material_lot-delete"
+    "read" => "product_lots",
+    "update" => "product_lot-form",
+    "create" => "product_lot-form",
+    "delete" => "product_lot-delete"
   ];
 
-  $pagetitle = T("Raw Material Lots");
+  $pagetitle = T("Product Lots");
   $actions_html = "";
   $actions_html .= download_xlsx($module_pages["read"]);
   $actions_html .= pagination($module_pages["read"] . ".php");
@@ -23,28 +26,29 @@ include("../../common/header.php");
 
   <?php
 
-  $tablename = "raw_material_lots";
+  $tablename = "product_lots";
 
   $primary_column = "id";
 
   $vendors_arr = fetch_data(["table" => "vendors", "columns" => "id, firm_name", "condition" => "", "order" => "firm_name ASC", "limit" => ""]);    // print_arr($vendors_arr);
   // print_arr($vendors_arr);
 
-  $raw_materials_arr = fetch_data(["table" => "raw_materials", "columns" => "id, raw_material", "condition" => "", "order" => "raw_material ASC", "limit" => ""]);    // print_arr($raw_materials_arr);
-  // print_arr($raw_materials_arr);
+  $products_arr = fetch_data(["table" => "products", "columns" => "id, product", "condition" => "", "order" => "product ASC", "limit" => ""]);    // print_arr($products_arr);
+  // print_arr($products_arr);
 
   $display_columns = [
     ["name" => "", "column" => "", "type" => "details", "sorting" => false, "search" => false, "class" => "text-center nowrap"],
     ["name" => "Select", "column" => "", "type" => "select", "sorting" => false, "search" => false, "class" => "text-center"],
     ["name" => "ID", "column" => "id", "class" => "text-center"],
-    ["name" => "Raw Material", "column" => "raw_material", "options" => $raw_materials_arr, "type" => "table_id", "option_id" => "id", "option_label" => "raw_material", "class" => "title"],
+    ["name" => "Product", "column" => "product", "options" => $products_arr, "type" => "table_id", "option_id" => "id", "option_label" => "product", "class" => "title"],
+    ["name" => "Source", "column" => "source", "options" => get_product_lot_source_arr(), "badge" => true],
     ["name" => "Quantity", "column" => "quantity", "class" => "nowrap"],
     ["name" => "Buy Date", "column" => "buy_date", "format" => "date", "class" => "nowrap"],
     ["name" => "Buy Price", "column" => "buy_price", "class" => "nowrap"],
     ["name" => "Vendor", "column" => "vendor", "options" => $vendors_arr, "type" => "table_id", "option_id" => "id", "option_label" => "firm_name"],
     ["name" => "Purchase Invoice", "column" => "purchase_invoice", "type" => "image-file", "sorting" => false, "search" => false, "class" => "text-center"],
-    ["name" => "Status", "column" => "status", "options" => get_raw_material_lot_status_arr(), "badge" => true],
-    ["name" => "Actions", "column" => "", "type" => "edit_delete", "sorting" => false, "search" => false, "class" => "nowrap", "acl" => ["edit" => "raw_material_lots-update", "delete" => "raw_material_lots-delete"]],
+    ["name" => "Status", "column" => "status", "options" => get_product_lot_status_arr(), "badge" => true],
+    ["name" => "Actions", "column" => "", "type" => "edit_delete", "sorting" => false, "search" => false, "class" => "nowrap", "acl" => ["edit" => "product_lots-update", "delete" => "product_lots-delete"]],
   ];
 
   $fetch_columns = [];
@@ -56,7 +60,7 @@ include("../../common/header.php");
       "name" => "History",
       "type" => "history",
       "history_columns" => [
-        ["name" => "Status", "column" => "status", "options" => get_raw_material_lot_status_arr(), "badge" => true],
+        ["name" => "Status", "column" => "status", "options" => get_product_lot_status_arr(), "badge" => true],
         // ["name" => "Quantity", "column" => "quantity"]
       ],
     ]

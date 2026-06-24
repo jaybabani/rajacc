@@ -195,10 +195,13 @@ function ts_to_dt($ts)
 }
 function ymd_to_dt($dt)
 {
-    $dateString = $dt;
-    $date = DateTime::createFromFormat('Ymd', $dateString);
-    $formattedDate = $date->format('d M Y, D');
-    return $formattedDate;
+    if ($dt != NULL && $dt != "") {
+        $dateString = $dt;
+        $date = DateTime::createFromFormat('Ymd', $dateString);
+        $formattedDate = $date->format('d M Y, D');
+        return $formattedDate;
+    }
+    return "";
     // F j, Y (D)
     // return date('D, d-M-Y', $ts);
     // return date('D, d-M-Y h:i A', $ts);
@@ -294,6 +297,8 @@ function crud_read($vars)
     $cols = "*";
     $cols_arr = [];
     $image_cols = [];
+    $fetch_column_history = false;
+    $history = "";
 
     // remove any empty columns from $vars["display_columns"]
     $vars["display_columns"] = array_filter($vars["display_columns"]);
@@ -339,6 +344,9 @@ function crud_read($vars)
                 $cols_arr[] = "auth_user";
                 $cols_arr[] = "updated";
             }
+            if (isset($v["type"]) && $v["type"] == "history") {
+                $fetch_column_history = true;
+            }
             if (isset($v["column"])) {
                 if ($v["column"] != "") {
                     $cols_arr[] = $v["column"];
@@ -383,6 +391,9 @@ function crud_read($vars)
         // print_arr($images);
         $auth_users = fetch_auth_users($fetched_rows);
         // print_arr($auth_users);
+        if ($fetch_column_history == true) {
+            $history = fetch_column_history($vars, $fetched_rows);
+        }
 
         $inc = 0;
 
@@ -575,24 +586,27 @@ function crud_read($vars)
             // Details Columns ---------
             $row_detail = "";
             foreach ($vars["detail_columns"] as $dk => $dv) {
-                if (isset($dv["type"]) && $dv["type"] == "last_update_info") {
 
+                // Last updated by info
+                if (isset($dv["type"]) && $dv["type"] == "last_update_info") {
                     $row_detail .= "<small><i>" . $dv["name"] . ": </i></small>";
-                    if (arr_val_valid($r, "auth_user")) {
-                        if (isset($auth_users[$r["auth_user"]]["name"])) {
-                            $row_detail .= "&nbsp;<small><i>By: </i></small><strong>" . $auth_users[$r["auth_user"]]["name"]."</strong>";
-                        }
-                    }
-                    if (arr_val_valid($r, "updated")) {
-                        $row_detail .= "&nbsp;<small><i>On: </i></small><strong>" . ts_to_dt($r["updated"])."</strong>";
-                    }
-                } else if (isset($dv["column"]) && $dv["column"] != "") {
+                    $row_detail .= user_updated($r, $auth_users);
+                }
+
+                // history in details
+                else if (isset($dv["type"]) && $dv["type"] == "history") {
+                    $row_detail .= "<br><br><strong><i>" . $dv["name"] . ": </i></strong><br>";
+                    $row_detail .= display_column_history($vars, $r, $history, $dv["history_columns"]);
+                }
+
+                // Extra column values
+                else if (isset($dv["column"]) && $dv["column"] != "") {
                     $colname = $dv["column"];
                     $colval = "";
                     if ($r[$colname] != NULL) {
                         $colval = nl2br($r[$colname]);
                     }
-                    $row_detail .= "<small><i>" . $dv["name"] . ": </i></small><strong>" . $colval ."</strong>". "<br>";
+                    $row_detail .= "<small><i>" . $dv["name"] . ": </i></small><strong>" . $colval . "</strong>" . "<br>";
                 }
             }
             $details[$r[$vars["primary_column"]]] = $row_detail;
@@ -830,7 +844,14 @@ function datatable_instance($module_pages)
 <?php
 }
 
-
+function column_history_fields($history, $data)
+{
+    $s = "";
+    foreach ($history["columns"] as $hk => $hv) {
+        $s .= '<input type="hidden" class="form-control" name="old_' . $hv . '" id="old_' . $hv . '" value="' . get_value($data, $hv) . '" ' . '>';
+    }
+    return $s;
+}
 
 function form_field($vars, $data)
 {
@@ -854,7 +875,12 @@ function form_field($vars, $data)
 
         if ($show_as_field) {
 
-            $s = '<div class="' . $vars["class"] . '"><label for="' . $vars["key"] . '" class="form-label">' . $vars["name"] . '';
+            $parent_class = "";
+            // if(isset($vars["parent_field"])){
+            //     $parent_class = $vars["parent_field"]["column"]."_".$vars["parent_field"]["value"]." default_".$vars["parent_field"]["default"];
+            // }
+
+            $s = '<div class="' . $vars["class"] . ' ' . $parent_class . '"><label for="' . $vars["key"] . '" class="form-label">' . $vars["name"] . '';
 
             $required = (isset($vars["required"]) && $vars["required"] == true) ? true : false;
             if ($required) {
@@ -1066,6 +1092,7 @@ function module_submit_form($vars)
 
                 $insert_id = $conn->insert_id;
                 save_link_table_rows($vars, $insert_id);
+                save_column_history($vars, $insert_id);
                 notify('success', $msg["success_added"]);
 
                 redirect_action($_REQ);
@@ -1088,6 +1115,7 @@ function module_submit_form($vars)
 
             if ($sql) {
                 save_link_table_rows($vars, $_REQ[$primary_column]);
+                save_column_history($vars, $_REQ[$primary_column]);
                 notify('success', $msg["success_update"]);
                 redirect_action($_REQ);
 
@@ -1129,6 +1157,166 @@ function save_link_table_rows($vars, $primary_id)
             $conn->query($inssql);
         }
     }
+}
+
+function save_column_history($vars, $primary_id)
+{
+    // check is history is enabled or not
+    if (isset($vars["save_column_history"])) {
+
+        global $conn;
+
+        $_REQ = $vars["submit_data"];
+        $history = $vars["save_column_history"];
+        $primary_column = $vars["primary_column"];
+        $tablename = $vars["tablename"];
+
+        // print_arr($tablename);
+        // print_arr($_REQ);
+        // print_arr($history);
+        // print_arr($primary_column);
+        // echo $primary_id;
+
+        $auth_user = get_curr_user_id();
+        $ts = getts();
+
+        if (isset($history["columns"])) {
+            if ($primary_id != "") {
+                $row_id = $primary_id;
+                foreach ($history["columns"] as $hk => $hv) {
+                    if (isset($_REQ["old_" . $hv]) && isset($_REQ[$hv])) {
+                        if ($_REQ["old_" . $hv] != $_REQ[$hv]) {
+                            $value = $_REQ[$hv];
+                            $sql = " INSERT INTO column_history (table_name, row_id, column_name, value, auth_user, updated) VALUES ('" . $tablename . "', '" . $row_id . "', '" . $hv . "', '" . $value . "', '" . $auth_user . "', '" . $ts . "') ";
+                            // echo $sql."<br>";
+                            $conn->query($sql);
+                        }
+                    }
+                }
+            }
+        }
+    }
+    // die;
+}
+
+function display_column_history($vars, $row, $history, $columns)
+{
+
+    global $conn;
+
+    // $_REQ = $vars["submit_data"];
+    // $history = $vars["save_column_history"];
+    $primary_column = $vars["primary_column"];
+    $tablename = $vars["tablename"];
+
+    // print_arrbox($history,200);
+    // print_arr($tablename);
+    // print_arr($row);
+    // print_arr($history);
+    // print_arr($primary_column);
+    // echo "<hr>";
+    // print_arrbox($history, 400);
+
+    $s = '';
+
+    if (isset($history["rows"][$row[$primary_column]])) {
+        foreach ($history["rows"][$row[$primary_column]] as $hk => $v) {
+
+            $s .= '<div class="disp-history-row">';
+            foreach ($columns as $ck => $cv) {
+                if ($cv["column"] == $v["column_name"]) {
+                    $s .= "<i>" . $cv["name"] . ": </i> ";
+
+                    $hisval = $v["value"];
+                    if (isset($cv["options"]) && is_array($cv["options"]) && isset($cv["options"][$v["value"]])) {
+                        $hisval = $cv["options"][$v["value"]];
+                    }
+                    if (isset($cv["badge"]) && $cv["badge"] == true) {
+                        $hisval = '<span class="badge badge-' . $v["value"] . '">' . $hisval . '</span>';
+                    } else {
+                        $hisval = '<strong>' . $hisval . '</strong>';
+                    }
+                    $s .= $hisval;
+                }
+            }
+
+            $s .= user_updated($v, $history["auth_users"]);
+            $s .= '</div>';
+        }
+    }
+
+    return $s;
+}
+
+function fetch_column_history($vars, $rows)
+{
+    // get ids of each rows
+    // get data for all ids from history table
+    $primary_column = $vars["primary_column"];
+    $tablename = $vars["tablename"];
+    // print_arr($tablename);
+    // print_arr($primary_column);
+    // print_arrbox($vars, 200);
+    // print_arrbox($rows, 200);
+    // print_arrbox($rows);
+    // print_arr($cols);
+
+    $fetched = [];
+    $history = [];
+    $ids = [];
+    $history_auth_users = [];
+
+    foreach ($rows as $rk => $r) {
+        if (arr_val_valid($r, $primary_column)) {
+            $ids[] = $r[$primary_column];
+        }
+    }
+    // print_arr($ids);
+    $condition = "";
+    if (sizeof($ids) > 0) {
+        $condition = " row_id IN (" . implode(",", $ids) . ") AND table_name = '" . $tablename . "' ";
+        $fetched = fetch_data([
+            "table" => "column_history",
+            "columns" => "id, column_name, table_name, row_id, value, auth_user, updated",
+            "condition" => $condition,
+            "order" => " updated ASC ",
+            "limit" => ""
+        ]);
+
+        // print_arrbox($fetched, 300);
+        foreach ($fetched as $k => $hr) {
+            if (!isset($history[$hr["row_id"]])) {
+                $history[$hr["row_id"]] = [];
+            }
+            $history[$hr["row_id"]][] = $hr;
+
+            // $history_auth_users[] = $hr["auth_user"];
+        }
+    }
+
+    $history_auth_users = fetch_auth_users($fetched);
+
+    // // print_arrbox($users, 300);
+    // return $users;
+
+    return [
+        "rows" => $history,
+        "auth_users" => $history_auth_users
+    ];
+}
+
+function user_updated($r, $auth_users)
+{
+    $s = "";
+    if (arr_val_valid($r, "auth_user")) {
+        if (isset($auth_users[$r["auth_user"]]["name"])) {
+            $s .= "&nbsp;<small><i>By: </i></small><strong>" . $auth_users[$r["auth_user"]]["name"] . "</strong>";
+        }
+    }
+    if (arr_val_valid($r, "updated")) {
+        $s .= "&nbsp;<small><i>On: </i></small><strong>" . ts_to_dt($r["updated"]) . "</strong>";
+    }
+    return $s;
 }
 
 

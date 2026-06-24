@@ -56,14 +56,20 @@ include("../../common/header.php");
     "error_added" => "Error in adding new raw_material_lot",
   ];
 
+  $save_column_history = [
+    "columns" => ["status"],
+  ];
+
   $submit_result = module_submit_form([
     "submit_data" => $_POST,
     "primary_column" => $primary_column,
     "tablename" => $tablename,
     "save_fields" => $save_fields,
     "messages" => $msg,
-    "link_table_rows" => $link_table_rows
+    "link_table_rows" => $link_table_rows,
+    "save_column_history" => $save_column_history,
   ]);
+
 
   $data = module_get_data($tablename, $id);
   // print_arr($data);
@@ -96,17 +102,19 @@ include("../../common/header.php");
     echo form_field(["type" => "date", "name" => "Buy Date", "key" => "buy_date", "required" => true, "class" => "col-md-6 col-lg-4 mb-3"], $data);
     echo form_field(["type" => "textarea", "name" => "Notes", "key" => "notes", "class" => "col-md-6 col-lg-4 mb-3"], $data);
     echo form_field(["type" => "select", "name" => "Purchased from Vendor", "key" => "vendor", "options" => $vendors, "class" => "col-md-6 col-lg-4 mb-3"], $data);
-    echo form_field(["type" => "select", "name" => "Status", "key" => "status", "required" => true, "options" => get_raw_materail_lot_status_arr(), "class" => "col-md-6 col-lg-4 mb-3"], $data);
+    echo form_field(["type" => "select", "name" => "Status", "key" => "status", "required" => true, "options" => get_raw_material_lot_status_arr(), "class" => "col-md-6 col-lg-4 mb-3"], $data);
 
     // Image upload field
-    if(isset($data["purchase_invoice"]) && $data["purchase_invoice"] != NULL && $data["purchase_invoice"] != "") {
-      $image_arr = fetch_data(["table" => "uploads", "columns" => "id, name, thumb, type, small", "condition" => " id = '".$data["purchase_invoice"]."' ", "order" => "", "limit" => ""]);    // print_arr($image_arr);
-      $data["purchase_invoice"] = $image_arr;      
+    if (isset($data["purchase_invoice"]) && $data["purchase_invoice"] != NULL && $data["purchase_invoice"] != "") {
+      $image_arr = fetch_data(["table" => "uploads", "columns" => "id, name, thumb, type, small", "condition" => " id = '" . $data["purchase_invoice"] . "' ", "order" => "", "limit" => ""]);    // print_arr($image_arr);
+      $data["purchase_invoice"] = $image_arr;
       // print_arr($data);
     }
     echo form_field(["type" => "image-file", "name" => "Purchase Invoice", "key" => "purchase_invoice", "display_size" => "small", "class" => "col-md-6 col-lg-4 mb-3"], $data);
 
     echo form_field(["type" => "submit", "name" => "Save", "key" => "save", "class" => "col-md-12 col-sm-12 col-xs-12 text-center"], $data);
+
+    echo column_history_fields($save_column_history,$data);
 
     ?>
 
