@@ -46,6 +46,7 @@ include("../../common/header.php");
     ["name" => "Product", "column" => "product"],
     ["name" => "No. of pieces / Set of", "column" => "pieces"],
     ["name" => "Description", "column" => "description"],
+    ["name" => "Last update", "type" => "last_update_info"],
   ];
 
 

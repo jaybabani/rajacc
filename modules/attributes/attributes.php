@@ -51,7 +51,9 @@ include("attribute-submodule.php");
 
   $fetch_columns = [];
 
-  $detail_columns = [];
+  $detail_columns = [
+    ["name" => "Last update", "type" => "last_update_info"],
+  ];
 
   $url_param = $submod["url_param"];
   $query = $submod["query"];

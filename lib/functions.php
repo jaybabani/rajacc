@@ -670,6 +670,14 @@ function getts($d = '0', $m = '0', $y = '0', $h = '0', $min = '0', $s = '0')
 // return trim(mcrypt_decrypt(MCRYPT_RIJNDAEL_256, $salt, base64_decode($text), MCRYPT_MODE_ECB, mcrypt_create_iv(mcrypt_get_iv_size(MCRYPT_RIJNDAEL_256, MCRYPT_MODE_ECB), MCRYPT_RAND)));
 // }
 
+function get_curr_user_id(){
+    $ret = "0";
+    if(isset($_SESSION["user_id"])){
+        $ret = $_SESSION["user_id"];
+    }
+    return $ret;
+}
+
 function logthis($table, $query, $id, $datetime, $type)
 {
     /*include("variables.php");

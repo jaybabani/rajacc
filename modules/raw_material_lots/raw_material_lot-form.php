@@ -39,6 +39,7 @@ include("../../common/header.php");
     ["key" => "buy_price"],
     ["key" => "buy_date", "type" => "date"],
     ["key" => "purchase_invoice", "type" => "image"],
+    ["key" => "auth_user", "type" => "session_user"],
     ["key" => "updated", "type" => "time"]
   ];
 
@@ -66,6 +67,7 @@ include("../../common/header.php");
 
   $data = module_get_data($tablename, $id);
   // print_arr($data);
+  // print_arr($_SESSION);
   ?>
 
   <form class="row g-3 needs-validation" novalidate method="POST" enctype="multipart/form-data">

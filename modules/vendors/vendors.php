@@ -59,6 +59,7 @@ include("../../common/header.php");
     ["name" => "Firm Name", "column" => "firm_name"],
     ["name" => "Payment term", "column" => "payment_term"],
     ["name" => "Firm Address", "column" => "firm_address"],
+    ["name" => "Last update", "type" => "last_update_info"],
   ];
 
 

@@ -49,6 +49,7 @@ include("../../common/header.php");
     ["name" => "Firm Name", "column" => "firm_name"],
     ["name" => "Price Allotment", "column" => "price_allotment"],
     ["name" => "Firm Address", "column" => "firm_address"],
+    ["name" => "Last update", "type" => "last_update_info"],
   ];
 
 

@@ -32,6 +32,7 @@ include("../../common/header.php");
     ["key" => "exchange"],
     ["key" => "active"],
     ["key" => "tags", "type" => "implode", "sep" => ","],
+    ["key" => "auth_user", "type" => "session_user"],
     ["key" => "updated", "type" => "time"]
   ];
 

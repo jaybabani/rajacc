@@ -49,6 +49,7 @@ include("../../common/header.php");
     ["name" => "Name", "column" => "name"],
     ["name" => "Aadhaar No.", "column" => "aadhaar"],
     ["name" => "Address", "column" => "address"],
+    ["name" => "Last update", "type" => "last_update_info"],
   ];
 
 

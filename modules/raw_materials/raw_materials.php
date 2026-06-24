@@ -41,7 +41,9 @@ include("../../common/header.php");
 
   $fetch_columns = [];
 
-  $detail_columns = [];
+  $detail_columns = [
+    ["name" => "Last update", "type" => "last_update_info"],
+  ];
 
 
   $table_html = crud_read([

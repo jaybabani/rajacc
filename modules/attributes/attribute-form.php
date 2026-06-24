@@ -33,6 +33,7 @@ include("attribute-submodule.php");
     // ["key" => "code"],
     ["key" => "active"],
     ["key" => "category"],
+    ["key" => "auth_user", "type" => "session_user"],
     ["key" => "updated", "type" => "time"]
   ];
 

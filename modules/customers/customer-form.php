@@ -41,6 +41,7 @@ include("../../common/header.php");
     ["key" => "price_allotment"],
     ["key" => "active"],
     ["key" => "image", "type" => "image"],
+    ["key" => "auth_user", "type" => "session_user"],
     ["key" => "updated", "type" => "time"]
   ];
 
@@ -87,7 +88,7 @@ include("../../common/header.php");
 
     // Image upload field
     if (isset($data["image"]) && $data["image"] != NULL && $data["image"] != "") {
-      $image_arr = fetch_data(["table" => "uploads", "columns" => "id, thumb, small", "condition" => " id = '" . $data["image"] . "' ", "order" => "", "limit" => ""]);    // print_arr($image_arr);
+      $image_arr = fetch_data(["table" => "uploads", "columns" => "id, thumb, small, name, type", "condition" => " id = '" . $data["image"] . "' ", "order" => "", "limit" => ""]);    // print_arr($image_arr);
       $data["image"] = $image_arr;      // print_arr($data);
     }
     echo form_field(["type" => "image-file", "name" => "Image", "key" => "image", "display_size" => "small", "class" => "col-md-6 col-lg-4 mb-3"], $data);

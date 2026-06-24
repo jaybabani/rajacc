@@ -34,7 +34,6 @@ include("../../common/header.php");
   // print_arr($raw_materials_arr);
 
 echo "todo: <br>
-auth user (column in db, in datatable in details row - last update: by user and time)<br>
 lot status history on change of rm lot status<br>
 ";
 
@@ -42,7 +41,7 @@ lot status history on change of rm lot status<br>
     ["name" => "", "column" => "", "type" => "details", "sorting" => false, "search" => false, "class" => "text-center nowrap"],
     ["name" => "Select", "column" => "", "type" => "select", "sorting" => false, "search" => false, "class" => "text-center"],
     ["name" => "ID", "column" => "id", "class" => "text-center"],
-    ["name" => "Raw Material", "column" => "raw_material", "options" => $raw_materials_arr, "type" => "table_id", "option_id" => "id", "option_label" => "raw_material"],
+    ["name" => "Raw Material", "column" => "raw_material", "options" => $raw_materials_arr, "type" => "table_id", "option_id" => "id", "option_label" => "raw_material", "class" => "title"],
     ["name" => "Quantity", "column" => "quantity", "class" => "nowrap"],
     ["name" => "Buy Date", "column" => "buy_date", "format" => "date", "class" => "nowrap"],
     ["name" => "Buy Price", "column" => "buy_price", "class" => "nowrap"],
@@ -56,8 +55,8 @@ lot status history on change of rm lot status<br>
 
   $detail_columns = [
     ["name" => "Notes", "column" => "notes"],
+    ["name" => "Last update", "type" => "last_update_info"],
   ];
-
 
   $table_html = crud_read([
     "module_pages" => $module_pages,

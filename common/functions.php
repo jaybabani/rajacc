@@ -190,7 +190,7 @@ function pagination($pagename)
 
 function ts_to_dt($ts)
 {
-    return date('D, d-M-Y', $ts);
+    return date('d M Y h:i a, D', $ts);
     // return date('D, d-M-Y h:i A', $ts);
 }
 function ymd_to_dt($dt)
@@ -335,8 +335,14 @@ function crud_read($vars)
     // Columns fetched in detail rows (toggle rows)
     if (isset($vars["detail_columns"])) {
         foreach ($vars["detail_columns"] as $k => $v) {
-            if (isset($v["column"]) && $v["column"] != "") {
-                $cols_arr[] = $v["column"];
+            if (isset($v["type"]) && $v["type"] == "last_update_info") {
+                $cols_arr[] = "auth_user";
+                $cols_arr[] = "updated";
+            }
+            if (isset($v["column"])) {
+                if ($v["column"] != "") {
+                    $cols_arr[] = $v["column"];
+                }
             }
         }
     }
@@ -375,6 +381,8 @@ function crud_read($vars)
 
         $images = fetch_image_rows($fetched_rows, $image_cols);
         // print_arr($images);
+        $auth_users = fetch_auth_users($fetched_rows);
+        // print_arr($auth_users);
 
         $inc = 0;
 
@@ -446,7 +454,7 @@ function crud_read($vars)
                                 if ($val != "" && isset($images[$val])) {
                                     $fullpath = $images[$val]["name"];
                                     $filetype = get_filetype($images[$val]["type"]);
-                                    
+
                                     $iconpath = "";
                                     if ($filetype == "image" && $images[$val]["thumb"] != "") {
                                         $iconpath = $images[$val]["thumb"];
@@ -567,13 +575,24 @@ function crud_read($vars)
             // Details Columns ---------
             $row_detail = "";
             foreach ($vars["detail_columns"] as $dk => $dv) {
-                if (isset($dv["column"]) && $dv["column"] != "") {
+                if (isset($dv["type"]) && $dv["type"] == "last_update_info") {
+
+                    $row_detail .= "<small><i>" . $dv["name"] . ": </i></small>";
+                    if (arr_val_valid($r, "auth_user")) {
+                        if (isset($auth_users[$r["auth_user"]]["name"])) {
+                            $row_detail .= "&nbsp;<small><i>By: </i></small><strong>" . $auth_users[$r["auth_user"]]["name"]."</strong>";
+                        }
+                    }
+                    if (arr_val_valid($r, "updated")) {
+                        $row_detail .= "&nbsp;<small><i>On: </i></small><strong>" . ts_to_dt($r["updated"])."</strong>";
+                    }
+                } else if (isset($dv["column"]) && $dv["column"] != "") {
                     $colname = $dv["column"];
                     $colval = "";
                     if ($r[$colname] != NULL) {
                         $colval = nl2br($r[$colname]);
                     }
-                    $row_detail .= "<small><i>" . $dv["name"] . ": </i></small>" . $colval . "<br>";
+                    $row_detail .= "<small><i>" . $dv["name"] . ": </i></small><strong>" . $colval ."</strong>". "<br>";
                 }
             }
             $details[$r[$vars["primary_column"]]] = $row_detail;
@@ -593,6 +612,16 @@ function crud_read($vars)
     return $html;
 
     // return $ret;
+}
+
+function arr_val_valid($arr, $key)
+{
+    if (is_array($arr) && $key != "") {
+        if (isset($arr[$key]) && $arr[$key] != NULL && $arr[$key] != "" && $arr[$key] != "0") {
+            return true;
+        }
+    }
+    return false;
 }
 
 function crud_update() {}
@@ -630,6 +659,35 @@ function fetch_image_rows($rows, $cols)
 
     // print_arrbox($images, 300);
     return $images;
+}
+
+function fetch_auth_users($rows)
+{
+
+    $users = [];
+
+    // print_arrbox($rows);
+    // print_arr($cols);
+    $ids = [];
+    foreach ($rows as $rk => $r) {
+        if (isset($r["auth_user"]) && $r["auth_user"] != NULL && $r["auth_user"] != "" && $r["auth_user"] != "0") {
+            $ids[] = $r["auth_user"];
+        }
+    }
+    // print_arr($ids);
+    $condition = "";
+    if (sizeof($ids) > 0) {
+        $condition = " id IN (" . implode(",", $ids) . ") ";
+        $fetched = fetch_data(["table" => "users", "columns" => "id, name", "condition" => $condition, "order" => "", "limit" => ""]);    // print_arr($image_arr);
+        // print_arrbox($fetched, 300);
+        foreach ($fetched as $k => $i) {
+            $users[$i["id"]] = $i;
+        }
+        unset($fetched);
+    }
+
+    // print_arrbox($users, 300);
+    return $users;
 }
 
 function datepicker_scripts()
@@ -948,6 +1006,7 @@ function module_submit_form($vars)
     $primary_column = $vars["primary_column"];
 
     $ts = getts();
+    $curr_user_id = get_curr_user_id();
 
     if (isset($_REQ['save']) || isset($_REQ['savenew'])) {
         // print_arr($_REQ);
@@ -958,9 +1017,12 @@ function module_submit_form($vars)
         $query = '';
         foreach ($save_fields as $sk => $sv) {
 
-
             if (isset($sv["type"]) && $sv["type"] == "time") {
                 $query .= " " . $sv['key'] . " = \"" . $ts . "\", ";
+            }
+            //
+            else if (isset($sv["type"]) && $sv["type"] == "session_user") {
+                $query .= " " . $sv['key'] . " = \"" . $curr_user_id . "\", ";
             }
             //
             else if (isset($sv["type"]) && $sv["type"] == "image") {
