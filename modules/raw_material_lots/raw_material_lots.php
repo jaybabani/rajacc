@@ -36,10 +36,6 @@ include("../../common/header.php");
 echo "todo: <br>
 auth user (column in db, in datatable in details row - last update: by user and time)<br>
 lot status history on change of rm lot status<br>
-pdf upload along with image (auto detect format)<br>
-image view in new page<br>
-pdf open in new page<br>
-full image display in edit mode or atleast noncropped and 400px wide.<br>
 ";
 
   $display_columns = [
