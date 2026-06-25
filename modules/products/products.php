@@ -47,6 +47,7 @@ include("../../common/header.php");
     ["name" => "No. of pieces / Set of", "column" => "pieces"],
     ["name" => "Description", "column" => "description"],
     ["name" => "Last update", "type" => "last_update_info"],
+    ["name" => "Created", "type" => "created_info"],
   ];
 
 

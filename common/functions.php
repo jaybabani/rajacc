@@ -344,6 +344,10 @@ function crud_read($vars)
                 $cols_arr[] = "auth_user";
                 $cols_arr[] = "updated";
             }
+            if (isset($v["type"]) && $v["type"] == "created_info") {
+                // $cols_arr[] = "auth_user";
+                $cols_arr[] = "created";
+            }
             if (isset($v["type"]) && $v["type"] == "history") {
                 $fetch_column_history = true;
             }
@@ -574,6 +578,10 @@ function crud_read($vars)
                 if (isset($dv["type"]) && $dv["type"] == "last_update_info") {
                     $row_detail .= "<small><i>" . $dv["name"] . ": </i></small>";
                     $row_detail .= user_updated($r, $auth_users);
+                }
+                if (isset($dv["type"]) && $dv["type"] == "created_info") {
+                    $row_detail .= "<br><small><i>" . $dv["name"] . ": </i></small>";
+                    $row_detail .= user_created($r, $auth_users);
                 }
 
                 // history in details
@@ -1095,6 +1103,12 @@ function module_submit_form($vars)
                 $query .= " " . $sv['key'] . " = \"" . $ts . "\", ";
             }
             //
+            else if (isset($sv["type"]) && $sv["type"] == "created_time") {
+                if ($_REQ['mode'] == 'new') {
+                    $query .= " " . $sv['key'] . " = \"" . $ts."_".$curr_user_id . "\", ";
+                }
+            }
+            //
             else if (isset($sv["type"]) && $sv["type"] == "session_user") {
                 $query .= " " . $sv['key'] . " = \"" . $curr_user_id . "\", ";
             }
@@ -1126,7 +1140,7 @@ function module_submit_form($vars)
         //for non english languages
         $sql = $conn->query('SET NAMES utf8');
 
-        if ($_POST['mode'] == 'new') {
+        if ($_REQ['mode'] == 'new') {
             // insert
 
             // $query .= " created = \"".$ts."\" ";
@@ -1235,7 +1249,7 @@ function save_column_history($vars, $primary_id)
                     if (isset($_REQ["old_" . $hv]) && isset($_REQ[$hv])) {
                         if ($_REQ["old_" . $hv] != $_REQ[$hv]) {
                             $value = $_REQ[$hv];
-                            $sql = " INSERT INTO column_history (table_name, row_id, column_name, value, auth_user, updated) VALUES ('" . $tablename . "', '" . $row_id . "', '" . $hv . "', '" . $value . "', '" . $auth_user . "', '" . $ts . "') ";
+                            $sql = " INSERT INTO column_history (table_name, row_id, column_name, value, auth_user, updated, created) VALUES ('" . $tablename . "', '" . $row_id . "', '" . $hv . "', '" . $value . "', '" . $auth_user . "', '" . $ts . "', '" . $ts . "') ";
                             // echo $sql."<br>";
                             $conn->query($sql);
                         }
@@ -1325,7 +1339,7 @@ function fetch_column_history($vars, $rows)
         $condition = " row_id IN (" . implode(",", $ids) . ") AND table_name = '" . $tablename . "' ";
         $fetched = fetch_data([
             "table" => "column_history",
-            "columns" => "id, column_name, table_name, row_id, value, auth_user, updated",
+            "columns" => "id, column_name, table_name, row_id, value, auth_user, updated, created",
             "condition" => $condition,
             "order" => " updated ASC ",
             "limit" => ""
@@ -1367,6 +1381,20 @@ function user_updated($r, $auth_users)
     return $s;
 }
 
+function user_created($r, $auth_users)
+{
+    $s = "";
+    if (arr_val_valid($r, "created")) {
+        $exp = explode("_", $r["created"]);
+        if (sizeof($exp) == 2) {
+            if (isset($auth_users[$exp[1]]["name"])) {
+                $s .= "&nbsp;<small><i>By: </i></small><strong>" . $auth_users[$exp[1]]["name"] . "</strong>";
+            }
+            $s .= "&nbsp;<small><i>On: </i></small><strong>" . ts_to_dt($exp[0]) . "</strong>";
+        }
+    }
+    return $s;
+}
 
 
 function module_submit_delete_form($vars)

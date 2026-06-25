@@ -34,7 +34,8 @@ include("attribute-submodule.php");
     ["key" => "active"],
     ["key" => "category"],
     ["key" => "auth_user", "type" => "session_user"],
-    ["key" => "updated", "type" => "time"]
+    ["key" => "updated", "type" => "time"],
+    ["key" => "created", "type" => "created_time"],
   ];
 
   $link_table_rows = [];

@@ -40,7 +40,8 @@ include("../../common/header.php");
     ["key" => "buy_date", "type" => "date"],
     ["key" => "purchase_invoice", "type" => "image"],
     ["key" => "auth_user", "type" => "session_user"],
-    ["key" => "updated", "type" => "time"]
+    ["key" => "updated", "type" => "time"],
+    ["key" => "created", "type" => "created_time"],
   ];
 
   $link_table_rows = [

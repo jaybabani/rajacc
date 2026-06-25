@@ -38,7 +38,8 @@ include("../../common/header.php");
     ["key" => "image", "type" => "image"],
     ["key" => "user_roles", "type" => "implode", "sep" => ","],
     ["key" => "auth_user", "type" => "session_user"],
-    ["key" => "updated", "type" => "time"]
+    ["key" => "updated", "type" => "time"],
+    ["key" => "created", "type" => "created_time"],
   ];
 
   $link_table_rows = [

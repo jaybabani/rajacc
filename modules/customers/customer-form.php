@@ -42,7 +42,8 @@ include("../../common/header.php");
     ["key" => "active"],
     ["key" => "image", "type" => "image"],
     ["key" => "auth_user", "type" => "session_user"],
-    ["key" => "updated", "type" => "time"]
+    ["key" => "updated", "type" => "time"],
+    ["key" => "created", "type" => "created_time"],
   ];
 
   $msg = [

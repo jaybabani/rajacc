@@ -30,7 +30,8 @@ include("../../common/header.php");
   $save_fields = [
     ["key" => "user_role"],
     ["key" => "auth_user", "type" => "session_user"],
-    ["key" => "updated", "type" => "time"]
+    ["key" => "updated", "type" => "time"],
+    ["key" => "created", "type" => "created_time"],
   ];
 
   $link_table_rows = [

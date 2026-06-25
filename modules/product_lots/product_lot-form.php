@@ -52,7 +52,8 @@ include("../../common/header.php");
     ["key" => "notes"],
     ["key" => "status"],
     ["key" => "auth_user", "type" => "session_user"],
-    ["key" => "updated", "type" => "time"]
+    ["key" => "updated", "type" => "time"],
+    ["key" => "created", "type" => "created_time"],
   ];
   if ($source == "purchased") {
     $save_fields = array_merge($save_fields, [
