@@ -40,7 +40,7 @@ include("attribute-submodule.php");
   $display_columns = [
     ["name" => "", "column" => "", "type" => "details", "sorting" => false, "search" => false, "class" => "text-center nowrap"],
     ["name" => "Select", "column" => "", "type" => "select", "sorting" => false, "search" => false, "class" => "text-center"],
-    ["name" => "ID", "column" => "id", "class" => "text-center"],
+    ["name" => "ID", "column" => "id", "class" => "text-center nowrap", "id_prefix" => $submod["id_prefix"]],
     ["name" => $submod["column_title"], "column" => "attribute", "class" => "title nowrap"],
     // ["name" => "Code", "column" => "code"],
     ($parent == "default") ? ["name" => "Category", "column" => "category", "options" => get_attribute_category_arr()]:[],

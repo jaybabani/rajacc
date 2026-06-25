@@ -319,27 +319,35 @@ body {
 .badge-yes {
 	background-color: rgba(var(--bs-success-rgb), 1);
 }
-
+.badge-pending,
 .badge-new,
 .badge-no {
 	background-color: rgba(var(--bs-warning-rgb), 1);
 }
+.badge-draft,
 .badge-under_production,
 .badge-order_placed{
 	background-color: rgba(var(--bs-warning-rgb), 1);
 }
+.badge-order_placed,
+.badge-partially_paid,
 .badge-production_complete,
 .badge-received{
 	background-color: rgba(var(--bs-accent1-rgb), 1);
 }
+.badge-partially_received,
 .badge-under_packaging,
 .badge-under_process{
 	background-color: rgba(var(--bs-accent2-rgb), 1);
 }
+.badge-fully_paid,
+.badge-fully_received,
 .badge-produced,
 .badge-ready{
 	background-color: rgba(var(--bs-success-rgb), 1);
 }
+.badge-on_hold,
+.badge-cancelled,
 .badge-purchased{
 	background-color: rgba(var(--bs-info-rgb), 1);
 }

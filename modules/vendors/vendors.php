@@ -40,7 +40,7 @@ include("../../common/header.php");
   $display_columns = [
     ["name" => "", "column" => "", "type" => "details", "sorting" => false, "search" => false, "class" => "text-center nowrap"],
     ["name" => "Select", "column" => "", "type" => "select", "sorting" => false, "search" => false, "class" => "text-center"],
-    ["name" => "ID", "column" => "id", "class" => "text-center"],
+    ["name" => "ID", "column" => "id", "class" => "text-center nowrap", "id_prefix" => "V-"],
     ["name" => "Image", "column" => "image", "type" => "image-file", "sorting" => false, "search" => false, "class" => "text-center"],
     ["name" => "Firm Name", "column" => "firm_name", "class" => "title nowrap"],
     ["name" => "Firm Contact", "column" => ["firm_email", "firm_phone"], "prefix" => ["Firm Email", "Firm Phone"], "sorting" => false],

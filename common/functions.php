@@ -190,12 +190,15 @@ function pagination($pagename)
 
 function ts_to_dt($ts)
 {
-    return date('d M Y h:i a, D', $ts);
+    if ($ts != NULL && $ts != "" && $ts != "0") {
+        return date('d M Y h:i a, D', $ts);
+    }
+    return "";
     // return date('D, d-M-Y h:i A', $ts);
 }
 function ymd_to_dt($dt)
 {
-    if ($dt != NULL && $dt != "") {
+    if ($dt != NULL && $dt != "" && $dt != "0") {
         $dateString = $dt;
         $date = DateTime::createFromFormat('Ymd', $dateString);
         $formattedDate = $date->format('d M Y, D');
@@ -441,6 +444,11 @@ function crud_read($vars)
                     foreach ($colarr as $ck => $colname) {
 
                         $colval = $r[$colname];
+
+                        if (isset($dv["id_prefix"]) && $dv["id_prefix"] != NULL && trim($dv["id_prefix"]) != "") {
+                            $colval = trim($dv["id_prefix"]) . $colval;
+                        }
+
 
                         if (isset($dv["format"])) {
                             if ($dv["format"] == "ts_to_dt") {
@@ -1105,7 +1113,7 @@ function module_submit_form($vars)
             //
             else if (isset($sv["type"]) && $sv["type"] == "created_time") {
                 if ($_REQ['mode'] == 'new') {
-                    $query .= " " . $sv['key'] . " = \"" . $ts."_".$curr_user_id . "\", ";
+                    $query .= " " . $sv['key'] . " = \"" . $ts . "_" . $curr_user_id . "\", ";
                 }
             }
             //

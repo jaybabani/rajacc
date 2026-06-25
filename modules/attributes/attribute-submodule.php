@@ -10,6 +10,7 @@ $submodule = [
     "column_name" => "",
     "query" => "",
     "url_param" => "",
+    "id_prefix" => "ATR-",
   ],
   "product_category" => [
     "page_title" => "Product Category",
@@ -17,6 +18,7 @@ $submodule = [
     "column_name" => "category",
     "query" => "category = '" . $parent . "' ",
     "url_param" => "module=" . $parent . "",
+    "id_prefix" => "PC-",
   ],
   "product_quality" => [
     "page_title" => "Product Quality",
@@ -24,6 +26,7 @@ $submodule = [
     "column_name" => "category",
     "query" => "category = '" . $parent . "' ",
     "url_param" => "module=" . $parent . "",
+    "id_prefix" => "PQ-",
   ],
   "raw_material_category" => [
     "page_title" => "Raw material Category",
@@ -31,6 +34,7 @@ $submodule = [
     "column_name" => "category",
     "query" => "category = '" . $parent . "' ",
     "url_param" => "module=" . $parent . "",
+    "id_prefix" => "RMC-",
   ],
   "vendor_category" => [
     "page_title" => "Vendor Category",
@@ -38,6 +42,7 @@ $submodule = [
     "column_name" => "category",
     "query" => "category = '" . $parent . "' ",
     "url_param" => "module=" . $parent . "",
+    "id_prefix" => "VC-",
   ],
   "customer_category" => [
     "page_title" => "Customer Category",
@@ -45,6 +50,7 @@ $submodule = [
     "column_name" => "category",
     "query" => "category = '" . $parent . "' ",
     "url_param" => "module=" . $parent . "",
+    "id_prefix" => "CC-",
   ],
 ];
 

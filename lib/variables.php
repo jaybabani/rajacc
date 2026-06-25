@@ -50,6 +50,10 @@ function acl_roles($format = "")
 		["attributes-update", "Update attributes"],
 		["attributes-create", "Add new attributes"],
 		["attributes-delete", "Delete attributes"],
+		["purchases-read", "View all purchases"],
+		["purchases-update", "Update purchases"],
+		["purchases-create", "Add new purchases"],
+		["purchases-delete", "Delete purchases"],
 	];
 
 	if ($format == "raw") {
@@ -135,6 +139,30 @@ function get_product_lot_source_arr()
 	$arr = [
 		"produced" => "Produced in factory",
 		"purchased" => "Purchased from vendor"
+	];
+	return $arr;
+}
+
+
+function get_purchase_status_arr()
+{
+	$arr = [
+		"draft" => "Draft",
+		"order_placed" => "Order placed",
+		"partially_received" => "Partially received",
+		"fully_received" => "Fully Received",
+		"cancelled" => "Cancelled",
+	];
+	return $arr;
+}
+
+function get_purchase_payment_status_arr()
+{
+	$arr = [
+		"pending" => "Pending",
+		"on_hold" => "Kept on hold",
+		"partially_paid" => "Partially paid",
+		"fully_paid" => "Fully paid",
 	];
 	return $arr;
 }

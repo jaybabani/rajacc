@@ -42,7 +42,7 @@ include("../../common/header.php");
   $display_columns = [
     ["name" => "", "column" => "", "type" => "details", "sorting" => false, "search" => false, "class" => "text-center nowrap"],
     ["name" => "Select", "column" => "", "type" => "select", "sorting" => false, "search" => false, "class" => "text-center"],
-    ["name" => "ID", "column" => "id", "class" => "text-center"],
+    ["name" => "ID", "column" => "id", "class" => "text-center nowrap", "id_prefix" => "UR-"],
     ["name" => "User Role", "column" => "user_role", "class" => "title nowrap"],
     ["name" => "Permissions", "column" => "", "options" => $permissions_arr, "type" => "link_table_rows", "links" => $links, "option_id" => "id", "option_label" => "permission", "sorting" => false],
     ["name" => "Updated", "column" => "updated", "format" => "ts_to_dt", "class" => "nowrap"],

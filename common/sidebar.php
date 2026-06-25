@@ -88,6 +88,7 @@
     $show_menu["raw_materials"] = "";
     $show_menu["products"] = "";
     $show_menu["attributes"] = "";
+    $show_menu["purchases"] = "";
     
     $current_page = str_replace(".php","",basename($_SERVER['PHP_SELF']));
     // echo $current_page;
@@ -107,6 +108,9 @@
     else if(in_array($current_page,array("vendors","vendor-form","vendor-delete"))){
       $show_menu["vendors"] = "show";
     }
+    else if(in_array($current_page,array("purchases","purchase-form","purchase-delete"))){
+      $show_menu["purchases"] = "show";
+    }
     else if(in_array($current_page,array("raw_materials","raw_material-form","raw_material-delete","raw_material_lots","raw_material_lot-form","raw_material_lot-delete"))){
       $show_menu["raw_materials"] = "show";
     }
@@ -123,6 +127,8 @@
         $show_menu["raw_materials"] = "show";
       } else if(isset($_GET["module"]) && $_GET["module"] == "vendor_category"){
         $show_menu["vendors"] = "show";
+      } else if(isset($_GET["module"]) && $_GET["module"] == "purchase_category"){
+        $show_menu["purchases"] = "show";
       } else if(isset($_GET["module"]) && $_GET["module"] == "customer_category"){
         $show_menu["customers"] = "show";
       } else {
@@ -237,6 +243,21 @@
           <li><a href="<?php echo ROOT_PATH; ?>/modules/vendors/vendor-form.php" class="link-dark"><span>Add new vendor</span></a></li>
           <li><a href="<?php echo ROOT_PATH; ?>/modules/attributes/attributes.php?module=vendor_category" class="link-dark"><span>All vendor category</span></a></li>
           <li><a href="<?php echo ROOT_PATH; ?>/modules/attributes/attribute-form.php?module=vendor_category" class="link-dark"><span>Add new vendor category</span></a></li>
+        </ul>
+      </div>
+    </li>    
+
+    <?php $menuid = "purchases"; ?>
+    <li class="mb-1">
+      <button class="btn btn-toggle align-items-center collapsed" data-bs-toggle="collapse" data-bs-target="#<?php echo $menuid; ?>-collapse"  aria-expanded="<?php echo $show_menu[$menuid] == "show" ? "true" : "false"; ?>">
+        <span class="icon"><i data-feather="home"></i></span> <span class="txt">Purchases</span>
+      </button>
+      <div class="collapse <?php echo $show_menu[$menuid]; ?>" id="<?php echo $menuid; ?>-collapse" data-bs-parent="#parent-level">
+        <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
+          <li><a href="<?php echo ROOT_PATH; ?>/modules/purchases/purchases.php" class="link-dark"><span>All purchases</span></a></li>
+          <li><a href="<?php echo ROOT_PATH; ?>/modules/purchases/purchase-form.php" class="link-dark"><span>Add new purchase</span></a></li>
+          <!-- <li><a href="<?php echo ROOT_PATH; ?>/modules/attributes/attributes.php?module=purchase_category" class="link-dark"><span>All purchase category</span></a></li>
+          <li><a href="<?php echo ROOT_PATH; ?>/modules/attributes/attribute-form.php?module=purchase_category" class="link-dark"><span>Add new purchase category</span></a></li> -->
         </ul>
       </div>
     </li>    

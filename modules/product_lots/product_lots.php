@@ -36,7 +36,7 @@ include("../../common/header.php");
   $display_columns = [
     ["name" => "", "column" => "", "type" => "details", "sorting" => false, "search" => false, "class" => "text-center nowrap"],
     ["name" => "Select", "column" => "", "type" => "select", "sorting" => false, "search" => false, "class" => "text-center"],
-    ["name" => "ID", "column" => "id", "class" => "text-center"],
+    ["name" => "ID", "column" => "id", "class" => "text-center nowrap", "id_prefix" => "PL-"],
     ["name" => "Product", "column" => "product", "options" => $products_arr, "type" => "table_id", "option_id" => "id", "option_label" => "product", "class" => "title"],
     ["name" => "Source", "column" => "source", "options" => get_product_lot_source_arr(), "badge" => true],
     ["name" => "Quantity", "column" => "quantity", "class" => "nowrap"],
