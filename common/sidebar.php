@@ -200,8 +200,8 @@
           <li><a href="<?php echo ROOT_PATH; ?>/modules/products/products.php" class="link-dark"><span>All products</span></a></li>
           <li><a href="<?php echo ROOT_PATH; ?>/modules/products/product-form.php" class="link-dark"><span>Add new product</span></a></li>
           <li><a href="<?php echo ROOT_PATH; ?>/modules/product_lots/product_lots.php" class="link-dark"><span>All product lots</span></a></li>
-          <li><a href="<?php echo ROOT_PATH; ?>/modules/product_lots/product_lot-form.php?source=external" class="link-dark"><span>Add new product lot<br>(purchased)</span></a></li>
-          <li><a href="<?php echo ROOT_PATH; ?>/modules/product_lots/product_lot-form.php?source=internal" class="link-dark"><span>Add new product lot<br>(produced internally)</span></a></li>
+          <li><a href="<?php echo ROOT_PATH; ?>/modules/product_lots/product_lot-form.php?source=purchased" class="link-dark"><span>Add new product lot<br>(purchased)</span></a></li>
+          <li><a href="<?php echo ROOT_PATH; ?>/modules/product_lots/product_lot-form.php?source=produced" class="link-dark"><span>Add new product lot<br>(produced internally)</span></a></li>
           <li><a href="<?php echo ROOT_PATH; ?>/modules/attributes/attributes.php?module=product_category" class="link-dark"><span>All product category</span></a></li>
           <li><a href="<?php echo ROOT_PATH; ?>/modules/attributes/attribute-form.php?module=product_category" class="link-dark"><span>Add new product category</span></a></li>
           <li><a href="<?php echo ROOT_PATH; ?>/modules/attributes/attributes.php?module=product_quality" class="link-dark"><span>All product quality</span></a></li>

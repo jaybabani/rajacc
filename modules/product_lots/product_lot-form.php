@@ -16,16 +16,16 @@ include("../../common/header.php");
 
   $id = '';
   $mode = "new";
-  $source = "internal";
+  $source = "produced";
   $titletag = T('Add New product Lot (produced internally)');
   if (isset($_GET['id']) && is_numeric($_GET['id']) && trim($_GET['id']) != '') {
     $mode = 'update';
     $titletag = T('Edit product Lot');
     $id = $_GET['id'];
   }
-  if (isset($_GET['source']) && trim($_GET['source']) == 'external') {
+  if (isset($_GET['source']) && trim($_GET['source']) == 'purchased') {
     $titletag = T('Add New product Lot (purchased)');
-    $source = "external";
+    $source = "purchased";
   }
 
   widget_start($titletag);
@@ -54,7 +54,7 @@ include("../../common/header.php");
     ["key" => "auth_user", "type" => "session_user"],
     ["key" => "updated", "type" => "time"]
   ];
-  if ($source == "external") {
+  if ($source == "purchased") {
     $save_fields = array_merge($save_fields, [
       ["key" => "vendor"],
       ["key" => "buy_price"],
@@ -102,7 +102,7 @@ include("../../common/header.php");
 
     <?php
 
-    if ($source == "external") {
+    if ($source == "purchased") {
       $vendor_arr = fetch_data(["table" => "vendors", "columns" => "id, firm_name", "condition" => " active = 'yes' ", "order" => "firm_name ASC", "limit" => ""]);        // print_arr($vendor_arr);
       $vendors = [];
       foreach ($vendor_arr as $vk => $vv) {
@@ -122,14 +122,14 @@ include("../../common/header.php");
     echo form_field(["type" => "number", "name" => "Quantity", "key" => "quantity", "required" => true, "class" => "col-md-6 col-lg-4 mb-3"], $data);
     echo form_field(["type" => "hidden", "name" => "Source", "key" => "source", "class" => "col-md-6 col-lg-4 mb-3"], $data);
 
-    if ($source == "external") {
+    if ($source == "purchased") {
       echo form_field([
         "type" => "number",
         "name" => "Buy Price",
         "key" => "buy_price",
         "required" => true,
         "class" => "col-md-6 col-lg-4 mb-3",
-        // "parent_field" => ["column" => "source", "value" => "external", "default" => "hide"]
+        // "parent_field" => ["column" => "source", "value" => "purchased", "default" => "hide"]
       ], $data);
       echo form_field(["type" => "date", "name" => "Buy Date", "key" => "buy_date", "required" => true, "class" => "col-md-6 col-lg-4 mb-3"], $data);
       echo form_field(["type" => "select", "name" => "Purchased from Vendor", "key" => "vendor", "options" => $vendors, "class" => "col-md-6 col-lg-4 mb-3"], $data);

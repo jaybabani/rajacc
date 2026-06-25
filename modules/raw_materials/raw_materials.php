@@ -31,6 +31,7 @@ include("../../common/header.php");
     ["name" => "", "column" => "", "type" => "details", "sorting" => false, "search" => false, "class" => "text-center nowrap"],
     ["name" => "Select", "column" => "", "type" => "select", "sorting" => false, "search" => false, "class" => "text-center"],
     ["name" => "ID", "column" => "id", "class" => "text-center"],
+    ["name" => "Item Code", "column" => "code", "class" => "nowrap"],
     ["name" => "Image", "column" => "image", "type" => "image-file", "sorting" => false, "search" => false, "class" => "text-center"],
     ["name" => "Raw material", "column" => "raw_material", "class" => "title nowrap"],
     ["name" => "Category", "column" => "category", "attributes" => get_attributes_arr("raw_material_category"), "badge" => true],
@@ -57,7 +58,7 @@ include("../../common/header.php");
     "pagination" => true,
     "pagelimit" => 100,
     "query" => "",
-    "orderby" => "id DESC"
+    "orderby" => "raw_material ASC"
   ]);
 
   $load_datatable = true;

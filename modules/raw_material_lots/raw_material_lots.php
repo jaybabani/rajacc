@@ -73,7 +73,7 @@ include("../../common/header.php");
     "pagination" => true,
     "pagelimit" => 100,
     "query" => "",
-    "orderby" => "id DESC"
+    "orderby" => "raw_material ASC"
   ]);
 
   $load_datatable = true;

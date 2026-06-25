@@ -122,9 +122,9 @@ function get_product_lot_status_arr($source = "")
 		"under_process" => "Product under processing",
 		"ready" => "Ready for sale",
 	];
-	if ($source == "internal") {
+	if ($source == "produced") {
 		return $int_arr;
-	} else if ($source == "external") {
+	} else if ($source == "purchased") {
 		return $ext_arr;
 	}
 	return array_merge($int_arr, $ext_arr);
@@ -133,8 +133,8 @@ function get_product_lot_status_arr($source = "")
 function get_product_lot_source_arr()
 {
 	$arr = [
-		"internal" => "Produced in factory",
-		"external" => "Purchased from vendor"
+		"produced" => "Produced in factory",
+		"purchased" => "Purchased from vendor"
 	];
 	return $arr;
 }

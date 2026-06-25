@@ -61,7 +61,7 @@ include("../../common/header.php");
     "pagination" => true,
     "pagelimit" => 100,
     "query" => "",
-    "orderby" => "id DESC"
+    "orderby" => "product ASC"
   ]);
 
   $load_datatable = true;

@@ -380,7 +380,7 @@ function member_display_name($v, $lang)
 						}
 					}
 		*/
-        if (isset($v['external']) && $v['external'] == '1') {
+        if (isset($v['purchased']) && $v['purchased'] == '1') {
             $fullname .= ' (बाहर से)'; //" (बाहर से)";
         }
     } elseif (
@@ -406,7 +406,7 @@ function member_display_name($v, $lang)
 						}
 					}
 		*/
-        if (isset($v['external']) && $v['external'] == '1') {
+        if (isset($v['purchased']) && $v['purchased'] == '1') {
             $fullname .= ' (બહાર થી)';
         }
     } else {
@@ -430,7 +430,7 @@ function member_display_name($v, $lang)
                 $fullname = str_ireplace(' behn', '', $fullname);
             }
         }
-        if (isset($v['external']) && $v['external'] == '1') {
+        if (isset($v['purchased']) && $v['purchased'] == '1') {
             $fullname .= ' (Ext.)';
         }
     }

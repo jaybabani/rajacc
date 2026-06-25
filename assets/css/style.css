@@ -336,11 +336,11 @@ body {
 .badge-under_process{
 	background-color: rgba(var(--bs-accent2-rgb), 1);
 }
-.badge-internal,
+.badge-produced,
 .badge-ready{
 	background-color: rgba(var(--bs-success-rgb), 1);
 }
-.badge-external{
+.badge-purchased{
 	background-color: rgba(var(--bs-info-rgb), 1);
 }
 
