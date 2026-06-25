@@ -6,10 +6,7 @@ include("../../common/header.php");
 ?>
 
 <div class="row row-cols-1 row-cols-sm-1 row-cols-md-1 row-cols-lg-1 row-cols-xl-1 row-cols-xxl-1 g-4 py-3 px-2">
-<b>
-todo:<br>
-move buy date, vendor, buy price, invoice in details row.<br>
-</b>
+
   <?php
   $module_pages = [
     "read" => "product_lots",
@@ -43,10 +40,10 @@ move buy date, vendor, buy price, invoice in details row.<br>
     ["name" => "Product", "column" => "product", "options" => $products_arr, "type" => "table_id", "option_id" => "id", "option_label" => "product", "class" => "title"],
     ["name" => "Source", "column" => "source", "options" => get_product_lot_source_arr(), "badge" => true],
     ["name" => "Quantity", "column" => "quantity", "class" => "nowrap"],
-    ["name" => "Buy Date", "column" => "buy_date", "format" => "date", "class" => "nowrap"],
-    ["name" => "Buy Price", "column" => "buy_price", "class" => "nowrap"],
-    ["name" => "Vendor", "column" => "vendor", "options" => $vendors_arr, "type" => "table_id", "option_id" => "id", "option_label" => "firm_name"],
-    ["name" => "Purchase Invoice", "column" => "purchase_invoice", "type" => "image-file", "sorting" => false, "search" => false, "class" => "text-center"],
+    // ["name" => "Buy Date", "column" => "buy_date", "format" => "date", "class" => "nowrap"],
+    // ["name" => "Buy Price", "column" => "buy_price", "class" => "nowrap"],
+    // ["name" => "Vendor", "column" => "vendor", "options" => $vendors_arr, "type" => "table_id", "option_id" => "id", "option_label" => "firm_name"],
+    // ["name" => "Purchase Invoice", "column" => "purchase_invoice", "type" => "image-file", "sorting" => false, "search" => false, "class" => "text-center"],
     ["name" => "Status", "column" => "status", "options" => get_product_lot_status_arr(), "badge" => true],
     ["name" => "Actions", "column" => "", "type" => "edit_delete", "sorting" => false, "search" => false, "class" => "nowrap", "acl" => ["edit" => "product_lots-update", "delete" => "product_lots-delete"]],
   ];
@@ -55,6 +52,10 @@ move buy date, vendor, buy price, invoice in details row.<br>
 
   $detail_columns = [
     ["name" => "Notes", "column" => "notes"],
+    ["name" => "Buy Price", "column" => "buy_price"],
+    ["name" => "Buy Date", "column" => "buy_date", "format" => "date", "class" => "nowrap"],
+    ["name" => "Vendor", "column" => "vendor", "options" => $vendors_arr, "type" => "table_id", "option_id" => "id", "option_label" => "firm_name"],
+    ["name" => "Purchase Invoice", "column" => "purchase_invoice", "type" => "image-file", "class" => "text-center"],
     ["name" => "Last update", "type" => "last_update_info"],
     [
       "name" => "History",

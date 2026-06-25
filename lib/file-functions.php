@@ -543,6 +543,11 @@ function allowed_files()
         'xlsx' => [
             'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
         ],
+        'zip' => [
+            'application/zip',
+            'application/x-zip-compressed',
+            'multipart/x-zip'
+        ],
 
         'jpg' => ['image/jpeg'],
         'jpeg' => ['image/jpeg'],

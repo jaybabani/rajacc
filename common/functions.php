@@ -350,6 +350,11 @@ function crud_read($vars)
             if (isset($v["column"])) {
                 if ($v["column"] != "") {
                     $cols_arr[] = $v["column"];
+
+                    // Note: Image-file column cannot be merged with other columns
+                    if (isset($v["type"]) && $v["type"] == "image-file") {
+                        $image_cols[] = $v["column"];
+                    }
                 }
             }
         }
@@ -461,29 +466,7 @@ function crud_read($vars)
 
                         if (isset($dv["type"])) {
                             if ($dv['type'] == "image-file") {
-                                $val = $r[$colname] ?? "";
-                                if ($val != "" && isset($images[$val])) {
-                                    $fullpath = $images[$val]["name"];
-                                    $filetype = get_filetype($images[$val]["type"]);
-
-                                    $iconpath = "";
-                                    if ($filetype == "image" && $images[$val]["thumb"] != "") {
-                                        $iconpath = $images[$val]["thumb"];
-                                    } else {
-                                        $iconpath = "assets/images/file/" . $filetype . ".svg";
-                                    }
-                                    // default file icon
-                                    if (!file_exists(ROOT_DIR . "/" . $iconpath)) {
-                                        $iconpath = "assets/images/file/file.svg";
-                                    }
-
-
-                                    if (file_exists(ROOT_DIR . "/" . $fullpath)) {
-                                        $colval = "<a href='" . ROOT_PATH . "/" . $fullpath . "' target='_blank'><img src='" . ROOT_PATH . "/" . $iconpath . "' class='table-thumb'></a>";
-                                    } else {
-                                        $colval = "<img src='" . ROOT_PATH . "/assets/images/notfound.jpg' class='table-thumb'>";
-                                    }
-                                }
+                                $colval = display_thumb($r, $colname, $images);
                             } else if ($dv['type'] == "table_id") {
                                 $val = $r[$colname] ?? "";
                                 if ($val != "") {
@@ -606,6 +589,41 @@ function crud_read($vars)
                     if ($r[$colname] != NULL) {
                         $colval = nl2br($r[$colname]);
                     }
+
+                    if (isset($dv["format"])) {
+                        if ($dv["format"] == "ts_to_dt") {
+                            $colval = ts_to_dt($colval);
+                        }
+                        if ($dv["format"] == "date") {
+                            $colval = ymd_to_dt($colval);
+                        }
+                    }
+
+                    // if (isset($dv["options"]) && !isset($dv["type"])) {
+                    //     if (is_array($dv["options"]) && isset($dv["options"][$colval])) {
+                    //         $colval = $dv["options"][$colval];
+                    //     }
+                    // }
+
+                    if (isset($dv['type'])) {
+                        if ($dv['type'] == "image-file") {
+                            $colval = display_thumb($r, $colname, $images);
+                        }
+                        if ($dv['type'] == "table_id") {
+                            $val = $r[$colname] ?? "";
+                            if ($val != "") {
+                                $colval = "";
+                                foreach ($dv["options"] as $ok => $ov) {
+                                    if ($ov[$dv["option_id"]] == $val) {
+                                        $colval .= $ov[$dv["option_label"]] . "";
+                                    }
+                                }
+                            }
+                        }
+                    }
+
+
+                    //
                     $row_detail .= "<small><i>" . $dv["name"] . ": </i></small><strong>" . $colval . "</strong>" . "<br>";
                 }
             }
@@ -620,7 +638,8 @@ function crud_read($vars)
     $html .= "</tbody></table></div></div>";
 
     foreach ($details as $det_rowid => $str) {
-        $html .= "<input type='hidden' value='" . $str . "' id='details-" . $det_rowid . "'>";
+        // $html .= "<input type='text' value='" . htmlspecialchars($str, ENT_QUOTES, 'UTF-8'). "' id='details-" . $det_rowid . "'>";
+        $html .= "<textarea id='details-" . $det_rowid . "' style='display:none;'>" . htmlspecialchars($str, ENT_QUOTES, 'UTF-8') . "</textarea>";
     }
 
     return $html;
@@ -644,6 +663,35 @@ function crud_delete() {}
 
 function crud_create() {}
 
+function display_thumb($r, $colname, $images)
+{
+    $colval = "";
+    $val = $r[$colname] ?? "";
+    if ($val != "" && isset($images[$val])) {
+        $fullpath = $images[$val]["name"];
+        $filetype = get_filetype($images[$val]["type"]);
+
+        $iconpath = "";
+        if ($filetype == "image" && $images[$val]["thumb"] != "") {
+            $iconpath = $images[$val]["thumb"];
+        } else {
+            $iconpath = "assets/images/file/" . $filetype . ".svg";
+        }
+        // default file icon
+        if (!file_exists(ROOT_DIR . "/" . $iconpath)) {
+            $iconpath = "assets/images/file/file.svg";
+        }
+
+
+        if (file_exists(ROOT_DIR . "/" . $fullpath)) {
+            $colval = "<a href='" . ROOT_PATH . "/" . $fullpath . "' target='_blank'><img src='" . ROOT_PATH . "/" . $iconpath . "' class='table-thumb'></a>";
+        } else {
+            $colval = "<img src='" . ROOT_PATH . "/assets/images/notfound.jpg' class='table-thumb'>";
+        }
+    }
+    // echo $colval;
+    return $colval;
+}
 
 function fetch_image_rows($rows, $cols)
 {

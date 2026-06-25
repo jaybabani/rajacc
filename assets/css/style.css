@@ -917,12 +917,13 @@ tr .no-det {
 	margin: 10px 0;
 }
 .table-thumb{
-	height: 50px;
+	height: 40px;
 	width: auto;
 	display: inline-block;
 	border: 1px solid #ddd;
 	border-radius: 4px;
 	padding: 1px;	
+	margin: 0 5px;
 }
 .disp-history-row{
 	display: inline-block;
