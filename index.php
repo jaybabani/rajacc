@@ -27,6 +27,16 @@ include(__DIR__ . "/common/header.php");
   fetch array from db
 
 
+  // documents
+  id
+thumb icon
+type - file extension
+caption - document type
+other
+attached to   table and id
+change file in forms - image-file
+file type - document only
+
 
   
   </pre>";  
