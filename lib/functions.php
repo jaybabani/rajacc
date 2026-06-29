@@ -594,6 +594,7 @@ function select_options($arr, $sel)
 
 function select_attribute_options($arr, $sel)
 {
+    // print_arr($arr);
     $ret = "<option value=''></option>";
 
     foreach ($arr as $key => $value) {
@@ -1798,7 +1799,7 @@ function get_attributes_arr($cat)
             if($lv["color"] == NULL || $lv["color"] == ""){
                 $lv["color"] = $color = $colors[$lv["id"] % count($colors)];
             }
-            $arr[$lv["code"]] = $lv;
+            $arr[$lv["id"]] = $lv;
         }
     }
     return $arr;

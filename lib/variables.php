@@ -96,6 +96,7 @@ function get_attribute_category_arr()
 		"raw_material_category" => "Raw material category",
 		"product_category" => "Product category",
 		"product_quality" => "Product quality",
+		"document_type" => "Document Type",
 	];
 	return $arr;
 }
@@ -159,8 +160,8 @@ function get_purchase_status_arr()
 function get_purchase_payment_status_arr()
 {
 	$arr = [
-		"pending" => "Pending",
-		"on_hold" => "Kept on hold",
+		"pending" => "Payment pending",
+		"on_hold" => "Payment on hold",
 		"partially_paid" => "Partially paid",
 		"fully_paid" => "Fully paid",
 	];

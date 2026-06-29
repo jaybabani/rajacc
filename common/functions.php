@@ -401,6 +401,9 @@ function crud_read($vars)
 
         $images = fetch_image_rows($fetched_rows, $image_cols);
         // print_arr($images);
+
+        $documents = fetch_document_rows($vars, $fetched_rows);
+        // print_arr($documents);
         $auth_users = fetch_auth_users($fetched_rows);
         // print_arr($auth_users);
         if ($fetch_column_history == true) {
@@ -598,6 +601,12 @@ function crud_read($vars)
                     $row_detail .= display_column_history($vars, $r, $history, $dv["history_columns"]);
                 }
 
+                // documents
+                else if (isset($dv["type"]) && $dv["type"] == "multi-file") {
+                    $row_detail .= "<strong><i>" . $dv["name"] . ": </i></strong><br>";
+                    $row_detail .= display_documents($vars, $r, $dv, $documents);
+                }
+
                 // Extra column values
                 else if (isset($dv["column"]) && $dv["column"] != "") {
                     $colname = $dv["column"];
@@ -679,6 +688,65 @@ function crud_delete() {}
 
 function crud_create() {}
 
+function display_documents($vars, $r, $dv, $documents)
+{
+    // print_arr($documents);
+    // $colval = json_encode($r);
+
+    $colval = "";
+
+    $primary_column = $vars["primary_column"];
+    if (isset($documents[$r[$primary_column]])) {
+
+        // $colval = sizeof($documents[$r[$primary_column]]);
+
+        $docs = $documents[$r[$primary_column]];
+        foreach ($docs as $dk => $drow) {
+            $d = "";
+            $fullpath = $drow["name"];
+            $filetype = get_filetype($drow["type"]);
+
+            $iconpath = "";
+            if ($filetype == "image" && $drow["thumb"] != "") {
+                $iconpath = $drow["thumb"];
+            } else {
+                $iconpath = "assets/images/file/" . $filetype . ".svg";
+            }
+            // default file icon
+            if (!file_exists(ROOT_DIR . "/" . $iconpath)) {
+                $iconpath = "assets/images/file/file.svg";
+            }
+
+
+            if (file_exists(ROOT_DIR . "/" . $fullpath)) {
+                $tit = "";
+                if($drow["caption"] != "" && isset($dv["attributes"][$drow["caption"]])){
+                    $tit .= $dv["attributes"][$drow["caption"]]["attribute"];
+                }
+                if($drow["other"] != "" && $drow["other"] != NULL){
+                    if($tit != ""){ $tit .= " / ";}
+                    $tit .= $drow["other"];
+                }
+                $d = "<div class='doc-thumb'>
+                        <a href='" . ROOT_PATH . "/" . $fullpath . "' target='_blank'><img src='" . ROOT_PATH . "/" . $iconpath . "' class='table-thumb'><span>".$tit."</span></a>
+                </div>";
+
+                
+
+            } else {
+                $d = "<img src='" . ROOT_PATH . "/assets/images/notfound.jpg' class='table-thumb'>";
+            }
+            $colval .= $d;
+        }
+    }
+
+    if($colval != ""){
+       $colval .= "<br><br>";
+    }
+
+    return $colval;
+}
+
 function display_thumb($r, $colname, $images)
 {
     $colval = "";
@@ -737,6 +805,32 @@ function fetch_image_rows($rows, $cols)
 
     // print_arrbox($images, 300);
     return $images;
+}
+
+function fetch_document_rows($vars, $fetched_rows)
+{
+    $docs = [];
+    $tablename = $vars["tablename"];
+    // print_arrbox($rows);
+    // print_arr($cols);
+    $ids = [];
+    foreach ($fetched_rows as $rk => $r) {
+        $ids[] = $r[$vars["primary_column"]];
+    }
+    // print_arr($ids);
+    $condition = "";
+    if (sizeof($ids) > 0) {
+        $condition = " table_name = '" . $tablename . "' AND  row_id IN (" . implode(",", $ids) . ") AND file_type = 'document' ";
+        $fetched = fetch_data(["table" => "uploads", "columns" => "id, thumb, name, type, small, row_id, table_name, caption, other", "condition" => $condition, "order" => "", "limit" => ""]);    // print_arr($image_arr);
+        // print_arrbox($fetched, 300);
+        foreach ($fetched as $k => $i) {
+            $docs[$i["row_id"]][] = $i;
+        }
+        unset($fetched);
+    }
+
+    // print_arrbox($docs, 300);
+    return $docs;
 }
 
 function fetch_auth_users($rows)
@@ -1038,12 +1132,60 @@ function form_field($vars, $data)
 
                     // if file exists, then link it
                     if (file_exists(ROOT_DIR . "/" . $fullpath)) {
-                        $s .= "<a href='" . ROOT_PATH . "/" . $fullpath . "' target='_blank'><img src='" . ROOT_PATH . "/" . $urlpath . "' class='form-imgbox'></a>";
+                        $s .= "<div class='image-file-box'><a href='" . ROOT_PATH . "/" . $fullpath . "' target='_blank'><img src='" . ROOT_PATH . "/" . $urlpath . "' class='form-imgbox'></a>";
+                        $s .= "<div class='delete-this-checkbox'>
+                                    <input class='form-check-input delete' name='" . $vars["key"] . "-delete' value='" . $imgarr["id"] . "' id='delete-file-" . $imgarr["id"] . "' type='checkbox'>
+                                    <label class='form-check-label' for='delete-file-" . $imgarr["id"] . "'>Delete</label>
+                                </div><script> $('#delete-file-" . $imgarr["id"] . "').on('change', function() {
+                                $(this).closest('.image-file-box').toggleClass('mark-delete', this.checked);
+                                }); </script></div>";
                     }
                     // if file not exists on server
                     else {
                         $s .= "<img src='" . ROOT_PATH . "/assets/images/notfound.jpg' class='form-imgbox'>";
                     }
+                }
+            }
+        }
+
+        //
+        else if ($vars["type"] == "multi-file") {
+            $s .= '<input type="file" multiple class="form-control" name="' . $vars["key"] . '[]" id="' . $vars["key"] . '" ' . ($required ? "required" : "") . '>';
+            $s .= '<div class="invalid-feedback">Invalid ' . $vars["name"] . '</div><div id="file-list-' . $vars["key"] . '"></div>';
+            $s .= "<script>
+                        document.getElementById('" . $vars["key"] . "').addEventListener('change', function(e) {
+                        let files = Array.from(e.target.files);
+                        console.log(files);
+                        let html = '';
+                        files.forEach((file, index) => {
+                            html += `<div class='multi-file-item'><img src='" . ROOT_PATH . "/assets/images/file/file.svg'><div class='fn'><b>`+file.name+`</b> (`+((file.size/1024).toFixed(1))+` KB)</div>
+                            <input type='hidden' name='" . $vars["key"] . "-index[]' value='`+index+`'>
+                            <div class='multi-ft'>
+                            <div class='ftcol'><p>Select file type</p>
+                            <select class='form-control " . $vars["key"] . "-multi-item-type' name='" . $vars["key"] . "-caption[]' id='" . $vars["key"] . "-attribute-`+index+`'>";
+            $sel = "";
+            $s .= select_attribute_options($vars["attributes"], $sel);
+            $s .= "</select></div>
+                            <div class='ftcol'>
+                            <p>Or describe file type</p>
+                            <input type='text' class='form-control " . $vars["key"] . "-multi-item-other' name='" . $vars["key"] . "-other[]' value='' placeholder=''>
+                            </div></div>
+                            </div>`;
+                        });
+                        document.getElementById('file-list-" . $vars["key"] . "').innerHTML = html;";
+            /*
+                        $s .= "$('." . $vars["key"] . "-multi-item-type').on('change', function() {
+                            let other = $(this).next('." . $vars["key"] . "-multi-item-other');
+                            if($(this).val() == 'other'){ other.attr('type', 'text'); } else { other.attr('type', 'hidden'); }
+                            console.log($(this).val());
+                        });"; */
+            $s .= "});
+                    </script>";
+            if (isset($data[$vars["key"]]) && is_array($data[$vars["key"]])) {
+                foreach ($data[$vars["key"]] as $dk => $dv) {
+                    // print_arr($dv);
+                    // print_arr($vars["attributes"]);
+                    $s .= display_document_linked($vars, $dv, $vars["attributes"]);
                 }
             }
         }
@@ -1069,6 +1211,67 @@ function form_field($vars, $data)
     return $s;
 }
 
+function display_document_linked($vars, $dv, $captions)
+{
+    $fieldkey = $vars["key"];
+    $imgarr = $dv;
+    $urlpath = "";
+    $fullpath = $imgarr["name"];
+    // print_arr($imgarr);
+    $filetype = get_filetype($imgarr["type"]);
+    // echo $filetype;
+
+    $s = "";
+    // if image, then display thumb
+    if ($filetype == "image" && isset($vars["display_size"]) && $vars["display_size"] != "") {
+        $urlpath = isset($imgarr[$vars["display_size"]]) ? $imgarr[$vars["display_size"]] : $imgarr["thumb"];
+    }
+    // choose file icon
+    else {
+        $urlpath = "assets/images/file/" . $filetype . ".svg";
+    }
+
+    // default file icon
+    if (!file_exists(ROOT_DIR . "/" . $urlpath)) {
+        $urlpath = "assets/images/file/file.svg";
+    }
+
+    $tit = "";
+    if (isset($dv["caption"]) && $dv["caption"] != "") {
+        if (isset($captions[$dv["caption"]])) {
+            $tit .= $captions[$dv["caption"]]["attribute"];
+        }
+    }
+    if (isset($dv["other"]) && $dv["other"] != "") {
+        if ($tit != "") {
+            $tit .= " / ";
+        }
+        $tit .= $dv["other"];
+    }
+
+    $s .= "<div class='multi-listwrap'>";
+    // if file exists, then link it
+    if (file_exists(ROOT_DIR . "/" . $fullpath)) {
+        $s .= "<a href='" . ROOT_PATH . "/" . $fullpath . "' target='_blank'><img src='" . ROOT_PATH . "/" . $urlpath . "' class='form-imgbox-list'><span>" . $tit . "</span></a>";
+    }
+    // if file not exists on server
+    else {
+        $s .= "<img src='" . ROOT_PATH . "/assets/images/notfound.jpg' class='form-imgbox'>";
+    }
+
+    $s .= "<div class='delete-this-checkbox'>
+            <input class='form-check-input delete' name='" . $fieldkey . "-delete[]' value='" . $dv["id"] . "' id='delete-doc-" . $dv["id"] . "' type='checkbox'>
+            <label class='form-check-label' for='delete-doc-" . $dv["id"] . "'>Delete</label>
+        </div><script> $('#delete-doc-" . $dv["id"] . "').on('change', function() {
+         $(this).closest('.multi-listwrap').toggleClass('mark-delete', this.checked);
+        }); </script>";
+
+    $s .= "</div>";
+
+    return $s;
+}
+//multi-listwrap
+
 function module_get_data($table, $id)
 {
     $data = [];
@@ -1089,6 +1292,7 @@ function module_submit_form($vars)
     global $conn;
 
     $_REQ = $vars["submit_data"];
+    // $_FILES = $vars["submit_files"] ?? [];
     $table = $vars["tablename"];
     $msg = $vars["messages"];
     $save_fields = $vars["save_fields"];
@@ -1122,12 +1326,29 @@ function module_submit_form($vars)
             }
             //
             else if (isset($sv["type"]) && $sv["type"] == "image") {
+
                 $image = single_file_upload($conn, $_REQ, $_FILES, $sv["key"]);
                 // echo "image id: " . $image;
                 if ($image != "") {
                     $query .= " " . $sv['key'] . " = \"" . $image . "\", ";
                 }
+                // if image or file is marked as deleted
+                else if (isset($_REQ[$sv["key"] . "-delete"]) && $_REQ[$sv["key"] . "-delete"] != "") {
+                    $query .= " " . $sv['key'] . " = NULL, ";
+                }
+
                 // die;
+            }
+
+            //
+            else if (isset($sv["type"]) && $sv["type"] == "multi-file") {
+                // do nothing..
+                // $image = multi_file_upload($conn, $_REQ, $_FILES, $sv["key"]);
+                //     // echo "image id: " . $image;
+                //     if ($image != "") {
+                //         $query .= " " . $sv['key'] . " = \"" . $image . "\", ";
+                //     }
+                //     // die;
             }
             // 
             else if (isset($sv["type"]) && $sv["type"] == "implode") {
@@ -1162,6 +1383,7 @@ function module_submit_form($vars)
 
                 $insert_id = $conn->insert_id;
                 save_link_table_rows($vars, $insert_id);
+                save_multi_document_upload($vars, $insert_id);
                 save_column_history($vars, $insert_id);
                 notify('success', $msg["success_added"]);
 
@@ -1185,6 +1407,7 @@ function module_submit_form($vars)
 
             if ($sql) {
                 save_link_table_rows($vars, $_REQ[$primary_column]);
+                save_multi_document_upload($vars, $_REQ[$primary_column]);
                 save_column_history($vars, $_REQ[$primary_column]);
                 notify('success', $msg["success_update"]);
                 redirect_action($_REQ);
@@ -1228,6 +1451,143 @@ function save_link_table_rows($vars, $primary_id)
         }
     }
 }
+
+function save_multi_document_upload($vars, $primary_id)
+{
+
+    global $conn;
+
+    $attachments = [];
+    $deleted = [];
+
+    $_REQ = $vars["submit_data"];
+    $tablename = $vars["tablename"];
+    $primary_column = $vars["primary_column"];
+    $save_fields = $vars["save_fields"];
+    // print_arr($_REQ);
+    // print_arr($_FILES);
+
+    $ts = getts();
+    $curr_user_id = get_curr_user_id();
+
+    if (isset($_REQ['save']) || isset($_REQ['savenew'])) {
+        // print_arr($_REQ);
+        // print_arr($_FILES);
+        // print_arr($_SESSION);
+        // die;
+
+        $save_uploads = [];
+
+
+        $query = '';
+        foreach ($save_fields as $sk => $sv) {
+
+            if (isset($sv["type"]) && $sv["type"] == "multi-file") {
+                // echo $sv["key"] . "<br>";
+                if (isset($_REQ[$sv["key"] . "-index"])) {
+                    foreach ($_REQ[$sv["key"] . "-index"] as $i) {
+                        if (isset($_FILES[$sv["key"]]["name"][$i])) {
+                            $file = $_FILES[$sv["key"]];
+                            $farr = [];
+                            $farr["name"] = $file["name"][$i];
+                            $farr["full_path"] = $file["full_path"][$i];
+                            $farr["type"] = $file["type"][$i];
+                            $farr["tmp_name"] = $file["tmp_name"][$i];
+                            $farr["size"] = $file["size"][$i];
+                            $farr["error"] = $file["error"][$i];
+                            $fother = $_REQ[$sv["key"] . "-other"][$i];
+                            $fcaption = $_REQ[$sv["key"] . "-caption"][$i];
+
+                            // print_arr($farr);
+                            // echo $fcaption . " , " . $fother . "<br>";
+
+                            if (0 < $farr["error"]) {
+                            } else {
+                                $allowed_file = isAllowedFile($farr);
+                                if (is_array($allowed_file) && $allowed_file[0] == true) {
+                                    // echo "$i allowed<br>";
+                                    $randno = rand() . '-';
+                                    $filename = 'uploads/' . $randno . '' . $farr['name'];
+                                    $type = $farr['type'];
+                                    $tmp_name = $farr['tmp_name'];
+                                    $thumbname = "";
+                                    $smallname = "";
+                                    $resize_img = (str_starts_with($allowed_file[2], "image/") && $allowed_file[1] != "svg") ? true : false;
+                                    if ($resize_img) {
+                                        $thumbname = 'uploads/' . $randno . 'thumb-' . $farr['name'];
+                                        $thumb = ImageResize(
+                                            100,
+                                            100,
+                                            '../../' . $thumbname,
+                                            $tmp_name,
+                                            $type,
+                                            false
+                                        );
+                                        if (!$thumb) {
+                                            $thumbname = '';
+                                        }
+
+                                        $smallname = 'uploads/' . $randno . 'small-' . $farr['name'];
+                                        $small = ImageResize(
+                                            200,
+                                            200,
+                                            '../../' . $smallname,
+                                            $tmp_name,
+                                            $type,
+                                            true
+                                        );
+                                        if (!$small) {
+                                            $smallname = '';
+                                        }
+                                    }
+                                    move_uploaded_file($tmp_name, '../../' . $filename);
+
+                                    // compress image
+                                    if ($resize_img) {
+                                        compress_image('../../' . $filename);
+                                    }
+                                    $save_uploads[$i] = [];
+                                    $save_uploads[$i]['name'] = $filename;
+                                    $save_uploads[$i]['thumb'] = $thumbname;
+                                    $save_uploads[$i]['small'] = $smallname;
+                                    $save_uploads[$i]['type'] = $type;
+                                    $save_uploads[$i]['size'] = $farr['size'];
+                                    $save_uploads[$i]['auth_user'] = $curr_user_id;
+                                    $save_uploads[$i]['table_name'] = $tablename;
+                                    $save_uploads[$i]['row_id'] = $primary_id;
+                                    $save_uploads[$i]['file_type'] = "document";
+                                    $save_uploads[$i]['caption'] = $fcaption;
+                                    $save_uploads[$i]['other'] = $fother;
+                                    $save_uploads[$i]['created'] = $ts . "_" . $curr_user_id;
+                                }
+                            }
+                        }
+                    }
+                }
+
+                ////
+                $uploaded_ids = insert_update_data('uploads', $save_uploads, 'id');
+                if (sizeof($uploaded_ids['inserted']) > 0) {
+                    $attachments = [...$attachments, ...$uploaded_ids['inserted']];
+                    // $attachments = implode(',', $uploaded_ids['inserted']);
+                    // echo "attachments: " . implode(",", $attachments);
+                }
+
+                // delete if any is marked as deleted
+                if (isset($_REQ[$sv["key"] . "-delete"]) && is_array($_REQ[$sv["key"] . "-delete"])) {
+                    $delsql = " DELETE FROM uploads WHERE id IN (" . implode(",", $_REQ[$sv["key"] . "-delete"]) . ") ";
+                    if ($conn->query($delsql)) {
+                        $deleted = [...$deleted, ...$_REQ[$sv["key"] . "-delete"]];
+                    }
+                    // echo $delsql;
+                }
+            } // end multi file
+        }
+    }
+    return [$attachments, $deleted];
+    // die;
+}
+
 
 function save_column_history($vars, $primary_id)
 {

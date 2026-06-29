@@ -939,3 +939,125 @@ tr .no-det {
 	padding: 2px;
 	margin-bottom: 5px;
 }
+.form-imgbox-list{
+	height: 40px;
+	width: auto;
+	display: inline-block;
+	/* border: 1px solid #ddd; */
+	/* border-radius: 5px; */
+	padding: 0px;	
+	margin: 0px 10px 0px 0px;
+}
+.multi-listwrap{
+	position: relative;
+	display: inline-block;
+	width: 100%;
+	/* max-width: 400px; */
+	border: 1px solid #ddd;
+	border-radius: 5px;
+	padding: 4px 4px;	
+	margin: 10px 0px 0px 0px;
+}
+.multi-listwrap a{
+	text-decoration: none;
+}
+.multi-listwrap span{
+	font-size: 16px;
+	font-weight: bold;
+	color: var(--text-color);
+}
+.multi-listwrap .delete-this-checkbox{
+	position: absolute;
+	right: 10px;
+	top: 10px;
+	cursor: pointer;
+}
+
+.delete-this-checkbox input{
+	margin-right: 4px;
+}
+
+.multi-listwrap.mark-delete{
+    background-color: rgba(var(--bs-danger-rgb), 0.1);
+    border-color: rgba(var(--bs-danger-rgb), 1);
+		text-decoration: line-through;
+		  text-decoration-thickness: 2px;
+    text-decoration-color:  rgba(var(--bs-danger-rgb), 1);
+}
+.image-file-box{
+	display: inline-block;
+	width: auto;
+}
+.image-file-box a{
+	display: inline-block;
+}
+.image-file-box.mark-delete .form-imgbox{
+    background-color: rgba(var(--bs-danger-rgb), 0.4);
+    border-color: rgba(var(--bs-danger-rgb), 1);
+		border-width: 3px;
+		opacity: 0.4;
+}
+.multi-file-item{
+	display: inline-block;
+	width: 100%;
+	border: 1px solid #ddd;
+	border-radius: 5px;
+	padding: 10px;	
+	margin: 10px 0px 0px 0px;
+	position: relative;
+}
+.multi-file-item img{
+	width: 40px;
+	margin-right: 10px;
+	position: absolute;
+}
+.multi-file-item .fn{
+	position: relative;
+	padding-left: 50px;
+	/* max-width: 300px; */
+	display: inline-block;
+	margin-bottom: 10px;
+}
+.multi-file-item .multi-ft{
+	padding-left: 50px;
+	display: inline-block;
+}
+.multi-file-item .multi-ft .ftcol{
+	width: 45%;
+	min-width: 180px;
+	display: inline-block;
+	padding-top: 7px;
+}
+.multi-file-item .multi-ft .ftcol p{
+	margin-bottom: 3px;
+}
+.multi-file-item .multi-ft .ftcol:first-child{
+	margin-right: 10px;
+}
+.multi-file-item select{
+	padding: 5px;
+	min-width: 180px;
+	width: 100%;
+}
+.multi-file-item input[type="text"]{
+	padding: 5px;
+	width: 100%;
+	min-width: 180px;
+}
+
+.doc-thumb{
+	display: inline-block;
+	width: auto;
+	padding: 4px 10px 4px 3px;
+	border: 1px solid #cccccc;
+	border-radius: 5px;
+	margin: 10px 10px 0px 0px;
+	font-weight: bold;
+}
+.doc-thumb img{
+	margin-right: 4px;
+}
+.doc-thumb a{
+	color: var(--text-color);
+	text-decoration: none;
+}

@@ -58,6 +58,7 @@ include("../../common/header.php");
 
     ["name" => "Vendor", "column" => "vendor", "options" => $vendors_arr, "type" => "table_id", "option_id" => "id", "option_label" => "firm_name"],
     ["name" => "Purchase Invoice", "column" => "purchase_invoice", "type" => "image-file", "class" => "text-center"],
+    ["name" => "Documents", "type" => "multi-file", "attributes" => get_attributes_arr("document_type"),],
     ["name" => "Last update", "type" => "last_update_info"],
     [
       "name" => "History",

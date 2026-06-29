@@ -47,8 +47,8 @@ include("../../common/header.php");
     ["key" => "tax"],
     ["key" => "discount"],
     ["key" => "grand_total"],
-
     ["key" => "purchase_invoice", "type" => "image"],
+    ["key" => "documents", "type" => "multi-file"],
     ["key" => "auth_user", "type" => "session_user"],
     ["key" => "updated", "type" => "time"],
     ["key" => "created", "type" => "created_time"],
@@ -131,9 +131,37 @@ include("../../common/header.php");
     }
     echo form_field(["type" => "image-file", "name" => "Purchase Invoice", "key" => "purchase_invoice", "display_size" => "small", "class" => "col-md-6 col-lg-4 mb-3"], $data);
 
+
+
+    $data["documents"] = [];
+    if ($mode == 'update' && isset($id) && $id != "" && $id != NULL) {
+      $documents_arr = fetch_data([
+        "table" => "uploads",
+        "columns" => "id, name, thumb, type, small, caption, other",
+        "condition" => " table_name = '" . $tablename . "' AND row_id = '" . $id . "' AND file_type = 'document' ",
+        "order" => "",
+        "limit" => ""
+      ]);    // print_arr($documents_arr);
+      $data["documents"] = $documents_arr;
+    }
+    // print_arr($data);
+
+    // print_arr(get_attributes_arr("document_type"));
+
+    // print_arr(get_attributes_arr("raw_material_category"));
+
+    echo form_field([
+      "type" => "multi-file",
+      "name" => "Documents",
+      "key" => "documents",
+      "attributes" => get_attributes_arr("document_type"),
+      "display_size" => "small",
+      "class" => "col-md-6 col-lg-4 mb-3"
+    ], $data);
+
     echo form_field(["type" => "submit", "name" => "Save", "key" => "save", "class" => "col-md-12 col-sm-12 col-xs-12 text-center"], $data);
 
-    echo column_history_fields($save_column_history,$data);
+    echo column_history_fields($save_column_history, $data);
 
     ?>
 
