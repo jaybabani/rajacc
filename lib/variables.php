@@ -54,6 +54,10 @@ function acl_roles($format = "")
 		["purchases-update", "Update purchases"],
 		["purchases-create", "Add new purchases"],
 		["purchases-delete", "Delete purchases"],
+		["documents-read", "View all documents"],
+		["documents-update", "Update documents"],
+		["documents-create", "Add new documents"],
+		["documents-delete", "Delete documents"],
 	];
 
 	if ($format == "raw") {

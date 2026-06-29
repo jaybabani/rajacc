@@ -52,6 +52,14 @@ $submodule = [
     "url_param" => "module=" . $parent . "",
     "id_prefix" => "CC-",
   ],
+  "document_type" => [
+    "page_title" => "Document Type",
+    "column_title" => "Document Type",
+    "column_name" => "category",
+    "query" => "category = '" . $parent . "' ",
+    "url_param" => "module=" . $parent . "",
+    "id_prefix" => "DT-",
+  ],
 ];
 
 $submod = $submodule[$parent];
