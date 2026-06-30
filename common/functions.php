@@ -112,6 +112,8 @@ function paragraph()
 function download_xlsx($data_type)
 {
 
+    return "";
+    /*
     $param = "?data_type=" . $data_type . "";
     if (isset($_GET["srch"]) && $_GET["srch"] != "") {
         $param .= "&srch=" . $_GET["srch"] . "";
@@ -134,6 +136,7 @@ function download_xlsx($data_type)
     }
 
     return "<a class='download-btn btn btn-lightbg' href='" . ROOT_PATH . "/modules/spreadsheet/spreadsheet.php" . $param . "' target='_blank'>Download as excel</a>";
+    */
 }
 
 
