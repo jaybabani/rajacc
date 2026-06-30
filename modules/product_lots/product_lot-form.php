@@ -5,7 +5,7 @@ if (isset($_GET['id']) && is_numeric($_GET['id']) && trim($_GET['id']) != '') {
   $pageid = "product_lots-update";
 }
 
-$load_datepicker = true;
+// $load_datepicker = true;
 
 include("../../common/header.php");
 // include("product_lot-functions.php");
@@ -60,20 +60,14 @@ include("../../common/header.php");
   ];
   if ($source == "purchased") {
     $save_fields = array_merge($save_fields, [
-      // ["key" => "vendor"],
       ["key" => "purchase"],
       ["key" => "buy_price"],
-      // ["key" => "buy_date", "type" => "date"],
-      // ["key" => "purchase_invoice", "type" => "image"],
     ]);
   }
   // print_arr($save_fields);
   // die;
 
   $link_table_rows = [
-    // "table" => "product_lot_sector_link",
-    // "single_column" => ["column" => "product_lot", "field" => $primary_column],
-    // "multi_column" => ["column" => "sector", "field" => "sectors"],
   ];
 
   $msg = [
@@ -149,15 +143,7 @@ include("../../common/header.php");
         "class" => "col-md-6 col-lg-4 mb-3",
         // "parent_field" => ["column" => "source", "value" => "purchased", "default" => "hide"]
       ], $data);
-      // echo form_field(["type" => "date", "name" => "Buy Date", "key" => "buy_date", "required" => true, "class" => "col-md-6 col-lg-4 mb-3"], $data);
       echo form_field(["type" => "select", "name" => "Purchase details", "key" => "purchase", "options" => $purchases, "class" => "col-md-6 col-lg-4 mb-3"], $data);
-      // Image upload field
-      // if (isset($data["purchase_invoice"]) && $data["purchase_invoice"] != NULL && $data["purchase_invoice"] != "") {
-      //   $image_arr = fetch_data(["table" => "uploads", "columns" => "id, name, thumb, type, small", "condition" => " id = '" . $data["purchase_invoice"] . "' ", "order" => "", "limit" => ""]);    // print_arr($image_arr);
-      //   $data["purchase_invoice"] = $image_arr;
-      //   // print_arr($data);
-      // }
-      // echo form_field(["type" => "image-file", "name" => "Purchase Invoice", "key" => "purchase_invoice", "display_size" => "small", "class" => "col-md-6 col-lg-4 mb-3"], $data);
     }
 
     echo form_field(["type" => "select", "name" => "Status", "key" => "status", "required" => true, "options" => get_product_lot_status_arr($source), "class" => "col-md-6 col-lg-4 mb-3"], $data);
@@ -175,8 +161,4 @@ include("../../common/header.php");
 
 </div>
 
-<?php
-// $other_scripts = '<link rel="stylesheet" href="'. ROOT_PATH.'/assets/plugins/flatpickr/flatpickr.min.css">
-// <script src="'. ROOT_PATH.'/assets/plugins/flatpickr/flatpickr.js"></script><script>flatpickr("#datepicker", {}); </script>';
-?>
 <?php include '../../common/footer.php'; ?>

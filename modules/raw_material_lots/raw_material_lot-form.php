@@ -5,7 +5,7 @@ if (isset($_GET['id']) && is_numeric($_GET['id']) && trim($_GET['id']) != '') {
   $pageid = "raw_material_lots-update";
 }
 
-$load_datepicker = true;
+// $load_datepicker = true;
 
 include("../../common/header.php");
 // include("raw_material_lot-functions.php");
@@ -43,18 +43,12 @@ include("../../common/header.php");
     ["key" => "available_quantity"],
     ["key" => "reserved_quantity"],
     ["key" => "consumed_quantity"],
-    // ["key" => "vendor"],
-    // ["key" => "buy_date", "type" => "date"],
-    // ["key" => "purchase_invoice", "type" => "image"],
     ["key" => "auth_user", "type" => "session_user"],
     ["key" => "updated", "type" => "time"],
     ["key" => "created", "type" => "created_time"],
   ];
 
   $link_table_rows = [
-    // "table" => "raw_material_lot_sector_link",
-    // "single_column" => ["column" => "raw_material_lot", "field" => $primary_column],
-    // "multi_column" => ["column" => "sector", "field" => "sectors"],
   ];
 
   $msg = [
@@ -81,7 +75,6 @@ include("../../common/header.php");
 
   $data = module_get_data($tablename, $id);
   // print_arr($data);
-  // print_arr($_SESSION);
   ?>
 
   <form class="row g-3 needs-validation" novalidate method="POST" enctype="multipart/form-data">
@@ -89,13 +82,6 @@ include("../../common/header.php");
     <input type="hidden" name="<?php echo $primary_column; ?>" value="<?php echo $id; ?>">
 
     <?php
-
-    // $vendor_arr = fetch_data(["table" => "vendors", "columns" => "id, firm_name", "condition" => " active = 'yes' ", "order" => "firm_name ASC", "limit" => ""]);        // print_arr($vendor_arr);
-    // $vendors = [];
-    // foreach ($vendor_arr as $vk => $vv) {
-    //   $vendors[$vv["id"]] = $vv["firm_name"];
-    // }
-    // print_arr($vendors);
 
     $raw_material_arr = fetch_data(["table" => "raw_materials", "columns" => "id, raw_material", "condition" => "", "order" => "raw_material ASC", "limit" => ""]);        // print_arr($raw_material_arr);
     $raw_materials = [];
@@ -122,18 +108,8 @@ include("../../common/header.php");
     echo form_field(["type" => "number", "name" => "Reserved Quantity", "key" => "reserved_quantity", "class" => "col-md-6 col-lg-4 mb-3"], $data);
     echo form_field(["type" => "number", "name" => "Consumed Quantity", "key" => "consumed_quantity", "class" => "col-md-6 col-lg-4 mb-3"], $data);
 
-    // echo form_field(["type" => "date", "name" => "Buy Date", "key" => "buy_date", "required" => true, "class" => "col-md-6 col-lg-4 mb-3"], $data);
     echo form_field(["type" => "textarea", "name" => "Notes", "key" => "notes", "class" => "col-md-6 col-lg-4 mb-3"], $data);
-    // echo form_field(["type" => "select", "name" => "Purchased from Vendor", "key" => "vendor", "options" => $vendors, "class" => "col-md-6 col-lg-4 mb-3"], $data);
     echo form_field(["type" => "select", "name" => "Status", "key" => "status", "required" => true, "options" => get_raw_material_lot_status_arr(), "class" => "col-md-6 col-lg-4 mb-3"], $data);
-
-    // Image upload field
-    // if (isset($data["purchase_invoice"]) && $data["purchase_invoice"] != NULL && $data["purchase_invoice"] != "") {
-    //   $image_arr = fetch_data(["table" => "uploads", "columns" => "id, name, thumb, type, small", "condition" => " id = '" . $data["purchase_invoice"] . "' ", "order" => "", "limit" => ""]);    // print_arr($image_arr);
-    //   $data["purchase_invoice"] = $image_arr;
-    //   // print_arr($data);
-    // }
-    // echo form_field(["type" => "image-file", "name" => "Purchase Invoice", "key" => "purchase_invoice", "display_size" => "small", "class" => "col-md-6 col-lg-4 mb-3"], $data);
 
     echo form_field(["type" => "submit", "name" => "Save", "key" => "save", "class" => "col-md-12 col-sm-12 col-xs-12 text-center"], $data);
 
@@ -147,8 +123,4 @@ include("../../common/header.php");
 
 </div>
 
-<?php
-// $other_scripts = '<link rel="stylesheet" href="'. ROOT_PATH.'/assets/plugins/flatpickr/flatpickr.min.css">
-// <script src="'. ROOT_PATH.'/assets/plugins/flatpickr/flatpickr.js"></script><script>flatpickr("#datepicker", {}); </script>';
-?>
 <?php include '../../common/footer.php'; ?>
