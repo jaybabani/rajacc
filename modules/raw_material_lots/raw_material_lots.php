@@ -8,12 +8,9 @@ include("../../common/header.php");
 <div class="row row-cols-1 row-cols-sm-1 row-cols-md-1 row-cols-lg-1 row-cols-xl-1 row-cols-xxl-1 g-4 py-3 px-2">
 
   <?php
-  $module_pages = [
-    "read" => "raw_material_lots",
-    "update" => "raw_material_lot-form",
-    "create" => "raw_material_lot-form",
-    "delete" => "raw_material_lot-delete"
-  ];
+
+  $module_arr = get_module_pages_arr();
+  $module_pages = $module_arr["raw_material_lots"];
 
   $pagetitle = T("Raw Material Lots");
   $actions_html = "";
@@ -36,7 +33,7 @@ include("../../common/header.php");
   $display_columns = [
     ["name" => "", "column" => "", "type" => "details", "sorting" => false, "search" => false, "class" => "text-center nowrap"],
     ["name" => "Select", "column" => "", "type" => "select", "sorting" => false, "search" => false, "class" => "text-center"],
-    ["name" => "ID", "column" => "id", "class" => "text-center nowrap", "id_prefix" => "RML-"],
+    ["name" => "ID", "column" => "id", "class" => "text-center nowrap", "id_prefix" => $module_pages["id_prefix"]],
     ["name" => "Raw Material", "column" => "raw_material", "options" => $raw_materials_arr, "type" => "table_id", "option_id" => "id", "option_label" => "raw_material", "class" => "title"],
     ["name" => "Quantity", "column" => "quantity", "class" => "nowrap"],
     ["name" => "Buy Date", "column" => "buy_date", "format" => "date", "class" => "nowrap"],

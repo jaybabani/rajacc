@@ -92,6 +92,121 @@ function get_active_arr()
 	return $arr;
 }
 
+function get_module_pages_arr()
+{
+	$arr = [
+		"purchases" => [
+			"name" => "Purchases",
+			"id_prefix" => "PR-",
+			"read" => "purchases",
+			"update" => "purchase-form",
+			"create" => "purchase-form",
+			"delete" => "purchase-delete",
+			"form" => ROOT_PATH . "/modules/purchases/purchase-form.php?id=XXX"
+		],
+		"attributes" => [
+			"name" => "Attributes",
+			"id_prefix" => "PR-",
+			"read" => "attributes",
+			"update" => "attribute-form",
+			"create" => "attribute-form",
+			"delete" => "attribute-delete",
+			"form" => ROOT_PATH . "/modules/attributes/attribute-form.php?id=XXX"
+		],
+		"documents" => [
+			"name" => "Documents",
+			"id_prefix" => "DOC-",
+			"read" => "documents",
+			// "update" => "document-form",
+			// "create" => "document-form",
+			// "delete" => "document-delete",
+			// "form" => ROOT_PATH . "/modules/documents/document-form.php?id=XXX"
+		],
+		"customers" => [
+			"name" => "Customers",
+			"id_prefix" => "C-",
+			"read" => "customers",
+			"update" => "customer-form",
+			"create" => "customer-form",
+			"delete" => "customer-delete",
+			"form" => ROOT_PATH . "/modules/customers/customer-form.php?id=XXX"
+		],
+		"products" => [
+			"name" => "Products",
+			"id_prefix" => "P-",
+			"read" => "products",
+			"update" => "product-form",
+			"create" => "product-form",
+			"delete" => "product-delete",
+			"form" => ROOT_PATH . "/modules/products/product-form.php?id=XXX"
+		],
+		"product_lots" => [
+			"name" => "Product lots",
+			"id_prefix" => "PL-",
+			"read" => "product_lots",
+			"update" => "product_lot-form",
+			"create" => "product_lot-form",
+			"delete" => "product_lot-delete",
+			"form" => ROOT_PATH . "/modules/product_lots/product_lot-form.php?id=XXX"
+		],
+		"raw_materials" => [
+			"name" => "Raw materials",
+			"id_prefix" => "RM-",
+			"read" => "raw_materials",
+			"update" => "raw_material-form",
+			"create" => "raw_material-form",
+			"delete" => "raw_material-delete",
+			"form" => ROOT_PATH . "/modules/raw_materials/raw_material-form.php?id=XXX"
+		],
+		"raw_material_lots" => [
+			"name" => "Raw material lots",
+			"id_prefix" => "RML-",
+			"read" => "raw_material_lots",
+			"update" => "raw_material_lot-form",
+			"create" => "raw_material_lot-form",
+			"delete" => "raw_material_lot-delete",
+			"form" => ROOT_PATH . "/modules/raw_material_lots/raw_material_lot-form.php?id=XXX"
+		],
+		"symbols" => [
+			"name" => "Symbols",
+			"id_prefix" => "SYM-",
+			"read" => "symbols",
+			"update" => "symbol-form",
+			"create" => "symbol-form",
+			"delete" => "symbol-delete",
+			"form" => ROOT_PATH . "/modules/symbols/symbol-form.php?id=XXX"
+		],
+		"user_roles" => [
+			"name" => "User roles",
+			"id_prefix" => "UR-",
+			"read" => "user_roles",
+			"update" => "user_role-form",
+			"create" => "user_role-form",
+			"delete" => "user_role-delete",
+			"form" => ROOT_PATH . "/modules/user_roles/user_role-form.php?id=XXX"
+		],
+		"users" => [
+			"name" => "Users",
+			"id_prefix" => "U-",
+			"read" => "users",
+			"update" => "user-form",
+			"create" => "user-form",
+			"delete" => "user-delete",
+			"form" => ROOT_PATH . "/modules/users/user-form.php?id=XXX"
+		],
+		"vendors" => [
+			"name" => "Vendors",
+			"id_prefix" => "U-",
+			"read" => "vendors",
+			"update" => "vendor-form",
+			"create" => "vendor-form",
+			"delete" => "vendor-delete",
+			"form" => ROOT_PATH . "/modules/vendors/vendor-form.php?id=XXX"
+		],
+	];
+	return $arr;
+}
+
 function get_attribute_category_arr()
 {
 	$arr = [

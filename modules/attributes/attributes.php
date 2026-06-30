@@ -18,12 +18,8 @@ include("attribute-submodule.php");
   */ ?>
 
   <?php
-  $module_pages = [
-    "read" => "attributes",
-    "update" => "attribute-form",
-    "create" => "attribute-form",
-    "delete" => "attribute-delete"
-  ];
+  $module_arr = get_module_pages_arr();
+  $module_pages = $module_arr["attributes"];
 
   $pagetitle = T($submod["page_title"]);
   $actions_html = "";

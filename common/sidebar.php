@@ -112,7 +112,7 @@
     else if(in_array($current_page,array("purchases","purchase-form","purchase-delete"))){
       $show_menu["purchases"] = "show";
     }
-    else if(in_array($current_page,array("documents","document-form","document-delete"))){
+    else if(in_array($current_page,array("documents"))){
       $show_menu["documents"] = "show";
     }
     else if(in_array($current_page,array("raw_materials","raw_material-form","raw_material-delete","raw_material_lots","raw_material_lot-form","raw_material_lot-delete"))){
@@ -276,7 +276,6 @@
       <div class="collapse <?php echo $show_menu[$menuid]; ?>" id="<?php echo $menuid; ?>-collapse" data-bs-parent="#parent-level">
         <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
           <li><a href="<?php echo ROOT_PATH; ?>/modules/documents/documents.php" class="link-dark"><span>All documents</span></a></li>
-          <li><a href="<?php echo ROOT_PATH; ?>/modules/documents/document-form.php" class="link-dark"><span>Add new document</span></a></li>
           <li><a href="<?php echo ROOT_PATH; ?>/modules/attributes/attributes.php?module=document_type" class="link-dark"><span>All document types</span></a></li>
           <li><a href="<?php echo ROOT_PATH; ?>/modules/attributes/attribute-form.php?module=document_type" class="link-dark"><span>Add new document type</span></a></li>
         </ul>

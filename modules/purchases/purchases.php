@@ -8,12 +8,8 @@ include("../../common/header.php");
 <div class="row row-cols-1 row-cols-sm-1 row-cols-md-1 row-cols-lg-1 row-cols-xl-1 row-cols-xxl-1 g-4 py-3 px-2">
 
   <?php
-  $module_pages = [
-    "read" => "purchases",
-    "update" => "purchase-form",
-    "create" => "purchase-form",
-    "delete" => "purchase-delete"
-  ];
+  $module_arr = get_module_pages_arr();
+  $module_pages = $module_arr["purchases"];
 
   $pagetitle = T("Purchases");
   $actions_html = "";
@@ -33,7 +29,7 @@ include("../../common/header.php");
   $display_columns = [
     ["name" => "", "column" => "", "type" => "details", "sorting" => false, "search" => false, "class" => "text-center nowrap"],
     ["name" => "Select", "column" => "", "type" => "select", "sorting" => false, "search" => false, "class" => "text-center"],
-    ["name" => "ID", "column" => "id", "class" => "text-center nowrap", "id_prefix" => "PR-"],
+    ["name" => "ID", "column" => "id", "class" => "text-center nowrap", "id_prefix" => $module_pages["id_prefix"]],
     ["name" => "Title", "column" => "title", "class" => "nowrap"],
     ["name" => "Status", "column" => "status", "options" => get_purchase_status_arr(), "badge" => true],
     ["name" => "Order Date", "column" => "order_date", "format" => "date", "class" => "nowrap"],

@@ -18,12 +18,8 @@ include("../../common/header.php");
   */ ?>
 
   <?php
-  $module_pages = [
-    "read" => "symbols",
-    "update" => "symbol-form",
-    "create" => "symbol-form",
-    "delete" => "symbol-delete"
-  ];
+  $module_arr = get_module_pages_arr();
+  $module_pages = $module_arr["symbols"];
 
   $pagetitle = T("Symbols");
   $actions_html = "";
@@ -53,7 +49,7 @@ include("../../common/header.php");
   $display_columns = [
     ["name" => "", "column" => "", "type" => "details", "sorting" => false, "search" => false, "class" => "text-center nowrap"],
     ["name" => "Select", "column" => "", "type" => "select", "sorting" => false, "search" => false, "class" => "text-center"],
-    ["name" => "ID", "column" => "id", "class" => "text-center nowrap", "id_prefix" => "SYM-"],
+    ["name" => "ID", "column" => "id", "class" => "text-center nowrap", "id_prefix" => $module_pages["id_prefix"]],
     ["name" => "Symbol", "column" => "symbol", "class" => "title nowrap"],
     ["name" => "Exchange", "column" => "exchange"],
     ["name" => "Active", "column" => "active", "options" => get_active_arr(), "badge" => true],

@@ -333,9 +333,9 @@ function crud_read($vars)
 
     // Extra info to be fetched
     if (isset($vars["fetch_columns"])) {
-        foreach ($vars["fetch_columns"] as $k => $v) {
-            if (isset($v["column"]) && $v["column"] != "") {
-                $cols_arr[] = $v["column"];
+        foreach ($vars["fetch_columns"] as $k => $colv) {
+            if ($colv != "") {
+                $cols_arr[] = $colv;
             }
         }
     }
@@ -482,7 +482,10 @@ function crud_read($vars)
                         if (isset($dv["type"])) {
                             if ($dv['type'] == "image-file") {
                                 $colval = display_thumb($r, $colname, $images);
-                            } else if ($dv['type'] == "table_id") {
+                            }
+
+                            //
+                            else if ($dv['type'] == "table_id") {
                                 $val = $r[$colname] ?? "";
                                 if ($val != "") {
                                     $colval = "";
@@ -492,7 +495,10 @@ function crud_read($vars)
                                         }
                                     }
                                 }
-                            } else if ($dv['type'] == "implode" && isset($dv["sep"])) {
+                            }
+
+                            //
+                            else if ($dv['type'] == "implode" && isset($dv["sep"])) {
                                 $val = $r[$colname] ?? "";
                                 if ($val != "") {
                                     $selarr = explode($dv["sep"], $val);
@@ -557,6 +563,19 @@ function crud_read($vars)
                                     $html .= "<a href='" . $vars["module_pages"]["delete"] . ".php?id=" . $r[$vars["primary_column"]] . "" . $urlparam . "'><span class='icon wtxt bg-info'><i data-feather='trash'></i>Delete</span></a></td>";
                                 }
                             }
+                        }
+
+                        //
+                        else if ($dv['type'] == "table_row_link") {
+                            $colval = "";
+                            if (isset($dv["options"]) && $dv["options"][$r["table_name"]]) {
+                                $modarr = $dv["options"][$r["table_name"]];
+                                $modname = $modarr["name"]." ".$modarr["id_prefix"]."".$r["row_id"];
+                                $link = $modarr["form"];
+                                $link = str_replace("XXX",$r["row_id"],$link);
+                                $colval = "<a href='".$link."'>".$modname."</a>"; //$r[$dv["column"]]." ".($r["row_id"] ?? "");
+                            }
+                            $html .= "<td class='" . $row_col_class . "'>" . $colval . "</td>";
                         }
                         //
                         else if ($dv['type'] == "link_table_rows") {
@@ -720,19 +739,18 @@ function display_documents($vars, $r, $dv, $documents)
 
             if (file_exists(ROOT_DIR . "/" . $fullpath)) {
                 $tit = "";
-                if($drow["caption"] != "" && isset($dv["attributes"][$drow["caption"]])){
+                if ($drow["caption"] != "" && isset($dv["attributes"][$drow["caption"]])) {
                     $tit .= $dv["attributes"][$drow["caption"]]["attribute"];
                 }
-                if($drow["other"] != "" && $drow["other"] != NULL){
-                    if($tit != ""){ $tit .= " / ";}
+                if ($drow["other"] != "" && $drow["other"] != NULL) {
+                    if ($tit != "") {
+                        $tit .= " / ";
+                    }
                     $tit .= $drow["other"];
                 }
                 $d = "<div class='doc-thumb'>
-                        <a href='" . ROOT_PATH . "/" . $fullpath . "' target='_blank'><img src='" . ROOT_PATH . "/" . $iconpath . "' class='table-thumb'><span>".$tit."</span></a>
+                        <a href='" . ROOT_PATH . "/" . $fullpath . "' target='_blank'><img src='" . ROOT_PATH . "/" . $iconpath . "' class='table-thumb'><span>" . $tit . "</span></a>
                 </div>";
-
-                
-
             } else {
                 $d = "<img src='" . ROOT_PATH . "/assets/images/notfound.jpg' class='table-thumb'>";
             }
@@ -740,8 +758,8 @@ function display_documents($vars, $r, $dv, $documents)
         }
     }
 
-    if($colval != ""){
-       $colval .= "<br><br>";
+    if ($colval != "") {
+        $colval .= "<br><br>";
     }
 
     return $colval;

@@ -8,12 +8,9 @@ include("../../common/header.php");
 <div class="row row-cols-1 row-cols-sm-1 row-cols-md-1 row-cols-lg-1 row-cols-xl-1 row-cols-xxl-1 g-4 py-3 px-2">
 
   <?php
-  $module_pages = [
-    "read" => "raw_materials",
-    "update" => "raw_material-form",
-    "create" => "raw_material-form",
-    "delete" => "raw_material-delete"
-  ];
+
+  $module_arr = get_module_pages_arr();
+  $module_pages = $module_arr["raw_materials"];
 
   $pagetitle = T("Raw Materials");
   $actions_html = "";
@@ -30,7 +27,7 @@ include("../../common/header.php");
   $display_columns = [
     ["name" => "", "column" => "", "type" => "details", "sorting" => false, "search" => false, "class" => "text-center nowrap"],
     ["name" => "Select", "column" => "", "type" => "select", "sorting" => false, "search" => false, "class" => "text-center"],
-    ["name" => "ID", "column" => "id", "class" => "text-center nowrap", "id_prefix" => "RM-"],
+    ["name" => "ID", "column" => "id", "class" => "text-center nowrap", "id_prefix" => $module_pages["id_prefix"]],
     ["name" => "Item Code", "column" => "code", "class" => "nowrap"],
     ["name" => "Image", "column" => "image", "type" => "image-file", "sorting" => false, "search" => false, "class" => "text-center"],
     ["name" => "Raw material", "column" => "raw_material", "class" => "title nowrap"],
