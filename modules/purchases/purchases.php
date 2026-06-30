@@ -37,7 +37,7 @@ include("../../common/header.php");
     ["name" => "Received Date", "column" => "fully_received_date", "format" => "date", "class" => "nowrap"],
     // ["name" => "Total Cost", "column" => "grand_total", "class" => "nowrap"],
     ["name" => "Cost", "column" => ["sub_total", "gst", "tax", "discount", "grand_total"], "prefix" => ["Subtotal", "GST", "Tax", "Discount", "Grand Total"], "sorting" => false],
-    ["name" => "Vendor", "column" => "vendor", "options" => $vendors_arr, "type" => "table_id", "option_id" => "id", "option_label" => "firm_name"],
+    // ["name" => "Vendor", "column" => "vendor", "options" => $vendors_arr, "type" => "table_id", "option_id" => "id", "option_label" => "firm_name", "module" => "vendors"],
     // ["name" => "Purchase Invoice", "column" => "purchase_invoice", "type" => "image-file", "sorting" => false, "search" => false, "class" => "text-center"],
     ["name" => "Payment Status", "column" => "payment_status", "options" => get_purchase_payment_status_arr(), "badge" => true],
     ["name" => "Actions", "column" => "", "type" => "edit_delete", "sorting" => false, "search" => false, "class" => "nowrap", "acl" => ["edit" => "purchases-update", "delete" => "purchases-delete"]],
@@ -52,7 +52,7 @@ include("../../common/header.php");
     ["name" => "Fully Received on", "column" => "fully_received_date", "format" => "date", "class" => "nowrap"],
     ["name" => "Cancelled on", "column" => "cancel_date", "format" => "date", "class" => "nowrap"],
 
-    ["name" => "Vendor", "column" => "vendor", "options" => $vendors_arr, "type" => "table_id", "option_id" => "id", "option_label" => "firm_name"],
+    ["name" => "Vendor", "column" => "vendor", "options" => $vendors_arr, "type" => "table_id", "option_id" => "id", "option_label" => "firm_name", "module" => "vendors"],
     ["name" => "Purchase Invoice", "column" => "purchase_invoice", "type" => "image-file", "class" => "text-center"],
     ["name" => "Documents", "type" => "multi-file", "attributes" => get_attributes_arr("document_type"),],
     ["name" => "Last update", "type" => "last_update_info"],

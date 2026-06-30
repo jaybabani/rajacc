@@ -40,14 +40,17 @@ include("../../common/header.php");
   if ($mode == "update" && isset($data["source"]) && $data["source"] != "") {
     $source = $data["source"];
   }
-  if ($mode == "new" && !isset($data["source"])) {
-    $data["source"] = $source;
-  }
   // print_arr($data);
 
   $save_fields = [
     ["key" => "product"],
-    ["key" => "quantity"],
+    ["key" => "ordered_quantity"],
+    ["key" => "received_quantity"],
+    ["key" => "accepted_quantity"],
+    ["key" => "rejected_quantity"],
+    ["key" => "available_quantity"],
+    ["key" => "reserved_quantity"],
+    ["key" => "consumed_quantity"],
     ["key" => "source"],
     ["key" => "notes"],
     ["key" => "status"],
@@ -57,10 +60,11 @@ include("../../common/header.php");
   ];
   if ($source == "purchased") {
     $save_fields = array_merge($save_fields, [
-      ["key" => "vendor"],
+      // ["key" => "vendor"],
+      ["key" => "purchase"],
       ["key" => "buy_price"],
-      ["key" => "buy_date", "type" => "date"],
-      ["key" => "purchase_invoice", "type" => "image"],
+      // ["key" => "buy_date", "type" => "date"],
+      // ["key" => "purchase_invoice", "type" => "image"],
     ]);
   }
   // print_arr($save_fields);
@@ -93,6 +97,10 @@ include("../../common/header.php");
     "save_column_history" => $save_column_history,
   ]);
 
+  $data = module_get_data($tablename, $id);
+  if ($mode == "new" && !isset($data["source"])) {
+    $data["source"] = $source;
+  }
 
   // print_arr($_SESSION);
   ?>
@@ -103,13 +111,13 @@ include("../../common/header.php");
 
     <?php
 
+    $purchases = [];
     if ($source == "purchased") {
-      $vendor_arr = fetch_data(["table" => "vendors", "columns" => "id, firm_name", "condition" => " active = 'yes' ", "order" => "firm_name ASC", "limit" => ""]);        // print_arr($vendor_arr);
-      $vendors = [];
-      foreach ($vendor_arr as $vk => $vv) {
-        $vendors[$vv["id"]] = $vv["firm_name"];
+      $purchase_arr = fetch_data(["table" => "purchases", "columns" => "id, title", "condition" => "", "order" => "created DESC", "limit" => ""]);        // print_arr($purchase_arr);
+      foreach ($purchase_arr as $vk => $vv) {
+        $purchases[$vv["id"]] = $vv["title"];
       }
-      // print_arr($vendors);
+      // print_arr($purchases);
     }
 
     $product_arr = fetch_data(["table" => "products", "columns" => "id, product", "condition" => "", "order" => "product ASC", "limit" => ""]);        // print_arr($product_arr);
@@ -117,10 +125,19 @@ include("../../common/header.php");
     foreach ($product_arr as $vk => $vv) {
       $products[$vv["id"]] = $vv["product"];
     }
-    // print_arr($vendors); 
+    // print_arr($products); 
 
     echo form_field(["type" => "select", "name" => "Product", "key" => "product", "required" => true, "options" => $products, "class" => "col-md-6 col-lg-4 mb-3"], $data);
-    echo form_field(["type" => "number", "name" => "Quantity", "key" => "quantity", "required" => true, "class" => "col-md-6 col-lg-4 mb-3"], $data);
+
+    echo form_field(["type" => "number", "name" => "Ordered Quantity", "key" => "ordered_quantity", "class" => "col-md-6 col-lg-4 mb-3"], $data);
+    echo form_field(["type" => "number", "name" => "Received Quantity", "key" => "received_quantity", "class" => "col-md-6 col-lg-4 mb-3"], $data);
+    echo form_field(["type" => "number", "name" => "Accepted Quantity", "key" => "accepted_quantity", "class" => "col-md-6 col-lg-4 mb-3"], $data);
+    echo form_field(["type" => "number", "name" => "Rejected Quantity", "key" => "rejected_quantity", "class" => "col-md-6 col-lg-4 mb-3"], $data);
+    echo form_field(["type" => "number", "name" => "Available Quantity", "key" => "available_quantity", "class" => "col-md-6 col-lg-4 mb-3"], $data);
+    echo form_field(["type" => "number", "name" => "Reserved Quantity", "key" => "reserved_quantity", "class" => "col-md-6 col-lg-4 mb-3"], $data);
+    echo form_field(["type" => "number", "name" => "Consumed Quantity", "key" => "consumed_quantity", "class" => "col-md-6 col-lg-4 mb-3"], $data);
+
+    // echo form_field(["type" => "number", "name" => "Quantity", "key" => "quantity", "required" => true, "class" => "col-md-6 col-lg-4 mb-3"], $data);
     echo form_field(["type" => "hidden", "name" => "Source", "key" => "source", "class" => "col-md-6 col-lg-4 mb-3"], $data);
 
     if ($source == "purchased") {
@@ -132,15 +149,15 @@ include("../../common/header.php");
         "class" => "col-md-6 col-lg-4 mb-3",
         // "parent_field" => ["column" => "source", "value" => "purchased", "default" => "hide"]
       ], $data);
-      echo form_field(["type" => "date", "name" => "Buy Date", "key" => "buy_date", "required" => true, "class" => "col-md-6 col-lg-4 mb-3"], $data);
-      echo form_field(["type" => "select", "name" => "Purchased from Vendor", "key" => "vendor", "options" => $vendors, "class" => "col-md-6 col-lg-4 mb-3"], $data);
+      // echo form_field(["type" => "date", "name" => "Buy Date", "key" => "buy_date", "required" => true, "class" => "col-md-6 col-lg-4 mb-3"], $data);
+      echo form_field(["type" => "select", "name" => "Purchase details", "key" => "purchase", "options" => $purchases, "class" => "col-md-6 col-lg-4 mb-3"], $data);
       // Image upload field
-      if (isset($data["purchase_invoice"]) && $data["purchase_invoice"] != NULL && $data["purchase_invoice"] != "") {
-        $image_arr = fetch_data(["table" => "uploads", "columns" => "id, name, thumb, type, small", "condition" => " id = '" . $data["purchase_invoice"] . "' ", "order" => "", "limit" => ""]);    // print_arr($image_arr);
-        $data["purchase_invoice"] = $image_arr;
-        // print_arr($data);
-      }
-      echo form_field(["type" => "image-file", "name" => "Purchase Invoice", "key" => "purchase_invoice", "display_size" => "small", "class" => "col-md-6 col-lg-4 mb-3"], $data);
+      // if (isset($data["purchase_invoice"]) && $data["purchase_invoice"] != NULL && $data["purchase_invoice"] != "") {
+      //   $image_arr = fetch_data(["table" => "uploads", "columns" => "id, name, thumb, type, small", "condition" => " id = '" . $data["purchase_invoice"] . "' ", "order" => "", "limit" => ""]);    // print_arr($image_arr);
+      //   $data["purchase_invoice"] = $image_arr;
+      //   // print_arr($data);
+      // }
+      // echo form_field(["type" => "image-file", "name" => "Purchase Invoice", "key" => "purchase_invoice", "display_size" => "small", "class" => "col-md-6 col-lg-4 mb-3"], $data);
     }
 
     echo form_field(["type" => "select", "name" => "Status", "key" => "status", "required" => true, "options" => get_product_lot_status_arr($source), "class" => "col-md-6 col-lg-4 mb-3"], $data);

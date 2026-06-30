@@ -24,8 +24,8 @@ include("../../common/header.php");
 
   $primary_column = "id";
 
-  $vendors_arr = fetch_data(["table" => "vendors", "columns" => "id, firm_name", "condition" => "", "order" => "firm_name ASC", "limit" => ""]);    // print_arr($vendors_arr);
-  // print_arr($vendors_arr);
+  $purchases_arr = fetch_data(["table" => "purchases", "columns" => "id, title", "condition" => "", "order" => "created DESC", "limit" => ""]);    // print_arr($purchases_arr);
+  // print_arr($purchases_arr);
 
   $raw_materials_arr = fetch_data(["table" => "raw_materials", "columns" => "id, raw_material", "condition" => "", "order" => "raw_material ASC", "limit" => ""]);    // print_arr($raw_materials_arr);
   // print_arr($raw_materials_arr);
@@ -34,12 +34,14 @@ include("../../common/header.php");
     ["name" => "", "column" => "", "type" => "details", "sorting" => false, "search" => false, "class" => "text-center nowrap"],
     ["name" => "Select", "column" => "", "type" => "select", "sorting" => false, "search" => false, "class" => "text-center"],
     ["name" => "ID", "column" => "id", "class" => "text-center nowrap", "id_prefix" => $module_pages["id_prefix"]],
-    ["name" => "Raw Material", "column" => "raw_material", "options" => $raw_materials_arr, "type" => "table_id", "option_id" => "id", "option_label" => "raw_material", "class" => "title"],
-    ["name" => "Quantity", "column" => "quantity", "class" => "nowrap"],
-    ["name" => "Buy Date", "column" => "buy_date", "format" => "date", "class" => "nowrap"],
+    ["name" => "Raw Material", "column" => "raw_material", "options" => $raw_materials_arr, "type" => "table_id", "option_id" => "id", "option_label" => "raw_material", "class" => "title", "module" => "raw_materials"],
+    ["name" => "Available Qty", "column" => "available_quantity", "class" => "nowrap"],
+    ["name" => "Reserved Qty", "column" => "reserved_quantity", "class" => "nowrap"],
+    ["name" => "Consumed Qty", "column" => "consumed_quantity", "class" => "nowrap"],
+    // ["name" => "Buy Date", "column" => "buy_date", "format" => "date", "class" => "nowrap"],
     ["name" => "Buy Price", "column" => "buy_price", "class" => "nowrap"],
-    ["name" => "Vendor", "column" => "vendor", "options" => $vendors_arr, "type" => "table_id", "option_id" => "id", "option_label" => "firm_name"],
-    ["name" => "Purchase Invoice", "column" => "purchase_invoice", "type" => "image-file", "sorting" => false, "search" => false, "class" => "text-center"],
+    // ["name" => "Vendor", "column" => "vendor", "options" => $vendors_arr, "type" => "table_id", "option_id" => "id", "option_label" => "firm_name", "module" => "vendors"],
+    // ["name" => "Purchase Invoice", "column" => "purchase_invoice", "type" => "image-file", "sorting" => false, "search" => false, "class" => "text-center"],
     ["name" => "Status", "column" => "status", "options" => get_raw_material_lot_status_arr(), "badge" => true],
     ["name" => "Actions", "column" => "", "type" => "edit_delete", "sorting" => false, "search" => false, "class" => "nowrap", "acl" => ["edit" => "raw_material_lots-update", "delete" => "raw_material_lots-delete"]],
   ];
@@ -48,6 +50,11 @@ include("../../common/header.php");
 
   $detail_columns = [
     ["name" => "Notes", "column" => "notes"],
+    ["name" => "Ordered quantity", "column" => "ordered_quantity"],
+    ["name" => "Received quantity", "column" => "received_quantity"],
+    ["name" => "Accepted quantity", "column" => "accepted_quantity"],
+    ["name" => "Rejected quantity", "column" => "rejected_quantity"],
+    ["name" => "Purchase Details", "column" => "purchase", "options" => $purchases_arr, "type" => "table_id", "option_id" => "id", "option_label" => "title", "module" => "purchases"],
     ["name" => "Last update", "type" => "last_update_info"],
     [
       "name" => "History",

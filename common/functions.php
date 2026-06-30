@@ -492,6 +492,9 @@ function crud_read($vars)
                                     foreach ($dv["options"] as $ok => $ov) {
                                         if ($ov[$dv["option_id"]] == $val) {
                                             $colval .= $ov[$dv["option_label"]] . "";
+                                            if (isset($dv["module"]) && $dv["module"] != "") {
+                                                $colval .= " (" . get_module_link($dv["module"], $val, "form") . ") ";
+                                            }
                                         }
                                     }
                                 }
@@ -570,10 +573,10 @@ function crud_read($vars)
                             $colval = "";
                             if (isset($dv["options"]) && $dv["options"][$r["table_name"]]) {
                                 $modarr = $dv["options"][$r["table_name"]];
-                                $modname = $modarr["name"]." ".$modarr["id_prefix"]."".$r["row_id"];
+                                $modname = $modarr["name"] . " " . $modarr["id_prefix"] . "" . $r["row_id"];
                                 $link = $modarr["form"];
-                                $link = str_replace("XXX",$r["row_id"],$link);
-                                $colval = "<a href='".$link."'>".$modname."</a>"; //$r[$dv["column"]]." ".($r["row_id"] ?? "");
+                                $link = str_replace("XXX", $r["row_id"], $link);
+                                $colval = "<a href='" . $link . "'>" . $modname . "</a>"; //$r[$dv["column"]]." ".($r["row_id"] ?? "");
                             }
                             $html .= "<td class='" . $row_col_class . "'>" . $colval . "</td>";
                         }
@@ -630,45 +633,63 @@ function crud_read($vars)
                 else if (isset($dv["column"]) && $dv["column"] != "") {
                     $colname = $dv["column"];
                     $colval = "";
-                    if ($r[$colname] != NULL) {
-                        $colval = nl2br($r[$colname]);
-                    }
 
-                    if (isset($dv["format"])) {
-                        if ($dv["format"] == "ts_to_dt") {
-                            $colval = ts_to_dt($colval);
-                        }
-                        if ($dv["format"] == "date") {
-                            $colval = ymd_to_dt($colval);
-                        }
-                    }
-
-                    // if (isset($dv["options"]) && !isset($dv["type"])) {
-                    //     if (is_array($dv["options"]) && isset($dv["options"][$colval])) {
-                    //         $colval = $dv["options"][$colval];
-                    //     }
-                    // }
-
-                    if (isset($dv['type'])) {
-                        if ($dv['type'] == "image-file") {
-                            $colval = display_thumb($r, $colname, $images);
-                        }
-                        if ($dv['type'] == "table_id") {
-                            $val = $r[$colname] ?? "";
-                            if ($val != "") {
-                                $colval = "";
-                                foreach ($dv["options"] as $ok => $ov) {
-                                    if ($ov[$dv["option_id"]] == $val) {
-                                        $colval .= $ov[$dv["option_label"]] . "";
-                                    }
+                    $show_col = true;
+                    if (isset($dv["show_only"]) && is_array($dv["show_only"]) && sizeof($dv["show_only"]) > 0) {
+                        foreach ($dv["show_only"] as $shwk => $shwv) {
+                            // print_arr($shwv);
+                            foreach ($shwv as $sk => $sv) {
+                                if ($r[$sk] != $sv) {
+                                    $show_col = false;
                                 }
                             }
                         }
                     }
 
+                    if ($show_col == true) {
+                        if ($r[$colname] != NULL) {
+                            $colval = nl2br($r[$colname]);
+                        }
 
-                    //
-                    $row_detail .= "<small><i>" . $dv["name"] . ": </i></small><strong>" . $colval . "</strong>" . "<br>";
+                        if (isset($dv["format"])) {
+                            if ($dv["format"] == "ts_to_dt") {
+                                $colval = ts_to_dt($colval);
+                            }
+                            if ($dv["format"] == "date") {
+                                $colval = ymd_to_dt($colval);
+                            }
+                        }
+
+                        // if (isset($dv["options"]) && !isset($dv["type"])) {
+                        //     if (is_array($dv["options"]) && isset($dv["options"][$colval])) {
+                        //         $colval = $dv["options"][$colval];
+                        //     }
+                        // }
+
+                        if (isset($dv['type'])) {
+                            if ($dv['type'] == "image-file") {
+                                $colval = display_thumb($r, $colname, $images);
+                            }
+                            if ($dv['type'] == "table_id") {
+                                $val = $r[$colname] ?? "";
+                                if ($val != "") {
+                                    $colval = "";
+                                    foreach ($dv["options"] as $ok => $ov) {
+                                        if ($ov[$dv["option_id"]] == $val) {
+                                            $colval .= $ov[$dv["option_label"]] . "";
+                                            if (isset($dv["module"]) && $dv["module"] != "") {
+                                                $colval .= " (" . get_module_link($dv["module"], $val, "form") . ")";
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+
+
+                        //
+                        $row_detail .= "<small><i>" . $dv["name"] . ": </i></small><strong>" . $colval . "</strong>" . "<br>";
+                    }
                 }
             }
             $details[$r[$vars["primary_column"]]] = $row_detail;
@@ -690,6 +711,28 @@ function crud_read($vars)
 
     // return $ret;
 }
+
+function get_module_link($module, $val, $key, $format = "")
+{
+    $s = "";
+    if ($module != "" && $key != "" && $val != "") {
+        $arr = get_module_details($module);
+        // print_arr($arr);
+        $link = $arr[$key];
+        // echo $link;
+        $link = str_replace("XXX", $val, $link);
+
+        $modname = "";
+        if ($format == "full") {
+            $modname .= $arr["name"] . " ";
+        }
+
+        $modname .= $arr["id_prefix"] . "" . $val;
+        $s = "<a href='" . $link . "'>" . $modname . "</a>";
+    }
+    return $s;
+}
+
 
 function arr_val_valid($arr, $key)
 {
@@ -1361,12 +1404,6 @@ function module_submit_form($vars)
             //
             else if (isset($sv["type"]) && $sv["type"] == "multi-file") {
                 // do nothing..
-                // $image = multi_file_upload($conn, $_REQ, $_FILES, $sv["key"]);
-                //     // echo "image id: " . $image;
-                //     if ($image != "") {
-                //         $query .= " " . $sv['key'] . " = \"" . $image . "\", ";
-                //     }
-                //     // die;
             }
             // 
             else if (isset($sv["type"]) && $sv["type"] == "implode") {

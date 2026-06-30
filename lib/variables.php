@@ -106,7 +106,7 @@ function get_module_pages_arr()
 		],
 		"attributes" => [
 			"name" => "Attributes",
-			"id_prefix" => "PR-",
+			"id_prefix" => "ATR-",
 			"read" => "attributes",
 			"update" => "attribute-form",
 			"create" => "attribute-form",
@@ -196,7 +196,7 @@ function get_module_pages_arr()
 		],
 		"vendors" => [
 			"name" => "Vendors",
-			"id_prefix" => "U-",
+			"id_prefix" => "V-",
 			"read" => "vendors",
 			"update" => "vendor-form",
 			"create" => "vendor-form",
@@ -204,6 +204,16 @@ function get_module_pages_arr()
 			"form" => ROOT_PATH . "/modules/vendors/vendor-form.php?id=XXX"
 		],
 	];
+	return $arr;
+}
+
+function get_module_details($module)
+{
+	$arr = [];
+	$module_arr = get_module_pages_arr();
+	if (isset($module_arr[$module])) {
+		$arr = $module_arr[$module];
+	}
 	return $arr;
 }
 
