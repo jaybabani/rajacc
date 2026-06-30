@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1:3306
--- Generation Time: Jun 25, 2026 at 12:59 PM
+-- Generation Time: Jun 30, 2026 at 09:27 AM
 -- Server version: 8.2.0
 -- PHP Version: 8.2.13
 
@@ -39,7 +39,7 @@ CREATE TABLE IF NOT EXISTS `attributes` (
   `updated` int DEFAULT NULL,
   `created` varchar(35) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=48 DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB AUTO_INCREMENT=52 DEFAULT CHARSET=utf8mb3;
 
 --
 -- Dumping data for table `attributes`
@@ -75,7 +75,11 @@ INSERT INTO `attributes` (`id`, `attribute`, `active`, `code`, `category`, `colo
 (28, 'SS Saliya Items', 'yes', 'ss_saliya', 'product_category', NULL, 0, 1782196049, '0'),
 (29, 'SS Pipes', 'yes', 'ss_pipes', 'product_category', NULL, 0, 1782202749, '0'),
 (30, 'MS', 'yes', 'ms', 'product_quality', NULL, 0, 1782196049, '0'),
-(31, 'SS', 'yes', 'ss', 'product_quality', NULL, 0, 1782209476, '0');
+(31, 'SS', 'yes', 'ss', 'product_quality', NULL, 0, 1782209476, '0'),
+(48, 'Vendor Invoice', 'yes', NULL, 'document_type', NULL, 1, 1782734571, '1782734571_1'),
+(49, 'Goods receipt note (GRN)', 'yes', NULL, 'document_type', NULL, 1, 1782734612, '1782734612_1'),
+(50, 'Delivery Challan', 'yes', NULL, 'document_type', NULL, 1, 1782734626, '1782734626_1'),
+(51, 'Eway Bill', 'yes', NULL, 'document_type', NULL, 1, 1782734648, '1782734648_1');
 
 -- --------------------------------------------------------
 
@@ -94,7 +98,7 @@ CREATE TABLE IF NOT EXISTS `column_history` (
   `updated` int DEFAULT NULL,
   `created` varchar(35) COLLATE utf8mb3_unicode_ci DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=25 DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_unicode_ci;
+) ENGINE=MyISAM AUTO_INCREMENT=30 DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_unicode_ci;
 
 --
 -- Dumping data for table `column_history`
@@ -124,7 +128,12 @@ INSERT INTO `column_history` (`id`, `table_name`, `row_id`, `column_name`, `valu
 (21, 'purchases', 7, 'status', 'draft', 1, 1782389921, '1782389921'),
 (22, 'purchases', 8, 'status', 'fully_received', 1, 1782389982, '1782389982'),
 (23, 'purchases', 7, 'status', 'order_placed', 1, 1782391476, '1782391476'),
-(24, 'purchases', 7, 'payment_status', 'on_hold', 1, 1782391476, '1782391476');
+(24, 'purchases', 7, 'payment_status', 'on_hold', 1, 1782391476, '1782391476'),
+(25, 'purchases', 20, 'status', 'draft', 1, 1782722621, '1782722621'),
+(26, 'purchases', 20, 'payment_status', 'fully_paid', 1, 1782722621, '1782722621'),
+(27, 'product_lots', 12, 'status', 'order_placed', 1, 1782810960, '1782810960'),
+(28, 'product_lots', 12, 'status', 'ready', 1, 1782811007, '1782811007'),
+(29, 'product_lots', 13, 'status', 'production_complete', 1, 1782811112, '1782811112');
 
 -- --------------------------------------------------------
 
@@ -179,60 +188,63 @@ CREATE TABLE IF NOT EXISTS `ipadd` (
   `sessionid` varchar(255) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
   `accounttype` varchar(255) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=72 DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_unicode_ci;
+) ENGINE=MyISAM AUTO_INCREMENT=75 DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_unicode_ci;
 
 --
 -- Dumping data for table `ipadd`
 --
 
 INSERT INTO `ipadd` (`id`, `ip`, `mac`, `userId`, `logged_on`, `loggedout_on`, `sessionid`, `accounttype`) VALUES
-(48, '::1', '', 1, '2026-06-22 10:53:36', '2026-06-25 11:48:59', 'f3ln87nbgi9iae5pt5o4qe800m', ''),
-(47, '::1', '', 1, '2026-06-22 10:53:32', '2026-06-25 11:48:59', 'f3ln87nbgi9iae5pt5o4qe800m', ''),
-(46, '::1', '', 1, '2026-06-22 10:53:22', '2026-06-25 11:48:59', 'f3ln87nbgi9iae5pt5o4qe800m', ''),
-(45, '::1', '', 1, '2026-06-22 10:52:19', '2026-06-25 11:48:59', 'f3ln87nbgi9iae5pt5o4qe800m', ''),
-(44, '::1', '', 1, '2026-06-22 10:50:46', '2026-06-25 11:48:59', 'f3ln87nbgi9iae5pt5o4qe800m', ''),
-(43, '::1', '', 1, '2026-06-22 10:50:37', '2026-06-25 11:48:59', 'f3ln87nbgi9iae5pt5o4qe800m', ''),
-(42, '::1', '', 1, '2026-06-22 10:50:20', '2026-06-25 11:48:59', 'f3ln87nbgi9iae5pt5o4qe800m', ''),
-(41, '::1', '', 1, '2026-06-22 10:50:05', '2026-06-25 11:48:59', 'f3ln87nbgi9iae5pt5o4qe800m', ''),
-(40, '::1', '', 1, '2026-06-22 10:46:54', '2026-06-25 11:48:59', 'f3ln87nbgi9iae5pt5o4qe800m', ''),
-(39, '::1', '', 1, '2026-06-22 10:46:51', '2026-06-25 11:48:59', 'f3ln87nbgi9iae5pt5o4qe800m', ''),
-(38, '::1', '', 1, '2026-06-22 10:46:15', '2026-06-25 11:48:59', 'f3ln87nbgi9iae5pt5o4qe800m', ''),
-(37, '::1', '', 1, '2026-06-22 10:45:02', '2026-06-25 11:48:59', 'f3ln87nbgi9iae5pt5o4qe800m', ''),
-(36, '::1', '', 1, '2026-06-22 10:44:38', '2026-06-25 11:48:59', 'f3ln87nbgi9iae5pt5o4qe800m', ''),
-(35, '::1', '', 1, '2026-06-22 10:43:53', '2026-06-25 11:48:59', 'f3ln87nbgi9iae5pt5o4qe800m', ''),
-(34, '::1', '', 1, '2026-06-22 10:42:20', '2026-06-25 11:48:59', 'f3ln87nbgi9iae5pt5o4qe800m', ''),
-(33, '::1', '', 1, '2026-06-22 10:41:39', '2026-06-25 11:48:59', 'f3ln87nbgi9iae5pt5o4qe800m', ''),
-(32, '::1', '', 1, '2026-06-22 10:41:26', '2026-06-25 11:48:59', 'f3ln87nbgi9iae5pt5o4qe800m', ''),
-(31, '::1', '', 1, '2026-06-22 10:40:16', '2026-06-25 11:48:59', 'f3ln87nbgi9iae5pt5o4qe800m', ''),
-(30, '::1', '', 1, '2026-06-22 16:09:56', '2026-06-25 11:48:59', 'f3ln87nbgi9iae5pt5o4qe800m', ''),
-(29, '::1', '', 1, '2026-06-22 10:39:05', '2026-06-25 11:48:59', 'f3ln87nbgi9iae5pt5o4qe800m', ''),
-(28, '::1', '', 1, '2026-06-22 07:03:28', '2026-06-25 11:48:59', 'f3ln87nbgi9iae5pt5o4qe800m', ''),
-(27, '::1', '', 1, '2026-06-22 03:02:47', '2026-06-25 11:48:59', 'f3ln87nbgi9iae5pt5o4qe800m', ''),
-(25, '::1', '', 1, '2026-06-20 11:45:48', '2026-06-25 11:48:59', 'f3ln87nbgi9iae5pt5o4qe800m', ''),
-(26, '::1', '', 1, '2026-06-20 12:17:37', '2026-06-25 11:48:59', 'f3ln87nbgi9iae5pt5o4qe800m', ''),
-(49, '::1', '', 1, '2026-06-22 10:54:12', '2026-06-25 11:48:59', 'f3ln87nbgi9iae5pt5o4qe800m', ''),
-(50, '::1', '', 1, '2026-06-22 10:54:46', '2026-06-25 11:48:59', 'f3ln87nbgi9iae5pt5o4qe800m', ''),
-(51, '::1', '', 1, '2026-06-22 11:09:21', '2026-06-25 11:48:59', 'f3ln87nbgi9iae5pt5o4qe800m', ''),
-(52, '::1', '', 1, '2026-06-22 11:11:02', '2026-06-25 11:48:59', 'f3ln87nbgi9iae5pt5o4qe800m', ''),
-(53, '::1', '', 1, '2026-06-22 11:11:17', '2026-06-25 11:48:59', 'f3ln87nbgi9iae5pt5o4qe800m', ''),
-(54, '::1', '', 1, '2026-06-22 11:36:12', '2026-06-25 11:48:59', 'f3ln87nbgi9iae5pt5o4qe800m', ''),
-(55, '::1', '', 1, '2026-06-22 11:37:47', '2026-06-25 11:48:59', 'f3ln87nbgi9iae5pt5o4qe800m', ''),
-(56, '::1', '', 1, '2026-06-22 11:37:54', '2026-06-25 11:48:59', 'f3ln87nbgi9iae5pt5o4qe800m', ''),
-(57, '::1', '', 1, '2026-06-22 11:38:06', '2026-06-25 11:48:59', 'f3ln87nbgi9iae5pt5o4qe800m', ''),
-(58, '::1', '', 1, '2026-06-22 11:38:17', '2026-06-25 11:48:59', 'f3ln87nbgi9iae5pt5o4qe800m', ''),
-(59, '::1', '', 1, '2026-06-22 11:38:23', '2026-06-25 11:48:59', 'f3ln87nbgi9iae5pt5o4qe800m', ''),
-(60, '::1', '', 1, '2026-06-22 11:38:28', '2026-06-25 11:48:59', 'f3ln87nbgi9iae5pt5o4qe800m', ''),
-(61, '::1', '', 1, '2026-06-22 12:14:38', '2026-06-25 11:48:59', 'f3ln87nbgi9iae5pt5o4qe800m', ''),
-(62, '::1', '', 1, '2026-06-22 12:51:24', '2026-06-25 11:48:59', 'f3ln87nbgi9iae5pt5o4qe800m', ''),
-(63, '::1', '', 1, '2026-06-23 05:01:00', '2026-06-25 11:48:59', 'f3ln87nbgi9iae5pt5o4qe800m', ''),
-(64, '::1', '', 1, '2026-06-23 05:27:08', '2026-06-25 11:48:59', 'f3ln87nbgi9iae5pt5o4qe800m', ''),
-(65, '::1', '', 1, '2026-06-23 06:17:12', '2026-06-25 11:48:59', 'f3ln87nbgi9iae5pt5o4qe800m', ''),
+(48, '::1', '', 1, '2026-06-22 10:53:36', '2026-06-30 05:25:53', 'f3ln87nbgi9iae5pt5o4qe800m', ''),
+(47, '::1', '', 1, '2026-06-22 10:53:32', '2026-06-30 05:25:53', 'f3ln87nbgi9iae5pt5o4qe800m', ''),
+(46, '::1', '', 1, '2026-06-22 10:53:22', '2026-06-30 05:25:53', 'f3ln87nbgi9iae5pt5o4qe800m', ''),
+(45, '::1', '', 1, '2026-06-22 10:52:19', '2026-06-30 05:25:53', 'f3ln87nbgi9iae5pt5o4qe800m', ''),
+(44, '::1', '', 1, '2026-06-22 10:50:46', '2026-06-30 05:25:53', 'f3ln87nbgi9iae5pt5o4qe800m', ''),
+(43, '::1', '', 1, '2026-06-22 10:50:37', '2026-06-30 05:25:53', 'f3ln87nbgi9iae5pt5o4qe800m', ''),
+(42, '::1', '', 1, '2026-06-22 10:50:20', '2026-06-30 05:25:53', 'f3ln87nbgi9iae5pt5o4qe800m', ''),
+(41, '::1', '', 1, '2026-06-22 10:50:05', '2026-06-30 05:25:53', 'f3ln87nbgi9iae5pt5o4qe800m', ''),
+(40, '::1', '', 1, '2026-06-22 10:46:54', '2026-06-30 05:25:53', 'f3ln87nbgi9iae5pt5o4qe800m', ''),
+(39, '::1', '', 1, '2026-06-22 10:46:51', '2026-06-30 05:25:53', 'f3ln87nbgi9iae5pt5o4qe800m', ''),
+(38, '::1', '', 1, '2026-06-22 10:46:15', '2026-06-30 05:25:53', 'f3ln87nbgi9iae5pt5o4qe800m', ''),
+(37, '::1', '', 1, '2026-06-22 10:45:02', '2026-06-30 05:25:53', 'f3ln87nbgi9iae5pt5o4qe800m', ''),
+(36, '::1', '', 1, '2026-06-22 10:44:38', '2026-06-30 05:25:53', 'f3ln87nbgi9iae5pt5o4qe800m', ''),
+(35, '::1', '', 1, '2026-06-22 10:43:53', '2026-06-30 05:25:53', 'f3ln87nbgi9iae5pt5o4qe800m', ''),
+(34, '::1', '', 1, '2026-06-22 10:42:20', '2026-06-30 05:25:53', 'f3ln87nbgi9iae5pt5o4qe800m', ''),
+(33, '::1', '', 1, '2026-06-22 10:41:39', '2026-06-30 05:25:53', 'f3ln87nbgi9iae5pt5o4qe800m', ''),
+(32, '::1', '', 1, '2026-06-22 10:41:26', '2026-06-30 05:25:53', 'f3ln87nbgi9iae5pt5o4qe800m', ''),
+(31, '::1', '', 1, '2026-06-22 10:40:16', '2026-06-30 05:25:53', 'f3ln87nbgi9iae5pt5o4qe800m', ''),
+(30, '::1', '', 1, '2026-06-22 16:09:56', '2026-06-30 05:25:53', 'f3ln87nbgi9iae5pt5o4qe800m', ''),
+(29, '::1', '', 1, '2026-06-22 10:39:05', '2026-06-30 05:25:53', 'f3ln87nbgi9iae5pt5o4qe800m', ''),
+(28, '::1', '', 1, '2026-06-22 07:03:28', '2026-06-30 05:25:53', 'f3ln87nbgi9iae5pt5o4qe800m', ''),
+(27, '::1', '', 1, '2026-06-22 03:02:47', '2026-06-30 05:25:53', 'f3ln87nbgi9iae5pt5o4qe800m', ''),
+(25, '::1', '', 1, '2026-06-20 11:45:48', '2026-06-30 05:25:53', 'f3ln87nbgi9iae5pt5o4qe800m', ''),
+(26, '::1', '', 1, '2026-06-20 12:17:37', '2026-06-30 05:25:53', 'f3ln87nbgi9iae5pt5o4qe800m', ''),
+(49, '::1', '', 1, '2026-06-22 10:54:12', '2026-06-30 05:25:53', 'f3ln87nbgi9iae5pt5o4qe800m', ''),
+(50, '::1', '', 1, '2026-06-22 10:54:46', '2026-06-30 05:25:53', 'f3ln87nbgi9iae5pt5o4qe800m', ''),
+(51, '::1', '', 1, '2026-06-22 11:09:21', '2026-06-30 05:25:53', 'f3ln87nbgi9iae5pt5o4qe800m', ''),
+(52, '::1', '', 1, '2026-06-22 11:11:02', '2026-06-30 05:25:53', 'f3ln87nbgi9iae5pt5o4qe800m', ''),
+(53, '::1', '', 1, '2026-06-22 11:11:17', '2026-06-30 05:25:53', 'f3ln87nbgi9iae5pt5o4qe800m', ''),
+(54, '::1', '', 1, '2026-06-22 11:36:12', '2026-06-30 05:25:53', 'f3ln87nbgi9iae5pt5o4qe800m', ''),
+(55, '::1', '', 1, '2026-06-22 11:37:47', '2026-06-30 05:25:53', 'f3ln87nbgi9iae5pt5o4qe800m', ''),
+(56, '::1', '', 1, '2026-06-22 11:37:54', '2026-06-30 05:25:53', 'f3ln87nbgi9iae5pt5o4qe800m', ''),
+(57, '::1', '', 1, '2026-06-22 11:38:06', '2026-06-30 05:25:53', 'f3ln87nbgi9iae5pt5o4qe800m', ''),
+(58, '::1', '', 1, '2026-06-22 11:38:17', '2026-06-30 05:25:53', 'f3ln87nbgi9iae5pt5o4qe800m', ''),
+(59, '::1', '', 1, '2026-06-22 11:38:23', '2026-06-30 05:25:53', 'f3ln87nbgi9iae5pt5o4qe800m', ''),
+(60, '::1', '', 1, '2026-06-22 11:38:28', '2026-06-30 05:25:53', 'f3ln87nbgi9iae5pt5o4qe800m', ''),
+(61, '::1', '', 1, '2026-06-22 12:14:38', '2026-06-30 05:25:53', 'f3ln87nbgi9iae5pt5o4qe800m', ''),
+(62, '::1', '', 1, '2026-06-22 12:51:24', '2026-06-30 05:25:53', 'f3ln87nbgi9iae5pt5o4qe800m', ''),
+(63, '::1', '', 1, '2026-06-23 05:01:00', '2026-06-30 05:25:53', 'f3ln87nbgi9iae5pt5o4qe800m', ''),
+(64, '::1', '', 1, '2026-06-23 05:27:08', '2026-06-30 05:25:53', 'f3ln87nbgi9iae5pt5o4qe800m', ''),
+(65, '::1', '', 1, '2026-06-23 06:17:12', '2026-06-30 05:25:53', 'f3ln87nbgi9iae5pt5o4qe800m', ''),
 (66, '::1', '', 1, '2026-06-23 14:09:03', '2026-06-23 14:25:49', 'j7hqruivd767m89j9sk0t6i6tp', ''),
 (67, '::1', '', 1, '2026-06-23 14:25:51', '', 'j7hqruivd767m89j9sk0t6i6tp', ''),
-(68, '::1', '', 1, '2026-06-24 04:36:01', '2026-06-25 11:48:59', 'f3ln87nbgi9iae5pt5o4qe800m', ''),
-(69, '::1', '', 1, '2026-06-24 12:13:41', '2026-06-25 11:48:59', 'f3ln87nbgi9iae5pt5o4qe800m', ''),
-(70, '::1', '', 1, '2026-06-25 08:23:18', '2026-06-25 11:48:59', 'f3ln87nbgi9iae5pt5o4qe800m', ''),
-(71, '::1', '', 1, '2026-06-25 11:49:02', '', 'f3ln87nbgi9iae5pt5o4qe800m', '');
+(68, '::1', '', 1, '2026-06-24 04:36:01', '2026-06-30 05:25:53', 'f3ln87nbgi9iae5pt5o4qe800m', ''),
+(69, '::1', '', 1, '2026-06-24 12:13:41', '2026-06-30 05:25:53', 'f3ln87nbgi9iae5pt5o4qe800m', ''),
+(70, '::1', '', 1, '2026-06-25 08:23:18', '2026-06-30 05:25:53', 'f3ln87nbgi9iae5pt5o4qe800m', ''),
+(71, '::1', '', 1, '2026-06-25 11:49:02', '2026-06-30 05:25:53', 'f3ln87nbgi9iae5pt5o4qe800m', ''),
+(72, '::1', '', 1, '2026-06-29 06:46:24', '2026-06-30 05:25:53', 'f3ln87nbgi9iae5pt5o4qe800m', ''),
+(73, '::1', '', 1, '2026-06-30 05:25:25', '2026-06-30 05:25:53', 'f3ln87nbgi9iae5pt5o4qe800m', ''),
+(74, '::1', '', 1, '2026-06-30 05:25:56', '', 'f3ln87nbgi9iae5pt5o4qe800m', '');
 
 -- --------------------------------------------------------
 
@@ -281,34 +293,33 @@ DROP TABLE IF EXISTS `product_lots`;
 CREATE TABLE IF NOT EXISTS `product_lots` (
   `id` int NOT NULL AUTO_INCREMENT,
   `product` int NOT NULL,
-  `quantity` int NOT NULL,
+  `ordered_quantity` int NOT NULL,
+  `received_quantity` int NOT NULL,
+  `accepted_quantity` int NOT NULL,
+  `rejected_quantity` int NOT NULL,
+  `available_quantity` int NOT NULL,
+  `reserved_quantity` int NOT NULL,
+  `consumed_quantity` int NOT NULL,
   `notes` text CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci,
   `source` varchar(20) COLLATE utf8mb3_unicode_ci NOT NULL,
   `status` varchar(255) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
-  `purchase_invoice` int DEFAULT NULL,
-  `vendor` int DEFAULT NULL,
+  `purchase` int DEFAULT NULL,
   `buy_price` decimal(10,2) DEFAULT NULL,
-  `buy_date` int DEFAULT NULL,
   `auth_user` int NOT NULL,
   `updated` int NOT NULL,
   `created` varchar(35) COLLATE utf8mb3_unicode_ci DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=12 DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_unicode_ci;
+) ENGINE=MyISAM AUTO_INCREMENT=14 DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_unicode_ci;
 
 --
 -- Dumping data for table `product_lots`
 --
 
-INSERT INTO `product_lots` (`id`, `product`, `quantity`, `notes`, `source`, `status`, `purchase_invoice`, `vendor`, `buy_price`, `buy_date`, `auth_user`, `updated`, `created`) VALUES
-(1, 7, 1001, 'test1', '', 'received', 29, 8, 20.00, 20260105, 0, 0, '0'),
-(3, 6, 111, 'tast', '', 'ready', 30, 5, 222.00, 20260623, 1, 1782301549, '0'),
-(4, 7, 34343, '', '', 'received', 39, 5, 333.00, 20260609, 0, 1782286889, '0'),
-(6, 12, 101, 'mirror glasses', '', 'ready', 42, 5, 200.00, 20260610, 1, 1782303777, '0'),
-(7, 8, 50, 'safety rods', '', 'under_process', 43, 8, 100.00, 20260604, 1, 1782303923, '0'),
-(8, 10, 322, 'test', '', 'order_placed', 44, 5, 33.00, 20260603, 1, 1782304098, '0'),
-(9, 11, 33, 'test', '', 'under_process', 45, 6, 22.00, 20260601, 1, 1782304127, '0'),
-(10, 7, 11, 'tset', 'produced', 'new', NULL, NULL, NULL, NULL, 1, 1782306903, '0'),
-(11, 6, 20, '11111', 'purchased', 'received', 48, 8, 30.00, 20260610, 1, 1782377656, '0');
+INSERT INTO `product_lots` (`id`, `product`, `ordered_quantity`, `received_quantity`, `accepted_quantity`, `rejected_quantity`, `available_quantity`, `reserved_quantity`, `consumed_quantity`, `notes`, `source`, `status`, `purchase`, `buy_price`, `auth_user`, `updated`, `created`) VALUES
+(12, 7, 1113, 113, 311, 113, 113, 311, 113, '11113', 'purchased', 'ready', 7, 3111.00, 1, 1782811042, '1782810960_1'),
+(13, 12, 222, 222, 220, 2, 200, 20, 0, 'nnn', 'produced', 'production_complete', NULL, NULL, 1, 1782811112, '1782811112_1'),
+(10, 7, 11, 0, 0, 0, 0, 0, 0, 'tset', 'produced', 'new', NULL, NULL, 1, 1782306903, '0'),
+(11, 6, 20, 0, 0, 0, 0, 0, 0, '11111', 'purchased', 'received', 20, 32.00, 1, 1782809279, '0');
 
 -- --------------------------------------------------------
 
@@ -339,7 +350,7 @@ CREATE TABLE IF NOT EXISTS `purchases` (
   `updated` int NOT NULL,
   `created` varchar(35) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=9 DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_unicode_ci;
+) ENGINE=MyISAM AUTO_INCREMENT=21 DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_unicode_ci;
 
 --
 -- Dumping data for table `purchases`
@@ -351,7 +362,19 @@ INSERT INTO `purchases` (`id`, `title`, `payment_status`, `notes`, `status`, `pu
 (4, '7', '34343', '', 'received', 39, 5, 333.00, 0.00, 0.00, 0.00, 0.00, 20260609, 0, 0, 0, 0, 0, 1782286889, '0'),
 (6, '7', '33331', 'tttt3', 'received', 41, 5, 3333.00, 0.00, 0.00, 0.00, 0.00, 20260609, 0, 0, 0, 0, 1, 1782296557, '0'),
 (7, 'tt1', 'on_hold', 'tsetstes ', 'order_placed', 50, 6, 2223.00, 226.00, 215.00, 114.00, 3337.00, 20260625, 20260627, 20260626, 20260627, 20260628, 1, 1782391476, '1782389921_1'),
-(8, 'ddsf', 'on_hold', '', 'fully_received', 51, 0, 0.00, 0.00, 0.00, 0.00, 0.00, 0, 0, 0, 0, 0, 1, 1782389982, '1782389982_1');
+(8, 'ddsf', 'on_hold', '', 'fully_received', 51, 0, 0.00, 0.00, 0.00, 0.00, 0.00, 0, 0, 0, 0, 0, 1, 1782389982, '1782389982_1'),
+(9, 'ads', 'partially_paid', '', 'order_placed', NULL, 0, 0.00, 0.00, 0.00, 0.00, 0.00, 0, 0, 0, 0, 0, 1, 1782719857, '1782719857_1'),
+(10, 'ads', 'partially_paid', '', 'order_placed', NULL, 0, 0.00, 0.00, 0.00, 0.00, 0.00, 0, 0, 0, 0, 0, 1, 1782719864, '1782719864_1'),
+(11, 'ads', 'partially_paid', '', 'order_placed', NULL, 0, 0.00, 0.00, 0.00, 0.00, 0.00, 0, 0, 0, 0, 0, 1, 1782720015, '1782720015_1'),
+(12, 'fdsa', 'fully_paid', '', 'draft', NULL, 0, 0.00, 0.00, 0.00, 0.00, 0.00, 0, 0, 0, 0, 0, 1, 1782720121, '1782720121_1'),
+(13, 'fdsa', 'fully_paid', '', 'draft', NULL, 0, 0.00, 0.00, 0.00, 0.00, 0.00, 0, 0, 0, 0, 0, 1, 1782720578, '1782720578_1'),
+(14, 'fdsa', 'fully_paid', '', 'draft', NULL, 0, 0.00, 0.00, 0.00, 0.00, 0.00, 0, 0, 0, 0, 0, 1, 1782720703, '1782720703_1'),
+(15, 'fdsa', 'fully_paid', '', 'draft', NULL, 0, 0.00, 0.00, 0.00, 0.00, 0.00, 0, 0, 0, 0, 0, 1, 1782721751, '1782721751_1'),
+(16, 'fdsa', 'fully_paid', '', 'draft', NULL, 0, 0.00, 0.00, 0.00, 0.00, 0.00, 0, 0, 0, 0, 0, 1, 1782722082, '1782722082_1'),
+(17, 'fdsa', 'fully_paid', '', 'draft', NULL, 0, 0.00, 0.00, 0.00, 0.00, 0.00, 0, 0, 0, 0, 0, 1, 1782722086, '1782722086_1'),
+(18, 'fdsa', 'fully_paid', '', 'draft', NULL, 0, 0.00, 0.00, 0.00, 0.00, 0.00, 0, 0, 0, 0, 0, 1, 1782722402, '1782722402_1'),
+(19, 'fdsa', 'fully_paid', '', 'draft', NULL, 0, 0.00, 0.00, 0.00, 0.00, 0.00, 0, 0, 0, 0, 0, 1, 1782722481, '1782722481_1'),
+(20, 'fdsa12', 'fully_paid', 'tsestst test ', 'draft', 85, 8, 200.00, 20.00, 10.00, 10.00, 250.00, 20260609, 20260629, 20260610, 20260701, 20260702, 1, 1782807949, '1782722621_1');
 
 -- --------------------------------------------------------
 
@@ -395,13 +418,17 @@ DROP TABLE IF EXISTS `raw_material_lots`;
 CREATE TABLE IF NOT EXISTS `raw_material_lots` (
   `id` int NOT NULL AUTO_INCREMENT,
   `raw_material` int NOT NULL,
-  `quantity` int NOT NULL,
+  `ordered_quantity` int NOT NULL,
+  `received_quantity` int NOT NULL,
+  `accepted_quantity` int NOT NULL,
+  `rejected_quantity` int NOT NULL,
+  `available_quantity` int NOT NULL,
+  `reserved_quantity` int NOT NULL,
+  `consumed_quantity` int NOT NULL,
   `notes` text CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci,
   `status` varchar(255) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
-  `purchase_invoice` int DEFAULT NULL,
-  `vendor` int DEFAULT NULL,
+  `purchase` int NOT NULL,
   `buy_price` decimal(10,2) DEFAULT NULL,
-  `buy_date` int DEFAULT NULL,
   `auth_user` int NOT NULL,
   `updated` int NOT NULL,
   `created` varchar(35) COLLATE utf8mb3_unicode_ci DEFAULT NULL,
@@ -412,11 +439,11 @@ CREATE TABLE IF NOT EXISTS `raw_material_lots` (
 -- Dumping data for table `raw_material_lots`
 --
 
-INSERT INTO `raw_material_lots` (`id`, `raw_material`, `quantity`, `notes`, `status`, `purchase_invoice`, `vendor`, `buy_price`, `buy_date`, `auth_user`, `updated`, `created`) VALUES
-(1, 7, 1001, 'test1', 'received', 29, 8, 20.00, 20260105, 0, 0, '0'),
-(3, 6, 111, 'tast', 'ready', 30, 5, 222.00, 20260623, 1, 1782301549, '0'),
-(4, 7, 34343, '', 'received', 39, 5, 333.00, 20260609, 0, 1782286889, '0'),
-(6, 7, 33331, 'tttt3', 'received', 41, 5, 3333.00, 20260609, 1, 1782296557, '0');
+INSERT INTO `raw_material_lots` (`id`, `raw_material`, `ordered_quantity`, `received_quantity`, `accepted_quantity`, `rejected_quantity`, `available_quantity`, `reserved_quantity`, `consumed_quantity`, `notes`, `status`, `purchase`, `buy_price`, `auth_user`, `updated`, `created`) VALUES
+(1, 7, 1001, 0, 0, 0, 0, 0, 0, 'test1', 'received', 0, 20.00, 0, 0, '0'),
+(3, 6, 111, 100, 90, 10, 80, 10, 0, 'tast12', 'ready', 20, 222.00, 1, 1782803622, '0'),
+(4, 7, 34343, 0, 0, 0, 0, 0, 0, '', 'received', 0, 333.00, 0, 1782286889, '0'),
+(6, 7, 33331, 0, 0, 0, 0, 0, 0, 'tttt3', 'received', 0, 3333.00, 1, 1782296557, '0');
 
 -- --------------------------------------------------------
 
@@ -548,67 +575,93 @@ CREATE TABLE IF NOT EXISTS `uploads` (
   `size` int DEFAULT NULL,
   `thumb` varchar(255) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci DEFAULT NULL,
   `small` varchar(255) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci DEFAULT NULL,
+  `table_name` varchar(200) COLLATE utf8mb3_unicode_ci DEFAULT NULL,
+  `row_id` int DEFAULT NULL,
+  `file_type` varchar(20) COLLATE utf8mb3_unicode_ci DEFAULT NULL,
+  `caption` varchar(255) COLLATE utf8mb3_unicode_ci DEFAULT NULL,
+  `other` varchar(255) COLLATE utf8mb3_unicode_ci DEFAULT NULL,
   `auth_user` int DEFAULT NULL,
   `updated` int DEFAULT NULL,
   `created` varchar(35) COLLATE utf8mb3_unicode_ci DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=52 DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=89 DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_unicode_ci;
 
 --
 -- Dumping data for table `uploads`
 --
 
-INSERT INTO `uploads` (`id`, `name`, `title`, `brief`, `module`, `module_id`, `type`, `size`, `thumb`, `small`, `auth_user`, `updated`, `created`) VALUES
-(2, 'uploads/872900647-2.png', NULL, NULL, NULL, NULL, 'image/png', 30028, 'uploads/872900647-thumb-2.png', 'uploads/872900647-small-2.png', 1, 1782113633, '0'),
-(3, 'uploads/1649863808-2.png', NULL, NULL, NULL, NULL, 'image/png', 30028, 'uploads/1649863808-thumb-2.png', 'uploads/1649863808-small-2.png', 1, 1782113651, '0'),
-(4, 'uploads/2011104342-2.png', NULL, NULL, NULL, NULL, 'image/png', 30028, 'uploads/2011104342-thumb-2.png', 'uploads/2011104342-small-2.png', 1, 1782113781, '0'),
-(5, 'uploads/376290803-3.png', NULL, NULL, NULL, NULL, 'image/png', 59487, 'uploads/376290803-thumb-3.png', 'uploads/376290803-small-3.png', 1, 1782114935, '0'),
-(6, 'uploads/908182907-4.png', NULL, NULL, NULL, NULL, 'image/png', 69397, 'uploads/908182907-thumb-4.png', 'uploads/908182907-small-4.png', 1, 1782116290, '0'),
-(7, 'uploads/1707818140-4.png', NULL, NULL, NULL, NULL, 'image/png', 69397, 'uploads/1707818140-thumb-4.png', 'uploads/1707818140-small-4.png', 1, 1782128377, '0'),
-(8, 'uploads/411351571-12.png', NULL, NULL, NULL, NULL, 'image/png', 26780, 'uploads/411351571-thumb-12.png', 'uploads/411351571-small-12.png', 1, 1782128393, '0'),
-(9, 'uploads/712457619-7.png', NULL, NULL, NULL, NULL, 'image/png', 34034, 'uploads/712457619-thumb-7.png', 'uploads/712457619-small-7.png', 1, 1782130941, '0'),
-(10, 'uploads/1815562786-7.png', NULL, NULL, NULL, NULL, 'image/png', 34034, 'uploads/1815562786-thumb-7.png', 'uploads/1815562786-small-7.png', 1, 1782130972, '0'),
-(11, 'uploads/1620306270-3.png', NULL, NULL, NULL, NULL, 'image/png', 59487, 'uploads/1620306270-thumb-3.png', 'uploads/1620306270-small-3.png', 1, 1782132065, '0'),
-(12, 'uploads/1381100136-3.png', NULL, NULL, NULL, NULL, 'image/png', 59487, 'uploads/1381100136-thumb-3.png', 'uploads/1381100136-small-3.png', 1, 1782132815, '0'),
-(13, 'uploads/1892644299-3.png', NULL, NULL, NULL, NULL, 'image/png', 59487, 'uploads/1892644299-thumb-3.png', 'uploads/1892644299-small-3.png', 1, 1782132847, '0'),
-(14, 'uploads/278105047-3.png', NULL, NULL, NULL, NULL, 'image/png', 59487, 'uploads/278105047-thumb-3.png', 'uploads/278105047-small-3.png', 1, 1782132872, '0'),
-(15, 'uploads/1992663147-4.png', NULL, NULL, NULL, NULL, 'image/png', 69397, 'uploads/1992663147-thumb-4.png', 'uploads/1992663147-small-4.png', 1, 1782133007, '0'),
-(16, 'uploads/1181413689-12.png', NULL, NULL, NULL, NULL, 'image/png', 26780, 'uploads/1181413689-thumb-12.png', 'uploads/1181413689-small-12.png', 1, 1782133023, '0'),
-(17, 'uploads/1913955719-4.png', NULL, NULL, NULL, NULL, 'image/png', 69397, 'uploads/1913955719-thumb-4.png', 'uploads/1913955719-small-4.png', 1, 1782193058, '0'),
-(18, 'uploads/1063420079-editmode.png', NULL, NULL, NULL, NULL, 'image/png', 13586, 'uploads/1063420079-thumb-editmode.png', 'uploads/1063420079-small-editmode.png', 1, 1782223927, '0'),
-(19, 'uploads/805107694-v.png', NULL, NULL, NULL, NULL, 'image/png', 40755, 'uploads/805107694-thumb-v.png', 'uploads/805107694-small-v.png', 1, 1782227972, '0'),
-(20, 'uploads/1048511331-2.png', NULL, NULL, NULL, NULL, 'image/png', 30028, 'uploads/1048511331-thumb-2.png', 'uploads/1048511331-small-2.png', 1, 1782280100, '0'),
-(21, 'uploads/417880223-2.png', NULL, NULL, NULL, NULL, 'image/png', 30028, 'uploads/417880223-thumb-2.png', 'uploads/417880223-small-2.png', 1, 1782280115, '0'),
-(22, 'uploads/459679485-2.png', NULL, NULL, NULL, NULL, 'image/png', 30028, 'uploads/459679485-thumb-2.png', 'uploads/459679485-small-2.png', 1, 1782280126, '0'),
-(23, 'uploads/476356215-Vadodara Area - all locations.pdf', NULL, NULL, NULL, NULL, 'application/pdf', 46425, 'uploads/476356215-thumb-Vadodara Area - all locations.pdf', 'uploads/476356215-small-Vadodara Area - all locations.pdf', 1, 1782280154, '0'),
-(24, 'uploads/185943452-Vadodara Area - all locations.pdf', NULL, NULL, NULL, NULL, 'application/pdf', 46425, 'uploads/185943452-thumb-Vadodara Area - all locations.pdf', 'uploads/185943452-small-Vadodara Area - all locations.pdf', 1, 1782280198, '0'),
-(25, 'uploads/2037800439-Vadodara Area - all locations.pdf', NULL, NULL, NULL, NULL, 'application/pdf', 46425, 'uploads/2037800439-thumb-Vadodara Area - all locations.pdf', 'uploads/2037800439-small-Vadodara Area - all locations.pdf', 1, 1782280209, '0'),
-(26, 'uploads/849765849-Vadodara Area - all locations.pdf', NULL, NULL, NULL, NULL, 'application/pdf', 46425, 'uploads/849765849-thumb-Vadodara Area - all locations.pdf', 'uploads/849765849-small-Vadodara Area - all locations.pdf', 1, 1782280220, '0'),
-(27, 'uploads/4737975-AV-Vadodara-June-2026.pdf', NULL, NULL, NULL, NULL, 'application/pdf', 45572, '', '', 1, 1782280710, '0'),
-(28, 'uploads/1858814656-IMG-20250630-WA0005.jpg', NULL, NULL, NULL, NULL, 'image/jpeg', 158367, 'uploads/1858814656-thumb-IMG-20250630-WA0005.jpg', 'uploads/1858814656-small-IMG-20250630-WA0005.jpg', 1, 1782281375, '0'),
-(29, 'uploads/1661824733-AV-Vadodara-April-2026.pdf', NULL, NULL, NULL, NULL, 'application/pdf', 46005, '', '', 1, 1782281391, '0'),
-(30, 'uploads/678204385-combo4.jpg', NULL, NULL, NULL, NULL, 'image/jpeg', 279028, 'uploads/678204385-thumb-combo4.jpg', 'uploads/678204385-small-combo4.jpg', 1, 1782282262, '0'),
-(31, 'uploads/1117840012-2.png', NULL, NULL, NULL, NULL, 'image/png', 1571022, 'uploads/1117840012-thumb-2.png', 'uploads/1117840012-small-2.png', 1, 1782282544, '0'),
-(32, 'uploads/664840457-html.svg', NULL, NULL, NULL, NULL, 'image/svg+xml', 2919, '', '', 1, 1782284094, '0'),
-(33, 'uploads/215116725-Daily WInners - Sheet1.csv', NULL, NULL, NULL, NULL, 'text/csv', 327, '', '', 1, 1782284125, '0'),
-(34, 'uploads/1474195778-Raj Deatails for Software.xlsx', NULL, NULL, NULL, NULL, 'application/vnd.openxmlformats', 22124, '', '', 1, 1782284153, '0'),
-(35, 'uploads/138769928-Raj Deatails for Software.xlsx', NULL, NULL, NULL, NULL, 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', 22124, '', '', 1, 1782284182, '0'),
-(36, 'uploads/801012707-WhatsApp Image 2025-07-24 at 11.21.11 PM.jpeg', NULL, NULL, NULL, NULL, 'image/jpeg', 117208, 'uploads/801012707-thumb-WhatsApp Image 2025-07-24 at 11.21.11 PM.jpeg', 'uploads/801012707-small-WhatsApp Image 2025-07-24 at 11.21.11 PM.jpeg', 1, 1782284518, '0'),
-(37, 'uploads/1041971282-nominalform-2145.pdf', NULL, NULL, NULL, NULL, 'application/pdf', 180916, '', '', 1, 1782284573, '0'),
-(38, 'uploads/705817082-WhatsApp Image 2025-07-24 at 11.21.11 PM.jpeg', NULL, NULL, NULL, NULL, 'image/jpeg', 117208, 'uploads/705817082-thumb-WhatsApp Image 2025-07-24 at 11.21.11 PM.jpeg', 'uploads/705817082-small-WhatsApp Image 2025-07-24 at 11.21.11 PM.jpeg', 1, 1782284583, '0'),
-(39, 'uploads/1093409995-Raj Deatails for Software.xlsx', NULL, NULL, NULL, NULL, 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', 22124, '', '', 1, 1782284647, '0'),
-(40, 'uploads/666263857-Raj Deatails for Software.xlsx', NULL, NULL, NULL, NULL, 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', 22124, '', '', 1, 1782287096, '0'),
-(41, 'uploads/1329456996-Raj Deatails for Software.xlsx', NULL, NULL, NULL, NULL, 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', 22124, '', '', 1, 1782287103, '0'),
-(42, 'uploads/1807747742-WhatsApp Image 2025-07-24 at 11.21.11 PM.jpeg', NULL, NULL, NULL, NULL, 'image/jpeg', 117208, 'uploads/1807747742-thumb-WhatsApp Image 2025-07-24 at 11.21.11 PM.jpeg', 'uploads/1807747742-small-WhatsApp Image 2025-07-24 at 11.21.11 PM.jpeg', 1, 1782303706, '0'),
-(43, 'uploads/1959219978-Sector Data - Sheet1.csv', NULL, NULL, NULL, NULL, 'text/csv', 8681, '', '', 1, 1782303873, '0'),
-(44, 'uploads/483983341-IMG-20250630-WA0005.jpg', NULL, NULL, NULL, NULL, 'image/jpeg', 158367, 'uploads/483983341-thumb-IMG-20250630-WA0005.jpg', 'uploads/483983341-small-IMG-20250630-WA0005.jpg', 1, 1782304076, '0'),
-(45, 'uploads/474580647-download-1415972908-1773137224.png', NULL, NULL, NULL, NULL, 'image/png', 377465, 'uploads/474580647-thumb-download-1415972908-1773137224.png', 'uploads/474580647-small-download-1415972908-1773137224.png', 1, 1782304127, '0'),
-(46, 'uploads/1514278666-WhatsApp Image 2026-03-31 at 10.58.45 AM.jpeg', NULL, NULL, NULL, NULL, 'image/jpeg', 101857, 'uploads/1514278666-thumb-WhatsApp Image 2026-03-31 at 10.58.45 AM.jpeg', 'uploads/1514278666-small-WhatsApp Image 2026-03-31 at 10.58.45 AM.jpeg', 1, 1782307050, '0'),
-(47, 'uploads/377550191-tinified (5).zip', NULL, NULL, NULL, NULL, 'application/x-zip-compressed', 77884, '', '', 1, 1782377645, '0'),
-(48, 'uploads/621225725-tinified (5).zip', NULL, NULL, NULL, NULL, 'application/x-zip-compressed', 77884, '', '', 1, 1782377656, '0'),
-(49, 'uploads/601758969-WhatsApp Image 2025-06-30 at 3.43.03 PM (1).jpeg', NULL, NULL, NULL, NULL, 'image/jpeg', 194314, 'uploads/601758969-thumb-WhatsApp Image 2025-06-30 at 3.43.03 PM (1).jpeg', 'uploads/601758969-small-WhatsApp Image 2025-06-30 at 3.43.03 PM (1).jpeg', 1, 1782385760, '0'),
-(50, 'uploads/1617118601-WhatsApp Image 2026-03-31 at 10.58.45 AM.jpeg', NULL, NULL, NULL, NULL, 'image/jpeg', 101857, 'uploads/1617118601-thumb-WhatsApp Image 2026-03-31 at 10.58.45 AM.jpeg', 'uploads/1617118601-small-WhatsApp Image 2026-03-31 at 10.58.45 AM.jpeg', 1, 1782389959, NULL),
-(51, 'uploads/1949113549-WhatsApp Image 2026-03-31 at 10.58.45 AM.jpeg', NULL, NULL, NULL, NULL, 'image/jpeg', 101857, 'uploads/1949113549-thumb-WhatsApp Image 2026-03-31 at 10.58.45 AM.jpeg', 'uploads/1949113549-small-WhatsApp Image 2026-03-31 at 10.58.45 AM.jpeg', 1, 1782389982, NULL);
+INSERT INTO `uploads` (`id`, `name`, `title`, `brief`, `module`, `module_id`, `type`, `size`, `thumb`, `small`, `table_name`, `row_id`, `file_type`, `caption`, `other`, `auth_user`, `updated`, `created`) VALUES
+(2, 'uploads/872900647-2.png', NULL, NULL, NULL, NULL, 'image/png', 30028, 'uploads/872900647-thumb-2.png', 'uploads/872900647-small-2.png', NULL, NULL, NULL, NULL, NULL, 1, 1782113633, '0'),
+(3, 'uploads/1649863808-2.png', NULL, NULL, NULL, NULL, 'image/png', 30028, 'uploads/1649863808-thumb-2.png', 'uploads/1649863808-small-2.png', NULL, NULL, NULL, NULL, NULL, 1, 1782113651, '0'),
+(4, 'uploads/2011104342-2.png', NULL, NULL, NULL, NULL, 'image/png', 30028, 'uploads/2011104342-thumb-2.png', 'uploads/2011104342-small-2.png', NULL, NULL, NULL, NULL, NULL, 1, 1782113781, '0'),
+(5, 'uploads/376290803-3.png', NULL, NULL, NULL, NULL, 'image/png', 59487, 'uploads/376290803-thumb-3.png', 'uploads/376290803-small-3.png', NULL, NULL, NULL, NULL, NULL, 1, 1782114935, '0'),
+(6, 'uploads/908182907-4.png', NULL, NULL, NULL, NULL, 'image/png', 69397, 'uploads/908182907-thumb-4.png', 'uploads/908182907-small-4.png', NULL, NULL, NULL, NULL, NULL, 1, 1782116290, '0'),
+(7, 'uploads/1707818140-4.png', NULL, NULL, NULL, NULL, 'image/png', 69397, 'uploads/1707818140-thumb-4.png', 'uploads/1707818140-small-4.png', NULL, NULL, NULL, NULL, NULL, 1, 1782128377, '0'),
+(8, 'uploads/411351571-12.png', NULL, NULL, NULL, NULL, 'image/png', 26780, 'uploads/411351571-thumb-12.png', 'uploads/411351571-small-12.png', NULL, NULL, NULL, NULL, NULL, 1, 1782128393, '0'),
+(9, 'uploads/712457619-7.png', NULL, NULL, NULL, NULL, 'image/png', 34034, 'uploads/712457619-thumb-7.png', 'uploads/712457619-small-7.png', NULL, NULL, NULL, NULL, NULL, 1, 1782130941, '0'),
+(10, 'uploads/1815562786-7.png', NULL, NULL, NULL, NULL, 'image/png', 34034, 'uploads/1815562786-thumb-7.png', 'uploads/1815562786-small-7.png', NULL, NULL, NULL, NULL, NULL, 1, 1782130972, '0'),
+(11, 'uploads/1620306270-3.png', NULL, NULL, NULL, NULL, 'image/png', 59487, 'uploads/1620306270-thumb-3.png', 'uploads/1620306270-small-3.png', NULL, NULL, NULL, NULL, NULL, 1, 1782132065, '0'),
+(12, 'uploads/1381100136-3.png', NULL, NULL, NULL, NULL, 'image/png', 59487, 'uploads/1381100136-thumb-3.png', 'uploads/1381100136-small-3.png', NULL, NULL, NULL, NULL, NULL, 1, 1782132815, '0'),
+(13, 'uploads/1892644299-3.png', NULL, NULL, NULL, NULL, 'image/png', 59487, 'uploads/1892644299-thumb-3.png', 'uploads/1892644299-small-3.png', NULL, NULL, NULL, NULL, NULL, 1, 1782132847, '0'),
+(14, 'uploads/278105047-3.png', NULL, NULL, NULL, NULL, 'image/png', 59487, 'uploads/278105047-thumb-3.png', 'uploads/278105047-small-3.png', NULL, NULL, NULL, NULL, NULL, 1, 1782132872, '0'),
+(15, 'uploads/1992663147-4.png', NULL, NULL, NULL, NULL, 'image/png', 69397, 'uploads/1992663147-thumb-4.png', 'uploads/1992663147-small-4.png', NULL, NULL, NULL, NULL, NULL, 1, 1782133007, '0'),
+(16, 'uploads/1181413689-12.png', NULL, NULL, NULL, NULL, 'image/png', 26780, 'uploads/1181413689-thumb-12.png', 'uploads/1181413689-small-12.png', NULL, NULL, NULL, NULL, NULL, 1, 1782133023, '0'),
+(17, 'uploads/1913955719-4.png', NULL, NULL, NULL, NULL, 'image/png', 69397, 'uploads/1913955719-thumb-4.png', 'uploads/1913955719-small-4.png', NULL, NULL, NULL, NULL, NULL, 1, 1782193058, '0'),
+(18, 'uploads/1063420079-editmode.png', NULL, NULL, NULL, NULL, 'image/png', 13586, 'uploads/1063420079-thumb-editmode.png', 'uploads/1063420079-small-editmode.png', NULL, NULL, NULL, NULL, NULL, 1, 1782223927, '0'),
+(19, 'uploads/805107694-v.png', NULL, NULL, NULL, NULL, 'image/png', 40755, 'uploads/805107694-thumb-v.png', 'uploads/805107694-small-v.png', NULL, NULL, NULL, NULL, NULL, 1, 1782227972, '0'),
+(20, 'uploads/1048511331-2.png', NULL, NULL, NULL, NULL, 'image/png', 30028, 'uploads/1048511331-thumb-2.png', 'uploads/1048511331-small-2.png', NULL, NULL, NULL, NULL, NULL, 1, 1782280100, '0'),
+(21, 'uploads/417880223-2.png', NULL, NULL, NULL, NULL, 'image/png', 30028, 'uploads/417880223-thumb-2.png', 'uploads/417880223-small-2.png', NULL, NULL, NULL, NULL, NULL, 1, 1782280115, '0'),
+(22, 'uploads/459679485-2.png', NULL, NULL, NULL, NULL, 'image/png', 30028, 'uploads/459679485-thumb-2.png', 'uploads/459679485-small-2.png', NULL, NULL, NULL, NULL, NULL, 1, 1782280126, '0'),
+(23, 'uploads/476356215-Vadodara Area - all locations.pdf', NULL, NULL, NULL, NULL, 'application/pdf', 46425, 'uploads/476356215-thumb-Vadodara Area - all locations.pdf', 'uploads/476356215-small-Vadodara Area - all locations.pdf', NULL, NULL, NULL, NULL, NULL, 1, 1782280154, '0'),
+(24, 'uploads/185943452-Vadodara Area - all locations.pdf', NULL, NULL, NULL, NULL, 'application/pdf', 46425, 'uploads/185943452-thumb-Vadodara Area - all locations.pdf', 'uploads/185943452-small-Vadodara Area - all locations.pdf', NULL, NULL, NULL, NULL, NULL, 1, 1782280198, '0'),
+(25, 'uploads/2037800439-Vadodara Area - all locations.pdf', NULL, NULL, NULL, NULL, 'application/pdf', 46425, 'uploads/2037800439-thumb-Vadodara Area - all locations.pdf', 'uploads/2037800439-small-Vadodara Area - all locations.pdf', NULL, NULL, NULL, NULL, NULL, 1, 1782280209, '0'),
+(26, 'uploads/849765849-Vadodara Area - all locations.pdf', NULL, NULL, NULL, NULL, 'application/pdf', 46425, 'uploads/849765849-thumb-Vadodara Area - all locations.pdf', 'uploads/849765849-small-Vadodara Area - all locations.pdf', NULL, NULL, NULL, NULL, NULL, 1, 1782280220, '0'),
+(27, 'uploads/4737975-AV-Vadodara-June-2026.pdf', NULL, NULL, NULL, NULL, 'application/pdf', 45572, '', '', NULL, NULL, NULL, NULL, NULL, 1, 1782280710, '0'),
+(28, 'uploads/1858814656-IMG-20250630-WA0005.jpg', NULL, NULL, NULL, NULL, 'image/jpeg', 158367, 'uploads/1858814656-thumb-IMG-20250630-WA0005.jpg', 'uploads/1858814656-small-IMG-20250630-WA0005.jpg', NULL, NULL, NULL, NULL, NULL, 1, 1782281375, '0'),
+(29, 'uploads/1661824733-AV-Vadodara-April-2026.pdf', NULL, NULL, NULL, NULL, 'application/pdf', 46005, '', '', NULL, NULL, NULL, NULL, NULL, 1, 1782281391, '0'),
+(30, 'uploads/678204385-combo4.jpg', NULL, NULL, NULL, NULL, 'image/jpeg', 279028, 'uploads/678204385-thumb-combo4.jpg', 'uploads/678204385-small-combo4.jpg', NULL, NULL, NULL, NULL, NULL, 1, 1782282262, '0'),
+(31, 'uploads/1117840012-2.png', NULL, NULL, NULL, NULL, 'image/png', 1571022, 'uploads/1117840012-thumb-2.png', 'uploads/1117840012-small-2.png', NULL, NULL, NULL, NULL, NULL, 1, 1782282544, '0'),
+(32, 'uploads/664840457-html.svg', NULL, NULL, NULL, NULL, 'image/svg+xml', 2919, '', '', NULL, NULL, NULL, NULL, NULL, 1, 1782284094, '0'),
+(33, 'uploads/215116725-Daily WInners - Sheet1.csv', NULL, NULL, NULL, NULL, 'text/csv', 327, '', '', NULL, NULL, NULL, NULL, NULL, 1, 1782284125, '0'),
+(34, 'uploads/1474195778-Raj Deatails for Software.xlsx', NULL, NULL, NULL, NULL, 'application/vnd.openxmlformats', 22124, '', '', NULL, NULL, NULL, NULL, NULL, 1, 1782284153, '0'),
+(35, 'uploads/138769928-Raj Deatails for Software.xlsx', NULL, NULL, NULL, NULL, 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', 22124, '', '', NULL, NULL, NULL, NULL, NULL, 1, 1782284182, '0'),
+(36, 'uploads/801012707-WhatsApp Image 2025-07-24 at 11.21.11 PM.jpeg', NULL, NULL, NULL, NULL, 'image/jpeg', 117208, 'uploads/801012707-thumb-WhatsApp Image 2025-07-24 at 11.21.11 PM.jpeg', 'uploads/801012707-small-WhatsApp Image 2025-07-24 at 11.21.11 PM.jpeg', NULL, NULL, NULL, NULL, NULL, 1, 1782284518, '0'),
+(37, 'uploads/1041971282-nominalform-2145.pdf', NULL, NULL, NULL, NULL, 'application/pdf', 180916, '', '', NULL, NULL, NULL, NULL, NULL, 1, 1782284573, '0'),
+(38, 'uploads/705817082-WhatsApp Image 2025-07-24 at 11.21.11 PM.jpeg', NULL, NULL, NULL, NULL, 'image/jpeg', 117208, 'uploads/705817082-thumb-WhatsApp Image 2025-07-24 at 11.21.11 PM.jpeg', 'uploads/705817082-small-WhatsApp Image 2025-07-24 at 11.21.11 PM.jpeg', NULL, NULL, NULL, NULL, NULL, 1, 1782284583, '0'),
+(39, 'uploads/1093409995-Raj Deatails for Software.xlsx', NULL, NULL, NULL, NULL, 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', 22124, '', '', NULL, NULL, NULL, NULL, NULL, 1, 1782284647, '0'),
+(40, 'uploads/666263857-Raj Deatails for Software.xlsx', NULL, NULL, NULL, NULL, 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', 22124, '', '', NULL, NULL, NULL, NULL, NULL, 1, 1782287096, '0'),
+(41, 'uploads/1329456996-Raj Deatails for Software.xlsx', NULL, NULL, NULL, NULL, 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', 22124, '', '', NULL, NULL, NULL, NULL, NULL, 1, 1782287103, '0'),
+(42, 'uploads/1807747742-WhatsApp Image 2025-07-24 at 11.21.11 PM.jpeg', NULL, NULL, NULL, NULL, 'image/jpeg', 117208, 'uploads/1807747742-thumb-WhatsApp Image 2025-07-24 at 11.21.11 PM.jpeg', 'uploads/1807747742-small-WhatsApp Image 2025-07-24 at 11.21.11 PM.jpeg', NULL, NULL, NULL, NULL, NULL, 1, 1782303706, '0'),
+(43, 'uploads/1959219978-Sector Data - Sheet1.csv', NULL, NULL, NULL, NULL, 'text/csv', 8681, '', '', NULL, NULL, NULL, NULL, NULL, 1, 1782303873, '0'),
+(44, 'uploads/483983341-IMG-20250630-WA0005.jpg', NULL, NULL, NULL, NULL, 'image/jpeg', 158367, 'uploads/483983341-thumb-IMG-20250630-WA0005.jpg', 'uploads/483983341-small-IMG-20250630-WA0005.jpg', NULL, NULL, NULL, NULL, NULL, 1, 1782304076, '0'),
+(45, 'uploads/474580647-download-1415972908-1773137224.png', NULL, NULL, NULL, NULL, 'image/png', 377465, 'uploads/474580647-thumb-download-1415972908-1773137224.png', 'uploads/474580647-small-download-1415972908-1773137224.png', NULL, NULL, NULL, NULL, NULL, 1, 1782304127, '0'),
+(46, 'uploads/1514278666-WhatsApp Image 2026-03-31 at 10.58.45 AM.jpeg', NULL, NULL, NULL, NULL, 'image/jpeg', 101857, 'uploads/1514278666-thumb-WhatsApp Image 2026-03-31 at 10.58.45 AM.jpeg', 'uploads/1514278666-small-WhatsApp Image 2026-03-31 at 10.58.45 AM.jpeg', NULL, NULL, NULL, NULL, NULL, 1, 1782307050, '0'),
+(47, 'uploads/377550191-tinified (5).zip', NULL, NULL, NULL, NULL, 'application/x-zip-compressed', 77884, '', '', NULL, NULL, NULL, NULL, NULL, 1, 1782377645, '0'),
+(48, 'uploads/621225725-tinified (5).zip', NULL, NULL, NULL, NULL, 'application/x-zip-compressed', 77884, '', '', NULL, NULL, NULL, NULL, NULL, 1, 1782377656, '0'),
+(49, 'uploads/601758969-WhatsApp Image 2025-06-30 at 3.43.03 PM (1).jpeg', NULL, NULL, NULL, NULL, 'image/jpeg', 194314, 'uploads/601758969-thumb-WhatsApp Image 2025-06-30 at 3.43.03 PM (1).jpeg', 'uploads/601758969-small-WhatsApp Image 2025-06-30 at 3.43.03 PM (1).jpeg', NULL, NULL, NULL, NULL, NULL, 1, 1782385760, '0'),
+(50, 'uploads/1617118601-WhatsApp Image 2026-03-31 at 10.58.45 AM.jpeg', NULL, NULL, NULL, NULL, 'image/jpeg', 101857, 'uploads/1617118601-thumb-WhatsApp Image 2026-03-31 at 10.58.45 AM.jpeg', 'uploads/1617118601-small-WhatsApp Image 2026-03-31 at 10.58.45 AM.jpeg', NULL, NULL, NULL, NULL, NULL, 1, 1782389959, NULL),
+(51, 'uploads/1949113549-WhatsApp Image 2026-03-31 at 10.58.45 AM.jpeg', NULL, NULL, NULL, NULL, 'image/jpeg', 101857, 'uploads/1949113549-thumb-WhatsApp Image 2026-03-31 at 10.58.45 AM.jpeg', 'uploads/1949113549-small-WhatsApp Image 2026-03-31 at 10.58.45 AM.jpeg', NULL, NULL, NULL, NULL, NULL, 1, 1782389982, NULL),
+(52, 'uploads/493783106-2. Rack AC Distributoin diagram.png', NULL, NULL, NULL, NULL, 'image/png', 67009, 'uploads/493783106-thumb-2. Rack AC Distributoin diagram.png', 'uploads/493783106-small-2. Rack AC Distributoin diagram.png', NULL, NULL, NULL, NULL, NULL, 1, 1782722082, NULL),
+(53, 'uploads/1077930481-3. DC DB diagram - v1.0.png', NULL, NULL, NULL, NULL, 'image/png', 107924, 'uploads/1077930481-thumb-3. DC DB diagram - v1.0.png', 'uploads/1077930481-small-3. DC DB diagram - v1.0.png', NULL, NULL, NULL, NULL, NULL, 1, 1782722082, NULL),
+(54, 'uploads/533279733-2. Rack AC Distributoin diagram.png', NULL, NULL, NULL, NULL, 'image/png', 67009, 'uploads/533279733-thumb-2. Rack AC Distributoin diagram.png', 'uploads/533279733-small-2. Rack AC Distributoin diagram.png', NULL, NULL, NULL, NULL, NULL, 1, 1782722086, NULL),
+(55, 'uploads/1103918327-3. DC DB diagram - v1.0.png', NULL, NULL, NULL, NULL, 'image/png', 107924, 'uploads/1103918327-thumb-3. DC DB diagram - v1.0.png', 'uploads/1103918327-small-3. DC DB diagram - v1.0.png', NULL, NULL, NULL, NULL, NULL, 1, 1782722086, NULL),
+(56, 'uploads/1127154135-2. Rack AC Distributoin diagram.png', NULL, NULL, NULL, NULL, 'image/png', 67009, 'uploads/1127154135-thumb-2. Rack AC Distributoin diagram.png', 'uploads/1127154135-small-2. Rack AC Distributoin diagram.png', 'purchases', 18, 'document', '', 'aaa', 1, 1782722403, NULL),
+(57, 'uploads/2051494259-3. DC DB diagram - v1.0.png', NULL, NULL, NULL, NULL, 'image/png', 107924, 'uploads/2051494259-thumb-3. DC DB diagram - v1.0.png', 'uploads/2051494259-small-3. DC DB diagram - v1.0.png', 'purchases', 18, 'document', 'sheets', '', 1, 1782722403, NULL),
+(58, 'uploads/677228917-2. Rack AC Distributoin diagram.png', NULL, NULL, NULL, NULL, 'image/png', 67009, 'uploads/677228917-thumb-2. Rack AC Distributoin diagram.png', 'uploads/677228917-small-2. Rack AC Distributoin diagram.png', 'purchases', 19, 'document', '', 'aaa', 1, 1782722482, '1782722481_1'),
+(59, 'uploads/1761716800-3. DC DB diagram - v1.0.png', NULL, NULL, NULL, NULL, 'image/png', 107924, 'uploads/1761716800-thumb-3. DC DB diagram - v1.0.png', 'uploads/1761716800-small-3. DC DB diagram - v1.0.png', 'purchases', 19, 'document', 'sheets', '', 1, 1782722482, '1782722481_1'),
+(69, 'uploads/1000459001-WhatsApp Image 2026-06-26 at 12.54.11 PM.jpeg', NULL, NULL, NULL, NULL, 'image/jpeg', 102450, 'uploads/1000459001-thumb-WhatsApp Image 2026-06-26 at 12.54.11 PM.jpeg', 'uploads/1000459001-small-WhatsApp Image 2026-06-26 at 12.54.11 PM.jpeg', NULL, NULL, NULL, NULL, NULL, 1, 1782730267, NULL),
+(70, 'uploads/2038846874-WhatsApp Image 2026-06-26 at 1.01.47 PM.jpeg', NULL, NULL, NULL, NULL, 'image/jpeg', 94168, 'uploads/2038846874-thumb-WhatsApp Image 2026-06-26 at 1.01.47 PM.jpeg', 'uploads/2038846874-small-WhatsApp Image 2026-06-26 at 1.01.47 PM.jpeg', NULL, NULL, NULL, NULL, NULL, 1, 1782731360, NULL),
+(71, 'uploads/1433388973-WhatsApp Image 2026-06-26 at 12.54.12 PM.jpeg', NULL, NULL, NULL, NULL, 'image/jpeg', 96011, 'uploads/1433388973-thumb-WhatsApp Image 2026-06-26 at 12.54.12 PM.jpeg', 'uploads/1433388973-small-WhatsApp Image 2026-06-26 at 12.54.12 PM.jpeg', NULL, NULL, NULL, NULL, NULL, 1, 1782731376, NULL),
+(72, 'uploads/208512721-WhatsApp Image 2026-06-26 at 12.54.11 PM.jpeg', NULL, NULL, NULL, NULL, 'image/jpeg', 102450, 'uploads/208512721-thumb-WhatsApp Image 2026-06-26 at 12.54.11 PM.jpeg', 'uploads/208512721-small-WhatsApp Image 2026-06-26 at 12.54.11 PM.jpeg', NULL, NULL, NULL, NULL, NULL, 1, 1782731447, NULL),
+(73, 'uploads/1805632886-WhatsApp Image 2026-06-26 at 1.01.47 PM.jpeg', NULL, NULL, NULL, NULL, 'image/jpeg', 94168, 'uploads/1805632886-thumb-WhatsApp Image 2026-06-26 at 1.01.47 PM.jpeg', 'uploads/1805632886-small-WhatsApp Image 2026-06-26 at 1.01.47 PM.jpeg', NULL, NULL, NULL, NULL, NULL, 1, 1782731508, NULL),
+(77, 'uploads/25554666-WhatsApp Image 2026-06-26 at 1.01.47 PM.jpeg', NULL, NULL, NULL, NULL, 'image/jpeg', 94168, 'uploads/25554666-thumb-WhatsApp Image 2026-06-26 at 1.01.47 PM.jpeg', 'uploads/25554666-small-WhatsApp Image 2026-06-26 at 1.01.47 PM.jpeg', NULL, NULL, NULL, NULL, NULL, 1, 1782734498, NULL),
+(81, 'uploads/1924528156-3. DC DB diagram - v1.0.png', NULL, NULL, NULL, NULL, 'image/png', 107924, 'uploads/1924528156-thumb-3. DC DB diagram - v1.0.png', 'uploads/1924528156-small-3. DC DB diagram - v1.0.png', 'purchases', 20, 'document', '50', 'tests1', 1, 1782734984, '1782734984_1'),
+(83, 'uploads/994740260-WhatsApp Image 2026-06-26 at 1.01.47 PM.jpeg', NULL, NULL, NULL, NULL, 'image/jpeg', 94168, 'uploads/994740260-thumb-WhatsApp Image 2026-06-26 at 1.01.47 PM.jpeg', 'uploads/994740260-small-WhatsApp Image 2026-06-26 at 1.01.47 PM.jpeg', NULL, NULL, NULL, NULL, NULL, 1, 1782735168, NULL),
+(84, 'uploads/647954286-6. Earthing diagram - v1.0.png', NULL, NULL, NULL, NULL, 'image/png', 27814, 'uploads/647954286-thumb-6. Earthing diagram - v1.0.png', 'uploads/647954286-small-6. Earthing diagram - v1.0.png', 'purchases', 20, 'document', '49', 'earth', 1, 1782735168, '1782735168_1'),
+(85, 'uploads/916324188-WhatsApp Image 2026-06-26 at 12.54.11 PM.jpeg', NULL, NULL, NULL, NULL, 'image/jpeg', 102450, 'uploads/916324188-thumb-WhatsApp Image 2026-06-26 at 12.54.11 PM.jpeg', 'uploads/916324188-small-WhatsApp Image 2026-06-26 at 12.54.11 PM.jpeg', NULL, NULL, NULL, NULL, NULL, 1, 1782735192, NULL),
+(86, 'uploads/1160306743-combo4.jpg', NULL, NULL, NULL, NULL, 'image/jpeg', 279028, 'uploads/1160306743-thumb-combo4.jpg', 'uploads/1160306743-small-combo4.jpg', 'purchases', 20, 'document', '50', '1', 1, 1782736745, '1782736745_1'),
+(87, 'uploads/1750315571-combo3.jpg', NULL, NULL, NULL, NULL, 'image/jpeg', 1508388, 'uploads/1750315571-thumb-combo3.jpg', 'uploads/1750315571-small-combo3.jpg', 'purchases', 20, 'document', '51', '2', 1, 1782736745, '1782736745_1'),
+(88, 'uploads/692987208-Factsheet (WSFP).pdf', NULL, NULL, NULL, NULL, 'application/pdf', 325240, '', '', 'customers', 6, 'document', '49', '3', 1, 1782736745, '1782736745_1');
 
 -- --------------------------------------------------------
 
