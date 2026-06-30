@@ -90,6 +90,7 @@
     $show_menu["attributes"] = "";
     $show_menu["purchases"] = "";
     $show_menu["documents"] = "";
+    $show_menu["folders"] = "";
     
     $current_page = str_replace(".php","",basename($_SERVER['PHP_SELF']));
     // echo $current_page;
@@ -112,6 +113,9 @@
     else if(in_array($current_page,array("purchases","purchase-form","purchase-delete"))){
       $show_menu["purchases"] = "show";
     }
+    else if(in_array($current_page,array("folders","folder-form","folder-delete"))){
+      $show_menu["folders"] = "show";
+    }
     else if(in_array($current_page,array("documents"))){
       $show_menu["documents"] = "show";
     }
@@ -133,6 +137,8 @@
         $show_menu["vendors"] = "show";
       } else if(isset($_GET["module"]) && $_GET["module"] == "purchase_category"){
         $show_menu["purchases"] = "show";
+      } else if(isset($_GET["module"]) && $_GET["module"] == "folder_category"){
+        $show_menu["folders"] = "show";
       } else if(isset($_GET["module"]) && $_GET["module"] == "document_type"){
         $show_menu["documents"] = "show";
       } else if(isset($_GET["module"]) && $_GET["module"] == "customer_category"){
@@ -281,6 +287,24 @@
         </ul>
       </div>
     </li>    
+
+
+    <?php $menuid = "folders"; ?>
+    <li class="mb-1">
+      <button class="btn btn-toggle align-items-center collapsed" data-bs-toggle="collapse" data-bs-target="#<?php echo $menuid; ?>-collapse"  aria-expanded="<?php echo $show_menu[$menuid] == "show" ? "true" : "false"; ?>">
+        <span class="icon"><i data-feather="home"></i></span> <span class="txt">Folders</span>
+      </button>
+      <div class="collapse <?php echo $show_menu[$menuid]; ?>" id="<?php echo $menuid; ?>-collapse" data-bs-parent="#parent-level">
+        <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
+          <li><a href="<?php echo ROOT_PATH; ?>/modules/folders/folders.php" class="link-dark"><span>All folders</span></a></li>
+          <li><a href="<?php echo ROOT_PATH; ?>/modules/folders/folder-form.php" class="link-dark"><span>Add new folder</span></a></li>
+          <li><a href="<?php echo ROOT_PATH; ?>/modules/attributes/attributes.php?module=folder_category" class="link-dark"><span>All folder category</span></a></li>
+          <li><a href="<?php echo ROOT_PATH; ?>/modules/attributes/attribute-form.php?module=folder_category" class="link-dark"><span>Add new folder category</span></a></li>
+        </ul>
+      </div>
+    </li>    
+
+
 
     <?php $menuid = "attributes"; ?>
     <li class="mb-1">

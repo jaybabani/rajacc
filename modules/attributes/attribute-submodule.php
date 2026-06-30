@@ -36,6 +36,14 @@ $submodule = [
     "url_param" => "module=" . $parent . "",
     "id_prefix" => "RMC-",
   ],
+  "folder_category" => [
+    "page_title" => "Folder Category",
+    "column_title" => "Folder Category",
+    "column_name" => "category",
+    "query" => "category = '" . $parent . "' ",
+    "url_param" => "module=" . $parent . "",
+    "id_prefix" => "FLDC-",
+  ],
   "vendor_category" => [
     "page_title" => "Vendor Category",
     "column_title" => "Vendor Category",
@@ -58,7 +66,7 @@ $submodule = [
     "column_name" => "category",
     "query" => "category = '" . $parent . "' ",
     "url_param" => "module=" . $parent . "",
-    "id_prefix" => "DT-",
+    "id_prefix" => "DOCT-",
   ],
 ];
 

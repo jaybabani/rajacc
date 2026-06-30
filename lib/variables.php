@@ -55,9 +55,13 @@ function acl_roles($format = "")
 		["purchases-create", "Add new purchases"],
 		["purchases-delete", "Delete purchases"],
 		["documents-read", "View all documents"],
-		["documents-update", "Update documents"],
-		["documents-create", "Add new documents"],
-		["documents-delete", "Delete documents"],
+		// ["documents-update", "Update documents"],
+		// ["documents-create", "Add new documents"],
+		// ["documents-delete", "Delete documents"],
+		["folders-read", "View all folders"],
+		["folders-update", "Update folders"],
+		["folders-create", "Add new folders"],
+		["folders-delete", "Delete folders"],
 	];
 
 	if ($format == "raw") {
@@ -130,6 +134,15 @@ function get_module_pages_arr()
 			"create" => "customer-form",
 			"delete" => "customer-delete",
 			"form" => ROOT_PATH . "/modules/customers/customer-form.php?id=XXX"
+		],
+		"folders" => [
+			"name" => "Folders",
+			"id_prefix" => "FLD-",
+			"read" => "folders",
+			"update" => "folder-form",
+			"create" => "folder-form",
+			"delete" => "folder-delete",
+			"form" => ROOT_PATH . "/modules/folders/folder-form.php?id=XXX"
 		],
 		"products" => [
 			"name" => "Products",
@@ -217,12 +230,23 @@ function get_module_details($module)
 	return $arr;
 }
 
+function get_attribute_category_id_prefix($sm){
+	$arr = [];
+	// $module_arr = get_module_pages_arr();
+	foreach ($sm as $key => $value) {
+		$arr[$key] = $value["id_prefix"];
+	}
+	return $arr;
+}
+
+
 function get_attribute_category_arr()
 {
 	$arr = [
 		"customer_category" => "Customer category",
 		"vendor_category" => "Vendor category",
 		"raw_material_category" => "Raw material category",
+		"folder_category" => "Folder category",
 		"product_category" => "Product category",
 		"product_quality" => "Product quality",
 		"document_type" => "Document Type",

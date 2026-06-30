@@ -452,7 +452,13 @@ function crud_read($vars)
                         $colval = $r[$colname];
 
                         if (isset($dv["id_prefix"]) && $dv["id_prefix"] != NULL && trim($dv["id_prefix"]) != "") {
-                            $colval = trim($dv["id_prefix"]) . $colval;
+                            if($dv["id_prefix"] == "attribute_category_id_prefix"){
+                                if(isset($dv["options"]) && is_array($dv["options"]) && isset($dv["options"][$r["category"]])){
+                                    $colval = $dv["options"][$r["category"]].$colval;
+                                }
+                            } else {
+                                $colval = trim($dv["id_prefix"]) . $colval;
+                            }
                         }
 
 
