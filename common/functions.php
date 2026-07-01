@@ -1490,6 +1490,101 @@ function module_submit_form($vars)
     }
 }
 
+function bulk_submit_form($vars){
+
+    global $conn;
+    print_arr($vars);
+    $_REQ = $vars["submit_data"];
+    // $_FILES = $vars["submit_files"] ?? [];
+    $table = $vars["tablename"];
+    $save_fields = $vars["save_fields"];
+
+    $ts = getts();
+    $curr_user_id = get_curr_user_id();
+    $saverows = [];
+    $insert_ids = [];
+    $errors = 0;
+
+    if (isset($_REQ['save']) || isset($_REQ['savenew'])) {
+        // print_arr($_REQ);
+        // print_arr($_FILES);
+        // die;
+
+        if(isset($_REQ["rowindex"]) && is_array($_REQ["rowindex"])){
+            
+            foreach ($_REQ["rowindex"] as $index => $rv) {
+                $row = [];
+
+                foreach ($save_fields["single"] as $sk => $sv) {
+                    if (isset($sv["type"]) && $sv["type"] == "time") {
+                        $row[$sv["key"]] = $ts;
+                    }
+                    //
+                    else if (isset($sv["type"]) && $sv["type"] == "created_time") {
+                            $row[$sv["key"]] = $ts . "_" . $curr_user_id;
+                    }
+                    //
+                    else if (isset($sv["type"]) && $sv["type"] == "session_user") {
+                        $row[$sv["key"]] = $curr_user_id;
+                    }
+
+                    else {
+                        if(isset($_REQ[$sv["key"]])){
+                            $row[$sv["key"]] = $_REQ[$sv["key"]];
+                        }
+                    }
+                }
+
+                foreach ($save_fields["multi"] as $fk => $fv) {
+                    $row[$fv["key"]] = $_REQ[$fv["key"]][$index];
+                }
+                $saverows[] = $row;
+            }
+
+            print_arr($saverows);
+
+        }
+
+        foreach ($saverows as $index => $r) {
+            // $cols = "";
+            // $vals = "";
+            // $sql = " INSERT INTO $tablename () VALUES () ";
+            $query = '';
+            foreach ($r as $c => $v) {
+                $query .= " " . $c . " = \"" . $conn->real_escape_string($v) . "\", ";
+            }
+            $query = trim($query);
+            $query = substr($query, 0, -1);
+            $q = "INSERT INTO ".$table." SET " . $query . ' ';
+            echo $q."<br>";
+            $sql = $conn->query($q);
+            if ($sql) {
+                $insert_ids[] = $conn->insert_id;
+            } else {
+                $errors++;
+            }
+        }
+
+        if(sizeof($_REQ["rowindex"]) == sizeof($insert_ids) && $errors == 0){
+                notify('success', $msg["success_added"]);
+                redirect_action($_REQ);
+                return true;
+        } 
+        else if(sizeof($insert_ids) > 0 && $errors > 0){
+                notify('warning', $msg["warning_added"]);
+                redirect_action($_REQ);
+                return false;
+        }
+        else {
+                notify('danger', $msg["error_added"]);
+                redirect_action($_REQ);
+                return false;
+        }
+
+    }
+
+}
+
 function save_link_table_rows($vars, $primary_id)
 {
     global $conn;
