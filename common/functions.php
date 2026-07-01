@@ -502,7 +502,7 @@ function crud_read($vars)
                                         if ($ov[$dv["option_id"]] == $val) {
                                             $colval .= $ov[$dv["option_label"]] . "";
                                             if (isset($dv["module"]) && $dv["module"] != "") {
-                                                $colval .= " (" . get_module_link($dv["module"], $val, "form") . ") ";
+                                                $colval .= "" . get_module_link($dv["module"], $val, "form") . "";
                                             }
                                         }
                                     }
@@ -687,7 +687,7 @@ function crud_read($vars)
                                         if ($ov[$dv["option_id"]] == $val) {
                                             $colval .= $ov[$dv["option_label"]] . "";
                                             if (isset($dv["module"]) && $dv["module"] != "") {
-                                                $colval .= " (" . get_module_link($dv["module"], $val, "form") . ")";
+                                                $colval .= "" . get_module_link($dv["module"], $val, "form") . "";
                                             }
                                         }
                                     }
@@ -737,7 +737,7 @@ function get_module_link($module, $val, $key, $format = "")
         }
 
         $modname .= $arr["id_prefix"] . "" . $val;
-        $s = "<a href='" . $link . "'>" . $modname . "</a>";
+        $s = "<a href='" . $link . "' class='table_id_link'>[" . $modname . "]</a></span>";
     }
     return $s;
 }

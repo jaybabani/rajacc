@@ -91,6 +91,7 @@
     $show_menu["purchases"] = "";
     $show_menu["documents"] = "";
     $show_menu["folders"] = "";
+    $show_menu["orders"] = "";
     
     $current_page = str_replace(".php","",basename($_SERVER['PHP_SELF']));
     // echo $current_page;
@@ -124,6 +125,9 @@
     }
     else if(in_array($current_page,array("products","product-form","product-delete", "product_lots","product_lot-form","product_lot-delete"))){
       $show_menu["products"] = "show";
+    }
+    else if(in_array($current_page,array("orders","order-form","order-delete"))){
+      $show_menu["orders"] = "show";
     }
 
     if(in_array($current_page,array("attributes","attribute-form","attribute-delete"))){
@@ -273,6 +277,21 @@
         </ul>
       </div>
     </li>    
+
+
+    <?php $menuid = "orders"; ?>
+    <li class="mb-1">
+      <button class="btn btn-toggle align-items-center collapsed" data-bs-toggle="collapse" data-bs-target="#<?php echo $menuid; ?>-collapse"  aria-expanded="<?php echo $show_menu[$menuid] == "show" ? "true" : "false"; ?>">
+        <span class="icon"><i data-feather="home"></i></span> <span class="txt">Orders</span>
+      </button>
+      <div class="collapse <?php echo $show_menu[$menuid]; ?>" id="<?php echo $menuid; ?>-collapse" data-bs-parent="#parent-level">
+        <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
+          <li><a href="<?php echo ROOT_PATH; ?>/modules/orders/orders.php" class="link-dark"><span>All sales orders</span></a></li>
+          <li><a href="<?php echo ROOT_PATH; ?>/modules/orders/order-form.php" class="link-dark"><span>Add new sales order</span></a></li>
+        </ul>
+      </div>
+    </li>    
+
 
     <?php $menuid = "documents"; ?>
     <li class="mb-1">

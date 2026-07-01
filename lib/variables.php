@@ -62,6 +62,10 @@ function acl_roles($format = "")
 		["folders-update", "Update folders"],
 		["folders-create", "Add new folders"],
 		["folders-delete", "Delete folders"],
+		["orders-read", "View all sales orders"],
+		["orders-update", "Update sales orders"],
+		["orders-create", "Add new sales orders"],
+		["orders-delete", "Delete sales orders"],
 	];
 
 	if ($format == "raw") {
@@ -216,6 +220,15 @@ function get_module_pages_arr()
 			"delete" => "vendor-delete",
 			"form" => ROOT_PATH . "/modules/vendors/vendor-form.php?id=XXX"
 		],
+		"orders" => [
+			"name" => "Orders",
+			"id_prefix" => "SO-",
+			"read" => "orders",
+			"update" => "order-form",
+			"create" => "order-form",
+			"delete" => "order-delete",
+			"form" => ROOT_PATH . "/modules/orders/order-form.php?id=XXX"
+		],
 	];
 	return $arr;
 }
@@ -317,6 +330,31 @@ function get_purchase_payment_status_arr()
 		"on_hold" => "Payment on hold",
 		"partially_paid" => "Partially paid",
 		"fully_paid" => "Fully paid",
+	];
+	return $arr;
+}
+
+
+function get_order_payment_status_arr()
+{
+	$arr = [
+		"pending" => "Payment pending",
+		"on_hold" => "Payment on hold",
+		"partially_paid" => "Partially paid",
+		"fully_paid" => "Fully paid",
+	];
+	return $arr;
+}
+
+function get_order_status_arr()
+{
+	$arr = [
+		"order_placed" => "Order placed",
+		"order_confirmed" => "Order confirmed",
+		"partially_dispatch" => "Partially dispatched",
+		"fully_dispatch" => "Fully dispatched",
+		"completed" => "Completed",
+		"cancelled" => "Cancelled",
 	];
 	return $arr;
 }
