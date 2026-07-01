@@ -66,6 +66,10 @@ function acl_roles($format = "")
 		["orders-update", "Update sales orders"],
 		["orders-create", "Add new sales orders"],
 		["orders-delete", "Delete sales orders"],
+		["order_items-read", "View all order items"],
+		["order_items-update", "Update order items"],
+		["order_items-create", "Add new order items"],
+		["order_items-delete", "Delete order items"],
 	];
 
 	if ($format == "raw") {
@@ -221,13 +225,24 @@ function get_module_pages_arr()
 			"form" => ROOT_PATH . "/modules/vendors/vendor-form.php?id=XXX"
 		],
 		"orders" => [
-			"name" => "Orders",
+			"name" => "Sales Orders",
 			"id_prefix" => "SO-",
 			"read" => "orders",
 			"update" => "order-form",
 			"create" => "order-form",
 			"delete" => "order-delete",
 			"form" => ROOT_PATH . "/modules/orders/order-form.php?id=XXX"
+		],
+		"order_items" => [
+			"name" => "Order Items",
+			"id_prefix" => "SOI-",
+			"read" => "order_items",
+			"update" => "order_item-form",
+			"create" => "order_item-form",
+			"bulk_update" => "order_item-bulkform",
+			"bulk_create" => "order_item-bulkform",
+			"delete" => "order_item-delete",
+			"form" => ROOT_PATH . "/modules/order_items/order_item-form.php?id=XXX"
 		],
 	];
 	return $arr;
@@ -250,6 +265,15 @@ function get_attribute_category_id_prefix($sm){
 		$arr[$key] = $value["id_prefix"];
 	}
 	return $arr;
+}
+
+function get_module_id_prefix($mod){
+	$pf = "";
+	$module_arr = get_module_pages_arr();
+	if(isset($module_arr[$mod])){
+		$pf = $module_arr[$mod]["id_prefix"];
+	}
+	return $pf;
 }
 
 
@@ -351,8 +375,8 @@ function get_order_status_arr()
 	$arr = [
 		"order_placed" => "Order placed",
 		"order_confirmed" => "Order confirmed",
-		"partially_dispatch" => "Partially dispatched",
-		"fully_dispatch" => "Fully dispatched",
+		"partially_dispatched" => "Partially dispatched",
+		"fully_dispatched" => "Fully dispatched",
 		"completed" => "Completed",
 		"cancelled" => "Cancelled",
 	];

@@ -28,146 +28,77 @@ include '../../common/header.php';
   // print_arr($purchases_arr);
 
   $customers_arr = fetch_data([
-'table' => 'customers',
-'columns' => 'id, firm_name',
-'condition' => '',
-'order' => 'firm_name ASC',
-'limit' => '',
+    'table' => 'customers',
+    'columns' => 'id, firm_name',
+    'condition' => '',
+    'order' => 'firm_name ASC',
+    'limit' => '',
   ]); // print_arr($customers_arr);
   // print_arr($customers_arr);
 
   $users_arr = fetch_data([
-'table' => 'users',
-'columns' => 'id, name',
-'condition' => '',
-'order' => 'name ASC',
-'limit' => '',
+    'table' => 'users',
+    'columns' => 'id, name',
+    'condition' => '',
+    'order' => 'name ASC',
+    'limit' => '',
   ]); // print_arr($users_arr);
   // print_arr($users_arr);
 
   $display_columns = [
-[
- 'name' => '',
- 'column' => '',
- 'type' => 'details',
- 'sorting' => false,
- 'search' => false,
- 'class' => 'text-center nowrap',
-],
-[
- 'name' => 'Select',
- 'column' => '',
- 'type' => 'select',
- 'sorting' => false,
- 'search' => false,
- 'class' => 'text-center',
-],
-[
- 'name' => 'ID',
- 'column' => 'id',
- 'class' => 'text-center nowrap',
- 'id_prefix' => $module_pages['id_prefix'],
-],
-[
- 'name' => 'Customer',
- 'column' => 'customer',
- 'options' => $customers_arr,
- 'type' => 'table_id',
- 'option_id' => 'id',
- 'option_label' => 'firm_name',
- 'class' => 'title',
- 'module' => 'customers',
-],
-[
- 'name' => 'Sales person',
- 'column' => 'user',
- 'options' => $users_arr,
- 'type' => 'table_id',
- 'option_id' => 'id',
- 'option_label' => 'name',
- 'class' => 'title',
- 'module' => 'users',
-],
-// ["name" => "Available Qty", "column" => "available_quantity", "class" => "nowrap"],
-// ["name" => "Reserved Qty", "column" => "reserved_quantity", "class" => "nowrap"],
-// ["name" => "Consumed Qty", "column" => "consumed_quantity", "class" => "nowrap"],
-[
- 'name' => 'Order placed on Date',
- 'column' => 'order_date',
- 'format' => 'date',
- 'class' => 'nowrap',
-],
-[
- 'name' => 'Delivery Due Date',
- 'column' => 'delivery_due_date',
- 'format' => 'date',
- 'class' => 'nowrap',
-],
-// ["name" => "Buy Price", "column" => "buy_price", "class" => "nowrap"],
-// ["name" => "Vendor", "column" => "vendor", "options" => $vendors_arr, "type" => "table_id", "option_id" => "id", "option_label" => "firm_name", "module" => "vendors"],
-// ["name" => "Purchase Invoice", "column" => "purchase_invoice", "type" => "image-file", "sorting" => false, "search" => false, "class" => "text-center"],
-[
- 'name' => 'Status',
- 'column' => 'status',
- 'options' => get_order_status_arr(),
- 'badge' => true,
-],
-[
- 'name' => 'Payment Status',
- 'column' => 'payment_status',
- 'options' => get_order_payment_status_arr(),
- 'badge' => true,
-],
-[
- 'name' => 'Actions',
- 'column' => '',
- 'type' => 'edit_delete',
- 'sorting' => false,
- 'search' => false,
- 'class' => 'nowrap',
- 'acl' => ['edit' => 'orders-update', 'delete' => 'orders-delete'],
-],
+    ['name' => '', 'column' => '', 'type' => 'details', 'sorting' => false, 'search' => false, 'class' => 'text-center nowrap',],
+    ['name' => 'Select', 'column' => '', 'type' => 'select', 'sorting' => false, 'search' => false, 'class' => 'text-center',],
+    ['name' => 'ID', 'column' => 'id', 'class' => 'text-center nowrap', 'id_prefix' => $module_pages['id_prefix'],],
+    ['name' => 'Customer', 'column' => 'customer', 'options' => $customers_arr, 'type' => 'table_id', 'option_id' => 'id', 'option_label' => 'firm_name', 'class' => 'title', 'module' => 'customers',],
+    ['name' => 'Sales person', 'column' => 'user', 'options' => $users_arr, 'type' => 'table_id', 'option_id' => 'id', 'option_label' => 'name', 'class' => 'title', 'module' => 'users',], // ["name" => "Available Qty", "column" => "available_quantity", "class" => "nowrap"],// ["name" => "Reserved Qty", "column" => "reserved_quantity", "class" => "nowrap"],// ["name" => "Consumed Qty", "column" => "consumed_quantity", "class" => "nowrap"],['name' => 'Order placed on Date','column' => 'order_date','format' => 'date','class' => 'nowrap',],['name' => 'Delivery Due Date','column' => 'delivery_due_date','format' => 'date','class' => 'nowrap',],// ["name" => "Buy Price", "column" => "buy_price", "class" => "nowrap"],// ["name" => "Vendor", "column" => "vendor", "options" => $vendors_arr, "type" => "table_id", "option_id" => "id", "option_label" => "firm_name", "module" => "vendors"],// ["name" => "Purchase Invoice", "column" => "purchase_invoice", "type" => "image-file", "sorting" => false, "search" => false, "class" => "text-center"],['name' => 'Status','column' => 'status','options' => get_order_status_arr(),'badge' => true,],['name' => 'Payment Status','column' => 'payment_status','options' => get_order_payment_status_arr(),'badge' => true,],['name' => 'Actions','column' => '','type' => 'edit_delete','sorting' => false,'search' => false,'class' => 'nowrap','acl' => ['edit' => 'orders-update', 'delete' => 'orders-delete'],],
+    ["name" => "Order Date", "column" => "order_date", "format" => "date", "class" => "nowrap"],
+    ["name" => "Due Date", "column" => "delivery_due_date", "format" => "date", "class" => "nowrap"],
+    ["name" => "Status", "column" => "status", "options" => get_order_status_arr(), "badge" => true],
+    ["name" => "Payment Status", "column" => "payment_status", "options" => get_order_payment_status_arr(), "badge" => true],
+    [
+      "name" => "Order Items",
+      "column" => "",
+      "type" => "link",
+      "sorting" => false,
+      "search" => false,
+      "class" => "nowrap",
+      "links" => [
+        ["text" => "View Order Items", "url" => ROOT_PATH . "/modules/order_items/order_items.php?order_id={id}", "acl" => "order_items-read"],
+        ["text" => "Add Order Items", "url" => ROOT_PATH . "/modules/order_items/order_item-bulkform.php?order_id={id}", "acl" => "order_items-create"]
+      ]
+    ],
+    ["name" => "Actions", "column" => "", "type" => "edit_delete", "sorting" => false, "search" => false, "class" => "nowrap", "acl" => ["edit" => "product_lots-update", "delete" => "product_lots-delete"]],
   ];
 
   $fetch_columns = [];
 
   $detail_columns = [
-['name' => 'Notes', 'column' => 'notes'],
-// ["name" => "Purchase Details", "column" => "purchase", "options" => $purchases_arr, "type" => "table_id", "option_id" => "id", "option_label" => "title", "module" => "purchases"],
-['name' => 'Last update', 'type' => 'last_update_info'],
-[
- 'name' => 'History',
- 'type' => 'history',
- 'history_columns' => [
-  [
-'name' => 'Status',
-'column' => 'status',
-'options' => get_order_status_arr(),
-'badge' => true,
-  ],
-  [
-'name' => 'Payment Status',
-'column' => 'payment_status',
-'options' => get_order_payment_status_arr(),
-'badge' => true,
-  ],
-  // ["name" => "Quantity", "column" => "quantity"]
- ],
-],
+    ['name' => 'Notes', 'column' => 'notes'],
+    // ["name" => "Purchase Details", "column" => "purchase", "options" => $purchases_arr, "type" => "table_id", "option_id" => "id", "option_label" => "title", "module" => "purchases"],['name' => 'Last update', 'type' => 'last_update_info'],['name' => 'History','type' => 'history','history_columns' => [  [    'name' => 'Status',    'column' => 'status',    'options' => get_order_status_arr(),    'badge' => true,  ],  [    'name' => 'Payment Status',    'column' => 'payment_status',    'options' => get_order_payment_status_arr(),    'badge' => true,  ],  // ["name" => "Quantity", "column" => "quantity"]],],
+    ["name" => "Last update", "type" => "last_update_info"],
+    [
+      "name" => "History",
+      "type" => "history",
+      "history_columns" => [
+        ["name" => "Status", "column" => "status", "options" => get_order_status_arr(), "badge" => true],
+        ["name" => "Payment Status", "column" => "payment_status", "options" => get_order_payment_status_arr(), "badge" => true],
+        // ["name" => "Quantity", "column" => "quantity"]
+      ],
+    ]
   ];
 
   $table_html = crud_read([
-'module_pages' => $module_pages,
-'tablename' => $tablename,
-'primary_column' => $primary_column,
-'display_columns' => $display_columns,
-'fetch_columns' => $fetch_columns,
-'detail_columns' => $detail_columns,
-'datatable' => true,
-'pagination' => true,
-'pagelimit' => 100,
-'query' => '',
-'orderby' => 'id DESC',
+    'module_pages' => $module_pages,
+    'tablename' => $tablename,
+    'primary_column' => $primary_column,
+    'display_columns' => $display_columns,
+    'fetch_columns' => $fetch_columns,
+    'detail_columns' => $detail_columns,
+    'datatable' => true,
+    'pagination' => true,
+    'pagelimit' => 100,
+    'query' => '',
+    'orderby' => 'id DESC',
   ]);
 
   $load_datatable = true;
@@ -179,14 +110,14 @@ include '../../common/header.php';
 
 
   <?php
-  $widgettitle = 'Add new orders';
+  /*
+  $widgettitle = 'Add new order items';
 
   widget_start($widgettitle, '', '', '', '');
   ?>
 
   <?php
   $tablename = 'order_items';
-  $column_titles = ['Product', 'Quantity'];
   $display_new_rows = 3;
   $save_fields = [
     'single' => [
@@ -196,13 +127,13 @@ include '../../common/header.php';
       ["key" => "created", "type" => "created_time"],
     ],
     'multi' => [
-      ['key' => 'product'], 
+      ['key' => 'product'],
       ['key' => 'quantity']
     ],
   ];
 
   $single_fields = [
-    ['column' => 'order', 'value' => '2'] // get form url
+    ['column' => 'order', 'value' => $_GET["order"] ?? ""] // get form url
   ];
 
   $msg = [
@@ -211,7 +142,7 @@ include '../../common/header.php';
     "warning_added" => "Some new order items were added. Errors encountered in rest.",
   ];
 
-  $submit_result = bulk_submit_form([
+  $submit_result = bi_bulk_submit_form([
     'submit_data' => $_POST,
     'tablename' => $tablename,
     'save_fields' => $save_fields,
@@ -219,85 +150,59 @@ include '../../common/header.php';
   ]);
 
   $tableid = 'order_items_table';
+  $column_titles = ['Product', 'Quantity'];
 
-?>
-  <form class="row g-3 needs-validation" novalidate method="POST" enctype="multipart/form-data">
- <?php echo single_inputs($single_fields); ?>
- 
- <div class='widget-table'>
-<div class='table-responsive'>
-<table class='table' id='<?php echo $tableid; ?>'>
-  <thead><tr>
- <?php 
-  foreach ($column_titles as $ctk => $ctv) {
-    echo '<th>' . $ctv . '</th>';
-   } 
-   ?>
-  </tr></thead>
-  <tbody>
-  <?php 
-    for ($index = 1; $index <= $display_new_rows; $index++) {
-      echo bulk_insert_table_row($index);
-    } 
+  function bulk_insert_table_row($index)
+  {
+
+    $product_arr = fetch_data(["table" => "products", "columns" => "id, product", "condition" => "", "order" => "product ASC", "limit" => ""]);        // print_arr($product_arr);
+    $products = [];
+    foreach ($product_arr as $vk => $vv) {
+      $products[$vv["id"]] = $vv["product"];
+    }
+    // print_arr($products); 
+
+
+    $s = '';
+    $s .= "<tr data-index='" . $index . "'>";
+    $s .= '<td>'
+      .  form_field(['type' => 'hidden', 'name' => '', 'key' => 'rowindex[]', 'class' => '',], [])
+      . form_field(['type' => 'select', 'name' => 'Product', 'key' => 'product[]', "options" => $products, 'class' => ''], []);
+    $s .= '</td>';
+    $s .=  '<td>' . form_field(['type' => 'number', 'name' => 'Quantity', 'key' => 'quantity[]', 'class' => '',], []) .  '</td>';
+    $s .= '</tr>';
+
+    return $s;
+  }
+
   ?>
- 
-  </tbody>
-</table>
-<?php
-$data = [];
-echo add_new_row('orders_table');
-echo form_field([  'type' => 'submit',  'name' => 'Save',  'key' => 'save',  'class' => 'col-md-12 col-sm-12 col-xs-12 text-center', ], $data);
-?>
+  <form class="row g-3 needs-validation" novalidate method="POST" enctype="multipart/form-data"><?php echo bi_single_inputs($single_fields); ?>
+    <div class='widget-table'>
+      <div class='table-responsive'>
+        <table class='table' id='<?php echo $tableid; ?>'>
+          <thead>
+            <tr> <?php foreach ($column_titles as $ctk => $ctv) {
+                    echo '<th>' . $ctv . '</th>';
+                  }
+                  ?>
+            </tr>
+          </thead>
+          <tbody> <?php
+                  for ($index = 1; $index <= $display_new_rows; $index++) {
+                    echo bulk_insert_table_row($index);
+                  }
+                  ?>
+          </tbody>
+        </table>
+        <?php
+        $data = [];
+        echo bi_add_new_row($tableid, bulk_insert_table_row('new'));
+        echo form_field(['type' => 'submit',  'name' => 'Save',  'key' => 'save',  'class' => 'col-md-12 col-sm-12 col-xs-12 text-center',], $data);
+        ?>
   </form>
-  
-  <?php widget_end(); ?>
 
+  <?php widget_end(); */ ?>
 
 </div>
 
 <?php include '../../common/footer.php'; ?>
-
-<?php
-function single_inputs($fields)
-{
- $s = '';
- foreach ($fields as $sk => $sv) {
-  $s .="<input type='text' name='" .$sv['column'] ."' value='" .$sv['value'] ."'>";
- }
- return $s;
-}
-
-function bulk_insert_table_row($index)
-{
- $data = [];
- $s = '';
- $s .= "<tr data-index='" . $index . "'>";
- $s .= '<td>' 
- .  form_field(['type' => 'hidden', 'name' => '', 'key' => 'rowindex[]', 'class' => '',],$data) 
- .form_field([ 'type' => 'text', 'name' => 'Product', 'key' => 'product[]', 'class' => ''],$data  ) .'</td>';
- $s .=  '<td>' .form_field(['type' => 'number', 'name' => 'Quantity', 'key' => 'quantity[]', 'class' => '',],$data  ) .  '</td>';
- $s .= '</tr>';
- return $s;
-}
-
-function add_new_row($tableid)
-{
- $s = "";
- $ele = 'new-row-html';
- $s .=  "<input type='button' class='btn btn-primary add-new-row' value='Add new row' data-element='" .  $ele .  "' data-table='" .  $tableid .  "'>";
- $s .= "<template  id='" . $ele . "' style='display:none'>" . bulk_insert_table_row('new') . '</template >';
- return $s;
-}
-
-
-?>
-
-<script>
-    $(document).on("click", ".add-new-row", function () {
-      let tableid = $(this).attr("data-table");
-      let ele = $(this).attr("data-element");
-      console.log(tableid, ele);
-      let rowHtml = $('#'+ele).html();
-      $('#'+tableid+' tbody').append(rowHtml);
-    });
-</script>

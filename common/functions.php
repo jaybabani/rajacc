@@ -452,9 +452,9 @@ function crud_read($vars)
                         $colval = $r[$colname];
 
                         if (isset($dv["id_prefix"]) && $dv["id_prefix"] != NULL && trim($dv["id_prefix"]) != "") {
-                            if($dv["id_prefix"] == "attribute_category_id_prefix"){
-                                if(isset($dv["options"]) && is_array($dv["options"]) && isset($dv["options"][$r["category"]])){
-                                    $colval = $dv["options"][$r["category"]].$colval;
+                            if ($dv["id_prefix"] == "attribute_category_id_prefix") {
+                                if (isset($dv["options"]) && is_array($dv["options"]) && isset($dv["options"][$r["category"]])) {
+                                    $colval = $dv["options"][$r["category"]] . $colval;
                                 }
                             } else {
                                 $colval = trim($dv["id_prefix"]) . $colval;
@@ -576,7 +576,22 @@ function crud_read($vars)
                                 }
                             }
                         }
-
+                        //
+                        else if ($dv['type'] == "link") {
+                            $colval = "";
+                            foreach ($dv["links"] as $lk => $lv) {
+                                if (isset($lv["acl"]) && in_array($lv["acl"], $_SESSION["acl"])) {
+                                    $url = $lv["url"];
+                                    $url = preg_replace_callback('/\{([a-zA-Z0-9_]+)\}/', function ($matches) use ($r) {
+                                        $key = $matches[1];
+                                        return $r[$key] ?? $matches[0]; // keep original if key missing
+                                    }, $url);
+                                    $text = $lv["text"];
+                                    $colval .= "<a href='" . $url . "'>" . $text . "</a> &nbsp;";
+                                }
+                            }
+                            $html .= "<td class='" . $row_col_class . "'>" . $colval . "</td>";
+                        }
                         //
                         else if ($dv['type'] == "table_row_link") {
                             $colval = "";
@@ -1233,9 +1248,9 @@ function form_field($vars, $data)
                             <div class='multi-ft'>
                             <div class='ftcol'><p>Select file type</p>
                             <select class='form-control " . $vars["key"] . "-multi-item-type' name='" . $vars["key"] . "-caption[]' id='" . $vars["key"] . "-attribute-`+index+`'>";
-            $sel = "";
-            $s .= select_attribute_options($vars["attributes"], $sel);
-            $s .= "</select></div>
+                            $sel = "";
+                            $s .= select_attribute_options($vars["attributes"], $sel);
+                            $s .= "</select></div>
                             <div class='ftcol'>
                             <p>Or describe file type</p>
                             <input type='text' class='form-control " . $vars["key"] . "-multi-item-other' name='" . $vars["key"] . "-other[]' value='' placeholder=''>
@@ -1258,6 +1273,13 @@ function form_field($vars, $data)
                     $s .= display_document_linked($vars, $dv, $vars["attributes"]);
                 }
             }
+        }
+        //
+        else if ($vars["type"] == "delete_row") {
+            $s .= "<span class='icon wtxt bg-info delete-row-btn' id='".$vars["key"]."'><i data-feather='trash'></i>Delete</span>
+            <script> $('#" . $vars["key"] . "').on('click', function() {
+                $(this).closest('tr').remove();
+            }); </script>";
         }
 
         if ($show_as_field) {
@@ -1490,12 +1512,43 @@ function module_submit_form($vars)
     }
 }
 
-function bulk_submit_form($vars){
+function bi_single_inputs($fields)
+{
+    $s = '';
+    foreach ($fields as $sk => $sv) {
+        $s .= "<input type='hidden' name='" . $sv['column'] . "' value='" . $sv['value'] . "'>";
+    }
+    return $s;
+}
+
+
+function bi_add_new_row($tableid, $template)
+{
+    $s = "";
+    $ele = 'new-row-html';
+    $s .=  "<input type='button' class='btn btn-primary add-new-row' value='Add new row' data-element='" .  $ele .  "' data-table='" .  $tableid .  "'>";
+    $s .= "<template  id='" . $ele . "' style='display:none'>" . $template . '</template >';
+    $s .= '<script>
+        $(document).on("click", ".add-new-row", function() {
+          let tableid = $(this).attr("data-table");
+          let ele = $(this).attr("data-element");
+          console.log(tableid, ele);
+          let rowHtml = $("#" + ele).html();
+          $("#" + tableid + " tbody").append(rowHtml);
+          feather.replace();
+        });
+      </script>';
+    return $s;
+}
+
+function bi_bulk_submit_form($vars)
+{
 
     global $conn;
-    print_arr($vars);
+    // print_arr($vars);
     $_REQ = $vars["submit_data"];
     // $_FILES = $vars["submit_files"] ?? [];
+    $msg = $vars["msg"];
     $table = $vars["tablename"];
     $save_fields = $vars["save_fields"];
 
@@ -1510,8 +1563,8 @@ function bulk_submit_form($vars){
         // print_arr($_FILES);
         // die;
 
-        if(isset($_REQ["rowindex"]) && is_array($_REQ["rowindex"])){
-            
+        if (isset($_REQ["rowindex"]) && is_array($_REQ["rowindex"])) {
+
             foreach ($_REQ["rowindex"] as $index => $rv) {
                 $row = [];
 
@@ -1521,15 +1574,13 @@ function bulk_submit_form($vars){
                     }
                     //
                     else if (isset($sv["type"]) && $sv["type"] == "created_time") {
-                            $row[$sv["key"]] = $ts . "_" . $curr_user_id;
+                        $row[$sv["key"]] = $ts . "_" . $curr_user_id;
                     }
                     //
                     else if (isset($sv["type"]) && $sv["type"] == "session_user") {
                         $row[$sv["key"]] = $curr_user_id;
-                    }
-
-                    else {
-                        if(isset($_REQ[$sv["key"]])){
+                    } else {
+                        if (isset($_REQ[$sv["key"]])) {
                             $row[$sv["key"]] = $_REQ[$sv["key"]];
                         }
                     }
@@ -1541,8 +1592,7 @@ function bulk_submit_form($vars){
                 $saverows[] = $row;
             }
 
-            print_arr($saverows);
-
+            // print_arr($saverows);
         }
 
         foreach ($saverows as $index => $r) {
@@ -1555,8 +1605,8 @@ function bulk_submit_form($vars){
             }
             $query = trim($query);
             $query = substr($query, 0, -1);
-            $q = "INSERT INTO ".$table." SET " . $query . ' ';
-            echo $q."<br>";
+            $q = "INSERT INTO " . $table . " SET " . $query . ' ';
+            // echo $q . "<br>";
             $sql = $conn->query($q);
             if ($sql) {
                 $insert_ids[] = $conn->insert_id;
@@ -1565,24 +1615,20 @@ function bulk_submit_form($vars){
             }
         }
 
-        if(sizeof($_REQ["rowindex"]) == sizeof($insert_ids) && $errors == 0){
-                notify('success', $msg["success_added"]);
-                redirect_action($_REQ);
-                return true;
-        } 
-        else if(sizeof($insert_ids) > 0 && $errors > 0){
-                notify('warning', $msg["warning_added"]);
-                redirect_action($_REQ);
-                return false;
+        if (sizeof($_REQ["rowindex"]) == sizeof($insert_ids) && $errors == 0) {
+            notify('success', $msg["success_added"]);
+            redirect_action($_REQ);
+            return true;
+        } else if (sizeof($insert_ids) > 0 && $errors > 0) {
+            notify('warning', $msg["warning_added"]);
+            redirect_action($_REQ);
+            return false;
+        } else {
+            notify('danger', $msg["error_added"]);
+            redirect_action($_REQ);
+            return false;
         }
-        else {
-                notify('danger', $msg["error_added"]);
-                redirect_action($_REQ);
-                return false;
-        }
-
     }
-
 }
 
 function save_link_table_rows($vars, $primary_id)

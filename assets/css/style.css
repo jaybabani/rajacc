@@ -1072,3 +1072,9 @@ tr .no-det {
 	font-size: 13px;
 	font-style: italic;
 }
+
+.delete-row-btn{
+	cursor: pointer;
+	vertical-align: bottom;
+	margin-top: 30px;
+}
