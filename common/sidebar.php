@@ -92,6 +92,7 @@
     $show_menu["documents"] = "";
     $show_menu["folders"] = "";
     $show_menu["orders"] = "";
+    $show_menu["dispatchs"] = "";
     
     $current_page = str_replace(".php","",basename($_SERVER['PHP_SELF']));
     // echo $current_page;
@@ -126,8 +127,11 @@
     else if(in_array($current_page,array("products","product-form","product-delete", "product_lots","product_lot-form","product_lot-delete"))){
       $show_menu["products"] = "show";
     }
-    else if(in_array($current_page,array("orders","order-form","order-delete"))){
+    else if(in_array($current_page,array("orders","order-form","order-delete","order_items","order_item-form","order_item-bulkform","order_item-delete"))){
       $show_menu["orders"] = "show";
+    }
+    else if(in_array($current_page,array("dispatchs","dispatch-form","dispatch-delete","dispatch_items","dispatch_item-form","dispatch_item-bulkform","dispatch_item-delete"))){
+      $show_menu["dispatchs"] = "show";
     }
 
     if(in_array($current_page,array("attributes","attribute-form","attribute-delete"))){
@@ -292,6 +296,19 @@
       </div>
     </li>    
 
+
+    <?php $menuid = "dispatchs"; ?>
+    <li class="mb-1">
+      <button class="btn btn-toggle align-items-center collapsed" data-bs-toggle="collapse" data-bs-target="#<?php echo $menuid; ?>-collapse"  aria-expanded="<?php echo $show_menu[$menuid] == "show" ? "true" : "false"; ?>">
+        <span class="icon"><i data-feather="home"></i></span> <span class="txt">Dispatchs</span>
+      </button>
+      <div class="collapse <?php echo $show_menu[$menuid]; ?>" id="<?php echo $menuid; ?>-collapse" data-bs-parent="#parent-level">
+        <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
+          <li><a href="<?php echo ROOT_PATH; ?>/modules/dispatchs/dispatchs.php" class="link-dark"><span>All dispatchs</span></a></li>
+          <li><a href="<?php echo ROOT_PATH; ?>/modules/dispatchs/dispatch-form.php" class="link-dark"><span>Add new dispatch</span></a></li>
+        </ul>
+      </div>
+    </li>    
 
     <?php $menuid = "documents"; ?>
     <li class="mb-1">

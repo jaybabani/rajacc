@@ -70,6 +70,15 @@ function acl_roles($format = "")
 		["order_items-update", "Update order items"],
 		["order_items-create", "Add new order items"],
 		["order_items-delete", "Delete order items"],
+		
+		["dispatchs-read", "View all dispatchs"],
+		["dispatchs-update", "Update dispatchs"],
+		["dispatchs-create", "Add new dispatchs"],
+		["dispatchs-delete", "Delete dispatchs"],
+		["dispatch_items-read", "View all dispatch items"],
+		["dispatch_items-update", "Update dispatch items"],
+		["dispatch_items-create", "Add new dispatch items"],
+		["dispatch_items-delete", "Delete dispatch items"],
 	];
 
 	if ($format == "raw") {
@@ -244,6 +253,26 @@ function get_module_pages_arr()
 			"delete" => "order_item-delete",
 			"form" => ROOT_PATH . "/modules/order_items/order_item-form.php?id=XXX"
 		],
+		"dispatchs" => [
+			"name" => "dispatchs",
+			"id_prefix" => "DO-",
+			"read" => "dispatchs",
+			"update" => "dispatch-form",
+			"create" => "dispatch-form",
+			"delete" => "dispatch-delete",
+			"form" => ROOT_PATH . "/modules/dispatchs/dispatch-form.php?id=XXX"
+		],
+		"dispatch_items" => [
+			"name" => "dispatch items",
+			"id_prefix" => "DOI-",
+			"read" => "dispatch_items",
+			"update" => "dispatch_item-form",
+			"create" => "dispatch_item-form",
+			"bulk_update" => "dispatch_item-bulkform",
+			"bulk_create" => "dispatch_item-bulkform",
+			"delete" => "dispatch_item-delete",
+			"form" => ROOT_PATH . "/modules/dispatch_items/dispatch_item-form.php?id=XXX"
+		],
 	];
 	return $arr;
 }
@@ -378,6 +407,16 @@ function get_order_status_arr()
 		"partially_dispatched" => "Partially dispatched",
 		"fully_dispatched" => "Fully dispatched",
 		"completed" => "Completed",
+		"cancelled" => "Cancelled",
+	];
+	return $arr;
+}
+
+function get_dispatch_status_arr(){
+	$arr = [
+		"new" => "New Dispatch",
+		"ready_for_dispatch" => "Packed and Ready",
+		"dispatched" => "Dispatched",
 		"cancelled" => "Cancelled",
 	];
 	return $arr;

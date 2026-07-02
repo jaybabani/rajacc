@@ -1146,8 +1146,12 @@ function form_field($vars, $data)
             $s .= '</label>';
         }
 
+        if ($vars["type"] == "display") {
+            $s .= '<div class="form-display" name="' . $vars["key"] . '" id="' . $vars["key"] . '">'.get_value($data, $vars["key"]).'</div>';
+        }
+        //
 
-        if ($vars["type"] == "text") {
+        else if ($vars["type"] == "text") {
             $s .= '<input type="text" class="form-control" name="' . $vars["key"] . '" id="' . $vars["key"] . '" value="' . get_value($data, $vars["key"]) . '" ' . ($required ? "required" : "") . '>';
             $s .= '<div class="invalid-feedback">Incorrect ' . $vars["name"] . ' value</div>';
         }
@@ -1168,7 +1172,11 @@ function form_field($vars, $data)
         }
         //
         else if ($vars["type"] == "number") {
-            $s .= '<input type="number" class="form-control" name="' . $vars["key"] . '" id="' . $vars["key"] . '" value="' . get_value($data, $vars["key"]) . '" ' . ($required ? "required" : "") . '>';
+            $maxno = "";
+            if(isset($vars["max"])){
+                $maxno = " max = '".$vars["max"]."' ";
+            }
+            $s .= '<input type="number" class="form-control" name="' . $vars["key"] . '" id="' . $vars["key"] . '" '.$maxno.' value="' . get_value($data, $vars["key"]) . '" ' . ($required ? "required" : "") . '>';
             $s .= '<div class="invalid-feedback">Incorrect ' . $vars["name"] . ' value</div>';
         }
         //
@@ -1595,7 +1603,10 @@ function bi_bulk_submit_form($vars)
                     //
                     else if (isset($sv["type"]) && $sv["type"] == "session_user") {
                         $row[$sv["key"]] = $curr_user_id;
-                    } else {
+                    } 
+
+                    //
+                    else {
                         if (isset($_REQ[$sv["key"]])) {
                             $row[$sv["key"]] = $_REQ[$sv["key"]];
                         }
@@ -1610,11 +1621,10 @@ function bi_bulk_submit_form($vars)
 
             // print_arr($saverows);
         }
+        // die;
 
         foreach ($saverows as $index => $r) {
-            // $cols = "";
-            // $vals = "";
-            // $sql = " INSERT INTO $tablename () VALUES () ";
+
             $query = '';
             foreach ($r as $c => $v) {
                 $query .= " " . $c . " = \"" . $conn->real_escape_string($v) . "\", ";
@@ -2116,4 +2126,134 @@ function fetch_data($vars)
     }
 
     return $ret;
+}
+
+function get_order_products($order_id, $format = "")
+{
+    $ret = [];
+    $product_ids = [];
+    $order_products = [];
+    $order_products_arr = fetch_data(["table" => "order_items", "columns" => "id, product, quantity, rate", "condition" => "order_id = '" . $order_id . "' ", "order" => "product ASC", "limit" => ""]);
+    foreach ($order_products_arr as $opk => $opv) {
+        $product_ids[] = $opv["product"];
+        $order_products[] = $opv;
+    }
+
+    $product_ids = array_values(array_filter(array_unique($product_ids)));
+
+    $ret["order_products"] = $order_products;
+    $ret["product_ids"] = $product_ids;
+
+    return $ret;
+}
+
+function get_products_by_ids($ids)
+{
+    $condition = "";
+    if (is_array($ids) && sizeof($ids) > 0) {
+        $condition = " id IN (" . implode(",", $ids) . ")";
+    }
+
+    $product_arr = fetch_data(["table" => "products", "columns" => "id, product", "condition" => $condition, "order" => "product ASC", "limit" => ""]);        // print_arr($product_arr);
+    $products = [];
+    foreach ($product_arr as $vk => $vv) {
+        $products[$vv["id"]] = $vv["product"];
+    }
+    // print_arr($products); 
+
+    return $products;
+}
+
+
+function get_product_lot_quantities($product_ids, $format = "")
+{
+
+    // fetch product lots 
+    $condition = "";
+    if (is_array($product_ids) && sizeof($product_ids) > 0) {
+        $condition = " product IN (" . implode(",", $product_ids) . ") AND status = 'ready' AND available_quantity > 0 ";
+    }
+
+    $product_lots_arr = fetch_data([
+        "table" => "product_lots",
+        "columns" => "id, product, available_quantity, reserved_quantity, consumed_quantity, source, buy_price",
+        "condition" => $condition,
+        "order" => "product ASC",
+        "limit" => ""
+    ]);        // print_arr($product_arr);
+
+    if ($format == "merged_by_product") {
+        $prod_qty = [];
+        foreach ($product_lots_arr as $k => $v) {
+            $pid = $v["product"];
+            if (!isset($prod_qty[$pid])) {
+                $prod_qty[$pid] = [];
+            }
+            $prod_qty[$pid][] = $v;
+        }
+
+        $lots = [];
+        foreach ($prod_qty as $pid => $parr) {
+
+            $lots[$pid] = [];
+            $lots[$pid]["available"] = 0;
+            $lots[$pid]["reserved"] = 0;
+            $lots[$pid]["consumed"] = 0;
+
+            foreach ($parr as $k => $p) {
+                $lots[$pid]["available"] += $p["available_quantity"];
+                $lots[$pid]["reserved"] += $p["reserved_quantity"];
+                $lots[$pid]["consumed"] += $p["consumed_quantity"];
+            }
+        }
+
+        return ["product_lots" => $prod_qty, "product_quantity" => $lots];
+    }
+    //
+    else {
+        return $product_lots_arr;
+    }
+}
+
+
+
+function get_order_quantities($arr)
+{
+
+    // ["order_id" => $order_id, "order_products" => $order_products];
+    $qty = [];
+
+    // Ordered product quantities
+    if (isset($arr["order_products"]) && is_array($arr["order_products"]) && sizeof($arr["order_products"]) > 0) {
+        $ord_prods = $arr["order_products"];
+        foreach ($ord_prods as $k => $p) {
+            $pid = $p["product"];
+            if (!isset($qty[$pid])) {
+                $qty[$pid]["available"] = 0;
+                $qty[$pid]["ordered"] = 0;
+                $qty[$pid]["pending"] = 0;
+            }
+            $qty[$pid]["ordered"] += $p["quantity"];
+        }
+    }
+
+    // Get product lot quantities
+    // $product_ids = array_keys($qty);    // print_arr($product_ids);
+    // $product_lots = get_product_lot_quantities($product_ids, "merged_by_product");
+    // print_arrbox($product_lots, 300);
+
+    foreach ($arr["product_lots"]["product_quantity"] as $pid => $parr) {
+            $qty[$pid]["available"] += $parr["available"];
+    }
+
+
+    // fetch reserved and dispatched then do final calculation of pending.
+    // only pending quantity products will be shown for dispatch.
+
+    // manage pending quantities
+    foreach ($qty as $pid => $v) {
+        $qty[$pid]["pending"] = $qty[$pid]["ordered"];
+    }
+
+    return $qty;
 }
