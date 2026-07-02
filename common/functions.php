@@ -1638,6 +1638,7 @@ function bi_bulk_submit_form($vars)
                 $insid = $conn->insert_id;
                 $insert_ids[] = $insid;
                 // save column history here
+                save_order_quantities($vars,$r);
                 save_bulk_column_history($vars, $insid, $index);
             } else {
                 $errors++;
@@ -1820,6 +1821,36 @@ function save_multi_document_upload($vars, $primary_id)
     }
     return [$attachments, $deleted];
     // die;
+}
+
+
+function save_order_quantities($vars, $r){
+
+    if (isset($vars["manage_order_quantity"])) {
+        global $conn;
+        $_REQ = $vars["submit_data"];
+        $tablename = $vars["tablename"];
+        $manage = $vars["manage_order_quantity"];
+
+        print_arr($r);
+
+        $action = $manage["action"];
+        $table = "order_quantities";
+        $ts = getts();
+        $curr_user_id = get_curr_user_id();
+        $created = $ts . "_" . $curr_user_id;
+
+        $quantity = $r[$manage["quantity_field"]];
+
+        $sql = " INSERT INTO ".$table." (order_id, dispatch, product, product_lot, quantity, action, auth_user, updated, created) VALUES 
+        ('".$r["order_id"]."', '".$r["dispatch"]."', '".$r["product"]."', '".$r["product_lot"]."', '".$quantity."', 
+         '".$action."', '".$curr_user_id."', '".$ts."', '".$created."' ) ";
+
+        $conn->query($sql);
+
+        print_arr($vars);
+        die;
+    }
 }
 
 

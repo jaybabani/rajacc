@@ -53,6 +53,7 @@ include '../../common/header.php';
     "columns" => ["reserve_quantity[]"],
   ];
 
+  $manage_order_quantity = ["action" => "reserve", "quantity_field" => "reserve_quantity"];
 
   $submit_result = bi_bulk_submit_form([
     'submit_data' => $_POST,
@@ -60,6 +61,7 @@ include '../../common/header.php';
     'save_fields' => $save_fields,
     'msg' => $msg,
     "save_column_history" => $save_column_history,
+    'manage_order_quantity' => $manage_order_quantity,
   ]);
 
 
