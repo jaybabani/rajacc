@@ -1832,7 +1832,7 @@ function save_order_quantities($vars, $r){
         $tablename = $vars["tablename"];
         $manage = $vars["manage_order_quantity"];
 
-        print_arr($r);
+        // print_arr($r);
 
         $action = $manage["action"];
         $table = "order_quantities";
@@ -1842,15 +1842,54 @@ function save_order_quantities($vars, $r){
 
         $quantity = $r[$manage["quantity_field"]];
 
-        $sql = " INSERT INTO ".$table." (order_id, dispatch, product, product_lot, quantity, action, auth_user, updated, created) VALUES 
-        ('".$r["order_id"]."', '".$r["dispatch"]."', '".$r["product"]."', '".$r["product_lot"]."', '".$quantity."', 
-         '".$action."', '".$curr_user_id."', '".$ts."', '".$created."' ) ";
+        // $action_date = $ts;
 
-        $conn->query($sql);
+        $sql = " INSERT INTO ".$table." (order_id, dispatch, product, product_lot, quantity, action, action_date, auth_user, updated, created) 
+        VALUES ('".$r["order_id"]."', '".$r["dispatch"]."', '".$r["product"]."', '".$r["product_lot"]."', '".$quantity."', 
+         '".$action."', '".$ts."', '".$curr_user_id."', '".$ts."', '".$created."' ) ";
 
-        print_arr($vars);
-        die;
+        if($conn->query($sql)){
+            manage_lot_quantity("product_lots", $r["product_lot"], $action, $quantity);
+        }
+
+        // print_arr($vars);
+        // die;
     }
+}
+
+function manage_lot_quantity($table, $row_id, $action, $quantity){
+        global $conn;
+
+        $condition = " id = '" . $row_id . "' ";
+        $fetched = fetch_data([
+            "table" => $table,
+            "columns" => "id, available_quantity, reserved_quantity, consumed_quantity",
+            "condition" => $condition,
+            "order" => "",
+            "limit" => ""
+        ]);
+
+        $ts = getts();
+        $curr_user_id = get_curr_user_id();
+
+        if(sizeof($fetched) > 0){
+            $available = $fetched[0]["available_quantity"];
+            $reserved = $fetched[0]["reserved_quantity"];
+            $consumed = $fetched[0]["consumed_quantity"];
+            // print_arr($fetched);
+            if($action == "reserve"){
+                $available = $available - $quantity;
+                $reserved = $reserved + $quantity;
+            }
+            $sql = " UPDATE ".$table." SET available_quantity = '".$available."', reserved_quantity = '".$reserved."', consumed_quantity = '".$consumed."', auth_user = '".$curr_user_id."', updated = '".$ts."' WHERE id = '".$row_id."' ";
+            // echo $sql;
+            if($conn->query($sql)){
+                // echo "manage in history";
+            }
+        }
+        // die;
+
+
 }
 
 
@@ -2248,7 +2287,7 @@ function get_product_lot_quantities($product_ids, $format = "")
 
 
 
-function get_order_quantities($arr)
+function get_quantities_summary($arr)
 {
 
     // ["order_id" => $order_id, "order_products" => $order_products];
@@ -2263,6 +2302,7 @@ function get_order_quantities($arr)
                 $qty[$pid]["available"] = 0;
                 $qty[$pid]["ordered"] = 0;
                 $qty[$pid]["pending"] = 0;
+                $qty[$pid]["reserve"] = 0;
             }
             $qty[$pid]["ordered"] += $p["quantity"];
         }
@@ -2277,14 +2317,51 @@ function get_order_quantities($arr)
             $qty[$pid]["available"] += $parr["available"];
     }
 
-
     // fetch reserved and dispatched then do final calculation of pending.
-    // only pending quantity products will be shown for dispatch.
+    if(isset($arr["order_quantities"]) && is_array($arr["order_quantities"])){
+        foreach ($arr["order_quantities"] as $pid => $val) {
+            if(isset($val["reserve"])){
+                $qty[$pid]["reserve"] += $val["reserve"];
+            }
+        }
+    }
+
 
     // manage pending quantities
     foreach ($qty as $pid => $v) {
-        $qty[$pid]["pending"] = $qty[$pid]["ordered"];
+        $qty[$pid]["pending"] = $qty[$pid]["ordered"] - $qty[$pid]["reserve"];
     }
 
     return $qty;
+}
+
+
+function fetch_order_quantities($arr){
+    // print_arr($arr); 
+    $status = [];
+    if(isset($arr["dispatch"]) && is_array($arr["dispatch"]) && sizeof($arr["dispatch"]) > 0){
+            
+        $order_quantities_arr = fetch_data([
+            "table" => "order_quantities",
+            "columns" => "id, product, product_lot, quantity, action, action_date ",
+            "condition" => " dispatch = '".$arr["dispatch"]["id"]."' AND order_id = '".$arr["dispatch"]["order_id"]."' ",
+            "order" => "",
+            "limit" => ""
+        ]);
+        // print_arr($order_quantities_arr);
+        if(sizeof($order_quantities_arr) > 0){
+            foreach ($order_quantities_arr as $k => $v) {
+                $pid = $v["product"];
+                $action = $v["action"];
+                $quantity = $v["quantity"];
+                if (!isset($status[$pid][$action])) {
+                    $status[$pid][$action] = 0;
+                }
+                $status[$pid][$action] += $quantity;
+            }
+        }
+    }
+
+    // print_arr($status);
+    return $status;
 }

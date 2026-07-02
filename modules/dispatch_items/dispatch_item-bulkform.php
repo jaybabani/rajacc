@@ -53,7 +53,10 @@ include '../../common/header.php';
     "columns" => ["reserve_quantity[]"],
   ];
 
-  $manage_order_quantity = ["action" => "reserve", "quantity_field" => "reserve_quantity"];
+  $manage_order_quantity = [
+    "action" => "reserve", 
+    "quantity_field" => "reserve_quantity"
+  ];
 
   $submit_result = bi_bulk_submit_form([
     'submit_data' => $_POST,
@@ -76,7 +79,8 @@ include '../../common/header.php';
   $product_ids = $order_products_arr["product_ids"];  // print_arr($product_ids);
   $product_lots = get_product_lot_quantities($product_ids, "merged_by_product");
   $products_arr = get_products_by_ids($product_ids);
-  $quantities = get_order_quantities(["order_id" => $order_id, "order_products" => $order_products, "product_lots" => $product_lots]);
+  $order_quantities = fetch_order_quantities(["order_id" => $order_id, "dispatch" => $dispatch_data]);
+  $quantities = get_quantities_summary(["order_id" => $order_id, "order_products" => $order_products, "product_lots" => $product_lots, "order_quantities" => $order_quantities]);
 
   $vars = [];
   $vars["dispatch"] = $dispatch_data;
