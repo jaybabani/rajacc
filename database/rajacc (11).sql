@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1:3306
--- Generation Time: Jun 29, 2026 at 12:50 PM
+-- Generation Time: Jul 02, 2026 at 07:43 AM
 -- Server version: 8.2.0
 -- PHP Version: 8.2.13
 
@@ -39,7 +39,7 @@ CREATE TABLE IF NOT EXISTS `attributes` (
   `updated` int DEFAULT NULL,
   `created` varchar(35) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=52 DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB AUTO_INCREMENT=53 DEFAULT CHARSET=utf8mb3;
 
 --
 -- Dumping data for table `attributes`
@@ -70,7 +70,7 @@ INSERT INTO `attributes` (`id`, `attribute`, `active`, `code`, `category`, `colo
 (23, 'Pipe Items', 'yes', 'pipes', 'product_category', NULL, 0, 1782196049, '0'),
 (24, 'Patra Items', 'yes', 'patra', 'product_category', NULL, 0, 1782196049, '0'),
 (25, 'Channel Items', 'yes', 'channel', 'product_category', NULL, 0, 1782196049, '0'),
-(26, 'Angle Items', 'yes', 'angle', 'product_category', NULL, 1, 1782292859, '0'),
+(26, 'Angle Items', 'yes', 'angle', 'product_category', NULL, 1, 1782972720, '0'),
 (27, 'Saliya Items', 'yes', 'saliya', 'product_category', NULL, 0, 1782196049, '0'),
 (28, 'SS Saliya Items', 'yes', 'ss_saliya', 'product_category', NULL, 0, 1782196049, '0'),
 (29, 'SS Pipes', 'yes', 'ss_pipes', 'product_category', NULL, 0, 1782202749, '0'),
@@ -79,7 +79,8 @@ INSERT INTO `attributes` (`id`, `attribute`, `active`, `code`, `category`, `colo
 (48, 'Vendor Invoice', 'yes', NULL, 'document_type', NULL, 1, 1782734571, '1782734571_1'),
 (49, 'Goods receipt note (GRN)', 'yes', NULL, 'document_type', NULL, 1, 1782734612, '1782734612_1'),
 (50, 'Delivery Challan', 'yes', NULL, 'document_type', NULL, 1, 1782734626, '1782734626_1'),
-(51, 'Eway Bill', 'yes', NULL, 'document_type', NULL, 1, 1782734648, '1782734648_1');
+(51, 'Eway Bill', 'yes', NULL, 'document_type', NULL, 1, 1782734648, '1782734648_1'),
+(52, 'Purchase docs', 'yes', NULL, 'folder_category', NULL, 1, 1782814369, '1782814369_1');
 
 -- --------------------------------------------------------
 
@@ -90,15 +91,15 @@ INSERT INTO `attributes` (`id`, `attribute`, `active`, `code`, `category`, `colo
 DROP TABLE IF EXISTS `column_history`;
 CREATE TABLE IF NOT EXISTS `column_history` (
   `id` int NOT NULL AUTO_INCREMENT,
-  `table_name` varchar(150) COLLATE utf8mb3_unicode_ci DEFAULT NULL,
+  `table_name` varchar(150) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci DEFAULT NULL,
   `row_id` int DEFAULT NULL,
-  `column_name` varchar(100) COLLATE utf8mb3_unicode_ci DEFAULT NULL,
-  `value` text COLLATE utf8mb3_unicode_ci,
+  `column_name` varchar(100) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci DEFAULT NULL,
+  `value` text CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci,
   `auth_user` int DEFAULT NULL,
   `updated` int DEFAULT NULL,
-  `created` varchar(35) COLLATE utf8mb3_unicode_ci DEFAULT NULL,
+  `created` varchar(35) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=27 DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_unicode_ci;
+) ENGINE=MyISAM AUTO_INCREMENT=69 DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_unicode_ci;
 
 --
 -- Dumping data for table `column_history`
@@ -130,7 +131,49 @@ INSERT INTO `column_history` (`id`, `table_name`, `row_id`, `column_name`, `valu
 (23, 'purchases', 7, 'status', 'order_placed', 1, 1782391476, '1782391476'),
 (24, 'purchases', 7, 'payment_status', 'on_hold', 1, 1782391476, '1782391476'),
 (25, 'purchases', 20, 'status', 'draft', 1, 1782722621, '1782722621'),
-(26, 'purchases', 20, 'payment_status', 'fully_paid', 1, 1782722621, '1782722621');
+(26, 'purchases', 20, 'payment_status', 'fully_paid', 1, 1782722621, '1782722621'),
+(27, 'product_lots', 12, 'status', 'order_placed', 1, 1782810960, '1782810960'),
+(28, 'product_lots', 12, 'status', 'ready', 1, 1782811007, '1782811007'),
+(29, 'product_lots', 13, 'status', 'production_complete', 1, 1782811112, '1782811112'),
+(30, 'orders', 7, 'status', 'order_placed', 1, 1782890964, '1782890964'),
+(31, 'orders', 7, 'payment_status', 'pending', 1, 1782890964, '1782890964'),
+(32, 'orders', 7, 'payment_status', 'on_hold', 1, 1782891299, '1782891299'),
+(33, 'orders', 7, 'status', 'order_confirmed', 1, 1782891948, '1782891948'),
+(34, 'orders', 7, 'status', 'order_placed', 1, 1782903748, '1782903748'),
+(35, 'orders', 7, 'status', 'partially_dispatch', 1, 1782903758, '1782903758'),
+(36, 'orders', 8, 'status', 'order_placed', 1, 1782903859, '1782903859'),
+(37, 'orders', 8, 'payment_status', 'pending', 1, 1782903859, '1782903859'),
+(38, 'orders', 7, 'status', 'partially_dispatched', 1, 1782904107, '1782904107'),
+(39, 'orders', 9, 'status', 'order_confirmed', 1, 1782909361, '1782909361'),
+(40, 'orders', 9, 'payment_status', 'on_hold', 1, 1782909361, '1782909361'),
+(41, 'order_items', 15, 'rate', '100', 1, 1782973101, '1782973101'),
+(42, 'order_items', 15, 'quantity', '10', 1, 1782973101, '1782973101'),
+(43, 'order_items', 15, 'rate', '101', 1, 1782973165, '1782973165'),
+(44, 'order_items', 11, 'rate', '20', 1, 1782974270, '1782974270'),
+(45, 'order_items', 11, 'quantity', '101', 1, 1782974747, '1782974747'),
+(46, 'order_items', 11, 'quantity', '102', 1, 1782974760, '1782974760'),
+(47, 'order_items', 11, 'rate', '21', 1, 1782974773, '1782974773'),
+(48, 'order_items', 21, 'rate', '21', 1, 1782974973, '1782974973'),
+(49, 'order_items', 30, 'rate', '11', 1, 1782976378, '1782976378'),
+(50, 'order_items', 30, 'quantity', '111', 1, 1782976378, '1782976378'),
+(51, 'order_items', 31, 'rate', '1', 1, 1782976471, '1782976471'),
+(52, 'order_items', 31, 'quantity', '111', 1, 1782976471, '1782976471'),
+(53, 'order_items', 32, 'rate', '2', 1, 1782976471, '1782976471'),
+(54, 'order_items', 32, 'quantity', '222', 1, 1782976471, '1782976471'),
+(55, 'order_items', 33, 'rate', '3', 1, 1782976471, '1782976471'),
+(56, 'order_items', 33, 'quantity', '333', 1, 1782976471, '1782976471'),
+(57, 'order_items', 33, 'rate', '6', 1, 1782976693, '1782976693'),
+(58, 'order_items', 33, 'quantity', '336', 1, 1782976693, '1782976693'),
+(59, 'order_items', 33, 'rate', '6', 1, 1782976710, '1782976710'),
+(60, 'order_items', 33, 'quantity', '336', 1, 1782976710, '1782976710'),
+(61, 'order_items', 33, 'rate', '10', 1, 1782976723, '1782976723'),
+(62, 'order_items', 33, 'quantity', '400', 1, 1782976723, '1782976723'),
+(63, 'order_items', 34, 'rate', '200', 1, 1782977033, '1782977033'),
+(64, 'order_items', 34, 'quantity', '20', 1, 1782977033, '1782977033'),
+(65, 'order_items', 35, 'rate', '500', 1, 1782977108, '1782977108'),
+(66, 'order_items', 35, 'quantity', '5', 1, 1782977108, '1782977108'),
+(67, 'order_items', 36, 'rate', '111', 1, 1782977901, '1782977901'),
+(68, 'order_items', 36, 'quantity', '1', 1, 1782977901, '1782977901');
 
 -- --------------------------------------------------------
 
@@ -156,7 +199,7 @@ CREATE TABLE IF NOT EXISTS `customers` (
   `active` varchar(5) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci DEFAULT NULL,
   `auth_user` int NOT NULL,
   `updated` int DEFAULT NULL,
-  `created` varchar(35) COLLATE utf8mb3_unicode_ci DEFAULT NULL,
+  `created` varchar(35) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_unicode_ci;
 
@@ -167,6 +210,31 @@ CREATE TABLE IF NOT EXISTS `customers` (
 INSERT INTO `customers` (`id`, `firm_name`, `firm_email`, `firm_phone`, `firm_address`, `image`, `owner_name`, `owner_email`, `owner_phone`, `zone`, `gst`, `category`, `price_allotment`, `active`, `auth_user`, `updated`, `created`) VALUES
 (5, 'c', 'e', '33333,\r\n444', 'aa  aa', 7, 'on', 'oe', '6666,\r\n55555,', 'Ahd', 'axip333232', 'auto_rickshaw_dealer', '90', 'yes', 0, 1782130324, '0'),
 (6, 'a', '', '', '', 8, 'dd', '', '', '', '', 'whole_seller', '', 'yes', 0, 1782130262, '0');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `folders`
+--
+
+DROP TABLE IF EXISTS `folders`;
+CREATE TABLE IF NOT EXISTS `folders` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `title` varchar(255) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
+  `notes` text CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci,
+  `category` varchar(200) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci DEFAULT NULL,
+  `auth_user` int NOT NULL,
+  `updated` int NOT NULL,
+  `created` varchar(35) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM AUTO_INCREMENT=22 DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_unicode_ci;
+
+--
+-- Dumping data for table `folders`
+--
+
+INSERT INTO `folders` (`id`, `title`, `notes`, `category`, `auth_user`, `updated`, `created`) VALUES
+(21, 'Red', 'red folder', '52', 1, 1782814375, '1782813914_1');
 
 -- --------------------------------------------------------
 
@@ -185,61 +253,136 @@ CREATE TABLE IF NOT EXISTS `ipadd` (
   `sessionid` varchar(255) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
   `accounttype` varchar(255) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=73 DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_unicode_ci;
+) ENGINE=MyISAM AUTO_INCREMENT=81 DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_unicode_ci;
 
 --
 -- Dumping data for table `ipadd`
 --
 
 INSERT INTO `ipadd` (`id`, `ip`, `mac`, `userId`, `logged_on`, `loggedout_on`, `sessionid`, `accounttype`) VALUES
-(48, '::1', '', 1, '2026-06-22 10:53:36', '2026-06-25 11:48:59', 'f3ln87nbgi9iae5pt5o4qe800m', ''),
-(47, '::1', '', 1, '2026-06-22 10:53:32', '2026-06-25 11:48:59', 'f3ln87nbgi9iae5pt5o4qe800m', ''),
-(46, '::1', '', 1, '2026-06-22 10:53:22', '2026-06-25 11:48:59', 'f3ln87nbgi9iae5pt5o4qe800m', ''),
-(45, '::1', '', 1, '2026-06-22 10:52:19', '2026-06-25 11:48:59', 'f3ln87nbgi9iae5pt5o4qe800m', ''),
-(44, '::1', '', 1, '2026-06-22 10:50:46', '2026-06-25 11:48:59', 'f3ln87nbgi9iae5pt5o4qe800m', ''),
-(43, '::1', '', 1, '2026-06-22 10:50:37', '2026-06-25 11:48:59', 'f3ln87nbgi9iae5pt5o4qe800m', ''),
-(42, '::1', '', 1, '2026-06-22 10:50:20', '2026-06-25 11:48:59', 'f3ln87nbgi9iae5pt5o4qe800m', ''),
-(41, '::1', '', 1, '2026-06-22 10:50:05', '2026-06-25 11:48:59', 'f3ln87nbgi9iae5pt5o4qe800m', ''),
-(40, '::1', '', 1, '2026-06-22 10:46:54', '2026-06-25 11:48:59', 'f3ln87nbgi9iae5pt5o4qe800m', ''),
-(39, '::1', '', 1, '2026-06-22 10:46:51', '2026-06-25 11:48:59', 'f3ln87nbgi9iae5pt5o4qe800m', ''),
-(38, '::1', '', 1, '2026-06-22 10:46:15', '2026-06-25 11:48:59', 'f3ln87nbgi9iae5pt5o4qe800m', ''),
-(37, '::1', '', 1, '2026-06-22 10:45:02', '2026-06-25 11:48:59', 'f3ln87nbgi9iae5pt5o4qe800m', ''),
-(36, '::1', '', 1, '2026-06-22 10:44:38', '2026-06-25 11:48:59', 'f3ln87nbgi9iae5pt5o4qe800m', ''),
-(35, '::1', '', 1, '2026-06-22 10:43:53', '2026-06-25 11:48:59', 'f3ln87nbgi9iae5pt5o4qe800m', ''),
-(34, '::1', '', 1, '2026-06-22 10:42:20', '2026-06-25 11:48:59', 'f3ln87nbgi9iae5pt5o4qe800m', ''),
-(33, '::1', '', 1, '2026-06-22 10:41:39', '2026-06-25 11:48:59', 'f3ln87nbgi9iae5pt5o4qe800m', ''),
-(32, '::1', '', 1, '2026-06-22 10:41:26', '2026-06-25 11:48:59', 'f3ln87nbgi9iae5pt5o4qe800m', ''),
-(31, '::1', '', 1, '2026-06-22 10:40:16', '2026-06-25 11:48:59', 'f3ln87nbgi9iae5pt5o4qe800m', ''),
-(30, '::1', '', 1, '2026-06-22 16:09:56', '2026-06-25 11:48:59', 'f3ln87nbgi9iae5pt5o4qe800m', ''),
-(29, '::1', '', 1, '2026-06-22 10:39:05', '2026-06-25 11:48:59', 'f3ln87nbgi9iae5pt5o4qe800m', ''),
-(28, '::1', '', 1, '2026-06-22 07:03:28', '2026-06-25 11:48:59', 'f3ln87nbgi9iae5pt5o4qe800m', ''),
-(27, '::1', '', 1, '2026-06-22 03:02:47', '2026-06-25 11:48:59', 'f3ln87nbgi9iae5pt5o4qe800m', ''),
-(25, '::1', '', 1, '2026-06-20 11:45:48', '2026-06-25 11:48:59', 'f3ln87nbgi9iae5pt5o4qe800m', ''),
-(26, '::1', '', 1, '2026-06-20 12:17:37', '2026-06-25 11:48:59', 'f3ln87nbgi9iae5pt5o4qe800m', ''),
-(49, '::1', '', 1, '2026-06-22 10:54:12', '2026-06-25 11:48:59', 'f3ln87nbgi9iae5pt5o4qe800m', ''),
-(50, '::1', '', 1, '2026-06-22 10:54:46', '2026-06-25 11:48:59', 'f3ln87nbgi9iae5pt5o4qe800m', ''),
-(51, '::1', '', 1, '2026-06-22 11:09:21', '2026-06-25 11:48:59', 'f3ln87nbgi9iae5pt5o4qe800m', ''),
-(52, '::1', '', 1, '2026-06-22 11:11:02', '2026-06-25 11:48:59', 'f3ln87nbgi9iae5pt5o4qe800m', ''),
-(53, '::1', '', 1, '2026-06-22 11:11:17', '2026-06-25 11:48:59', 'f3ln87nbgi9iae5pt5o4qe800m', ''),
-(54, '::1', '', 1, '2026-06-22 11:36:12', '2026-06-25 11:48:59', 'f3ln87nbgi9iae5pt5o4qe800m', ''),
-(55, '::1', '', 1, '2026-06-22 11:37:47', '2026-06-25 11:48:59', 'f3ln87nbgi9iae5pt5o4qe800m', ''),
-(56, '::1', '', 1, '2026-06-22 11:37:54', '2026-06-25 11:48:59', 'f3ln87nbgi9iae5pt5o4qe800m', ''),
-(57, '::1', '', 1, '2026-06-22 11:38:06', '2026-06-25 11:48:59', 'f3ln87nbgi9iae5pt5o4qe800m', ''),
-(58, '::1', '', 1, '2026-06-22 11:38:17', '2026-06-25 11:48:59', 'f3ln87nbgi9iae5pt5o4qe800m', ''),
-(59, '::1', '', 1, '2026-06-22 11:38:23', '2026-06-25 11:48:59', 'f3ln87nbgi9iae5pt5o4qe800m', ''),
-(60, '::1', '', 1, '2026-06-22 11:38:28', '2026-06-25 11:48:59', 'f3ln87nbgi9iae5pt5o4qe800m', ''),
-(61, '::1', '', 1, '2026-06-22 12:14:38', '2026-06-25 11:48:59', 'f3ln87nbgi9iae5pt5o4qe800m', ''),
-(62, '::1', '', 1, '2026-06-22 12:51:24', '2026-06-25 11:48:59', 'f3ln87nbgi9iae5pt5o4qe800m', ''),
-(63, '::1', '', 1, '2026-06-23 05:01:00', '2026-06-25 11:48:59', 'f3ln87nbgi9iae5pt5o4qe800m', ''),
-(64, '::1', '', 1, '2026-06-23 05:27:08', '2026-06-25 11:48:59', 'f3ln87nbgi9iae5pt5o4qe800m', ''),
-(65, '::1', '', 1, '2026-06-23 06:17:12', '2026-06-25 11:48:59', 'f3ln87nbgi9iae5pt5o4qe800m', ''),
-(66, '::1', '', 1, '2026-06-23 14:09:03', '2026-06-23 14:25:49', 'j7hqruivd767m89j9sk0t6i6tp', ''),
-(67, '::1', '', 1, '2026-06-23 14:25:51', '', 'j7hqruivd767m89j9sk0t6i6tp', ''),
-(68, '::1', '', 1, '2026-06-24 04:36:01', '2026-06-25 11:48:59', 'f3ln87nbgi9iae5pt5o4qe800m', ''),
-(69, '::1', '', 1, '2026-06-24 12:13:41', '2026-06-25 11:48:59', 'f3ln87nbgi9iae5pt5o4qe800m', ''),
-(70, '::1', '', 1, '2026-06-25 08:23:18', '2026-06-25 11:48:59', 'f3ln87nbgi9iae5pt5o4qe800m', ''),
-(71, '::1', '', 1, '2026-06-25 11:49:02', '', 'f3ln87nbgi9iae5pt5o4qe800m', ''),
-(72, '::1', '', 1, '2026-06-29 06:46:24', '', 'f3ln87nbgi9iae5pt5o4qe800m', '');
+(48, '::1', '', 1, '2026-06-22 10:53:36', '2026-07-01 12:04:58', 'f3ln87nbgi9iae5pt5o4qe800m', ''),
+(47, '::1', '', 1, '2026-06-22 10:53:32', '2026-07-01 12:04:58', 'f3ln87nbgi9iae5pt5o4qe800m', ''),
+(46, '::1', '', 1, '2026-06-22 10:53:22', '2026-07-01 12:04:58', 'f3ln87nbgi9iae5pt5o4qe800m', ''),
+(45, '::1', '', 1, '2026-06-22 10:52:19', '2026-07-01 12:04:58', 'f3ln87nbgi9iae5pt5o4qe800m', ''),
+(44, '::1', '', 1, '2026-06-22 10:50:46', '2026-07-01 12:04:58', 'f3ln87nbgi9iae5pt5o4qe800m', ''),
+(43, '::1', '', 1, '2026-06-22 10:50:37', '2026-07-01 12:04:58', 'f3ln87nbgi9iae5pt5o4qe800m', ''),
+(42, '::1', '', 1, '2026-06-22 10:50:20', '2026-07-01 12:04:58', 'f3ln87nbgi9iae5pt5o4qe800m', ''),
+(41, '::1', '', 1, '2026-06-22 10:50:05', '2026-07-01 12:04:58', 'f3ln87nbgi9iae5pt5o4qe800m', ''),
+(40, '::1', '', 1, '2026-06-22 10:46:54', '2026-07-01 12:04:58', 'f3ln87nbgi9iae5pt5o4qe800m', ''),
+(39, '::1', '', 1, '2026-06-22 10:46:51', '2026-07-01 12:04:58', 'f3ln87nbgi9iae5pt5o4qe800m', ''),
+(38, '::1', '', 1, '2026-06-22 10:46:15', '2026-07-01 12:04:58', 'f3ln87nbgi9iae5pt5o4qe800m', ''),
+(37, '::1', '', 1, '2026-06-22 10:45:02', '2026-07-01 12:04:58', 'f3ln87nbgi9iae5pt5o4qe800m', ''),
+(36, '::1', '', 1, '2026-06-22 10:44:38', '2026-07-01 12:04:58', 'f3ln87nbgi9iae5pt5o4qe800m', ''),
+(35, '::1', '', 1, '2026-06-22 10:43:53', '2026-07-01 12:04:58', 'f3ln87nbgi9iae5pt5o4qe800m', ''),
+(34, '::1', '', 1, '2026-06-22 10:42:20', '2026-07-01 12:04:58', 'f3ln87nbgi9iae5pt5o4qe800m', ''),
+(33, '::1', '', 1, '2026-06-22 10:41:39', '2026-07-01 12:04:58', 'f3ln87nbgi9iae5pt5o4qe800m', ''),
+(32, '::1', '', 1, '2026-06-22 10:41:26', '2026-07-01 12:04:58', 'f3ln87nbgi9iae5pt5o4qe800m', ''),
+(31, '::1', '', 1, '2026-06-22 10:40:16', '2026-07-01 12:04:58', 'f3ln87nbgi9iae5pt5o4qe800m', ''),
+(30, '::1', '', 1, '2026-06-22 16:09:56', '2026-07-01 12:04:58', 'f3ln87nbgi9iae5pt5o4qe800m', ''),
+(29, '::1', '', 1, '2026-06-22 10:39:05', '2026-07-01 12:04:58', 'f3ln87nbgi9iae5pt5o4qe800m', ''),
+(28, '::1', '', 1, '2026-06-22 07:03:28', '2026-07-01 12:04:58', 'f3ln87nbgi9iae5pt5o4qe800m', ''),
+(27, '::1', '', 1, '2026-06-22 03:02:47', '2026-07-01 12:04:58', 'f3ln87nbgi9iae5pt5o4qe800m', ''),
+(25, '::1', '', 1, '2026-06-20 11:45:48', '2026-07-01 12:04:58', 'f3ln87nbgi9iae5pt5o4qe800m', ''),
+(26, '::1', '', 1, '2026-06-20 12:17:37', '2026-07-01 12:04:58', 'f3ln87nbgi9iae5pt5o4qe800m', ''),
+(49, '::1', '', 1, '2026-06-22 10:54:12', '2026-07-01 12:04:58', 'f3ln87nbgi9iae5pt5o4qe800m', ''),
+(50, '::1', '', 1, '2026-06-22 10:54:46', '2026-07-01 12:04:58', 'f3ln87nbgi9iae5pt5o4qe800m', ''),
+(51, '::1', '', 1, '2026-06-22 11:09:21', '2026-07-01 12:04:58', 'f3ln87nbgi9iae5pt5o4qe800m', ''),
+(52, '::1', '', 1, '2026-06-22 11:11:02', '2026-07-01 12:04:58', 'f3ln87nbgi9iae5pt5o4qe800m', ''),
+(53, '::1', '', 1, '2026-06-22 11:11:17', '2026-07-01 12:04:58', 'f3ln87nbgi9iae5pt5o4qe800m', ''),
+(54, '::1', '', 1, '2026-06-22 11:36:12', '2026-07-01 12:04:58', 'f3ln87nbgi9iae5pt5o4qe800m', ''),
+(55, '::1', '', 1, '2026-06-22 11:37:47', '2026-07-01 12:04:58', 'f3ln87nbgi9iae5pt5o4qe800m', ''),
+(56, '::1', '', 1, '2026-06-22 11:37:54', '2026-07-01 12:04:58', 'f3ln87nbgi9iae5pt5o4qe800m', ''),
+(57, '::1', '', 1, '2026-06-22 11:38:06', '2026-07-01 12:04:58', 'f3ln87nbgi9iae5pt5o4qe800m', ''),
+(58, '::1', '', 1, '2026-06-22 11:38:17', '2026-07-01 12:04:58', 'f3ln87nbgi9iae5pt5o4qe800m', ''),
+(59, '::1', '', 1, '2026-06-22 11:38:23', '2026-07-01 12:04:58', 'f3ln87nbgi9iae5pt5o4qe800m', ''),
+(60, '::1', '', 1, '2026-06-22 11:38:28', '2026-07-01 12:04:58', 'f3ln87nbgi9iae5pt5o4qe800m', ''),
+(61, '::1', '', 1, '2026-06-22 12:14:38', '2026-07-01 12:04:58', 'f3ln87nbgi9iae5pt5o4qe800m', ''),
+(62, '::1', '', 1, '2026-06-22 12:51:24', '2026-07-01 12:04:58', 'f3ln87nbgi9iae5pt5o4qe800m', ''),
+(63, '::1', '', 1, '2026-06-23 05:01:00', '2026-07-01 12:04:58', 'f3ln87nbgi9iae5pt5o4qe800m', ''),
+(64, '::1', '', 1, '2026-06-23 05:27:08', '2026-07-01 12:04:58', 'f3ln87nbgi9iae5pt5o4qe800m', ''),
+(65, '::1', '', 1, '2026-06-23 06:17:12', '2026-07-01 12:04:58', 'f3ln87nbgi9iae5pt5o4qe800m', ''),
+(66, '::1', '', 1, '2026-06-23 14:09:03', '2026-07-01 07:02:33', 'j7hqruivd767m89j9sk0t6i6tp', ''),
+(67, '::1', '', 1, '2026-06-23 14:25:51', '2026-07-01 07:02:33', 'j7hqruivd767m89j9sk0t6i6tp', ''),
+(68, '::1', '', 1, '2026-06-24 04:36:01', '2026-07-01 12:04:58', 'f3ln87nbgi9iae5pt5o4qe800m', ''),
+(69, '::1', '', 1, '2026-06-24 12:13:41', '2026-07-01 12:04:58', 'f3ln87nbgi9iae5pt5o4qe800m', ''),
+(70, '::1', '', 1, '2026-06-25 08:23:18', '2026-07-01 12:04:58', 'f3ln87nbgi9iae5pt5o4qe800m', ''),
+(71, '::1', '', 1, '2026-06-25 11:49:02', '2026-07-01 12:04:58', 'f3ln87nbgi9iae5pt5o4qe800m', ''),
+(72, '::1', '', 1, '2026-06-29 06:46:24', '2026-07-01 12:04:58', 'f3ln87nbgi9iae5pt5o4qe800m', ''),
+(73, '::1', '', 1, '2026-06-30 05:25:25', '2026-07-01 12:04:58', 'f3ln87nbgi9iae5pt5o4qe800m', ''),
+(74, '::1', '', 1, '2026-06-30 05:25:56', '2026-07-01 12:04:58', 'f3ln87nbgi9iae5pt5o4qe800m', ''),
+(75, '::1', '', 1, '2026-06-30 10:04:18', '2026-07-01 12:04:58', 'f3ln87nbgi9iae5pt5o4qe800m', ''),
+(76, '::1', '', 1, '2026-07-01 07:02:37', '', 'j7hqruivd767m89j9sk0t6i6tp', ''),
+(77, '::1', '', 1, '2026-07-01 10:41:01', '2026-07-01 12:04:58', 'f3ln87nbgi9iae5pt5o4qe800m', ''),
+(78, '::1', '', 1, '2026-07-01 11:51:28', '2026-07-01 12:04:58', 'f3ln87nbgi9iae5pt5o4qe800m', ''),
+(79, '::1', '', 1, '2026-07-01 12:05:01', '', 'f3ln87nbgi9iae5pt5o4qe800m', ''),
+(80, '::1', '', 1, '2026-07-02 05:58:37', '', 'f3ln87nbgi9iae5pt5o4qe800m', '');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `orders`
+--
+
+DROP TABLE IF EXISTS `orders`;
+CREATE TABLE IF NOT EXISTS `orders` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `customer` int NOT NULL,
+  `notes` text CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci,
+  `status` varchar(255) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
+  `user` int NOT NULL,
+  `order_date` int NOT NULL,
+  `delivery_due_date` int NOT NULL,
+  `payment_status` varchar(200) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
+  `auth_user` int NOT NULL,
+  `updated` int NOT NULL,
+  `created` varchar(35) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM AUTO_INCREMENT=10 DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_unicode_ci;
+
+--
+-- Dumping data for table `orders`
+--
+
+INSERT INTO `orders` (`id`, `customer`, `notes`, `status`, `user`, `order_date`, `delivery_due_date`, `payment_status`, `auth_user`, `updated`, `created`) VALUES
+(7, 6, 'test', 'partially_dispatched', 4, 20260701, 20260715, 'on_hold', 1, 1782904107, '1782890964_1'),
+(8, 5, 'test test ', 'order_placed', 4, 20260701, 20260710, 'pending', 1, 1782903859, '1782903859_1'),
+(9, 6, 'test', 'order_confirmed', 4, 20260710, 20260708, 'on_hold', 1, 1782909361, '1782909361_1');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `order_items`
+--
+
+DROP TABLE IF EXISTS `order_items`;
+CREATE TABLE IF NOT EXISTS `order_items` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `product` int NOT NULL,
+  `quantity` decimal(10,2) NOT NULL,
+  `order_id` int NOT NULL,
+  `rate` decimal(10,2) DEFAULT NULL,
+  `auth_user` int NOT NULL,
+  `updated` int NOT NULL,
+  `created` varchar(35) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM AUTO_INCREMENT=37 DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_unicode_ci;
+
+--
+-- Dumping data for table `order_items`
+--
+
+INSERT INTO `order_items` (`id`, `product`, `quantity`, `order_id`, `rate`, `auth_user`, `updated`, `created`) VALUES
+(33, 8, 400.00, 9, 10.00, 1, 1782976723, '1782976471_1'),
+(36, 13, 1.00, 9, 111.00, 1, 1782977901, '1782977901_1'),
+(31, 7, 112.00, 9, 2.00, 1, 1782976490, '1782976471_1'),
+(30, 7, 111.00, 9, 11.00, 1, 1782976378, '1782976378_1'),
+(11, 7, 102.00, 7, 21.00, 1, 1782974773, '1782909237_1'),
+(29, 7, 111.00, 9, 1.00, 1, 1782976316, '1782976316_1'),
+(27, 6, 200.00, 9, 20.00, 1, 1782976264, '1782976264_1'),
+(28, 7, 111.00, 9, 1.00, 1, 1782976302, '1782976302_1'),
+(26, 7, 100.00, 9, 10.00, 1, 1782976264, '1782976264_1'),
+(34, 14, 20.00, 0, 200.00, 1, 1782977033, '1782977033_1'),
+(35, 14, 5.00, 9, 500.00, 1, 1782977108, '1782977108_1');
 
 -- --------------------------------------------------------
 
@@ -260,7 +403,7 @@ CREATE TABLE IF NOT EXISTS `products` (
   `pieces` int DEFAULT NULL,
   `auth_user` int NOT NULL,
   `updated` int NOT NULL,
-  `created` varchar(35) COLLATE utf8mb3_unicode_ci DEFAULT NULL,
+  `created` varchar(35) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM AUTO_INCREMENT=15 DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_unicode_ci;
 
@@ -288,34 +431,33 @@ DROP TABLE IF EXISTS `product_lots`;
 CREATE TABLE IF NOT EXISTS `product_lots` (
   `id` int NOT NULL AUTO_INCREMENT,
   `product` int NOT NULL,
-  `quantity` int NOT NULL,
+  `ordered_quantity` int NOT NULL,
+  `received_quantity` int NOT NULL,
+  `accepted_quantity` int NOT NULL,
+  `rejected_quantity` int NOT NULL,
+  `available_quantity` int NOT NULL,
+  `reserved_quantity` int NOT NULL,
+  `consumed_quantity` int NOT NULL,
   `notes` text CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci,
-  `source` varchar(20) COLLATE utf8mb3_unicode_ci NOT NULL,
+  `source` varchar(20) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
   `status` varchar(255) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
-  `purchase_invoice` int DEFAULT NULL,
-  `vendor` int DEFAULT NULL,
+  `purchase` int DEFAULT NULL,
   `buy_price` decimal(10,2) DEFAULT NULL,
-  `buy_date` int DEFAULT NULL,
   `auth_user` int NOT NULL,
   `updated` int NOT NULL,
-  `created` varchar(35) COLLATE utf8mb3_unicode_ci DEFAULT NULL,
+  `created` varchar(35) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=12 DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_unicode_ci;
+) ENGINE=MyISAM AUTO_INCREMENT=14 DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_unicode_ci;
 
 --
 -- Dumping data for table `product_lots`
 --
 
-INSERT INTO `product_lots` (`id`, `product`, `quantity`, `notes`, `source`, `status`, `purchase_invoice`, `vendor`, `buy_price`, `buy_date`, `auth_user`, `updated`, `created`) VALUES
-(1, 7, 1001, 'test1', '', 'received', 29, 8, 20.00, 20260105, 0, 0, '0'),
-(3, 6, 111, 'tast', '', 'ready', 30, 5, 222.00, 20260623, 1, 1782301549, '0'),
-(4, 7, 34343, '', '', 'received', 39, 5, 333.00, 20260609, 0, 1782286889, '0'),
-(6, 12, 101, 'mirror glasses', '', 'ready', 42, 5, 200.00, 20260610, 1, 1782303777, '0'),
-(7, 8, 50, 'safety rods', '', 'under_process', 43, 8, 100.00, 20260604, 1, 1782303923, '0'),
-(8, 10, 322, 'test', '', 'order_placed', 44, 5, 33.00, 20260603, 1, 1782304098, '0'),
-(9, 11, 33, 'test', '', 'under_process', 45, 6, 22.00, 20260601, 1, 1782304127, '0'),
-(10, 7, 11, 'tset', 'produced', 'new', NULL, NULL, NULL, NULL, 1, 1782306903, '0'),
-(11, 6, 20, '11111', 'purchased', 'received', 48, 8, 30.00, 20260610, 1, 1782377656, '0');
+INSERT INTO `product_lots` (`id`, `product`, `ordered_quantity`, `received_quantity`, `accepted_quantity`, `rejected_quantity`, `available_quantity`, `reserved_quantity`, `consumed_quantity`, `notes`, `source`, `status`, `purchase`, `buy_price`, `auth_user`, `updated`, `created`) VALUES
+(12, 7, 1113, 113, 311, 113, 113, 311, 113, '11113', 'purchased', 'ready', 7, 3111.00, 1, 1782811042, '1782810960_1'),
+(13, 12, 222, 222, 220, 2, 200, 20, 0, 'nnn', 'produced', 'production_complete', NULL, NULL, 1, 1782811112, '1782811112_1'),
+(10, 7, 11, 0, 0, 0, 0, 0, 0, 'tset', 'produced', 'new', NULL, NULL, 1, 1782306903, '0'),
+(11, 6, 20, 0, 0, 0, 0, 0, 0, '11111', 'purchased', 'received', 20, 32.00, 1, 1782809279, '0');
 
 -- --------------------------------------------------------
 
@@ -326,8 +468,8 @@ INSERT INTO `product_lots` (`id`, `product`, `quantity`, `notes`, `source`, `sta
 DROP TABLE IF EXISTS `purchases`;
 CREATE TABLE IF NOT EXISTS `purchases` (
   `id` int NOT NULL AUTO_INCREMENT,
-  `title` varchar(255) COLLATE utf8mb3_unicode_ci NOT NULL,
-  `payment_status` varchar(100) COLLATE utf8mb3_unicode_ci NOT NULL,
+  `title` varchar(255) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
+  `payment_status` varchar(100) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
   `notes` text CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci,
   `status` varchar(100) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
   `purchase_invoice` int DEFAULT NULL,
@@ -370,7 +512,7 @@ INSERT INTO `purchases` (`id`, `title`, `payment_status`, `notes`, `status`, `pu
 (17, 'fdsa', 'fully_paid', '', 'draft', NULL, 0, 0.00, 0.00, 0.00, 0.00, 0.00, 0, 0, 0, 0, 0, 1, 1782722086, '1782722086_1'),
 (18, 'fdsa', 'fully_paid', '', 'draft', NULL, 0, 0.00, 0.00, 0.00, 0.00, 0.00, 0, 0, 0, 0, 0, 1, 1782722402, '1782722402_1'),
 (19, 'fdsa', 'fully_paid', '', 'draft', NULL, 0, 0.00, 0.00, 0.00, 0.00, 0.00, 0, 0, 0, 0, 0, 1, 1782722481, '1782722481_1'),
-(20, 'fdsa12', 'fully_paid', '', 'draft', 85, 0, 0.00, 0.00, 0.00, 0.00, 0.00, 0, 0, 0, 0, 0, 1, 1782736745, '1782722621_1');
+(20, 'fdsa12', 'fully_paid', 'tsestst test ', 'draft', 85, 8, 200.00, 20.00, 10.00, 10.00, 250.00, 20260609, 20260629, 20260610, 20260701, 20260702, 1, 1782807949, '1782722621_1');
 
 -- --------------------------------------------------------
 
@@ -389,7 +531,7 @@ CREATE TABLE IF NOT EXISTS `raw_materials` (
   `image` int DEFAULT NULL,
   `auth_user` int DEFAULT NULL,
   `updated` int DEFAULT NULL,
-  `created` varchar(35) COLLATE utf8mb3_unicode_ci DEFAULT NULL,
+  `created` varchar(35) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM AUTO_INCREMENT=15 DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_unicode_ci;
 
@@ -414,16 +556,20 @@ DROP TABLE IF EXISTS `raw_material_lots`;
 CREATE TABLE IF NOT EXISTS `raw_material_lots` (
   `id` int NOT NULL AUTO_INCREMENT,
   `raw_material` int NOT NULL,
-  `quantity` int NOT NULL,
+  `ordered_quantity` int NOT NULL,
+  `received_quantity` int NOT NULL,
+  `accepted_quantity` int NOT NULL,
+  `rejected_quantity` int NOT NULL,
+  `available_quantity` int NOT NULL,
+  `reserved_quantity` int NOT NULL,
+  `consumed_quantity` int NOT NULL,
   `notes` text CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci,
   `status` varchar(255) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
-  `purchase_invoice` int DEFAULT NULL,
-  `vendor` int DEFAULT NULL,
+  `purchase` int NOT NULL,
   `buy_price` decimal(10,2) DEFAULT NULL,
-  `buy_date` int DEFAULT NULL,
   `auth_user` int NOT NULL,
   `updated` int NOT NULL,
-  `created` varchar(35) COLLATE utf8mb3_unicode_ci DEFAULT NULL,
+  `created` varchar(35) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_unicode_ci;
 
@@ -431,11 +577,11 @@ CREATE TABLE IF NOT EXISTS `raw_material_lots` (
 -- Dumping data for table `raw_material_lots`
 --
 
-INSERT INTO `raw_material_lots` (`id`, `raw_material`, `quantity`, `notes`, `status`, `purchase_invoice`, `vendor`, `buy_price`, `buy_date`, `auth_user`, `updated`, `created`) VALUES
-(1, 7, 1001, 'test1', 'received', 29, 8, 20.00, 20260105, 0, 0, '0'),
-(3, 6, 111, 'tast', 'ready', 30, 5, 222.00, 20260623, 1, 1782301549, '0'),
-(4, 7, 34343, '', 'received', 39, 5, 333.00, 20260609, 0, 1782286889, '0'),
-(6, 7, 33331, 'tttt3', 'received', 41, 5, 3333.00, 20260609, 1, 1782296557, '0');
+INSERT INTO `raw_material_lots` (`id`, `raw_material`, `ordered_quantity`, `received_quantity`, `accepted_quantity`, `rejected_quantity`, `available_quantity`, `reserved_quantity`, `consumed_quantity`, `notes`, `status`, `purchase`, `buy_price`, `auth_user`, `updated`, `created`) VALUES
+(1, 7, 1001, 0, 0, 0, 0, 0, 0, 'test1', 'received', 0, 20.00, 0, 0, '0'),
+(3, 6, 111, 100, 90, 10, 80, 10, 0, 'tast12', 'ready', 20, 222.00, 1, 1782803622, '0'),
+(4, 7, 34343, 0, 0, 0, 0, 0, 0, '', 'received', 0, 333.00, 0, 1782286889, '0'),
+(6, 7, 33331, 0, 0, 0, 0, 0, 0, 'tttt3', 'received', 0, 3333.00, 1, 1782296557, '0');
 
 -- --------------------------------------------------------
 
@@ -567,16 +713,16 @@ CREATE TABLE IF NOT EXISTS `uploads` (
   `size` int DEFAULT NULL,
   `thumb` varchar(255) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci DEFAULT NULL,
   `small` varchar(255) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci DEFAULT NULL,
-  `table_name` varchar(200) COLLATE utf8mb3_unicode_ci DEFAULT NULL,
+  `table_name` varchar(200) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci DEFAULT NULL,
   `row_id` int DEFAULT NULL,
-  `file_type` varchar(20) COLLATE utf8mb3_unicode_ci DEFAULT NULL,
-  `caption` varchar(255) COLLATE utf8mb3_unicode_ci DEFAULT NULL,
-  `other` varchar(255) COLLATE utf8mb3_unicode_ci DEFAULT NULL,
+  `file_type` varchar(20) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci DEFAULT NULL,
+  `caption` varchar(255) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci DEFAULT NULL,
+  `other` varchar(255) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci DEFAULT NULL,
   `auth_user` int DEFAULT NULL,
   `updated` int DEFAULT NULL,
-  `created` varchar(35) COLLATE utf8mb3_unicode_ci DEFAULT NULL,
+  `created` varchar(35) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=89 DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=93 DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_unicode_ci;
 
 --
 -- Dumping data for table `uploads`
@@ -653,7 +799,11 @@ INSERT INTO `uploads` (`id`, `name`, `title`, `brief`, `module`, `module_id`, `t
 (85, 'uploads/916324188-WhatsApp Image 2026-06-26 at 12.54.11 PM.jpeg', NULL, NULL, NULL, NULL, 'image/jpeg', 102450, 'uploads/916324188-thumb-WhatsApp Image 2026-06-26 at 12.54.11 PM.jpeg', 'uploads/916324188-small-WhatsApp Image 2026-06-26 at 12.54.11 PM.jpeg', NULL, NULL, NULL, NULL, NULL, 1, 1782735192, NULL),
 (86, 'uploads/1160306743-combo4.jpg', NULL, NULL, NULL, NULL, 'image/jpeg', 279028, 'uploads/1160306743-thumb-combo4.jpg', 'uploads/1160306743-small-combo4.jpg', 'purchases', 20, 'document', '50', '1', 1, 1782736745, '1782736745_1'),
 (87, 'uploads/1750315571-combo3.jpg', NULL, NULL, NULL, NULL, 'image/jpeg', 1508388, 'uploads/1750315571-thumb-combo3.jpg', 'uploads/1750315571-small-combo3.jpg', 'purchases', 20, 'document', '51', '2', 1, 1782736745, '1782736745_1'),
-(88, 'uploads/692987208-Factsheet (WSFP).pdf', NULL, NULL, NULL, NULL, 'application/pdf', 325240, '', '', 'purchases', 20, 'document', '49', '3', 1, 1782736745, '1782736745_1');
+(88, 'uploads/692987208-Factsheet (WSFP).pdf', NULL, NULL, NULL, NULL, 'application/pdf', 325240, '', '', 'customers', 6, 'document', '49', '3', 1, 1782736745, '1782736745_1'),
+(89, 'uploads/1003084028-WhatsApp Image 2025-06-30 at 3.43.03 PM (1).jpeg', NULL, NULL, NULL, NULL, 'image/jpeg', 194314, 'uploads/1003084028-thumb-WhatsApp Image 2025-06-30 at 3.43.03 PM (1).jpeg', 'uploads/1003084028-small-WhatsApp Image 2025-06-30 at 3.43.03 PM (1).jpeg', 'folders', 21, 'document', '50', 'f1', 1, 1782813915, '1782813914_1'),
+(90, 'uploads/1811551403-WhatsApp Image 2025-07-26 at 6.37.13 PM (2).jpeg', NULL, NULL, NULL, NULL, 'image/jpeg', 594300, 'uploads/1811551403-thumb-WhatsApp Image 2025-07-26 at 6.37.13 PM (2).jpeg', 'uploads/1811551403-small-WhatsApp Image 2025-07-26 at 6.37.13 PM (2).jpeg', 'folders', 21, 'document', '51', 'f2', 1, 1782813915, '1782813914_1'),
+(91, 'uploads/591254547-Wealth Seeds Flexi cap introduction.docx', NULL, NULL, NULL, NULL, 'application/vnd.openxmlformats-officedocument.wordprocessingml.document', 14347, '', '', 'folders', 21, 'document', '49', 'f3', 1, 1782813915, '1782813914_1'),
+(92, 'uploads/873762403-Factsheet (WSFP).pdf', NULL, NULL, NULL, NULL, 'application/pdf', 325240, '', '', 'folders', 21, 'document', '48', 'f4', 1, 1782813915, '1782813914_1');
 
 -- --------------------------------------------------------
 
@@ -679,7 +829,7 @@ CREATE TABLE IF NOT EXISTS `users` (
   `created_on` varchar(100) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
   `auth_user` int NOT NULL,
   `updated` int DEFAULT NULL,
-  `created` varchar(35) COLLATE utf8mb3_unicode_ci DEFAULT NULL,
+  `created` varchar(35) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_unicode_ci;
 
@@ -704,7 +854,7 @@ CREATE TABLE IF NOT EXISTS `user_roles` (
   `user_role` varchar(100) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
   `auth_user` int NOT NULL,
   `updated` int NOT NULL,
-  `created` varchar(35) COLLATE utf8mb3_unicode_ci DEFAULT NULL,
+  `created` varchar(35) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_unicode_ci;
 
@@ -783,7 +933,7 @@ CREATE TABLE IF NOT EXISTS `vendors` (
   `active` varchar(5) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci DEFAULT NULL,
   `auth_user` int NOT NULL,
   `updated` int DEFAULT NULL,
-  `created` varchar(35) COLLATE utf8mb3_unicode_ci DEFAULT NULL,
+  `created` varchar(35) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM AUTO_INCREMENT=9 DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_unicode_ci;
 
@@ -795,7 +945,7 @@ INSERT INTO `vendors` (`id`, `firm_name`, `firm_email`, `firm_phone`, `firm_addr
 (5, 'c', 'e', '33333,\r\n444', 'aa  aa', 7, 'on', 'oe', '6666,\r\n55555,', 'Ahd', 'axip333232', 'packing_material', '90', 'yes', 0, 1782131053, '0'),
 (6, 'a', '', '', '', 8, 'dd', '', '', '', '', 'machine_tools', '', 'yes', 0, 1782131060, '0'),
 (7, 'vvv1', 'jay290489@gmail.com', '33434,4342,', 'a2 2020', 10, 'ownn', 'enem.com', '3434324242,\r\n23423423432', 'yyyyyyyyyy', 'axip333232', 'raw_material', '30 days', 'no', 0, 1782131942, '0'),
-(8, 'MS ', '', '', '', 11, 'on', '', '', '', '', 'packing_material', '', 'yes', 1, 1782293037, '0');
+(8, 'MS ', '', '', '', 11, 'on', '', '', '', '', '10', '', 'yes', 1, 1782974801, '0');
 
 -- --------------------------------------------------------
 
@@ -809,7 +959,7 @@ CREATE TABLE IF NOT EXISTS `vendor_raw_material_link` (
   `vendor` int NOT NULL,
   `raw_material` int NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=27 DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_unicode_ci;
+) ENGINE=MyISAM AUTO_INCREMENT=29 DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_unicode_ci;
 
 --
 -- Dumping data for table `vendor_raw_material_link`
@@ -822,8 +972,8 @@ INSERT INTO `vendor_raw_material_link` (`id`, `vendor`, `raw_material`) VALUES
 (17, 80, 1),
 (22, 7, 6),
 (21, 7, 9),
-(26, 8, 6),
-(25, 8, 7);
+(28, 8, 6),
+(27, 8, 7);
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
