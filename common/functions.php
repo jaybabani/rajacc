@@ -108,6 +108,16 @@ function paragraph()
 }
 
 
+function add_new_form_link($opt)
+{
+    $s = "";
+    if (isset($opt["text"]) && $opt["url"]) {
+        $s = "<a class='download-btn btn btn-primary' href='" . $opt["url"] . "'>" . $opt["text"] . "</a>";
+    }
+    return $s;
+}
+
+
 
 function download_xlsx($data_type)
 {
@@ -1248,9 +1258,9 @@ function form_field($vars, $data)
                             <div class='multi-ft'>
                             <div class='ftcol'><p>Select file type</p>
                             <select class='form-control " . $vars["key"] . "-multi-item-type' name='" . $vars["key"] . "-caption[]' id='" . $vars["key"] . "-attribute-`+index+`'>";
-                            $sel = "";
-                            $s .= select_attribute_options($vars["attributes"], $sel);
-                            $s .= "</select></div>
+            $sel = "";
+            $s .= select_attribute_options($vars["attributes"], $sel);
+            $s .= "</select></div>
                             <div class='ftcol'>
                             <p>Or describe file type</p>
                             <input type='text' class='form-control " . $vars["key"] . "-multi-item-other' name='" . $vars["key"] . "-other[]' value='' placeholder=''>
@@ -1276,7 +1286,7 @@ function form_field($vars, $data)
         }
         //
         else if ($vars["type"] == "delete_row") {
-            $s .= "<span class='icon wtxt bg-info delete-row-btn' id='".$vars["key"]."'><i data-feather='trash'></i>Delete</span>
+            $s .= "<span class='icon wtxt bg-info delete-row-btn' id='" . $vars["key"] . "'><i data-feather='trash'></i>Delete</span>
             <script> $('#" . $vars["key"] . "').on('click', function() {
                 $(this).closest('tr').remove();
             }); </script>";
@@ -1471,15 +1481,18 @@ function module_submit_form($vars)
                 save_link_table_rows($vars, $insert_id);
                 save_multi_document_upload($vars, $insert_id);
                 save_column_history($vars, $insert_id);
-                notify('success', $msg["success_added"]);
 
-                redirect_action($_REQ);
+                notify_and_redirect_on_submit($vars, 'success', $msg["success_added"]);
+                //
+                // notify('success', $msg["success_added"]);
+
+                // redirect_action($_REQ);
 
                 return true;
             } else {
                 notify('danger', $msg["error_added"]);
 
-                redirect_action($_REQ);
+                // redirect_action($_REQ);
 
                 return false;
             }
@@ -1495,13 +1508,16 @@ function module_submit_form($vars)
                 save_link_table_rows($vars, $_REQ[$primary_column]);
                 save_multi_document_upload($vars, $_REQ[$primary_column]);
                 save_column_history($vars, $_REQ[$primary_column]);
-                notify('success', $msg["success_update"]);
-                redirect_action($_REQ);
+
+                notify_and_redirect_on_submit($vars, 'success', $msg["success_update"]);
+
+                // notify('success', $msg["success_update"]);
+                // redirect_action($_REQ);
 
                 return true;
             } else {
                 notify('danger', $msg["error_update"]);
-                redirect_action($_REQ);
+                // redirect_action($_REQ);
 
                 return false;
             }
@@ -1609,7 +1625,10 @@ function bi_bulk_submit_form($vars)
             // echo $q . "<br>";
             $sql = $conn->query($q);
             if ($sql) {
-                $insert_ids[] = $conn->insert_id;
+                $insid = $conn->insert_id;
+                $insert_ids[] = $insid;
+                // save column history here
+                save_bulk_column_history($vars, $insid, $index);
             } else {
                 $errors++;
             }
@@ -1793,6 +1812,47 @@ function save_multi_document_upload($vars, $primary_id)
     // die;
 }
 
+
+function save_bulk_column_history($vars, $primary_id, $index)
+{
+    if (isset($vars["save_column_history"])) {
+
+        global $conn;
+        $_REQ = $vars["submit_data"];
+        $history = $vars["save_column_history"];
+        // $primary_column = $vars["primary_column"];
+        $tablename = $vars["tablename"];
+
+        // print_arr($tablename);
+        // print_arr($_REQ);
+        // print_arr($history);
+        // print_arr($primary_column);
+        // echo $primary_id;
+
+        $auth_user = get_curr_user_id();
+        $ts = getts();
+
+        if (isset($history["columns"])) {
+            if ($primary_id != "") {
+                $row_id = $primary_id;
+                foreach ($history["columns"] as $hk => $hv) {
+                    $hv = str_replace("[]", "", $hv);
+                    if (isset($_REQ["old_" . $hv][$index]) && isset($_REQ[$hv][$index])) {
+                        if ($_REQ["old_" . $hv][$index] != $_REQ[$hv][$index]) {
+                            $value = $_REQ[$hv][$index];
+                            $sql = " INSERT INTO column_history (table_name, row_id, column_name, value, auth_user, updated, created) VALUES ('" . $tablename . "', '" . $row_id . "', '" . $hv . "', '" . $value . "', '" . $auth_user . "', '" . $ts . "', '" . $ts . "') ";
+                            // echo $sql."<br>";
+                            $conn->query($sql);
+                        }
+                    }
+                }
+            }
+        }
+
+        // die;
+
+    }
+}
 
 function save_column_history($vars, $primary_id)
 {
@@ -1989,9 +2049,9 @@ function module_submit_delete_form($vars)
             notify_after_redirect("success", $msg["success_delete"]);
             $urlparam = "";
             if (isset($vars["url_param"]) && $vars["url_param"] != "") {
-                $urlparam = $vars["url_param"];
+                $urlparam = "?" . $vars["url_param"];
             }
-            echo "<script>window.top.location='" . $vars["redirect_to"] . ".php?" . $urlparam . "'</script>";
+            echo "<script>window.top.location='" . $vars["redirect_to"] . ".php" . $urlparam . "'</script>";
         } else {
             notify("error", $msg["error_delete"]);
         }

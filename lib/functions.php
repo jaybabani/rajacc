@@ -671,9 +671,10 @@ function getts($d = '0', $m = '0', $y = '0', $h = '0', $min = '0', $s = '0')
 // return trim(mcrypt_decrypt(MCRYPT_RIJNDAEL_256, $salt, base64_decode($text), MCRYPT_MODE_ECB, mcrypt_create_iv(mcrypt_get_iv_size(MCRYPT_RIJNDAEL_256, MCRYPT_MODE_ECB), MCRYPT_RAND)));
 // }
 
-function get_curr_user_id(){
+function get_curr_user_id()
+{
     $ret = "0";
-    if(isset($_SESSION["user_id"])){
+    if (isset($_SESSION["user_id"])) {
         $ret = $_SESSION["user_id"];
     }
     return $ret;
@@ -701,6 +702,20 @@ function notify($type = '', $msg = '')
 function notify_after_redirect($type = '', $msg = '')
 {
     $_SESSION["notify"] = [$type, $msg];
+}
+
+function notify_and_redirect_on_submit($vars, $type = '', $msg = '')
+{
+    if (
+        isset($vars["redirect_to"]) && $vars["redirect_to"] != ""
+        && isset($vars["url_param"]) && $vars["url_param"] != ""
+    ) {
+        notify_after_redirect($type, $msg);
+        $urlparam = "?" . $vars["url_param"];
+        echo "<script>window.top.location='" . $vars["redirect_to"] . ".php" . $urlparam . "'</script>";
+    } else {
+        notify($type, $msg);
+    }
 }
 
 function display_notifications()
@@ -1796,7 +1811,7 @@ function get_attributes_arr($cat)
     if ($cat != "") {
         $fetch_arr = fetch_data(["table" => "attributes", "columns" => "id, color, attribute, code", "condition" => " category = '" . $cat . "' AND active = 'yes' ", "order" => "attribute ASC", "limit" => ""]);
         foreach ($fetch_arr as $lk => $lv) {
-            if($lv["color"] == NULL || $lv["color"] == ""){
+            if ($lv["color"] == NULL || $lv["color"] == "") {
                 $lv["color"] = $color = $colors[$lv["id"] % count($colors)];
             }
             $arr[$lv["id"]] = $lv;

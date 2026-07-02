@@ -6,11 +6,6 @@ include("../../common/header.php");
 ?>
 
 <div class="row row-cols-1 row-cols-sm-1 row-cols-md-1 row-cols-lg-1 row-cols-xl-1 row-cols-xxl-1 g-4 py-3 px-2">
-<br><br>
-  edit and redirect to this page<br>
-  delete and redirect to this page<br>
-  add new individual order item
-
   <?php
 
   $module_arr = get_module_pages_arr();
@@ -19,6 +14,12 @@ include("../../common/header.php");
   $pagetitle = T("Sales Order Items");
   $actions_html = "";
   $actions_html .= download_xlsx($module_pages["read"]);
+
+  if (isset($_GET["order_id"]) && $_GET["order_id"] != "") {
+    $actions_html .= add_new_form_link(["text" => "Add new order items (Bulk)", "url" => ROOT_PATH . "/modules/order_items/order_item-bulkform.php?order_id=" . $_GET["order_id"] . ""]);
+    $actions_html .= add_new_form_link(["text" => "Add new order item (Single)", "url" => ROOT_PATH . "/modules/order_items/order_item-form.php?order_id=" . $_GET["order_id"] . ""]);
+  }
+
   $actions_html .= pagination($module_pages["read"] . ".php");
   widget_start($pagetitle, "", "", "", $actions_html); ?>
 
@@ -42,33 +43,21 @@ include("../../common/header.php");
     ["name" => "Product", "column" => "product", "options" => $products_arr, "type" => "table_id", "option_id" => "id", "option_label" => "product", "class" => "title", "module" => "products"],
     ["name" => "Ordered quantity", "column" => "quantity", "class" => "nowrap"],
     ["name" => "Rate per unit", "column" => "rate", "class" => "nowrap"],
-    // ["name" => "Consumed Qty", "column" => "consumed_quantity", "class" => "nowrap"],
-    // ["name" => "Buy Date", "column" => "buy_date", "format" => "date", "class" => "nowrap"],
-    // ["name" => "Buy Price", "column" => "buy_price", "class" => "nowrap"],
-    // ["name" => "Vendor", "column" => "vendor", "options" => $vendors_arr, "type" => "table_id", "option_id" => "id", "option_label" => "firm_name", "module" => "vendors"],
-    // ["name" => "Purchase Invoice", "column" => "purchase_invoice", "type" => "image-file", "sorting" => false, "search" => false, "class" => "text-center"],
-    // ["name" => "Status", "column" => "status", "options" => get_order_item_status_arr(), "badge" => true],
     ["name" => "Actions", "column" => "", "type" => "edit_delete", "sorting" => false, "search" => false, "class" => "nowrap", "acl" => ["edit" => "order_items-update", "delete" => "order_items-delete"]],
   ];
 
   $fetch_columns = [];
 
   $detail_columns = [
-    // ["name" => "Notes", "column" => "notes"],
-    // ["name" => "Ordered quantity", "column" => "ordered_quantity"],
-    // ["name" => "Received quantity", "column" => "received_quantity"],
-    // ["name" => "Accepted quantity", "column" => "accepted_quantity"],
-    // ["name" => "Rejected quantity", "column" => "rejected_quantity"],
-    // ["name" => "Purchase Details", "column" => "purchase", "options" => $purchases_arr, "type" => "table_id", "option_id" => "id", "option_label" => "title", "module" => "purchases"],
     ["name" => "Last update", "type" => "last_update_info"],
-    // [
-    //   "name" => "History",
-    //   "type" => "history",
-    //   "history_columns" => [
-    //     // ["name" => "Status", "column" => "status", "options" => get_order_item_status_arr(), "badge" => true],
-    //     // ["name" => "Quantity", "column" => "quantity"]
-    //   ],
-    // ]
+    [
+      "name" => "History",
+      "type" => "history",
+      "history_columns" => [
+        ["name" => "Quantity", "column" => "quantity"],
+        ["name" => "Rate", "column" => "rate"]
+      ],
+    ]
   ];
 
   $table_html = crud_read([
@@ -81,7 +70,7 @@ include("../../common/header.php");
     "datatable" => true,
     "pagination" => true,
     "pagelimit" => 100,
-    "query" => (isset($_GET["order_id"]) && $_GET["order_id"] != "") ? " order_id = '".$_GET["order_id"]."' " : "",
+    "query" => (isset($_GET["order_id"]) && $_GET["order_id"] != "") ? " order_id = '" . $_GET["order_id"] . "' " : "",
     "orderby" => "product ASC"
   ]);
 

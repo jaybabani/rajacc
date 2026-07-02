@@ -31,25 +31,16 @@ include("../../common/header.php");
   $primary_column = "id";
 
   $save_fields = [
-    ["key" => "raw_material"],
-    ["key" => "purchase"],
-    ["key" => "notes"],
-    ["key" => "status"],
-    ["key" => "buy_price"],
-    ["key" => "ordered_quantity"],
-    ["key" => "received_quantity"],
-    ["key" => "accepted_quantity"],
-    ["key" => "rejected_quantity"],
-    ["key" => "available_quantity"],
-    ["key" => "reserved_quantity"],
-    ["key" => "consumed_quantity"],
+    ["key" => "product"],
+    ["key" => "rate"],
+    ["key" => "quantity"],
+    ["key" => "order_id"],
     ["key" => "auth_user", "type" => "session_user"],
     ["key" => "updated", "type" => "time"],
     ["key" => "created", "type" => "created_time"],
   ];
 
-  $link_table_rows = [
-  ];
+  $link_table_rows = [];
 
   $msg = [
     "success_update" => "Order Item updated successfully",
@@ -59,8 +50,21 @@ include("../../common/header.php");
   ];
 
   $save_column_history = [
-    "columns" => ["status"],
+    "columns" => ["rate", "quantity"],
   ];
+
+
+  $redirect_to = "";
+  $url_param = "";
+  if (isset($_POST["order_id"])) {
+    $url_param = "order_id=" . $_POST["order_id"] . "";
+    $redirect_to = "order_items";
+  }
+
+  // if(isset($data["order_id"]) && $data["order_id"] != ""){
+  //   $url_param = " order_id =" . $data["order_id"] . "";
+  //   $redirect_to = "order_items";
+  // }
 
   $submit_result = module_submit_form([
     "submit_data" => $_POST,
@@ -70,50 +74,50 @@ include("../../common/header.php");
     "messages" => $msg,
     "link_table_rows" => $link_table_rows,
     "save_column_history" => $save_column_history,
+    "redirect_to" => $redirect_to,
+    "url_param" => $url_param,
   ]);
 
-
   $data = module_get_data($tablename, $id);
+  if ($mode == "new" && !isset($data["order_id"]) && isset($_GET["order_id"]) && $_GET["order_id"] != "") {
+    $data["order_id"] = $_GET["order_id"];
+  }
   // print_arr($data);
+
   ?>
 
   <form class="row g-3 needs-validation" novalidate method="POST" enctype="multipart/form-data">
     <input type="hidden" name="mode" value="<?php echo $mode; ?>">
     <input type="hidden" name="<?php echo $primary_column; ?>" value="<?php echo $id; ?>">
+    <input type="hidden" name="order_id" value="<?php echo get_value($data, 'order_id'); ?>">
 
     <?php
 
-    $raw_material_arr = fetch_data(["table" => "raw_materials", "columns" => "id, raw_material", "condition" => "", "order" => "raw_material ASC", "limit" => ""]);        // print_arr($raw_material_arr);
-    $raw_materials = [];
-    foreach ($raw_material_arr as $vk => $vv) {
-      $raw_materials[$vv["id"]] = $vv["raw_material"];
+    $product_arr = fetch_data(["table" => "products", "columns" => "id, product", "condition" => "", "order" => "product ASC", "limit" => ""]);        // print_arr($product_arr);
+    $products = [];
+    foreach ($product_arr as $vk => $vv) {
+      $products[$vv["id"]] = $vv["product"];
     }
-    // print_arr($raw_materials);
+    // print_arr($products);
 
-    $purchase_arr = fetch_data(["table" => "purchases", "columns" => "id, title", "condition" => "", "order" => "created DESC", "limit" => ""]);        // print_arr($vendor_arr);
-    $purchases = [];
-    foreach ($purchase_arr as $vk => $vv) {
-      $purchases[$vv["id"]] = $vv["title"];
-    }
+    // $purchase_arr = fetch_data(["table" => "purchases", "columns" => "id, title", "condition" => "", "order" => "created DESC", "limit" => ""]);        // print_arr($vendor_arr);
+    // $purchases = [];
+    // foreach ($purchase_arr as $vk => $vv) {
+    //   $purchases[$vv["id"]] = $vv["title"];
+    // }
     // print_arr($purchases);
 
-    echo form_field(["type" => "select", "name" => "Raw Material", "key" => "raw_material", "required" => true, "options" => $raw_materials, "class" => "col-md-6 col-lg-4 mb-3"], $data);
-    echo form_field(["type" => "select", "name" => "Purchase Details", "key" => "purchase", "options" => $purchases, "class" => "col-md-6 col-lg-4 mb-3"], $data);
-    echo form_field(["type" => "number", "name" => "Buy Price", "key" => "buy_price", "required" => true, "class" => "col-md-6 col-lg-4 mb-3"], $data);
-    echo form_field(["type" => "number", "name" => "Ordered Quantity", "key" => "ordered_quantity", "class" => "col-md-6 col-lg-4 mb-3"], $data);
-    echo form_field(["type" => "number", "name" => "Received Quantity", "key" => "received_quantity", "class" => "col-md-6 col-lg-4 mb-3"], $data);
-    echo form_field(["type" => "number", "name" => "Accepted Quantity", "key" => "accepted_quantity", "class" => "col-md-6 col-lg-4 mb-3"], $data);
-    echo form_field(["type" => "number", "name" => "Rejected Quantity", "key" => "rejected_quantity", "class" => "col-md-6 col-lg-4 mb-3"], $data);
-    echo form_field(["type" => "number", "name" => "Available Quantity", "key" => "available_quantity", "class" => "col-md-6 col-lg-4 mb-3"], $data);
-    echo form_field(["type" => "number", "name" => "Reserved Quantity", "key" => "reserved_quantity", "class" => "col-md-6 col-lg-4 mb-3"], $data);
-    echo form_field(["type" => "number", "name" => "Consumed Quantity", "key" => "consumed_quantity", "class" => "col-md-6 col-lg-4 mb-3"], $data);
+    echo form_field(["type" => "select", "name" => "Product", "key" => "product", "required" => true, "options" => $products, "class" => "col-md-6 col-lg-4 mb-3"], $data);
+    echo form_field(["type" => "number", "name" => "Rate", "key" => "rate", "required" => true, "class" => "col-md-6 col-lg-4 mb-3"], $data);
+    echo form_field(["type" => "number", "name" => "Ordered Quantity", "key" => "quantity", "class" => "col-md-6 col-lg-4 mb-3"], $data);
+    // echo form_field(["type" => "hidden", "name" => "", "key" => "order_id", "class" => "col-md-6 col-lg-4 mb-3"], $data);
 
-    echo form_field(["type" => "textarea", "name" => "Notes", "key" => "notes", "class" => "col-md-6 col-lg-4 mb-3"], $data);
-    echo form_field(["type" => "select", "name" => "Status", "key" => "status", "required" => true, "options" => get_order_item_status_arr(), "class" => "col-md-6 col-lg-4 mb-3"], $data);
+    // echo form_field(["type" => "select", "name" => "Purchase Details", "key" => "purchase", "options" => $purchases, "class" => "col-md-6 col-lg-4 mb-3"], $data);
+    // echo form_field(["type" => "select", "name" => "Status", "key" => "status", "required" => true, "options" => get_order_item_status_arr(), "class" => "col-md-6 col-lg-4 mb-3"], $data);
 
     echo form_field(["type" => "submit", "name" => "Save", "key" => "save", "class" => "col-md-12 col-sm-12 col-xs-12 text-center"], $data);
 
-    echo column_history_fields($save_column_history,$data);
+    echo column_history_fields($save_column_history, $data);
 
     ?>
 

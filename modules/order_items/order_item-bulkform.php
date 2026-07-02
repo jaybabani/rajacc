@@ -34,7 +34,7 @@ include '../../common/header.php';
   ];
 
   $single_fields = [
-    ['column' => 'order_id', 'value' => $_GET["order"] ?? ""] // get form url
+    ['column' => 'order_id', 'value' => $_GET["order_id"] ?? ""] // get form url
   ];
 
   $msg = [
@@ -43,17 +43,22 @@ include '../../common/header.php';
     "warning_added" => "Some new order items were added. Errors encountered in rest.",
   ];
 
+  $save_column_history = [
+    "columns" => ["rate[]", "quantity[]"],
+  ];
+
   $submit_result = bi_bulk_submit_form([
     'submit_data' => $_POST,
     'tablename' => $tablename,
     'save_fields' => $save_fields,
     'msg' => $msg,
+    "save_column_history" => $save_column_history,
   ]);
 
   $tableid = 'order_items_table';
   $column_titles = ['Product', 'Quantity', 'Rate / unit', 'Actions'];
 
-  function bulk_insert_table_row($index)
+  function bulk_insert_table_row($index, $save_column_history)
   {
 
     $product_arr = fetch_data(["table" => "products", "columns" => "id, product", "condition" => "", "order" => "product ASC", "limit" => ""]);        // print_arr($product_arr);
@@ -68,12 +73,15 @@ include '../../common/header.php';
     $s .= "<tr data-index='" . $index . "'>";
     $s .= '<td>'
       .  form_field(['type' => 'hidden', 'name' => '', 'key' => 'rowindex[]', 'class' => '',], [])
-      . form_field(['type' => 'select', 'name' => 'Product', 'key' => 'product[]', 'required' => true, "options" => $products, 'class' => ''], []);
+      .  column_history_fields($save_column_history, [])
+      .  form_field(['type' => 'select', 'name' => 'Product', 'key' => 'product[]', 'required' => true, "options" => $products, 'class' => ''], []);
     $s .= '</td>';
     $s .=  '<td>' . form_field(['type' => 'number', 'name' => 'Quantity', 'key' => 'quantity[]', 'required' => true, 'class' => '',], []) .  '</td>';
     $s .=  '<td>' . form_field(['type' => 'number', 'name' => 'Rate', 'key' => 'rate[]', 'required' => true, 'class' => '',], []) .  '</td>';
     $s .=  '<td>' . form_field(['type' => 'delete_row', 'name' => '', 'class' => '', 'key' => 'delete-row-'.$index.'', 'index' => $index], []) .  '</td>';
     $s .= '</tr>';
+
+
 
     return $s;
   }
@@ -93,14 +101,14 @@ include '../../common/header.php';
           </thead>
           <tbody> <?php
                   for ($index = 1; $index <= $display_new_rows; $index++) {
-                    echo bulk_insert_table_row($index);
+                    echo bulk_insert_table_row($index, $save_column_history);
                   }
                   ?>
           </tbody>
         </table>
         <?php
         $data = [];
-        echo bi_add_new_row($tableid, bulk_insert_table_row('new'));
+        echo bi_add_new_row($tableid, bulk_insert_table_row('new', $save_column_history));
         echo form_field(['type' => 'submit',  'name' => 'Save',  'key' => 'save',  'class' => 'col-md-12 col-sm-12 col-xs-12 text-center',], $data);
         ?>
   </form>

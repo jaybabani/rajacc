@@ -17,27 +17,34 @@ include '../../common/header.php';
 
     $msg = [
         "success_delete" => "Order Item deleted successfully",
-        "error_delete" => "Error in deleting order_item",
+        "error_delete" => "Error in deleting order item",
     ];
 
     $primary_column = "id";
+
+    $url_param = "";
+    if(isset($_POST["order_id"])){
+        $url_param = "order_id=".$_POST["order_id"]."";
+    }
 
     $submit_result = module_submit_delete_form([
         "submit_data" => $_POST,
         "tablename" => $tablename,
         "messages" => $msg,
         "primary_column" => $primary_column,
-        "redirect_to" => "order_items"
+        "redirect_to" => "order_items",
+        "url_param" => $url_param,
     ]);
 
     $data = module_get_data($tablename, $id);
     // print_arr($data);
 
-    $raw_materials_arr = fetch_data(["table" => "raw_materials", "columns" => "id, raw_material", "condition" => " id = '".$data["raw_material"]."' ", "order" => "", "limit" => ""]);
-    // print_arr($raw_materials_arr);
-    if(isset($raw_materials_arr[0]["raw_material"])){
-        $data["raw_material"] = $raw_materials_arr[0]["raw_material"];
+    $products_arr = fetch_data(["table" => "products", "columns" => "id, product", "condition" => " id = '".$data["product"]."' ", "order" => "", "limit" => ""]);
+    // print_arr($products_arr);
+    if(isset($products_arr[0]["product"])){
+        $data["product"] = $products_arr[0]["product"];
     }
+
 
     widget_start($titletag);
 
@@ -45,6 +52,7 @@ include '../../common/header.php';
 
     <form action="order_item-delete.php" method="post" enctype="multipart/form-data">
         <input type="hidden" name="mode" value="<?php echo get_value($data, 'mode'); ?>">
+        <input type="hidden" name="order_id" value="<?php echo get_value($data, 'order_id'); ?>">
         <input type="hidden" name="id" value="<?php echo get_value($data, 'id'); ?>">
 
         <div class="col-lg-12">
@@ -53,8 +61,10 @@ include '../../common/header.php';
                     <div class="form-group">
                         <label class="form-label" for="field-4">Are You sure you want to delete Order Item?
                             <?php echo "<br>ID: <strong>" . get_value($data, 'id') . "</strong>";
-                            $raw_material = name_title(get_value($data, 'raw_material'));
-                            echo "<br>Raw Material: <strong>" . $raw_material . "</strong>"; ?></label>
+                            $order_item = name_title(get_value($data, 'order_item'));
+                            echo "<br>Product: <strong>" . get_value($data, 'product') . "</strong>";
+                            echo "<br>Quantity: <strong>" . get_value($data, 'quantity') . "</strong>"; ?>
+                            </label>
                     </div>
                 </div>
             </div>
