@@ -1,14 +1,14 @@
 <?php
-$module = "dispatchs";
-$pageid = "dispatchs-create";
+$module = "invoices";
+$pageid = "invoices-create";
 if (isset($_GET['id']) && is_numeric($_GET['id']) && trim($_GET['id']) != '') {
-  $pageid = "dispatchs-update";
+  $pageid = "invoices-update";
 }
 
 $load_datepicker = true;
 
 include("../../common/header.php");
-// include("dispatch-functions.php");
+// include("invoice-functions.php");
 ?>
 
 <div class="row row-cols-1 row-cols-sm-1 row-cols-md-1 row-cols-lg-1 row-cols-xl-1 row-cols-xxl-1 g-4 py-3 px-2">
@@ -16,10 +16,10 @@ include("../../common/header.php");
 
   $id = '';
   $mode = "new";
-  $titletag = T('Add New dispatch');
+  $titletag = T('Add New invoice');
   if (isset($_GET['id']) && is_numeric($_GET['id']) && trim($_GET['id']) != '') {
     $mode = 'update';
-    $titletag = T('Edit dispatch');
+    $titletag = T('Edit invoice');
     $id = $_GET['id'];
   }
 
@@ -27,11 +27,11 @@ include("../../common/header.php");
   ?>
   <?php
 
-  $tablename = "dispatchs";
+  $tablename = "invoices";
   $primary_column = "id";
 
   $save_fields = [
-    ["key" => "order_id"],
+    ["key" => "dispatch"],
     ["key" => "notes"],
     ["key" => "status"],
     ["key" => "created_on_date", "type" => "date"],
@@ -43,10 +43,10 @@ include("../../common/header.php");
   $link_table_rows = [];
 
   $msg = [
-    "success_update" => "dispatch updated successfully",
-    "error_update" => "Error in updating dispatch",
-    "success_added" => "New dispatch added successfully",
-    "error_added" => "Error in adding new dispatch",
+    "success_update" => "invoice updated successfully",
+    "error_update" => "Error in updating invoice",
+    "success_added" => "New invoice added successfully",
+    "error_added" => "Error in adding new invoice",
   ];
 
   $save_column_history = [
@@ -54,10 +54,10 @@ include("../../common/header.php");
   ];
 
   // $action_after_submit = [
-  //   "action" => "create_invoice_for_dispatch",
+  //   "action" => "create_invoice_for_invoice",
   //   "condition" => [
   //     "type" => "change_to",
-  //     "param" => ["column" => "status", "value" => "ready_for_dispatch"]
+  //     "param" => ["column" => "status", "value" => "ready_for_invoice"]
   //   ]
   // ];
 
@@ -83,15 +83,15 @@ include("../../common/header.php");
 
     <?php
 
-    $order_arr = fetch_data(["table" => "orders", "columns" => "id", "condition" => "", "order" => "id ASC", "limit" => ""]);        // print_arr($order_arr);
-    $orders = [];
-    foreach ($order_arr as $vk => $vv) {
-      $orders[$vv["id"]] = get_module_id_prefix("orders") . $vv["id"];
+    $dispatch_arr = fetch_data(["table" => "dispatchs", "columns" => "id", "condition" => "", "order" => "id ASC", "limit" => ""]);        // print_arr($dispatch_arr);
+    $dispatchs = [];
+    foreach ($dispatch_arr as $vk => $vv) {
+      $dispatchs[$vv["id"]] = get_module_id_prefix("dispatchs") . $vv["id"];
     }
-    // print_arr($orders);
+    // print_arr($dispatchs);
 
-    echo form_field(["type" => "select", "name" => "Order ID", "key" => "order_id", "required" => true, "options" => $orders, "class" => "col-md-6 col-lg-4 mb-3"], $data);
-    echo form_field(["type" => "select", "name" => "Status", "key" => "status", "required" => true, "options" => get_dispatch_status_arr(), "class" => "col-md-6 col-lg-4 mb-3"], $data);
+    echo form_field(["type" => "select", "name" => "Dispatch", "key" => "dispatch", "required" => true, "options" => $dispatchs, "class" => "col-md-6 col-lg-4 mb-3"], $data);
+    echo form_field(["type" => "select", "name" => "Status", "key" => "status", "required" => true, "options" => get_invoice_status_arr(), "class" => "col-md-6 col-lg-4 mb-3"], $data);
     echo form_field(["type" => "date", "name" => "Created on date", "key" => "created_on_date", "class" => "col-md-6 col-lg-4 mb-3"], $data);
     echo form_field(["type" => "textarea", "name" => "Notes", "key" => "notes", "class" => "col-md-6 col-lg-4 mb-3"], $data);
 

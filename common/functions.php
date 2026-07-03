@@ -577,14 +577,29 @@ function crud_read($vars)
                             }
                             if (in_array($dv['type'], ["edit", "edit_delete"])) {
                                 if (isset($dv["acl"]["edit"]) && in_array($dv["acl"]["edit"], $_SESSION["acl"])) {
-                                    $html .= "<a href='" . $vars["module_pages"]["update"] . ".php?id=" . $r[$vars["primary_column"]] . "" . $urlparam . "'><span class='icon wtxt bg-accent2'><i data-feather='edit'></i>Edit</span></a> &nbsp; ";
+                                    $html .= "<a href='" . $vars["module_pages"]["update"] . ".php?id=" . $r[$vars["primary_column"]] . "" . $urlparam . "'><span class='icon wtxt bg-accent2'><i data-feather='edit'></i>Edit</span></a> &nbsp;";
                                 }
                             }
                             if (in_array($dv['type'], ["delete", "edit_delete"])) {
                                 if (isset($dv["acl"]["delete"]) && in_array($dv["acl"]["delete"], $_SESSION["acl"])) {
-                                    $html .= "<a href='" . $vars["module_pages"]["delete"] . ".php?id=" . $r[$vars["primary_column"]] . "" . $urlparam . "'><span class='icon wtxt bg-info'><i data-feather='trash'></i>Delete</span></a></td>";
+                                    $html .= "<a href='" . $vars["module_pages"]["delete"] . ".php?id=" . $r[$vars["primary_column"]] . "" . $urlparam . "'><span class='icon wtxt bg-info'><i data-feather='trash'></i>Delete</span></a> &nbsp;";
                                 }
                             }
+
+                            if (isset($dv["links"])) {
+                                foreach ($dv["links"] as $lk => $lv) {
+                                    if (isset($lv["acl"]) && in_array($lv["acl"], $_SESSION["acl"])) {
+                                        $url = $lv["url"];
+                                        $url = preg_replace_callback('/\{([a-zA-Z0-9_]+)\}/', function ($matches) use ($r) {
+                                            $key = $matches[1];
+                                            return $r[$key] ?? $matches[0]; // keep original if key missing
+                                        }, $url);
+                                        $text = $lv["text"];
+                                        $html .= "<a href='" . $url . "'><span class='icon wtxt " . $lv["class"] . "'><i data-feather='" . $lv["icon"] . "'></i>" . $text . "</span></a> &nbsp;";
+                                    }
+                                }
+                            }
+                            $html .= "</td>";
                         }
                         //
                         else if ($dv['type'] == "link") {
@@ -940,7 +955,15 @@ function fetch_auth_users($rows)
         if (isset($r["auth_user"]) && $r["auth_user"] != NULL && $r["auth_user"] != "" && $r["auth_user"] != "0") {
             $ids[] = $r["auth_user"];
         }
+        if (isset($r["created"]) && $r["created"] != NULL && $r["created"] != "" && $r["created"] != "0") {
+            $expcr = explode("_", $r["created"]);
+            if (sizeof($expcr) == 2 && isset($expcr[1])) {
+                $ids[] = $expcr[1];
+            }
+        }
     }
+    $ids = array_filter(array_unique($ids));
+
     // print_arr($ids);
     $condition = "";
     if (sizeof($ids) > 0) {
@@ -1489,6 +1512,7 @@ function module_submit_form($vars)
                 save_link_table_rows($vars, $insert_id);
                 save_multi_document_upload($vars, $insert_id);
                 save_column_history($vars, $insert_id);
+                action_on_submit($vars, $_REQ[$primary_column]);
 
                 notify_and_redirect_on_submit($vars, 'success', $msg["success_added"]);
                 //
@@ -1516,6 +1540,7 @@ function module_submit_form($vars)
                 save_link_table_rows($vars, $_REQ[$primary_column]);
                 save_multi_document_upload($vars, $_REQ[$primary_column]);
                 save_column_history($vars, $_REQ[$primary_column]);
+                action_on_submit($vars, $_REQ[$primary_column]);
 
                 notify_and_redirect_on_submit($vars, 'success', $msg["success_update"]);
 
@@ -1535,6 +1560,8 @@ function module_submit_form($vars)
         }
     }
 }
+
+
 
 function bi_single_inputs($fields)
 {
@@ -1583,7 +1610,7 @@ function bi_bulk_submit_form($vars)
     $errors = 0;
 
     if (isset($_REQ['save']) || isset($_REQ['savenew'])) {
-        // print_arr($_REQ);
+        print_arr($_REQ);
         // print_arr($_FILES);
         // die;
 
@@ -1638,7 +1665,7 @@ function bi_bulk_submit_form($vars)
                 $insid = $conn->insert_id;
                 $insert_ids[] = $insid;
                 // save column history here
-                save_order_quantities($vars, $r);
+                save_product_movements($vars, $r);
                 save_bulk_column_history($vars, $insid, $index);
             } else {
                 $errors++;
@@ -1826,7 +1853,7 @@ function save_multi_document_upload($vars, $primary_id)
 }
 
 
-function save_order_quantities($vars, $r)
+function save_product_movements($vars, $r)
 {
 
     if (isset($vars["manage_order_quantity"])) {
@@ -1840,7 +1867,7 @@ function save_order_quantities($vars, $r)
         // die;
 
         $action = $manage["action"];
-        $table = "order_quantities";
+        $table = "product_movements";
         $ts = getts();
         $curr_user_id = get_curr_user_id();
         $created = $ts . "_" . $curr_user_id;
@@ -1887,8 +1914,7 @@ function manage_lot_quantity($table, $row_id, $action, $quantity)
         if ($action == "reserve") {
             $available = $available - $quantity;
             $reserved = $reserved + $quantity;
-        }
-        else if ($action == "unreserve") {
+        } else if ($action == "unreserve") {
             $available = $available + $quantity;
             $reserved = $reserved - $quantity;
         }
@@ -1941,6 +1967,56 @@ function save_bulk_column_history($vars, $primary_id, $index)
         }
 
         // die;
+
+    }
+}
+
+function action_on_submit($vars, $primary_id)
+{
+    if (isset($vars["action_after_submit"])) {
+        $_REQ = $vars["submit_data"];
+        // $table = $vars["tablename"];
+        // $msg = $vars["messages"];
+        // $save_fields = $vars["save_fields"];
+        // $link_table_rows = $vars["link_table_rows"];
+        // $primary_column = $vars["primary_column"];
+        // echo "action_on_submit: ";
+        // echo $primary_id;
+        // print_arrbox($vars, 300);
+        $action = $vars["action_after_submit"]["action"];
+        $condition = $vars["action_after_submit"]["condition"];
+        // print_arr($condition);
+        if ($condition["type"] == "change_to") {
+            // print_arr($condition["param"]);
+            // echo $action;
+            $param = $condition["param"];
+            if (isset($param["column"]) && isset($param["value"])) {
+                $col = $param["column"];
+                $val = $param["value"];
+                if (isset($_REQ[$col]) && isset($_REQ["old_" . $col])) {
+                    if ($_REQ[$col] == $val && $_REQ["old_" . $col] != $_REQ[$col]) {
+                        // echo $col . " : column change detected";
+                        execute_action($action, $vars, $primary_id);
+                    }
+                }
+            }
+        }
+        die;
+    }
+}
+
+function execute_action($action, $vars, $primary_id)
+{
+
+    $ts = getts();
+    $curr_user_id = get_curr_user_id();
+
+    if ($action == "create_invoice_for_dispatch") {
+        echo $primary_id;
+        print_arr($vars);
+        // insert new invoice row
+        // " "
+        // update invoice column for dispatch
 
     }
 }
@@ -2133,7 +2209,7 @@ function module_submit_delete_form($vars)
 
         if (isset($vars["manage_order_quantity"])) {
             $data_row = module_get_data($table, $_REQ[$vars["primary_column"]]);
-            save_order_quantities($vars, $data_row);
+            save_product_movements($vars, $data_row);
         }
 
         $query = " id = \"" . $_REQ[$vars["primary_column"]] . "\" ";
@@ -2214,6 +2290,16 @@ function fetch_data($vars)
     return $ret;
 }
 
+function get_invoice_items($invoice)
+{
+    $invoice_items_arr = fetch_data(["table" => "invoice_items", "columns" => "id, product, quantity, rate", "condition" => " invoice = '" . $invoice . "' ", "order" => "product ASC", "limit" => ""]);
+    // foreach ($invoice_items_arr as $opk => $opv) {
+    //     $product_ids[] = $opv["product"];
+    //     $order_products[] = $opv;
+    // }
+    return $invoice_items_arr;
+}
+
 function get_order_products($order_id, $format = "")
 {
     $ret = [];
@@ -2229,6 +2315,32 @@ function get_order_products($order_id, $format = "")
 
     $ret["order_products"] = $order_products;
     $ret["product_ids"] = $product_ids;
+
+    return $ret;
+}
+
+function get_dispatch_products($dispatch, $format = "")
+{
+    $ret = [];
+    $product_ids = [];
+    $dispatch_products = [];
+    $qty = [];
+    $dispatch_products_arr = fetch_data(["table" => "dispatch_items", "columns" => "id, product, quantity", "condition" => " dispatch = '" . $dispatch . "' ", "order" => "product ASC", "limit" => ""]);
+    foreach ($dispatch_products_arr as $opk => $opv) {
+        $pid = $opv["product"];
+        $product_ids[] = $pid;
+        $dispatch_products[] = $opv;
+        if (!isset($qty[$pid])) {
+            $qty[$pid] = 0;
+        }
+        $qty[$pid] += $opv["quantity"];
+    }
+
+    $product_ids = array_values(array_filter(array_unique($product_ids)));
+
+    $ret["dispatch_products"] = $dispatch_products;
+    $ret["product_ids"] = $product_ids;
+    $ret["quantity"] = $qty;
 
     return $ret;
 }
@@ -2335,8 +2447,8 @@ function get_quantities_summary($arr)
     }
 
     // fetch reserved and dispatched then do final calculation of pending.
-    if (isset($arr["order_quantities"]) && is_array($arr["order_quantities"])) {
-        foreach ($arr["order_quantities"] as $pid => $val) {
+    if (isset($arr["product_movements"]) && is_array($arr["product_movements"])) {
+        foreach ($arr["product_movements"] as $pid => $val) {
             if (isset($val["reserve"])) {
                 $qty[$pid]["reserve"] += $val["reserve"];
             }
@@ -2356,22 +2468,22 @@ function get_quantities_summary($arr)
 }
 
 
-function fetch_order_quantities($arr)
+function fetch_product_movements($arr)
 {
     // print_arr($arr); 
     $status = [];
     if (isset($arr["dispatch"]) && is_array($arr["dispatch"]) && sizeof($arr["dispatch"]) > 0) {
 
-        $order_quantities_arr = fetch_data([
-            "table" => "order_quantities",
+        $product_movements_arr = fetch_data([
+            "table" => "product_movements",
             "columns" => "id, product, product_lot, quantity, action, action_date ",
             "condition" => " dispatch = '" . $arr["dispatch"]["id"] . "' AND order_id = '" . $arr["dispatch"]["order_id"] . "' ",
             "order" => "",
             "limit" => ""
         ]);
-        // print_arr($order_quantities_arr);
-        if (sizeof($order_quantities_arr) > 0) {
-            foreach ($order_quantities_arr as $k => $v) {
+        // print_arr($product_movements_arr);
+        if (sizeof($product_movements_arr) > 0) {
+            foreach ($product_movements_arr as $k => $v) {
                 $pid = $v["product"];
                 $action = $v["action"];
                 $quantity = $v["quantity"];

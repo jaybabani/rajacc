@@ -79,6 +79,20 @@ function acl_roles($format = "")
 		["dispatch_items-update", "Update dispatch items"],
 		["dispatch_items-create", "Add new dispatch items"],
 		["dispatch_items-delete", "Delete dispatch items"],
+
+		["product_movements-read", "View all product movements"],
+
+		["invoices-read", "View all invoices"],
+		["invoices-update", "Update invoices"],
+		["invoices-create", "Add new invoices"],
+		["invoices-delete", "Delete invoices"],
+		["invoice_items-read", "View all invoice items"],
+		["invoice_items-update", "Update invoice items"],
+		["invoice_items-create", "Add new invoice items"],
+		["invoice_items-delete", "Delete invoice items"],
+
+
+
 	];
 
 	if ($format == "raw") {
@@ -259,19 +273,48 @@ function get_module_pages_arr()
 			"read" => "dispatchs",
 			"update" => "dispatch-form",
 			"create" => "dispatch-form",
-			"delete" => "dispatch-delete",
+			// "delete" => "dispatch-delete",
 			"form" => ROOT_PATH . "/modules/dispatchs/dispatch-form.php?id=XXX"
 		],
 		"dispatch_items" => [
 			"name" => "dispatch items",
 			"id_prefix" => "DPI-",
 			"read" => "dispatch_items",
-			"update" => "dispatch_item-form",
-			"create" => "dispatch_item-form",
+			// "update" => "dispatch_item-form",
+			// "create" => "dispatch_item-form",
 			"bulk_update" => "dispatch_item-bulkform",
 			"bulk_create" => "dispatch_item-bulkform",
 			"delete" => "dispatch_item-delete",
 			"form" => ROOT_PATH . "/modules/dispatch_items/dispatch_item-form.php?id=XXX"
+		],
+		"product_movements" => [
+			"name" => "product_movements",
+			"id_prefix" => "PMOV-",
+			"read" => "product_movements",
+			// "update" => "dispatch-form",
+			// "create" => "dispatch-form",
+			// "delete" => "dispatch-delete",
+			// "form" => ROOT_PATH . "/modules/product_movements/product_movement-form.php?id=XXX"
+		],
+		"invoices" => [
+			"name" => "invoices",
+			"id_prefix" => "INV-",
+			"read" => "invoices",
+			"update" => "invoice-form",
+			"create" => "invoice-form",
+			"delete" => "invoice-delete",
+			"form" => ROOT_PATH . "/modules/invoices/invoice-form.php?id=XXX"
+		],
+		"invoice_items" => [
+			"name" => "invoice items",
+			"id_prefix" => "DPI-",
+			"read" => "invoice_items",
+			// "update" => "invoice_item-form",
+			// "create" => "invoice_item-form",
+			"bulk_update" => "invoice_item-bulkform",
+			"bulk_create" => "invoice_item-bulkform",
+			"delete" => "invoice_item-delete",
+			"form" => ROOT_PATH . "/modules/invoice_items/invoice_item-form.php?id=XXX"
 		],
 	];
 	return $arr;
@@ -421,3 +464,23 @@ function get_dispatch_status_arr(){
 	];
 	return $arr;
 }
+
+function get_product_movement_action_arr()
+{
+	$arr = [
+		"reserve" => "Product Reserved",
+		"unreserve" => "Product Unreserved",
+		"consume" => "Product Consumed",
+	];
+	return $arr;
+}
+
+function get_invoice_status_arr(){
+	$arr = [
+		"draft" => "Draft",
+		"generated" => "Generated",
+		"cancelled" => "Cancelled",
+	];
+	return $arr;
+}
+

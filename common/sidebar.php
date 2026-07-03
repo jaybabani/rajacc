@@ -93,6 +93,7 @@
     $show_menu["folders"] = "";
     $show_menu["orders"] = "";
     $show_menu["dispatchs"] = "";
+    $show_menu["invoices"] = "";
     
     $current_page = str_replace(".php","",basename($_SERVER['PHP_SELF']));
     // echo $current_page;
@@ -132,6 +133,9 @@
     }
     else if(in_array($current_page,array("dispatchs","dispatch-form","dispatch-delete","dispatch_items", "dispatch_item-form", "dispatch_item-bulkform","dispatch_item-delete"))){
       $show_menu["dispatchs"] = "show";
+    }
+    else if(in_array($current_page,array("invoices","invoice-form","invoice-delete","invoice_items", "invoice_item-form", "invoice_item-bulkform","invoice_item-delete"))){
+      $show_menu["invoices"] = "show";
     }
 
     if(in_array($current_page,array("attributes","attribute-form","attribute-delete"))){
@@ -294,8 +298,7 @@
           <li><a href="<?php echo ROOT_PATH; ?>/modules/orders/order-form.php" class="link-dark"><span>Add new sales order</span></a></li>
         </ul>
       </div>
-    </li>    
-
+    </li>
 
     <?php $menuid = "dispatchs"; ?>
     <li class="mb-1">
@@ -306,6 +309,19 @@
         <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
           <li><a href="<?php echo ROOT_PATH; ?>/modules/dispatchs/dispatchs.php" class="link-dark"><span>All dispatchs</span></a></li>
           <li><a href="<?php echo ROOT_PATH; ?>/modules/dispatchs/dispatch-form.php" class="link-dark"><span>Add new dispatch</span></a></li>
+        </ul>
+      </div>
+    </li>    
+
+    <?php $menuid = "invoices"; ?>
+    <li class="mb-1">
+      <button class="btn btn-toggle align-items-center collapsed" data-bs-toggle="collapse" data-bs-target="#<?php echo $menuid; ?>-collapse"  aria-expanded="<?php echo $show_menu[$menuid] == "show" ? "true" : "false"; ?>">
+        <span class="icon"><i data-feather="home"></i></span> <span class="txt">Invoices</span>
+      </button>
+      <div class="collapse <?php echo $show_menu[$menuid]; ?>" id="<?php echo $menuid; ?>-collapse" data-bs-parent="#parent-level">
+        <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
+          <li><a href="<?php echo ROOT_PATH; ?>/modules/invoices/invoices.php" class="link-dark"><span>All invoices</span></a></li>
+          <li><a href="<?php echo ROOT_PATH; ?>/modules/invoices/invoice-form.php" class="link-dark"><span>Add new invoice</span></a></li>
         </ul>
       </div>
     </li>    

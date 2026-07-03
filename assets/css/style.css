@@ -315,7 +315,7 @@ body {
 	padding: 5px 10px;
 	font-size: 13px;
 }
-
+.badge-generated,
 .badge-completed,
 .badge-yes {
 	background-color: rgba(var(--bs-success-rgb), 1);
@@ -331,6 +331,7 @@ body {
 .badge-order_confirmed{
 	background-color: rgba(var(--bs-warning-rgb), 1);
 }
+.badge-reserve,
 .badge-on_hold,
 .badge-cancelled,
 .badge-purchased{
@@ -342,6 +343,7 @@ body {
 .badge-received{
 	background-color: rgba(var(--bs-accent1-rgb), 1);
 }
+.badge-unreserve,
 .badge-dispatched,
 .badge-partially_received,
 .badge-partially_dispatched,
@@ -355,6 +357,10 @@ body {
 .badge-produced,
 .badge-ready{
 	background-color: rgba(var(--bs-accent3-rgb), 1);
+}
+
+.prod-move-link{
+	background-color: rgba(var(--bs-accent1-rgb), 1);
 }
 
 /* typography  */
@@ -403,6 +409,7 @@ h6 {
 	padding: 3px 10px 3px 0px;
 	font-size: 13px;
 	color: #ffffff;
+	font-weight: 500;
 }
 
 .icon.wtxt svg {

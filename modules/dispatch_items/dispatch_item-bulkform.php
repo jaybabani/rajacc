@@ -86,8 +86,8 @@ include '../../common/header.php';
   $product_ids = $order_products_arr["product_ids"];  // print_arr($product_ids);
   $product_lots = get_product_lot_quantities($product_ids, "merged_by_product");
   $products_arr = get_products_by_ids($product_ids);
-  $order_quantities = fetch_order_quantities(["order_id" => $order_id, "dispatch" => $dispatch_data]);
-  $quantities = get_quantities_summary(["order_id" => $order_id, "order_products" => $order_products, "product_lots" => $product_lots, "order_quantities" => $order_quantities]);
+  $product_movements = fetch_product_movements(["order_id" => $order_id, "dispatch" => $dispatch_data]);
+  $quantities = get_quantities_summary(["order_id" => $order_id, "order_products" => $order_products, "product_lots" => $product_lots, "product_movements" => $product_movements]);
 
   $vars = [];
   $vars["dispatch"] = $dispatch_data;

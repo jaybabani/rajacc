@@ -33,7 +33,18 @@ include("../../common/header.php");
     ["name" => "Type", "column" => "type", "class" => "nowrap"],
     ["name" => "Category", "column" => "category", "attributes" => get_attributes_arr("product_category"), "badge" => true],
     ["name" => "Quality", "column" => "quality", "attributes" => get_attributes_arr("product_quality"), "badge" => true],
-    ["name" => "Actions", "column" => "", "type" => "edit_delete", "sorting" => false, "search" => false, "class" => "nowrap", "acl" => ["edit" => "products-update", "delete" => "products-delete"]],
+    [
+      "name" => "Actions",
+      "column" => "",
+      "type" => "edit_delete",
+      "sorting" => false,
+      "search" => false,
+      "class" => "nowrap",
+      "acl" => ["edit" => "products-update", "delete" => "products-delete"],
+      "links" => [
+        ["text" => "Inventory Movement", "icon" => "clipboard", "url" => ROOT_PATH . "/modules/product_movements/product_movements.php?product={id}", "acl" => "product_movements-read", "class" => "prod-move-link"],
+      ]
+    ],
   ];
 
   $fetch_columns = [];

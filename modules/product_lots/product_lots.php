@@ -47,7 +47,18 @@ include("../../common/header.php");
     // ["name" => "Vendor", "column" => "vendor", "options" => $vendors_arr, "type" => "table_id", "option_id" => "id", "option_label" => "firm_name", "module" => "vendors"],
     // ["name" => "Purchase Invoice", "column" => "purchase_invoice", "type" => "image-file", "sorting" => false, "search" => false, "class" => "text-center"],
     ["name" => "Status", "column" => "status", "options" => get_product_lot_status_arr(), "badge" => true],
-    ["name" => "Actions", "column" => "", "type" => "edit_delete", "sorting" => false, "search" => false, "class" => "nowrap", "acl" => ["edit" => "product_lots-update", "delete" => "product_lots-delete"]],
+    [
+      "name" => "Actions",
+      "column" => "",
+      "type" => "edit_delete",
+      "sorting" => false,
+      "search" => false,
+      "class" => "nowrap",
+      "acl" => ["edit" => "product_lots-update", "delete" => "product_lots-delete"],
+      "links" => [
+        ["text" => "Inventory Movement", "icon" => "clipboard", "url" => ROOT_PATH . "/modules/product_movements/product_movements.php?product_lot={id}", "acl" => "product_movements-read", "class" => "prod-move-link"],
+      ]
+    ],
   ];
 
   $fetch_columns = [];

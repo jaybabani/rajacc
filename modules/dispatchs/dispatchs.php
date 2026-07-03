@@ -45,7 +45,18 @@ include '../../common/header.php';
         ["text" => "Add Dispatch Items", "url" => ROOT_PATH . "/modules/dispatch_items/dispatch_item-bulkform.php?dispatch={id}", "acl" => "dispatch_items-create"]
       ]
     ],
-    ["name" => "Actions", "column" => "", "type" => "edit_delete", "sorting" => false, "search" => false, "class" => "nowrap", "acl" => ["edit" => "product_lots-update", "delete" => "product_lots-delete"]],
+    [
+      "name" => "Actions",
+      "column" => "",
+      "type" => "edit",
+      "sorting" => false,
+      "search" => false,
+      "class" => "nowrap",
+      "acl" => ["edit" => "dispatchs-update"],
+      "links" => [
+        ["text" => "Inventory Movement", "icon" => "clipboard", "url" => ROOT_PATH . "/modules/product_movements/product_movements.php?dispatch={id}", "acl" => "product_movements-read", "class" => "prod-move-link"],
+      ]
+    ],
   ];
 
   $fetch_columns = [];
