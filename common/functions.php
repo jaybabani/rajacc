@@ -658,7 +658,7 @@ function crud_read($vars)
 
                 // Last updated by info
                 if (isset($dv["type"]) && $dv["type"] == "last_update_info") {
-                    $row_detail .= "<small><i>" . $dv["name"] . ": </i></small>";
+                    $row_detail .= "<br><small><i>" . $dv["name"] . ": </i></small>";
                     $row_detail .= user_updated($r, $auth_users);
                 }
                 if (isset($dv["type"]) && $dv["type"] == "created_info") {
@@ -1601,7 +1601,10 @@ function bi_bulk_submit_form($vars)
     // $_FILES = $vars["submit_files"] ?? [];
     $msg = $vars["msg"];
     $table = $vars["tablename"];
+    $primary_column = $vars["primary_column"] ?? "";
     $save_fields = $vars["save_fields"];
+    $mode = $vars["mode"] ?? "new"; // todo in other forms
+
 
     $ts = getts();
     $curr_user_id = get_curr_user_id();
@@ -1618,6 +1621,10 @@ function bi_bulk_submit_form($vars)
 
             foreach ($_REQ["rowindex"] as $index => $rv) {
                 $row = [];
+
+                if($rv != ""){
+                    $row[$primary_column] = $rv;
+                }
 
                 foreach ($save_fields["single"] as $sk => $sv) {
                     if (isset($sv["type"]) && $sv["type"] == "time") {
@@ -1646,7 +1653,7 @@ function bi_bulk_submit_form($vars)
                 $saverows[] = $row;
             }
 
-            // print_arr($saverows);
+            print_arr($saverows);
         }
         // die;
 
@@ -1658,32 +1665,49 @@ function bi_bulk_submit_form($vars)
             }
             $query = trim($query);
             $query = substr($query, 0, -1);
-            $q = "INSERT INTO " . $table . " SET " . $query . ' ';
-            // echo $q . "<br>";
-            $sql = $conn->query($q);
-            if ($sql) {
-                $insid = $conn->insert_id;
-                $insert_ids[] = $insid;
-                // save column history here
-                save_product_movements($vars, $r);
-                save_bulk_column_history($vars, $insid, $index);
-            } else {
-                $errors++;
+
+            if($mode == "new"){
+                $q = "INSERT INTO " . $table . " SET " . $query . ' ';
+                // echo $q . "<br>";
+                $sql = $conn->query($q);
+                if ($sql) {
+                    $insid = $conn->insert_id;
+                    $affected_ids[] = $insid;
+                    // save column history here
+                    save_product_movements($vars, $r);
+                    save_bulk_column_history($vars, $insid, $index);
+                } else {
+                    $errors++;
+                }
+            } 
+            
+            //
+            else if($mode == "update"){
+                $q = " UPDATE " . $table . " SET " . $query . " WHERE ".$primary_column." = '".$r[$primary_column]."' ";
+                // echo $q . "<br>";
+                $sql = $conn->query($q);
+                if ($sql) {
+                    // $insid = $conn->insert_id;
+                    $affected_ids[] = $r[$primary_column];
+                    save_product_movements($vars, $r);
+                    save_bulk_column_history($vars, $r[$primary_column], $index);
+                    
+                } else {
+                    $errors++;
+                }
             }
         }
 
-        if (sizeof($_REQ["rowindex"]) == sizeof($insert_ids) && $errors == 0) {
-            notify_and_redirect_on_submit($vars, 'success', $msg["success_added"]);
-            // notify('success', $msg["success_added"]);
+        if (sizeof($_REQ["rowindex"]) == sizeof($affected_ids) && $errors == 0) {
+            notify_and_redirect_on_submit($vars, 'success', (($mode == "new") ? $msg["success_added"] : $msg["success_updated"]));
             redirect_action($_REQ);
             return true;
-        } else if (sizeof($insert_ids) > 0 && $errors > 0) {
-            notify_and_redirect_on_submit($vars, 'warning', $msg["warning_added"]);
-            // notify('warning', $msg["warning_added"]);
+        } else if (sizeof($affected_ids) > 0 && $errors > 0) {
+            notify_and_redirect_on_submit($vars, 'warning', (($mode == "new") ? $msg["warning_added"] : $msg["warning_updated"]));
             redirect_action($_REQ);
             return false;
         } else {
-            notify('danger', $msg["error_added"]);
+            notify('danger', (($mode == "new") ? $msg["error_added"] : $msg["error_updated"]));
             redirect_action($_REQ);
             return false;
         }
@@ -2341,6 +2365,29 @@ function get_dispatch_products($dispatch, $format = "")
     $ret["dispatch_products"] = $dispatch_products;
     $ret["product_ids"] = $product_ids;
     $ret["quantity"] = $qty;
+
+    return $ret;
+}
+
+function get_invoice_item_details($items, $format = "")
+{
+
+   $ret = [];
+   $product_ids = [];
+   $qty = [];
+   $rate = [];
+   $rowindex = [];
+    foreach ($items as $k => $r) {
+        $pid = $r["product"];
+        $product_ids[] = $pid;
+        $qty[$pid] = $r["quantity"];
+        $rate[$pid] = $r["rate"];
+        $rowindex[$pid] = $r["id"];
+    }
+    $ret["product_ids"] = $product_ids;
+    $ret["quantity"] = $qty;
+    $ret["rate"] = $rate;
+    $ret["rowindex"] = $rowindex;
 
     return $ret;
 }

@@ -74,7 +74,7 @@ function acl_roles($format = "")
 		["dispatchs-read", "View all dispatchs"],
 		["dispatchs-update", "Update dispatchs"],
 		["dispatchs-create", "Add new dispatchs"],
-		["dispatchs-delete", "Delete dispatchs"],
+		// ["dispatchs-delete", "Delete dispatchs"],
 		["dispatch_items-read", "View all dispatch items"],
 		["dispatch_items-update", "Update dispatch items"],
 		["dispatch_items-create", "Add new dispatch items"],
@@ -85,11 +85,11 @@ function acl_roles($format = "")
 		["invoices-read", "View all invoices"],
 		["invoices-update", "Update invoices"],
 		["invoices-create", "Add new invoices"],
-		["invoices-delete", "Delete invoices"],
+		// ["invoices-delete", "Delete invoices"],
 		["invoice_items-read", "View all invoice items"],
 		["invoice_items-update", "Update invoice items"],
 		["invoice_items-create", "Add new invoice items"],
-		["invoice_items-delete", "Delete invoice items"],
+		// ["invoice_items-delete", "Delete invoice items"],
 
 
 

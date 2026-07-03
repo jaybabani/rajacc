@@ -52,6 +52,7 @@ include("../../common/header.php");
   $fetch_columns = [];
 
   $detail_columns = [
+    ["name" => "Created", "type" => "created_info"],
     ["name" => "Last update", "type" => "last_update_info"],
     [
       "name" => "History",

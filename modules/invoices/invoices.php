@@ -48,11 +48,11 @@ include '../../common/header.php';
     [
       "name" => "Actions",
       "column" => "",
-      "type" => "edit_delete",
+      "type" => "edit",
       "sorting" => false,
       "search" => false,
       "class" => "nowrap",
-      "acl" => ["edit" => "invoices-update", "delete" => "invoices-delete"],
+      "acl" => ["edit" => "invoices-update"],
     ],
   ];
 
@@ -94,100 +94,6 @@ include '../../common/header.php';
 
   <?php widget_end(); ?>
 
-
-  <?php
-  /*
-  $widgettitle = 'Add new invoice items';
-
-  widget_start($widgettitle, '', '', '', '');
-  ?>
-
-  <?php
-  $tablename = 'invoice_items';
-  $display_new_rows = 3;
-  $save_fields = [
-    'single' => [
-      ['key' => 'invoice'],
-      ["key" => "auth_user", "type" => "session_user"],
-      ["key" => "updated", "type" => "time"],
-      ["key" => "created", "type" => "created_time"],
-    ],
-    'multi' => [
-      ['key' => 'product'],
-      ['key' => 'quantity']
-    ],
-  ];
-
-  $single_fields = [
-    ['column' => 'invoice', 'value' => $_GET["invoice"] ?? ""] // get form url
-  ];
-
-  $msg = [
-    "success_added" => "New invoice items added successfully",
-    "error_added" => "Error in adding new invoice items",
-    "warning_added" => "Some new invoice items were added. Errors encountered in rest.",
-  ];
-
-  $submit_result = bi_bulk_submit_form([
-    'submit_data' => $_POST,
-    'tablename' => $tablename,
-    'save_fields' => $save_fields,
-    'msg' => $msg,
-  ]);
-
-  $tableid = 'invoice_items_table';
-  $column_titles = ['Product', 'Quantity'];
-
-  function bulk_insert_table_row($index)
-  {
-
-    $product_arr = fetch_data(["table" => "products", "columns" => "id, product", "condition" => "", "invoice" => "product ASC", "limit" => ""]);        // print_arr($product_arr);
-    $products = [];
-    foreach ($product_arr as $vk => $vv) {
-      $products[$vv["id"]] = $vv["product"];
-    }
-    // print_arr($products); 
-
-
-    $s = '';
-    $s .= "<tr data-index='" . $index . "'>";
-    $s .= '<td>'
-      .  form_field(['type' => 'hidden', 'name' => '', 'key' => 'rowindex[]', 'class' => '',], [])
-      . form_field(['type' => 'select', 'name' => 'Product', 'key' => 'product[]', "options" => $products, 'class' => ''], []);
-    $s .= '</td>';
-    $s .=  '<td>' . form_field(['type' => 'number', 'name' => 'Quantity', 'key' => 'quantity[]', 'class' => '',], []) .  '</td>';
-    $s .= '</tr>';
-
-    return $s;
-  }
-
-  ?>
-  <form class="row g-3 needs-validation" novalidate method="POST" enctype="multipart/form-data"><?php echo bi_single_inputs($single_fields); ?>
-    <div class='widget-table'>
-      <div class='table-responsive'>
-        <table class='table' id='<?php echo $tableid; ?>'>
-          <thead>
-            <tr> <?php foreach ($column_titles as $ctk => $ctv) {
-                    echo '<th>' . $ctv . '</th>';
-                  }
-                  ?>
-            </tr>
-          </thead>
-          <tbody> <?php
-                  for ($index = 1; $index <= $display_new_rows; $index++) {
-                    echo bulk_insert_table_row($index);
-                  }
-                  ?>
-          </tbody>
-        </table>
-        <?php
-        $data = [];
-        echo bi_add_new_row($tableid, bulk_insert_table_row('new'));
-        echo form_field(['type' => 'submit',  'name' => 'Save',  'key' => 'save',  'class' => 'col-md-12 col-sm-12 col-xs-12 text-center',], $data);
-        ?>
-  </form>
-
-  <?php widget_end(); */ ?>
 
 </div>
 
