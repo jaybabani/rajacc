@@ -255,7 +255,7 @@ function get_module_pages_arr()
 		],
 		"dispatchs" => [
 			"name" => "dispatchs",
-			"id_prefix" => "DO-",
+			"id_prefix" => "DP-",
 			"read" => "dispatchs",
 			"update" => "dispatch-form",
 			"create" => "dispatch-form",
@@ -264,7 +264,7 @@ function get_module_pages_arr()
 		],
 		"dispatch_items" => [
 			"name" => "dispatch items",
-			"id_prefix" => "DOI-",
+			"id_prefix" => "DPI-",
 			"read" => "dispatch_items",
 			"update" => "dispatch_item-form",
 			"create" => "dispatch_item-form",

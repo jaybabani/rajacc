@@ -12,7 +12,7 @@ include '../../common/header.php';
   $module_arr = get_module_pages_arr();
   $module_pages = $module_arr['dispatchs'];
 
-  $pagetitle = T('dispatchs');
+  $pagetitle = T('All Dispatches');
   $actions_html = '';
   $actions_html .= download_xlsx($module_pages['read']);
   $actions_html .= pagination($module_pages['read'] . '.php');
@@ -24,26 +24,6 @@ include '../../common/header.php';
 
   $primary_column = 'id';
 
-  // $purchases_arr = fetch_data(["table" => "purchases", "columns" => "id, title", "condition" => "", "dispatch" => "created DESC", "limit" => ""]); // print_arr($purchases_arr);
-  // print_arr($purchases_arr);
-
-  // $customers_arr = fetch_data([
-  //   'table' => 'customers',
-  //   'columns' => 'id, firm_name',
-  //   'condition' => '',
-  //   'dispatch' => 'firm_name ASC',
-  //   'limit' => '',
-  // ]); // print_arr($customers_arr);
-  // // print_arr($customers_arr);
-
-  // $users_arr = fetch_data([
-  //   'table' => 'users',
-  //   'columns' => 'id, name',
-  //   'condition' => '',
-  //   'dispatch' => 'name ASC',
-  //   'limit' => '',
-  // ]); // print_arr($users_arr);
-  // // print_arr($users_arr);
 
   $display_columns = [
     ['name' => '', 'column' => '', 'type' => 'details', 'sorting' => false, 'search' => false, 'class' => 'text-center nowrap',],

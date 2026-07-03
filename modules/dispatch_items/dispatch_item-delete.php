@@ -23,15 +23,22 @@ include '../../common/header.php';
     $primary_column = "id";
 
     $url_param = "";
-    if(isset($_POST["order_id"])){
-        $url_param = "order_id=".$_POST["order_id"]."";
+    if (isset($_POST["dispatch"])) {
+        $url_param = "dispatch=" . $_POST["dispatch"] . "";
     }
+
+    $manage_order_quantity = [
+        "action" => "unreserve",
+        "quantity_field" => "quantity"
+    ];
+
 
     $submit_result = module_submit_delete_form([
         "submit_data" => $_POST,
         "tablename" => $tablename,
         "messages" => $msg,
         "primary_column" => $primary_column,
+        'manage_order_quantity' => $manage_order_quantity,
         "redirect_to" => "dispatch_items",
         "url_param" => $url_param,
     ]);
@@ -39,9 +46,9 @@ include '../../common/header.php';
     $data = module_get_data($tablename, $id);
     // print_arr($data);
 
-    $products_arr = fetch_data(["table" => "products", "columns" => "id, product", "condition" => " id = '".$data["product"]."' ", "order" => "", "limit" => ""]);
+    $products_arr = fetch_data(["table" => "products", "columns" => "id, product", "condition" => " id = '" . $data["product"] . "' ", "order" => "", "limit" => ""]);
     // print_arr($products_arr);
-    if(isset($products_arr[0]["product"])){
+    if (isset($products_arr[0]["product"])) {
         $data["product"] = $products_arr[0]["product"];
     }
 
@@ -52,7 +59,7 @@ include '../../common/header.php';
 
     <form action="dispatch_item-delete.php" method="post" enctype="multipart/form-data">
         <input type="hidden" name="mode" value="<?php echo get_value($data, 'mode'); ?>">
-        <input type="hidden" name="order_id" value="<?php echo get_value($data, 'order_id'); ?>">
+        <input type="hidden" name="dispatch" value="<?php echo get_value($data, 'dispatch'); ?>">
         <input type="hidden" name="id" value="<?php echo get_value($data, 'id'); ?>">
 
         <div class="col-lg-12">
@@ -60,11 +67,12 @@ include '../../common/header.php';
                 <div class="col-md-9 col-sm-10 col-xs-12">
                     <div class="form-group">
                         <label class="form-label" for="field-4">Are You sure you want to delete dispatch item?
-                            <?php echo "<br>ID: <strong>" . get_value($data, 'id') . "</strong>";
-                            $dispatch_item = name_title(get_value($data, 'dispatch_item'));
+                            <?php echo "<br>ID: <strong>" . get_module_id_prefix("dispatch_items") . get_value($data, 'id') . "</strong>";
+                            echo "<br>From Dispatch: <strong>" . get_module_id_prefix("dispatchs") . get_value($data, 'dispatch') . "</strong>";
+                            echo "<br>From Order: <strong>" . get_module_id_prefix("orders") . get_value($data, 'order_id') . "</strong>";
                             echo "<br>Product: <strong>" . get_value($data, 'product') . "</strong>";
                             echo "<br>Quantity: <strong>" . get_value($data, 'quantity') . "</strong>"; ?>
-                            </label>
+                        </label>
                     </div>
                 </div>
             </div>

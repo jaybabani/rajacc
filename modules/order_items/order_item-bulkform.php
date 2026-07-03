@@ -47,12 +47,22 @@ include '../../common/header.php';
     "columns" => ["rate[]", "quantity[]"],
   ];
 
+
+  $redirect_to = "";
+  $url_param = "";
+  if (isset($_POST["order_id"])) {
+    $url_param = "order_id=" . $_POST["order_id"] . "";
+    $redirect_to = "order_items";
+  }
+
   $submit_result = bi_bulk_submit_form([
     'submit_data' => $_POST,
     'tablename' => $tablename,
     'save_fields' => $save_fields,
     'msg' => $msg,
     "save_column_history" => $save_column_history,
+    "redirect_to" => $redirect_to,
+    "url_param" => $url_param,
   ]);
 
   $tableid = 'order_items_table';

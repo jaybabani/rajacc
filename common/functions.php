@@ -1147,7 +1147,7 @@ function form_field($vars, $data)
         }
 
         if ($vars["type"] == "display") {
-            $s .= '<div class="form-display" name="' . $vars["key"] . '" id="' . $vars["key"] . '">'.get_value($data, $vars["key"]).'</div>';
+            $s .= '<div class="form-display" name="' . $vars["key"] . '" id="' . $vars["key"] . '">' . get_value($data, $vars["key"]) . '</div>';
         }
         //
 
@@ -1173,10 +1173,10 @@ function form_field($vars, $data)
         //
         else if ($vars["type"] == "number") {
             $maxno = "";
-            if(isset($vars["max"])){
-                $maxno = " max = '".$vars["max"]."' ";
+            if (isset($vars["max"])) {
+                $maxno = " max = '" . $vars["max"] . "' ";
             }
-            $s .= '<input type="number" class="form-control" name="' . $vars["key"] . '" id="' . $vars["key"] . '" '.$maxno.' value="' . get_value($data, $vars["key"]) . '" ' . ($required ? "required" : "") . '>';
+            $s .= '<input type="number" class="form-control" name="' . $vars["key"] . '" id="' . $vars["key"] . '" ' . $maxno . ' value="' . get_value($data, $vars["key"]) . '" ' . ($required ? "required" : "") . '>';
             $s .= '<div class="invalid-feedback">Incorrect ' . $vars["name"] . ' value</div>';
         }
         //
@@ -1603,7 +1603,7 @@ function bi_bulk_submit_form($vars)
                     //
                     else if (isset($sv["type"]) && $sv["type"] == "session_user") {
                         $row[$sv["key"]] = $curr_user_id;
-                    } 
+                    }
 
                     //
                     else {
@@ -1638,7 +1638,7 @@ function bi_bulk_submit_form($vars)
                 $insid = $conn->insert_id;
                 $insert_ids[] = $insid;
                 // save column history here
-                save_order_quantities($vars,$r);
+                save_order_quantities($vars, $r);
                 save_bulk_column_history($vars, $insid, $index);
             } else {
                 $errors++;
@@ -1646,11 +1646,13 @@ function bi_bulk_submit_form($vars)
         }
 
         if (sizeof($_REQ["rowindex"]) == sizeof($insert_ids) && $errors == 0) {
-            notify('success', $msg["success_added"]);
+            notify_and_redirect_on_submit($vars, 'success', $msg["success_added"]);
+            // notify('success', $msg["success_added"]);
             redirect_action($_REQ);
             return true;
         } else if (sizeof($insert_ids) > 0 && $errors > 0) {
-            notify('warning', $msg["warning_added"]);
+            notify_and_redirect_on_submit($vars, 'warning', $msg["warning_added"]);
+            // notify('warning', $msg["warning_added"]);
             redirect_action($_REQ);
             return false;
         } else {
@@ -1824,7 +1826,8 @@ function save_multi_document_upload($vars, $primary_id)
 }
 
 
-function save_order_quantities($vars, $r){
+function save_order_quantities($vars, $r)
+{
 
     if (isset($vars["manage_order_quantity"])) {
         global $conn;
@@ -1832,7 +1835,9 @@ function save_order_quantities($vars, $r){
         $tablename = $vars["tablename"];
         $manage = $vars["manage_order_quantity"];
 
+        // print_arr($vars);
         // print_arr($r);
+        // die;
 
         $action = $manage["action"];
         $table = "order_quantities";
@@ -1844,11 +1849,11 @@ function save_order_quantities($vars, $r){
 
         // $action_date = $ts;
 
-        $sql = " INSERT INTO ".$table." (order_id, dispatch, product, product_lot, quantity, action, action_date, auth_user, updated, created) 
-        VALUES ('".$r["order_id"]."', '".$r["dispatch"]."', '".$r["product"]."', '".$r["product_lot"]."', '".$quantity."', 
-         '".$action."', '".$ts."', '".$curr_user_id."', '".$ts."', '".$created."' ) ";
+        $sql = " INSERT INTO " . $table . " (order_id, dispatch, product, product_lot, quantity, action, action_date, auth_user, updated, created) 
+        VALUES ('" . $r["order_id"] . "', '" . $r["dispatch"] . "', '" . $r["product"] . "', '" . $r["product_lot"] . "', '" . $quantity . "', 
+         '" . $action . "', '" . $ts . "', '" . $curr_user_id . "', '" . $ts . "', '" . $created . "' ) ";
 
-        if($conn->query($sql)){
+        if ($conn->query($sql)) {
             manage_lot_quantity("product_lots", $r["product_lot"], $action, $quantity);
         }
 
@@ -1857,37 +1862,43 @@ function save_order_quantities($vars, $r){
     }
 }
 
-function manage_lot_quantity($table, $row_id, $action, $quantity){
-        global $conn;
+function manage_lot_quantity($table, $row_id, $action, $quantity)
+{
+    global $conn;
 
-        $condition = " id = '" . $row_id . "' ";
-        $fetched = fetch_data([
-            "table" => $table,
-            "columns" => "id, available_quantity, reserved_quantity, consumed_quantity",
-            "condition" => $condition,
-            "order" => "",
-            "limit" => ""
-        ]);
+    $condition = " id = '" . $row_id . "' ";
+    $fetched = fetch_data([
+        "table" => $table,
+        "columns" => "id, available_quantity, reserved_quantity, consumed_quantity",
+        "condition" => $condition,
+        "order" => "",
+        "limit" => ""
+    ]);
 
-        $ts = getts();
-        $curr_user_id = get_curr_user_id();
+    $ts = getts();
+    $curr_user_id = get_curr_user_id();
 
-        if(sizeof($fetched) > 0){
-            $available = $fetched[0]["available_quantity"];
-            $reserved = $fetched[0]["reserved_quantity"];
-            $consumed = $fetched[0]["consumed_quantity"];
-            // print_arr($fetched);
-            if($action == "reserve"){
-                $available = $available - $quantity;
-                $reserved = $reserved + $quantity;
-            }
-            $sql = " UPDATE ".$table." SET available_quantity = '".$available."', reserved_quantity = '".$reserved."', consumed_quantity = '".$consumed."', auth_user = '".$curr_user_id."', updated = '".$ts."' WHERE id = '".$row_id."' ";
-            // echo $sql;
-            if($conn->query($sql)){
-                // echo "manage in history";
-            }
-        }
+    if (sizeof($fetched) > 0) {
+        $available = $fetched[0]["available_quantity"];
+        $reserved = $fetched[0]["reserved_quantity"];
+        $consumed = $fetched[0]["consumed_quantity"];
+        // print_arr($fetched);
         // die;
+        if ($action == "reserve") {
+            $available = $available - $quantity;
+            $reserved = $reserved + $quantity;
+        }
+        else if ($action == "unreserve") {
+            $available = $available + $quantity;
+            $reserved = $reserved - $quantity;
+        }
+        $sql = " UPDATE " . $table . " SET available_quantity = '" . $available . "', reserved_quantity = '" . $reserved . "', consumed_quantity = '" . $consumed . "', auth_user = '" . $curr_user_id . "', updated = '" . $ts . "' WHERE id = '" . $row_id . "' ";
+        // echo $sql;
+        if ($conn->query($sql)) {
+            // echo "manage in history";
+        }
+    }
+    // die;
 
 
 }
@@ -2120,6 +2131,11 @@ function module_submit_delete_form($vars)
     if (isset($_REQ['delete'])) {
         // print_arr($_REQ);
 
+        if (isset($vars["manage_order_quantity"])) {
+            $data_row = module_get_data($table, $_REQ[$vars["primary_column"]]);
+            save_order_quantities($vars, $data_row);
+        }
+
         $query = " id = \"" . $_REQ[$vars["primary_column"]] . "\" ";
 
         $sql = $conn->query("DELETE FROM $table WHERE " . $query . " ");
@@ -2303,6 +2319,7 @@ function get_quantities_summary($arr)
                 $qty[$pid]["ordered"] = 0;
                 $qty[$pid]["pending"] = 0;
                 $qty[$pid]["reserve"] = 0;
+                $qty[$pid]["unreserve"] = 0;
             }
             $qty[$pid]["ordered"] += $p["quantity"];
         }
@@ -2314,14 +2331,17 @@ function get_quantities_summary($arr)
     // print_arrbox($product_lots, 300);
 
     foreach ($arr["product_lots"]["product_quantity"] as $pid => $parr) {
-            $qty[$pid]["available"] += $parr["available"];
+        $qty[$pid]["available"] += $parr["available"];
     }
 
     // fetch reserved and dispatched then do final calculation of pending.
-    if(isset($arr["order_quantities"]) && is_array($arr["order_quantities"])){
+    if (isset($arr["order_quantities"]) && is_array($arr["order_quantities"])) {
         foreach ($arr["order_quantities"] as $pid => $val) {
-            if(isset($val["reserve"])){
+            if (isset($val["reserve"])) {
                 $qty[$pid]["reserve"] += $val["reserve"];
+            }
+            if (isset($val["unreserve"])) {
+                $qty[$pid]["unreserve"] += $val["unreserve"];
             }
         }
     }
@@ -2329,27 +2349,28 @@ function get_quantities_summary($arr)
 
     // manage pending quantities
     foreach ($qty as $pid => $v) {
-        $qty[$pid]["pending"] = $qty[$pid]["ordered"] - $qty[$pid]["reserve"];
+        $qty[$pid]["pending"] = $qty[$pid]["ordered"] - $qty[$pid]["reserve"] + $qty[$pid]["unreserve"];
     }
 
     return $qty;
 }
 
 
-function fetch_order_quantities($arr){
+function fetch_order_quantities($arr)
+{
     // print_arr($arr); 
     $status = [];
-    if(isset($arr["dispatch"]) && is_array($arr["dispatch"]) && sizeof($arr["dispatch"]) > 0){
-            
+    if (isset($arr["dispatch"]) && is_array($arr["dispatch"]) && sizeof($arr["dispatch"]) > 0) {
+
         $order_quantities_arr = fetch_data([
             "table" => "order_quantities",
             "columns" => "id, product, product_lot, quantity, action, action_date ",
-            "condition" => " dispatch = '".$arr["dispatch"]["id"]."' AND order_id = '".$arr["dispatch"]["order_id"]."' ",
+            "condition" => " dispatch = '" . $arr["dispatch"]["id"] . "' AND order_id = '" . $arr["dispatch"]["order_id"] . "' ",
             "order" => "",
             "limit" => ""
         ]);
         // print_arr($order_quantities_arr);
-        if(sizeof($order_quantities_arr) > 0){
+        if (sizeof($order_quantities_arr) > 0) {
             foreach ($order_quantities_arr as $k => $v) {
                 $pid = $v["product"];
                 $action = $v["action"];

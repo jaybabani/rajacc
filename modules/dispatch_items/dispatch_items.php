@@ -11,13 +11,12 @@ include("../../common/header.php");
   $module_arr = get_module_pages_arr();
   $module_pages = $module_arr["dispatch_items"];
 
-  $pagetitle = T("Sales dispatch items");
+  $pagetitle = T("Dispatch items");
   $actions_html = "";
   $actions_html .= download_xlsx($module_pages["read"]);
 
-  if (isset($_GET["order_id"]) && $_GET["order_id"] != "") {
-    $actions_html .= add_new_form_link(["text" => "Add new dispatch items (Bulk)", "url" => ROOT_PATH . "/modules/dispatch_items/dispatch_item-bulkform.php?order_id=" . $_GET["order_id"] . ""]);
-    $actions_html .= add_new_form_link(["text" => "Add new dispatch item (Single)", "url" => ROOT_PATH . "/modules/dispatch_items/dispatch_item-form.php?order_id=" . $_GET["order_id"] . ""]);
+  if (isset($_GET["dispatch"]) && $_GET["dispatch"] != "") {
+    $actions_html .= add_new_form_link(["text" => "Add new dispatch items (Bulk)", "url" => ROOT_PATH . "/modules/dispatch_items/dispatch_item-bulkform.php?dispatch=" . $_GET["dispatch"] . ""]);
   }
 
   $actions_html .= pagination($module_pages["read"] . ".php");
@@ -29,7 +28,7 @@ include("../../common/header.php");
 
   $primary_column = "id";
 
-  $purchases_arr = fetch_data(["table" => "purchases", "columns" => "id, title", "condition" => "", "order" => "created DESC", "limit" => ""]);    // print_arr($purchases_arr);
+  // $purchases_arr = fetch_data(["table" => "purchases", "columns" => "id, title", "condition" => "", "order" => "created DESC", "limit" => ""]);    // print_arr($purchases_arr);
   // print_arr($purchases_arr);
 
   $products_arr = fetch_data(["table" => "products", "columns" => "id, product", "condition" => "", "order" => "product ASC", "limit" => ""]);    // print_arr($products_arr);
@@ -39,11 +38,14 @@ include("../../common/header.php");
     ["name" => "", "column" => "", "type" => "details", "sorting" => false, "search" => false, "class" => "text-center nowrap"],
     ["name" => "Select", "column" => "", "type" => "select", "sorting" => false, "search" => false, "class" => "text-center"],
     ["name" => "ID", "column" => "id", "class" => "text-center nowrap", "id_prefix" => $module_pages["id_prefix"]],
-    ["name" => "Sales Order ID", "column" => "order_id", "class" => "text-center nowrap", "id_prefix" => get_module_id_prefix("orders")],
+    ["name" => "Sales Order", "column" => "order_id", "class" => "text-center nowrap", "id_prefix" => get_module_id_prefix("orders")],
+    ["name" => "Dispatch", "column" => "dispatch", "class" => "text-center nowrap", "id_prefix" => get_module_id_prefix("dispatchs")],
     ["name" => "Product", "column" => "product", "options" => $products_arr, "type" => "table_id", "option_id" => "id", "option_label" => "product", "class" => "title", "module" => "products"],
-    ["name" => "Ordered quantity", "column" => "quantity", "class" => "nowrap"],
-    ["name" => "Rate per unit", "column" => "rate", "class" => "nowrap"],
-    ["name" => "Actions", "column" => "", "type" => "edit_delete", "sorting" => false, "search" => false, "class" => "nowrap", "acl" => ["edit" => "dispatch_items-update", "delete" => "dispatch_items-delete"]],
+    ["name" => "Quantity", "column" => "quantity", "class" => "text-center nowrap"],
+    ["name" => "Product Lot", "column" => "product_lot", "class" => "text-center nowrap", "id_prefix" => get_module_id_prefix("product_lots")],
+    // ["name" => "Ordered quantity", "column" => "quantity", "class" => "nowrap"],
+    // ["name" => "Rate per unit", "column" => "rate", "class" => "nowrap"],
+    ["name" => "Actions", "column" => "", "type" => "delete", "sorting" => false, "search" => false, "class" => "nowrap", "acl" => ["delete" => "dispatch_items-delete"]],
   ];
 
   $fetch_columns = [];

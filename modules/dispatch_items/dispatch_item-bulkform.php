@@ -38,7 +38,7 @@ include '../../common/header.php';
     'multi' => [
       ['key' => 'product'],
       ['key' => 'product_lot'],
-      ['key' => 'reserve_quantity'],
+      ['key' => 'quantity'],
     ],
   ];
 
@@ -50,13 +50,21 @@ include '../../common/header.php';
   ];
 
   $save_column_history = [
-    "columns" => ["reserve_quantity[]"],
+    "columns" => ["quantity[]"],
   ];
 
   $manage_order_quantity = [
     "action" => "reserve", 
-    "quantity_field" => "reserve_quantity"
+    "quantity_field" => "quantity"
   ];
+
+
+  $redirect_to = "";
+  $url_param = "";
+  if (isset($_POST["dispatch"])) {
+    $url_param = "dispatch=" . $_POST["dispatch"] . "";
+    $redirect_to = "dispatch_items";
+  }
 
   $submit_result = bi_bulk_submit_form([
     'submit_data' => $_POST,
@@ -65,14 +73,13 @@ include '../../common/header.php';
     'msg' => $msg,
     "save_column_history" => $save_column_history,
     'manage_order_quantity' => $manage_order_quantity,
+    "redirect_to" => $redirect_to,
+    "url_param" => $url_param,
   ]);
-
-
 
 
   $tableid = 'dispatch_items_table';
   $column_titles = ['Reserve Quantity', 'Product Lot', 'Actions'];
-
 
   $order_products_arr = get_order_products($order_id);
   $order_products = $order_products_arr["order_products"];
@@ -93,8 +100,8 @@ include '../../common/header.php';
 
   $display_new_rows = sizeof($quantities);
 
-  print_arrbox($vars, 300);
-  print_arrbox($vars["quantities"], 300);
+  // print_arrbox($vars, 300);
+  // print_arrbox($vars["quantities"], 300);
 
   function bulk_header_row($vars, $pid)
   {
@@ -124,7 +131,7 @@ include '../../common/header.php';
       .  form_field(['type' => 'hidden', 'name' => '', 'key' => 'rowindex[]', 'class' => '',], [])
       .  column_history_fields($save_column_history, [])
       . form_field(['type' => 'hidden', 'name' => 'Product', 'key' => 'product[]', 'class' => '',], $data);
-    $s .= form_field(['type' => 'number', 'name' => 'Reserve Quantity', 'key' => 'reserve_quantity[]', 'max' => $maxqty, 'required' => true, 'class' => '',], []) .  '</td>';
+    $s .= form_field(['type' => 'number', 'name' => 'Reserve Quantity', 'key' => 'quantity[]', 'max' => $maxqty, 'required' => true, 'class' => '',], []) .  '</td>';
     $s .= '<td>'
       . form_field(['type' => 'display', 'name' => 'Product Lot', 'key' => 'product_lot_info[]', 'class' => ''], $data)
       . form_field(['type' => 'hidden', 'name' => '', 'key' => 'product_lot[]', 'class' => ''], $data)

@@ -130,7 +130,7 @@
     else if(in_array($current_page,array("orders","order-form","order-delete","order_items","order_item-form","order_item-bulkform","order_item-delete"))){
       $show_menu["orders"] = "show";
     }
-    else if(in_array($current_page,array("dispatchs","dispatch-form","dispatch-delete","dispatch_items","dispatch_item-form","dispatch_item-bulkform","dispatch_item-delete"))){
+    else if(in_array($current_page,array("dispatchs","dispatch-form","dispatch-delete","dispatch_items", "dispatch_item-form", "dispatch_item-bulkform","dispatch_item-delete"))){
       $show_menu["dispatchs"] = "show";
     }
 
