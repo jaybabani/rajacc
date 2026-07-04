@@ -53,13 +53,13 @@ include("../../common/header.php");
     "columns" => ["status"],
   ];
 
-  // $action_after_submit = [
-  //   "action" => "create_invoice_for_dispatch",
-  //   "condition" => [
-  //     "type" => "change_to",
-  //     "param" => ["key" => "status", "value" => "packed_and_ready"]
-  //   ]
-  // ];
+  $action_after_submit = [
+    "action" => "dispatch_done",
+    "condition" => [
+      "type" => "change_to",
+      "param" => ["key" => "status", "value" => "dispatched"]
+    ]
+  ];
 
   $submit_result = module_submit_form([
     "submit_data" => $_POST,
@@ -69,7 +69,7 @@ include("../../common/header.php");
     "messages" => $msg,
     "link_table_rows" => $link_table_rows,
     "save_column_history" => $save_column_history,
-    // "action_after_submit" => $action_after_submit,
+    "action_after_submit" => $action_after_submit,
   ]);
 
 

@@ -337,6 +337,7 @@ body {
 .badge-purchased{
 	background-color: rgba(var(--bs-info-rgb), 1);
 }
+.badge-return,
 .badge-invoice_generated,
 .badge-order_placed,
 .badge-partially_paid,
@@ -352,6 +353,8 @@ body {
 .badge-under_process{
 	background-color: rgba(var(--bs-accent2-rgb), 1);
 }
+/* .badge-dispatch_returned, */
+.badge-consume,
 .badge-fully_paid,
 .badge-fully_received,
 .badge-fully_dispatched,

@@ -1955,8 +1955,8 @@ function save_product_movements($vars, $r)
 
     if (isset($vars["manage_order_quantity"])) {
         global $conn;
-        $_REQ = $vars["submit_data"];
-        $tablename = $vars["tablename"];
+        // $_REQ = $vars["submit_data"];
+        // $tablename = $vars["tablename"];
         $manage = $vars["manage_order_quantity"];
 
         // print_arr($vars);
@@ -2011,9 +2011,21 @@ function manage_lot_quantity($table, $row_id, $action, $quantity)
         if ($action == "reserve") {
             $available = $available - $quantity;
             $reserved = $reserved + $quantity;
-        } else if ($action == "unreserve") {
+        } 
+        //
+        else if ($action == "unreserve") {
             $available = $available + $quantity;
             $reserved = $reserved - $quantity;
+        }
+        //
+        else if ($action == "consume") {
+            $consumed = $consumed + $quantity;
+            $reserved = $reserved - $quantity;
+        } 
+        //
+        else if ($action == "return") {
+            $consumed = $consumed - $quantity;
+            $available = $available + $quantity;
         }
         $sql = " UPDATE " . $table . " SET available_quantity = '" . $available . "', reserved_quantity = '" . $reserved . "', consumed_quantity = '" . $consumed . "', auth_user = '" . $curr_user_id . "', updated = '" . $ts . "' WHERE id = '" . $row_id . "' ";
         // echo $sql;
@@ -2148,7 +2160,10 @@ function execute_action($action, $vars, $primary_id)
 
         //
         // die;
-    } else if ($action == "invoice_items_added") {
+    } 
+    
+    //
+    else if ($action == "invoice_items_added") {
         // echo $action;
         // print_arr($vars);
         $_REQ = $vars["submit_data"];
@@ -2179,6 +2194,36 @@ function execute_action($action, $vars, $primary_id)
             ]);
         }
     }
+
+    //
+    else if ($action == "dispatch_done") {
+
+        // echo "invoice_cancelled";
+        $_REQ = $vars["submit_data"];
+        // $dispatch = $_REQ["dispatch"];
+        $dispatch = $_REQ["id"];
+        // print_arr($_REQ);
+        // print_arr($vars);
+            $movvars = [
+                "manage_order_quantity" => [
+                    "action" => "consume",
+                    "quantity_field" => "quantity"
+                ]
+            ];
+
+        // find product lots in a dispatch
+        $dispatch_items_arr = fetch_data(["table" => "dispatch_items", "columns" => "id, product, quantity, dispatch, order_id, product_lot", "condition" => " dispatch = '" . $dispatch . "' ", "order" => "product ASC", "limit" => ""]);
+        foreach ($dispatch_items_arr as $opk => $opv) {
+            // enter product movement as consumed for each product lot
+            // print_arr($opv);
+            save_product_movements($movvars, $opv);
+            // $pid = $opv["product"];
+        }
+
+        // maintain master quantity of each product lot
+
+        // die;
+    } 
 
     // die;
 }
@@ -2665,6 +2710,7 @@ function get_quantities_summary($arr)
                 $qty[$pid]["pending"] = 0;
                 $qty[$pid]["reserve"] = 0;
                 $qty[$pid]["unreserve"] = 0;
+                $qty[$pid]["consume"] = 0;
             }
             $qty[$pid]["ordered"] += $p["quantity"];
         }
@@ -2688,12 +2734,15 @@ function get_quantities_summary($arr)
             if (isset($val["unreserve"])) {
                 $qty[$pid]["unreserve"] += $val["unreserve"];
             }
+            if (isset($val["consume"])) {
+                $qty[$pid]["consume"] += $val["consume"];
+            }
         }
     }
 
-
     // manage pending quantities
     foreach ($qty as $pid => $v) {
+        // $qty[$pid]["pending"] = $qty[$pid]["ordered"] - $qty[$pid]["consume"];
         $qty[$pid]["pending"] = $qty[$pid]["ordered"] - $qty[$pid]["reserve"] + $qty[$pid]["unreserve"];
     }
 
@@ -2701,16 +2750,25 @@ function get_quantities_summary($arr)
 }
 
 
-function fetch_product_movements($arr)
+function fetch_product_movements($arr, $type = "order")
 {
     // print_arr($arr); 
     $status = [];
-    if (isset($arr["dispatch"]) && is_array($arr["dispatch"]) && sizeof($arr["dispatch"]) > 0) {
 
+    $condition = "";
+
+    if ($type == "order" && isset($arr["order_id"]) && $arr["order_id"] != "") {
+        $condition = " order_id = '" . $arr["dispatch"]["order_id"] . "' ";
+    }
+    else if ($type == "dispatch" && isset($arr["dispatch"]) && is_array($arr["dispatch"]) && sizeof($arr["dispatch"]) > 0) {
+        $condition = " dispatch = '" . $arr["dispatch"]["id"] . "' AND order_id = '" . $arr["dispatch"]["order_id"] . "' ";
+    }
+
+    if($condition != ""){
         $product_movements_arr = fetch_data([
             "table" => "product_movements",
             "columns" => "id, product, product_lot, quantity, action, action_date ",
-            "condition" => " dispatch = '" . $arr["dispatch"]["id"] . "' AND order_id = '" . $arr["dispatch"]["order_id"] . "' ",
+            "condition" => $condition,
             "order" => "",
             "limit" => ""
         ]);
@@ -2727,7 +2785,6 @@ function fetch_product_movements($arr)
             }
         }
     }
-
     // print_arr($status);
     return $status;
 }

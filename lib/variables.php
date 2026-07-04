@@ -472,6 +472,7 @@ function get_dispatch_status_arr(){
 		"packed_and_ready" => "Packed and Ready",
 		"invoice_generated" => "Invoice Generated",
 		"dispatched" => "Dispatched",
+		// "dispatch_returned" => "Returned back after dispatch",
 		"cancelled" => "Cancelled",
 	];
 	return $arr;

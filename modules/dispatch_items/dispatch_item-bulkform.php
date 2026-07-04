@@ -98,8 +98,6 @@ include '../../common/header.php';
   $vars["quantities"] = $quantities;
   $vars["product_lots"] = $product_lots["product_lots"];
 
-  $display_new_rows = sizeof($quantities);
-
   // print_arrbox($vars, 300);
   // print_arrbox($vars["quantities"], 300);
 
