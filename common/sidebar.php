@@ -191,7 +191,7 @@
     <?php $menuid = "users"; ?>
     <li class="mb-1">
       <button class="btn btn-toggle align-items-center collapsed" data-bs-toggle="collapse" data-bs-target="#<?php echo $menuid; ?>-collapse"  aria-expanded="<?php echo $show_menu[$menuid] == "show" ? "true" : "false"; ?>">
-        <span class="icon"><i data-feather="home"></i></span> <span class="txt">Users</span>
+        <span class="icon"><i data-feather="users"></i></span> <span class="txt">Users</span>
       </button>
       <div class="collapse <?php echo $show_menu[$menuid]; ?>" id="<?php echo $menuid; ?>-collapse" data-bs-parent="#parent-level">
         <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
@@ -206,7 +206,7 @@
     <?php $menuid = "raw_materials"; ?>
     <li class="mb-1">
       <button class="btn btn-toggle align-items-center collapsed" data-bs-toggle="collapse" data-bs-target="#<?php echo $menuid; ?>-collapse"  aria-expanded="<?php echo $show_menu[$menuid] == "show" ? "true" : "false"; ?>">
-        <span class="icon"><i data-feather="home"></i></span> <span class="txt">Raw Materials</span>
+        <span class="icon"><i data-feather="layers"></i></span> <span class="txt">Raw Materials</span>
       </button>
       <div class="collapse <?php echo $show_menu[$menuid]; ?>" id="<?php echo $menuid; ?>-collapse" data-bs-parent="#parent-level">
         <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
@@ -223,7 +223,7 @@
     <?php $menuid = "products"; ?>
     <li class="mb-1">
       <button class="btn btn-toggle align-items-center collapsed" data-bs-toggle="collapse" data-bs-target="#<?php echo $menuid; ?>-collapse"  aria-expanded="<?php echo $show_menu[$menuid] == "show" ? "true" : "false"; ?>">
-        <span class="icon"><i data-feather="home"></i></span> <span class="txt">Products</span>
+        <span class="icon"><i data-feather="shopping-bag"></i></span> <span class="txt">Products</span>
       </button>
       <div class="collapse <?php echo $show_menu[$menuid]; ?>" id="<?php echo $menuid; ?>-collapse" data-bs-parent="#parent-level">
         <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
@@ -243,7 +243,7 @@
     <?php $menuid = "customers"; ?>
     <li class="mb-1">
       <button class="btn btn-toggle align-items-center collapsed" data-bs-toggle="collapse" data-bs-target="#<?php echo $menuid; ?>-collapse"  aria-expanded="<?php echo $show_menu[$menuid] == "show" ? "true" : "false"; ?>">
-        <span class="icon"><i data-feather="home"></i></span> <span class="txt">Customers</span>
+        <span class="icon"><i data-feather="smile"></i></span> <span class="txt">Customers</span>
       </button>
       <div class="collapse <?php echo $show_menu[$menuid]; ?>" id="<?php echo $menuid; ?>-collapse" data-bs-parent="#parent-level">
         <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
@@ -259,7 +259,7 @@
     <?php $menuid = "vendors"; ?>
     <li class="mb-1">
       <button class="btn btn-toggle align-items-center collapsed" data-bs-toggle="collapse" data-bs-target="#<?php echo $menuid; ?>-collapse"  aria-expanded="<?php echo $show_menu[$menuid] == "show" ? "true" : "false"; ?>">
-        <span class="icon"><i data-feather="home"></i></span> <span class="txt">Vendors</span>
+        <span class="icon"><i data-feather="user-check"></i></span> <span class="txt">Vendors</span>
       </button>
       <div class="collapse <?php echo $show_menu[$menuid]; ?>" id="<?php echo $menuid; ?>-collapse" data-bs-parent="#parent-level">
         <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
@@ -274,7 +274,7 @@
     <?php $menuid = "purchases"; ?>
     <li class="mb-1">
       <button class="btn btn-toggle align-items-center collapsed" data-bs-toggle="collapse" data-bs-target="#<?php echo $menuid; ?>-collapse"  aria-expanded="<?php echo $show_menu[$menuid] == "show" ? "true" : "false"; ?>">
-        <span class="icon"><i data-feather="home"></i></span> <span class="txt">Purchases</span>
+        <span class="icon"><i data-feather="credit-card"></i></span> <span class="txt">Purchases</span>
       </button>
       <div class="collapse <?php echo $show_menu[$menuid]; ?>" id="<?php echo $menuid; ?>-collapse" data-bs-parent="#parent-level">
         <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
@@ -290,7 +290,7 @@
     <?php $menuid = "orders"; ?>
     <li class="mb-1">
       <button class="btn btn-toggle align-items-center collapsed" data-bs-toggle="collapse" data-bs-target="#<?php echo $menuid; ?>-collapse"  aria-expanded="<?php echo $show_menu[$menuid] == "show" ? "true" : "false"; ?>">
-        <span class="icon"><i data-feather="home"></i></span> <span class="txt">Orders</span>
+        <span class="icon"><i data-feather="globe"></i></span> <span class="txt">Orders</span>
       </button>
       <div class="collapse <?php echo $show_menu[$menuid]; ?>" id="<?php echo $menuid; ?>-collapse" data-bs-parent="#parent-level">
         <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
@@ -303,7 +303,7 @@
     <?php $menuid = "dispatchs"; ?>
     <li class="mb-1">
       <button class="btn btn-toggle align-items-center collapsed" data-bs-toggle="collapse" data-bs-target="#<?php echo $menuid; ?>-collapse"  aria-expanded="<?php echo $show_menu[$menuid] == "show" ? "true" : "false"; ?>">
-        <span class="icon"><i data-feather="home"></i></span> <span class="txt">Dispatchs</span>
+        <span class="icon"><i data-feather="package"></i></span> <span class="txt">Dispatchs</span>
       </button>
       <div class="collapse <?php echo $show_menu[$menuid]; ?>" id="<?php echo $menuid; ?>-collapse" data-bs-parent="#parent-level">
         <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
@@ -316,7 +316,7 @@
     <?php $menuid = "invoices"; ?>
     <li class="mb-1">
       <button class="btn btn-toggle align-items-center collapsed" data-bs-toggle="collapse" data-bs-target="#<?php echo $menuid; ?>-collapse"  aria-expanded="<?php echo $show_menu[$menuid] == "show" ? "true" : "false"; ?>">
-        <span class="icon"><i data-feather="home"></i></span> <span class="txt">Invoices</span>
+        <span class="icon"><i data-feather="book"></i></span> <span class="txt">Invoices</span>
       </button>
       <div class="collapse <?php echo $show_menu[$menuid]; ?>" id="<?php echo $menuid; ?>-collapse" data-bs-parent="#parent-level">
         <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
@@ -329,7 +329,7 @@
     <?php $menuid = "documents"; ?>
     <li class="mb-1">
       <button class="btn btn-toggle align-items-center collapsed" data-bs-toggle="collapse" data-bs-target="#<?php echo $menuid; ?>-collapse"  aria-expanded="<?php echo $show_menu[$menuid] == "show" ? "true" : "false"; ?>">
-        <span class="icon"><i data-feather="home"></i></span> <span class="txt">Documents</span>
+        <span class="icon"><i data-feather="file-text"></i></span> <span class="txt">Documents</span>
       </button>
       <div class="collapse <?php echo $show_menu[$menuid]; ?>" id="<?php echo $menuid; ?>-collapse" data-bs-parent="#parent-level">
         <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
@@ -344,7 +344,7 @@
     <?php $menuid = "folders"; ?>
     <li class="mb-1">
       <button class="btn btn-toggle align-items-center collapsed" data-bs-toggle="collapse" data-bs-target="#<?php echo $menuid; ?>-collapse"  aria-expanded="<?php echo $show_menu[$menuid] == "show" ? "true" : "false"; ?>">
-        <span class="icon"><i data-feather="home"></i></span> <span class="txt">Folders</span>
+        <span class="icon"><i data-feather="folder-plus"></i></span> <span class="txt">Folders</span>
       </button>
       <div class="collapse <?php echo $show_menu[$menuid]; ?>" id="<?php echo $menuid; ?>-collapse" data-bs-parent="#parent-level">
         <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
@@ -361,7 +361,7 @@
     <?php $menuid = "attributes"; ?>
     <li class="mb-1">
       <button class="btn btn-toggle align-items-center collapsed" data-bs-toggle="collapse" data-bs-target="#<?php echo $menuid; ?>-collapse"  aria-expanded="<?php echo $show_menu[$menuid] == "show" ? "true" : "false"; ?>">
-        <span class="icon"><i data-feather="home"></i></span> <span class="txt">Attributes</span>
+        <span class="icon"><i data-feather="paperclip"></i></span> <span class="txt">Attributes</span>
       </button>
       <div class="collapse <?php echo $show_menu[$menuid]; ?>" id="<?php echo $menuid; ?>-collapse" data-bs-parent="#parent-level">
         <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
@@ -374,7 +374,7 @@
     <?php $menuid = "symbols"; ?>
     <li class="mb-1">
       <button class="btn btn-toggle align-items-center collapsed" data-bs-toggle="collapse" data-bs-target="#<?php echo $menuid; ?>-collapse"  aria-expanded="<?php echo $show_menu[$menuid] == "show" ? "true" : "false"; ?>">
-        <span class="icon"><i data-feather="home"></i></span> <span class="txt">Symbols</span>
+        <span class="icon"><i data-feather="grid"></i></span> <span class="txt">Symbols</span>
       </button>
       <div class="collapse <?php echo $show_menu[$menuid]; ?>" id="<?php echo $menuid; ?>-collapse" data-bs-parent="#parent-level">
         <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
@@ -386,7 +386,7 @@
 
     <li class="mb-1">
       <button class="btn btn-toggle align-items-center collapsed" data-bs-toggle="collapse" data-bs-target="#home-collapse" aria-expanded="false">
-        <span class="icon"><i data-feather="edit"></i></span><span class="txt">Widgets</span>
+        <span class="icon"><i data-feather="layout"></i></span><span class="txt">Widgets</span>
       </button>
       <div class="collapse" id="home-collapse" data-bs-parent="#parent-level">
         <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
