@@ -49,9 +49,10 @@ include("../../common/header.php");
     ["name" => "Product", "column" => "product", "options" => $products_arr, "type" => "table_id", "option_id" => "id", "option_label" => "product", "class" => "title", "module" => "products"],
     ["name" => "Quantity", "column" => "quantity", "class" => "text-center nowrap"],
     ["name" => "Rate", "column" => "rate", "class" => "text-center nowrap"],
+    ["name" => "Discount (%)", "column" => "discount", "class" => "text-center nowrap"],
+    // ["name" => "GST", "column" => "igst", "class" => "text-center nowrap"],
     // ["name" => "Product Lot", "column" => "product_lot", "class" => "text-center nowrap", "id_prefix" => get_module_id_prefix("product_lots")],
     // ["name" => "Ordered quantity", "column" => "quantity", "class" => "nowrap"],
-    // ["name" => "Rate per unit", "column" => "rate", "class" => "nowrap"],
     // ["name" => "Actions", "column" => "", "type" => "delete", "sorting" => false, "search" => false, "class" => "nowrap", "acl" => ["delete" => "invoice_items-delete"]],
   ];
 
@@ -65,7 +66,8 @@ include("../../common/header.php");
       "type" => "history",
       "history_columns" => [
         ["name" => "Quantity", "column" => "quantity"],
-        ["name" => "Rate", "column" => "rate"]
+        ["name" => "Rate", "column" => "rate"],
+        ["name" => "Discount (%)", "column" => "discount"]
       ],
     ]
   ];

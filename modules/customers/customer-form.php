@@ -37,6 +37,7 @@ include("../../common/header.php");
     ["key" => "owner_phone"],
     ["key" => "zone"],
     ["key" => "gst"],
+    ["key" => "gst_type"],
     ["key" => "category"],
     ["key" => "price_allotment"],
     ["key" => "active"],
@@ -84,6 +85,7 @@ include("../../common/header.php");
     echo form_field(["type" => "select-attribute", "name" => "Category", "key" => "category", "required" => true, "attributes" => get_attributes_arr("customer_category"), "class" => "col-md-6 col-lg-4 mb-3"], $data);
     echo form_field(["type" => "text", "name" => "Zone / Area", "key" => "zone", "class" => "col-md-6 col-lg-4 mb-3"], $data);
     echo form_field(["type" => "text", "name" => "GST No.", "key" => "gst", "class" => "col-md-6 col-lg-4 mb-3"], $data);
+    echo form_field(["type" => "select", "name" => "GST Type", "key" => "gst_type", "required" => true, "options" => get_gst_type_arr(), "class" => "col-md-6 col-lg-4 mb-3"], $data);
     echo form_field(["type" => "text", "name" => "Price Allotment", "key" => "price_allotment", "class" => "col-md-6 col-lg-4 mb-3"], $data);
     echo form_field(["type" => "select", "name" => "Active", "key" => "active", "required" => true, "options" => get_active_arr(), "class" => "col-md-6 col-lg-4 mb-3"], $data);
 

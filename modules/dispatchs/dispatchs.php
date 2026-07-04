@@ -24,7 +24,6 @@ include '../../common/header.php';
 
   $primary_column = 'id';
 
-
   $display_columns = [
     ['name' => '', 'column' => '', 'type' => 'details', 'sorting' => false, 'search' => false, 'class' => 'text-center nowrap',],
     ['name' => 'Select', 'column' => '', 'type' => 'select', 'sorting' => false, 'search' => false, 'class' => 'text-center',],
@@ -42,7 +41,21 @@ include '../../common/header.php';
       "class" => "nowrap",
       "links" => [
         ["text" => "View Dispatch Items", "url" => ROOT_PATH . "/modules/dispatch_items/dispatch_items.php?dispatch={id}", "acl" => "dispatch_items-read"],
-        ["text" => "Add Dispatch Items", "url" => ROOT_PATH . "/modules/dispatch_items/dispatch_item-bulkform.php?dispatch={id}", "acl" => "dispatch_items-create"]
+        [
+          "text" => "Add Dispatch Items",
+          "url" => ROOT_PATH . "/modules/dispatch_items/dispatch_item-bulkform.php?dispatch={id}",
+          "acl" => "dispatch_items-create",
+          "row_condition" => [
+            "type" => "AND",
+            "checks" => [
+              [
+                "column" => "status",
+                "is" => "not_in_array",
+                "value" => ["invoice_generated", "dispatched"]
+              ]
+            ]
+          ]
+        ]
       ]
     ],
     [

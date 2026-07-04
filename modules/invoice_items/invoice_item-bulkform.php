@@ -45,6 +45,10 @@ include '../../common/header.php';
     'multi' => [
       ['key' => 'product'],
       ['key' => 'rate'],
+      ['key' => 'discount'],
+      ['key' => 'igst'],
+      ['key' => 'cgst'],
+      ['key' => 'sgst'],
       ['key' => 'quantity'],
     ],
   ];
@@ -56,6 +60,10 @@ include '../../common/header.php';
     ],
     'multi' => [
       ['key' => 'rate'],
+      ['key' => 'discount'],
+      ['key' => 'igst'],
+      ['key' => 'cgst'],
+      ['key' => 'sgst'],
     ],
   ];
 
@@ -86,7 +94,7 @@ include '../../common/header.php';
   ];
 
   $save_column_history = [
-    "columns" => ["rate[]"],
+    "columns" => ["rate[]", "discount[]"],
   ];
 
   // $manage_order_quantity = [
@@ -109,7 +117,6 @@ include '../../common/header.php';
     ]
   ];
 
-
   $submit_result = bi_bulk_submit_form([
     'mode' => $mode,
     'submit_data' => $_POST,
@@ -124,7 +131,7 @@ include '../../common/header.php';
   ]);
 
   $tableid = 'invoice_items_table';
-  $column_titles = ['Product', 'Quantity', 'Rate'];
+  $column_titles = ['Product', 'Quantity', 'Rate', 'Discount'];
 
   // get dispatch items
   // combine as products and merge all quantity 
@@ -133,19 +140,29 @@ include '../../common/header.php';
   if($mode == "new"){
     $dispatch_products = get_dispatch_products($dispatch);
     $product_ids = $dispatch_products["product_ids"];  // print_arr($product_ids);
+    $products_arr = get_products_by_ids($product_ids);
     $quantities = $dispatch_products["quantity"];
     $rates = [];
+    $discounts = [];
+    $igsts = $products_arr["igsts"];
+    $cgsts = $products_arr["cgsts"];
+    $sgsts = $products_arr["sgsts"];
     $rowindex = [];
   }
   else if($mode == "update"){
     $invoice_item_details = get_invoice_item_details($invoice_items_data);
     $product_ids = $invoice_item_details["product_ids"];  // print_arr($product_ids);
+
+    $products_arr = get_products_by_ids($product_ids);
     $quantities = $invoice_item_details["quantity"];
     $rates = $invoice_item_details["rate"];
+    $discounts = $invoice_item_details["discount"];
+    $igsts = $invoice_item_details["igst"];
+    $cgsts = $invoice_item_details["cgst"];
+    $sgsts = $invoice_item_details["sgst"];
     $rowindex = $invoice_item_details["rowindex"];
   }
 
-  $products_arr = get_products_by_ids($product_ids);
 
   $vars = [];
   $vars["invoice"] = $invoice_data;
@@ -153,9 +170,13 @@ include '../../common/header.php';
   $vars["order_id"] = $order_id;
   // $vars["dispatch_products"] = $dispatch_products;
   $vars["product_ids"] = $product_ids;
-  $vars["products"] = $products_arr;
+  $vars["products"] = $products_arr["products"];
   $vars["quantities"] = $quantities;
   $vars["rates"] = $rates;
+  $vars["discounts"] = $discounts;
+  $vars["igsts"] = $igsts;
+  $vars["cgsts"] = $cgsts;
+  $vars["sgsts"] = $sgsts;
   $vars["rowindex"] = $rowindex;
 
   $display_new_rows = sizeof($product_ids);
@@ -169,13 +190,19 @@ include '../../common/header.php';
     $s = '';
     $s .= "<tr data-index='" . $index . "'>";
     $data["product_name[]"] = $vars["products"][$pid];
+    $data["gst_info[]"] = "<small><i>(IGST: ".$vars["igsts"][$pid]."% CGST:".$vars["cgsts"][$pid]."% SGST:".$vars["sgsts"][$pid]."%)</i></small>";
     $data["product[]"] = $pid;  
     $data["quantity[]"] = $vars["quantities"][$pid];
     $data["rate[]"] = "";
+    $data["discount[]"] = "";
+    $data["igst[]"] = $vars["igsts"][$pid];
+    $data["cgst[]"] = $vars["cgsts"][$pid];
+    $data["sgst[]"] = $vars["sgsts"][$pid];
     $data["rowindex[]"] = "";
 
     if($mode == "update"){
       $data["rate[]"] = $vars["rates"][$pid];
+      $data["discount[]"] = $vars["discounts"][$pid];
       $data["rowindex[]"] = $vars["rowindex"][$pid];
     }
 
@@ -183,7 +210,11 @@ include '../../common/header.php';
       .  form_field(['type' => 'hidden', 'name' => '', 'key' => 'rowindex[]', 'class' => '',], $data)
       .  column_history_fields($save_column_history, $data)
       . form_field(['type' => 'hidden', 'name' => 'Product', 'key' => 'product[]', 'class' => '',], $data)
-      . form_field(['type' => 'display', 'name' => 'Product', 'key' => 'product_name[]', 'class' => '',], $data);
+      . form_field(['type' => 'display', 'name' => 'Product', 'key' => 'product_name[]', 'class' => '',], $data)
+      . form_field(['type' => 'display', 'name' => '', 'key' => 'gst_info[]', 'class' => '',], $data)
+      . form_field(['type' => 'hidden', 'name' => 'IGST (%)', 'key' => 'igst[]', 'required' => true, 'class' => '',], $data)
+      . form_field(['type' => 'hidden', 'name' => 'CGST (%)', 'key' => 'cgst[]', 'required' => true, 'class' => '',], $data)
+      . form_field(['type' => 'hidden', 'name' => 'SGST (%)', 'key' => 'sgst[]', 'required' => true, 'class' => '',], $data);
     $s .=  '</td>';
     $s .= '<td>'
       . form_field(['type' => 'hidden', 'name' => 'Quantity', 'key' => 'quantity[]', 'class' => '',], $data)
@@ -192,6 +223,8 @@ include '../../common/header.php';
     $s .=  '<td>'
       . form_field(['type' => 'number', 'name' => 'Rate', 'key' => 'rate[]', 'required' => true, 'class' => '',], $data)
       .  '</td>';
+    $s .=  '<td>'. form_field(['type' => 'number', 'name' => 'Discount (%)', 'key' => 'discount[]', 'required' => true, 'class' => '',], $data).'</td>'
+      .  '';
     $s .= '</tr>';
 
     return $s;

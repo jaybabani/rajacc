@@ -612,7 +612,13 @@ function crud_read($vars)
                                         return $r[$key] ?? $matches[0]; // keep original if key missing
                                     }, $url);
                                     $text = $lv["text"];
-                                    $colval .= "<a href='" . $url . "'>" . $text . "</a> &nbsp;";
+                                    $row_condition = true;
+                                    if (isset($lv["row_condition"])) {
+                                        $row_condition = check_row_condition($r, $lv["row_condition"]);
+                                    }
+                                    if ($row_condition == true) {
+                                        $colval .= "<a href='" . $url . "'>" . $text . "</a> &nbsp;";
+                                    }
                                 }
                             }
                             $html .= "<td class='" . $row_col_class . "'>" . $colval . "</td>";
@@ -735,6 +741,12 @@ function crud_read($vars)
                             }
                         }
 
+                        if (isset($dv["options"]) && !isset($dv["type"])) {
+                            if (is_array($dv["options"]) && isset($dv["options"][$colval])) {
+                                $colval = $dv["options"][$colval];
+                            }
+                        }
+
 
                         //
                         $row_detail .= "<small><i>" . $dv["name"] . ": </i></small><strong>" . $colval . "</strong>" . "<br>";
@@ -760,6 +772,58 @@ function crud_read($vars)
 
     // return $ret;
 }
+
+
+function check_row_condition($r, $condition)
+{
+    // print_arr($r);
+    // print_arr($condition);
+    $res = [];
+    foreach ($condition["checks"] as $ck => $c) {
+
+        // not in array condition
+        if ($c["is"] == "not_in_array") {
+            if (isset($c["column"]) && isset($c["value"])) {
+                $col = $c["column"];
+                $val = $c["value"];
+                // echo $col; print_arr($val);
+                $res[$ck] = in_array($r[$col], $val) ? "fail" : "pass";
+            }
+        }
+
+        // is_valid condition
+        else if ($c["is"] == "is_not_valid") {
+            if (isset($c["column"])) {
+                $col = $c["column"];
+                $res[$ck] = ($r[$col] == NULL || $r[$col] == "" || $r[$col] == "0") ? "pass" : "fail";
+            }
+        }
+
+        // is_valid condition
+        else if ($c["is"] == "is_valid") {
+            if (isset($c["column"])) {
+                $col = $c["column"];
+                $res[$ck] = ($r[$col] != NULL && $r[$col] != "" && $r[$col] != "0") ? "pass" : "fail";
+            }
+        }
+    }
+
+    // print_arr($res);
+    if ($condition["type"] == "AND") {
+        if (in_array("fail", $res)) {
+            return false;
+        }
+    } else if ($condition["type"] == "OR") {
+        if (!in_array('pass', $res, true)) {
+            return false;
+        }
+    }
+
+    return true;
+}
+
+
+
 
 function get_module_link($module, $val, $key, $format = "")
 {
@@ -792,6 +856,15 @@ function arr_val_valid($arr, $key)
     }
     return false;
 }
+
+function value_valid($v)
+{
+    if ($v != NULL && $v != "" && $v != "0") {
+        return true;
+    }
+    return false;
+}
+
 
 function crud_update() {}
 
@@ -2010,6 +2083,8 @@ function action_on_submit($vars, $primary_id)
         $action = $vars["action_after_submit"]["action"];
         $condition = $vars["action_after_submit"]["condition"];
         // print_arr($condition);
+        // print_arr($_REQ);
+        // die;
 
         //
         if ($condition["type"] == "change_to") {
@@ -2051,7 +2126,29 @@ function execute_action($action, $vars, $primary_id)
     $ts = getts();
     $curr_user_id = get_curr_user_id();
 
-    if ($action == "invoice_items_added") {
+    if ($action == "invoice_cancelled") {
+
+        // echo "invoice_cancelled";
+        $_REQ = $vars["submit_data"];
+        $dispatch = $_REQ["dispatch"];
+        $invoice = $_REQ["id"];
+        // print_arr($_REQ);
+
+        //invoice = '0', 
+        $sql = " UPDATE dispatchs SET status = 'new', auth_user = '" . $curr_user_id . "', updated = '" . $ts . "' WHERE id = '" . $dispatch . "' ";
+        if ($conn->query($sql)) {
+            insert_column_history([
+                "table_name" => "dispatchs",
+                "row_id" => $dispatch,
+                "column_name" => "status",
+                "value" => "new",
+                "notes" => "Status changed because invoice was cancelled",
+            ]);
+        }
+
+        //
+        // die;
+    } else if ($action == "invoice_items_added") {
         // echo $action;
         // print_arr($vars);
         $_REQ = $vars["submit_data"];
@@ -2060,7 +2157,8 @@ function execute_action($action, $vars, $primary_id)
 
         // update dispatchs table
         // echo "invoice attached to dispatch";
-        $sql = " UPDATE dispatchs SET invoice = '" . $invoice . "', status = 'invoice_generated', auth_user = '" . $curr_user_id . "', updated = '" . $ts . "' WHERE id = '" . $dispatch . "' ";
+        //invoice = '" . $invoice . "', 
+        $sql = " UPDATE dispatchs SET status = 'invoice_generated', auth_user = '" . $curr_user_id . "', updated = '" . $ts . "' WHERE id = '" . $dispatch . "' ";
         if ($conn->query($sql)) {
             insert_column_history([
                 "table_name" => "dispatchs",
@@ -2132,10 +2230,12 @@ function insert_column_history($arr)
     $row_id = $arr["row_id"];
     $column_name = $arr["column_name"];
     $value = $arr["value"];
+    $notes = $arr["notes"] ?? "";
+
     $auth_user = get_curr_user_id();
     $ts = getts();
 
-    $sql = " INSERT INTO column_history (table_name, row_id, column_name, value, auth_user, updated, created) VALUES ('" . $table_name . "', '" . $row_id . "', '" . $column_name . "', '" . $value . "', '" . $auth_user . "', '" . $ts . "', '" . $ts . "') ";
+    $sql = " INSERT INTO column_history (table_name, row_id, column_name, value, notes, auth_user, updated, created) VALUES ('" . $table_name . "', '" . $row_id . "', '" . $column_name . "', '" . $value . "', '" . $notes . "', '" . $auth_user . "', '" . $ts . "', '" . $ts . "') ";
     // echo $sql."<br>";
     $conn->query($sql);
 }
@@ -2178,6 +2278,9 @@ function display_column_history($vars, $row, $history, $columns)
                         $hisval = '<strong>' . $hisval . '</strong>';
                     }
                     $s .= $hisval;
+                    if ($v["notes"] != "" && $v["notes"] != NULL) {
+                        $s .= "&nbsp;<small><i>(" . $v["notes"] . ")</i></small>";
+                    }
                 }
             }
 
@@ -2218,7 +2321,7 @@ function fetch_column_history($vars, $rows)
         $condition = " row_id IN (" . implode(",", $ids) . ") AND table_name = '" . $tablename . "' ";
         $fetched = fetch_data([
             "table" => "column_history",
-            "columns" => "id, column_name, table_name, row_id, value, auth_user, updated, created",
+            "columns" => "id, column_name, table_name, row_id, value, notes, auth_user, updated, created",
             "condition" => $condition,
             "order" => " updated ASC ",
             "limit" => ""
@@ -2371,7 +2474,7 @@ function fetch_data($vars)
 
 function get_invoice_items($invoice)
 {
-    $invoice_items_arr = fetch_data(["table" => "invoice_items", "columns" => "id, product, quantity, rate", "condition" => " invoice = '" . $invoice . "' ", "order" => "product ASC", "limit" => ""]);
+    $invoice_items_arr = fetch_data(["table" => "invoice_items", "columns" => "id, product, quantity, rate, discount, igst, cgst, sgst", "condition" => " invoice = '" . $invoice . "' ", "order" => "product ASC", "limit" => ""]);
     // foreach ($invoice_items_arr as $opk => $opv) {
     //     $product_ids[] = $opv["product"];
     //     $order_products[] = $opv;
@@ -2431,17 +2534,26 @@ function get_invoice_item_details($items, $format = "")
     $product_ids = [];
     $qty = [];
     $rate = [];
+    $discount = [];
     $rowindex = [];
     foreach ($items as $k => $r) {
         $pid = $r["product"];
         $product_ids[] = $pid;
         $qty[$pid] = $r["quantity"];
         $rate[$pid] = $r["rate"];
+        $discount[$pid] = $r["discount"];
+        $igst[$pid] = $r["igst"];
+        $cgst[$pid] = $r["cgst"];
+        $sgst[$pid] = $r["sgst"];
         $rowindex[$pid] = $r["id"];
     }
     $ret["product_ids"] = $product_ids;
     $ret["quantity"] = $qty;
     $ret["rate"] = $rate;
+    $ret["discount"] = $discount;
+    $ret["igst"] = $igst;
+    $ret["cgst"] = $cgst;
+    $ret["sgst"] = $sgst;
     $ret["rowindex"] = $rowindex;
 
     return $ret;
@@ -2454,14 +2566,33 @@ function get_products_by_ids($ids)
         $condition = " id IN (" . implode(",", $ids) . ")";
     }
 
-    $product_arr = fetch_data(["table" => "products", "columns" => "id, product", "condition" => $condition, "order" => "product ASC", "limit" => ""]);        // print_arr($product_arr);
+    $product_arr = fetch_data(["table" => "products", "columns" => "id, product, igst, cgst, sgst", "condition" => $condition, "order" => "product ASC", "limit" => ""]);        // print_arr($product_arr);
     $products = [];
+    $igsts = [];
+    $cgsts = [];
+    $sgsts = [];
+
+    $prodgst = [];
     foreach ($product_arr as $vk => $vv) {
         $products[$vv["id"]] = $vv["product"];
+        $igsts[$vv["id"]] = $vv["igst"];
+        $cgsts[$vv["id"]] = $vv["cgst"];
+        $sgsts[$vv["id"]] = $vv["sgst"];
+
+        $prodgst[$vv["id"]] = [];
+        $prodgst[$vv["id"]]["igst"] = $vv["igst"];
+        $prodgst[$vv["id"]]["cgst"] = $vv["cgst"];
+        $prodgst[$vv["id"]]["sgst"] = $vv["sgst"];
     }
     // print_arr($products); 
 
-    return $products;
+    return [
+        "products" => $products,
+        "igsts" => $igsts,
+        "cgsts" => $cgsts,
+        "sgsts" => $sgsts,
+        "prod_gst" => $prodgst
+    ];
 }
 
 

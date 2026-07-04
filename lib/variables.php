@@ -127,6 +127,17 @@ function get_active_arr()
 	return $arr;
 }
 
+function get_gst_type_arr()
+{
+	$arr = [
+		'inter' => 'Inter State (CGST + SGST)',
+		'outer' => 'Outer State (IGST)'
+	];
+	return $arr;
+}
+
+
+
 function get_module_pages_arr()
 {
 	$arr = [

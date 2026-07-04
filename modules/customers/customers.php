@@ -46,6 +46,7 @@ include("../../common/header.php");
     ["name" => "Firm Name", "column" => "firm_name"],
     ["name" => "Price Allotment", "column" => "price_allotment"],
     ["name" => "Firm Address", "column" => "firm_address"],
+    ["name" => "GST Type", "column" => "gst_type", "options" => get_gst_type_arr()],
     ["name" => "Last update", "type" => "last_update_info"],
   ];
 

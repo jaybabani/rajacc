@@ -52,6 +52,9 @@ include("../../common/header.php");
   $detail_columns = [
     ["name" => "Product", "column" => "product"],
     ["name" => "No. of pieces / Set of", "column" => "pieces"],
+    ["name" => "IGST (%) (Outer state)", "column" => "igst"],
+    ["name" => "CGST (%) (Same state)", "column" => "cgst"],
+    ["name" => "SGST (%) (Same state)", "column" => "sgst"],
     ["name" => "Description", "column" => "description"],
     ["name" => "Last update", "type" => "last_update_info"],
     ["name" => "Created", "type" => "created_info"],

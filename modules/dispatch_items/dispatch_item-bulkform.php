@@ -94,7 +94,7 @@ include '../../common/header.php';
   $vars["order_id"] = $order_id;
   $vars["order_products"] = $order_products;
   $vars["product_ids"] = $product_ids;
-  $vars["products"] = $products_arr;
+  $vars["products"] = $products_arr["products"];
   $vars["quantities"] = $quantities;
   $vars["product_lots"] = $product_lots["product_lots"];
 

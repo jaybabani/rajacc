@@ -35,6 +35,9 @@ include("../../common/header.php");
     ["key" => "quality"],
     ["key" => "type"],
     ["key" => "pieces"],
+    ["key" => "igst"],
+    ["key" => "cgst"],
+    ["key" => "sgst"],
     ["key" => "image", "type" => "image"],
     ["key" => "auth_user", "type" => "session_user"],
     ["key" => "updated", "type" => "time"],
@@ -80,6 +83,9 @@ include("../../common/header.php");
     echo form_field(["type" => "select-attribute", "name" => "Quality", "key" => "quality", "required" => true, "attributes" => get_attributes_arr("product_quality"), "class" => "col-md-6 col-lg-4 mb-3"], $data);
     echo form_field(["type" => "text", "name" => "Type", "key" => "type", "class" => "col-md-6 col-lg-4 mb-3"], $data);
     echo form_field(["type" => "number", "name" => "No. of Pieces / Set of", "key" => "pieces", "class" => "col-md-6 col-lg-4 mb-3"], $data);
+    echo form_field(["type" => "number", "name" => "IGST (%) (Outer state)", "key" => "igst", "class" => "col-md-6 col-lg-4 mb-3"], $data);
+    echo form_field(["type" => "number", "name" => "SGST (%) (Same State)", "key" => "sgst", "class" => "col-md-6 col-lg-4 mb-3"], $data);
+    echo form_field(["type" => "number", "name" => "CGST (%) (Same State)", "key" => "cgst", "class" => "col-md-6 col-lg-4 mb-3"], $data);
 
     echo form_field(["type" => "textarea", "name" => "Description", "key" => "description", "class" => "col-md-6 col-lg-4 mb-3"], $data);
 

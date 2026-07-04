@@ -53,13 +53,13 @@ include("../../common/header.php");
     "columns" => ["status"],
   ];
 
-  // $action_after_submit = [
-  //   "action" => "create_invoice_for_invoice",
-  //   "condition" => [
-  //     "type" => "change_to",
-  //     "param" => ["column" => "status", "value" => "ready_for_invoice"]
-  //   ]
-  // ];
+  $action_after_submit = [
+    "action" => "invoice_cancelled",
+    "condition" => [
+      "type" => "change_to",
+      "param" => ["key" => "status", "value" => "cancelled"]
+    ]
+  ];
 
   $submit_result = module_submit_form([
     "submit_data" => $_POST,
@@ -69,7 +69,7 @@ include("../../common/header.php");
     "messages" => $msg,
     "link_table_rows" => $link_table_rows,
     "save_column_history" => $save_column_history,
-    // "action_after_submit" => $action_after_submit,
+    "action_after_submit" => $action_after_submit,
   ]);
 
 
@@ -83,14 +83,35 @@ include("../../common/header.php");
 
     <?php
 
-    $dispatch_arr = fetch_data(["table" => "dispatchs", "columns" => "id", "condition" => "", "order" => "id ASC", "limit" => ""]);        // print_arr($dispatch_arr);
+    //-------------------------------
+    // Fetch only dispatch without any invoice yet
+    // get all dispatchs where invoice is already generated. no need to display them in select field
+    $inv_dp_arr = fetch_data(["table" => "invoices", "columns" => "id, dispatch, status", "condition" => " status != 'cancelled' ", "order" => "id ASC", "limit" => ""]);
+    // print_arr($inv_dp_arr);
+    $dp_notin = [];
+    foreach ($inv_dp_arr as $vk => $vv) {
+      $dp_notin[] = $vv["dispatch"];
+    }
+    $dp_notin = array_filter(array_unique($dp_notin));
+    // print_arr($dp_notin);
+    $condition = sizeof($dp_notin) > 0 ? " id NOT IN (".implode(",", $dp_notin).") " : "";
+    $dispatch_arr = fetch_data(["table" => "dispatchs", "columns" => "id", "condition" => $condition, "order" => "id ASC", "limit" => ""]);        // print_arr($dispatch_arr);
     $dispatchs = [];
     foreach ($dispatch_arr as $vk => $vv) {
       $dispatchs[$vv["id"]] = get_module_id_prefix("dispatchs") . $vv["id"];
     }
     // print_arr($dispatchs);
+    //--------------------------------
 
-    echo form_field(["type" => "select", "name" => "Dispatch", "key" => "dispatch", "required" => true, "options" => $dispatchs, "class" => "col-md-6 col-lg-4 mb-3"], $data);
+
+
+    if($mode == "update"){
+      $data["dispatch_info"] = get_module_id_prefix("dispatchs").$data["dispatch"];
+      echo form_field(["type" => "hidden", "name" => "", "key" => "dispatch", "class" => "col-md-6 col-lg-4 mb-3"], $data);
+      echo form_field(["type" => "display", "name" => "Dispatch", "key" => "dispatch_info", "id_prefix" => get_module_id_prefix("dispatchs"), "class" => "col-md-6 col-lg-4 mb-3"], $data);
+    } else {
+      echo form_field(["type" => "select", "name" => "Dispatch", "key" => "dispatch", "required" => true, "options" => $dispatchs, "class" => "col-md-6 col-lg-4 mb-3"], $data);
+    }
     echo form_field(["type" => "select", "name" => "Status", "key" => "status", "required" => true, "options" => get_invoice_status_arr(), "class" => "col-md-6 col-lg-4 mb-3"], $data);
     echo form_field(["type" => "date", "name" => "Created on date", "key" => "created_on_date", "class" => "col-md-6 col-lg-4 mb-3"], $data);
     echo form_field(["type" => "textarea", "name" => "Notes", "key" => "notes", "class" => "col-md-6 col-lg-4 mb-3"], $data);
