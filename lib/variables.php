@@ -458,7 +458,8 @@ function get_order_status_arr()
 function get_dispatch_status_arr(){
 	$arr = [
 		"new" => "New Dispatch",
-		"ready_for_dispatch" => "Packed and Ready",
+		"packed_and_ready" => "Packed and Ready",
+		"invoice_generated" => "Invoice Generated",
 		"dispatched" => "Dispatched",
 		"cancelled" => "Cancelled",
 	];

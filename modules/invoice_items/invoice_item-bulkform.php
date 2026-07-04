@@ -101,6 +101,15 @@ include '../../common/header.php';
     $redirect_to = "invoice_items";
   }
 
+  $action_after_submit = [
+    "action" => "invoice_items_added",
+    "condition" => [
+      "type" => "equal",
+      "param" => ["key" => "mode", "value" => "new"]
+    ]
+  ];
+
+
   $submit_result = bi_bulk_submit_form([
     'mode' => $mode,
     'submit_data' => $_POST,
@@ -111,6 +120,7 @@ include '../../common/header.php';
     "save_column_history" => $save_column_history,
     "redirect_to" => $redirect_to,
     "url_param" => $url_param,
+    "action_after_submit" => $action_after_submit,
   ]);
 
   $tableid = 'invoice_items_table';

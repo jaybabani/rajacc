@@ -15,8 +15,27 @@ include("../../common/header.php");
   $actions_html = "";
   $actions_html .= download_xlsx($module_pages["read"]);
 
+  $query = "";
+  $dispatch_status = "";
+  $allow_delete = true;
+  
   if (isset($_GET["dispatch"]) && $_GET["dispatch"] != "") {
-    $actions_html .= add_new_form_link(["text" => "Add new dispatch items (Bulk)", "url" => ROOT_PATH . "/modules/dispatch_items/dispatch_item-bulkform.php?dispatch=" . $_GET["dispatch"] . ""]);
+    // $actions_html .= add_new_form_link(["text" => "Add new dispatch items (Bulk)", "url" => ROOT_PATH . "/modules/dispatch_items/dispatch_item-bulkform.php?dispatch=" . $_GET["dispatch"] . ""]);
+
+    $dispatch = $_GET["dispatch"];
+    $query = " dispatch = '" . $dispatch . "' ";
+
+    // fetch dispatch status
+    $dispatch_arr = fetch_data(["table" => "dispatchs", "columns" => "status", "condition" => " id = '" . $dispatch . "' ", "order" => "", "limit" => ""]);
+
+    // print_arr($dispatch_arr);
+    if (sizeof($dispatch_arr) == 1) {
+      $dispatch_status = $dispatch_arr[0]["status"];
+    }
+
+    // allow delete column
+    $allow_delete = in_array($dispatch_status, ["invoice_generated", "dispatched"]) ? false : true;
+
   }
 
   $actions_html .= pagination($module_pages["read"] . ".php");
@@ -27,9 +46,6 @@ include("../../common/header.php");
   $tablename = "dispatch_items";
 
   $primary_column = "id";
-
-  // $purchases_arr = fetch_data(["table" => "purchases", "columns" => "id, title", "condition" => "", "order" => "created DESC", "limit" => ""]);    // print_arr($purchases_arr);
-  // print_arr($purchases_arr);
 
   $products_arr = fetch_data(["table" => "products", "columns" => "id, product", "condition" => "", "order" => "product ASC", "limit" => ""]);    // print_arr($products_arr);
   // print_arr($products_arr);
@@ -45,7 +61,7 @@ include("../../common/header.php");
     ["name" => "Product Lot", "column" => "product_lot", "class" => "text-center nowrap", "id_prefix" => get_module_id_prefix("product_lots")],
     // ["name" => "Ordered quantity", "column" => "quantity", "class" => "nowrap"],
     // ["name" => "Rate per unit", "column" => "rate", "class" => "nowrap"],
-    ["name" => "Actions", "column" => "", "type" => "delete", "sorting" => false, "search" => false, "class" => "nowrap", "acl" => ["delete" => "dispatch_items-delete"]],
+    $allow_delete ? ["name" => "Actions", "column" => "", "type" => "delete", "sorting" => false, "search" => false, "class" => "nowrap", "acl" => ["delete" => "dispatch_items-delete"]] : [],
   ];
 
   $fetch_columns = [];
@@ -72,7 +88,7 @@ include("../../common/header.php");
     "datatable" => true,
     "pagination" => true,
     "pagelimit" => 100,
-    "query" => (isset($_GET["order_id"]) && $_GET["order_id"] != "") ? " order_id = '" . $_GET["order_id"] . "' " : "",
+    "query" => $query,
     "orderby" => "product ASC"
   ]);
 

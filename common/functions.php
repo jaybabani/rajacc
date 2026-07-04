@@ -1613,7 +1613,7 @@ function bi_bulk_submit_form($vars)
     $errors = 0;
 
     if (isset($_REQ['save']) || isset($_REQ['savenew'])) {
-        print_arr($_REQ);
+        // print_arr($_REQ);
         // print_arr($_FILES);
         // die;
 
@@ -1622,7 +1622,7 @@ function bi_bulk_submit_form($vars)
             foreach ($_REQ["rowindex"] as $index => $rv) {
                 $row = [];
 
-                if($rv != ""){
+                if ($rv != "") {
                     $row[$primary_column] = $rv;
                 }
 
@@ -1653,7 +1653,7 @@ function bi_bulk_submit_form($vars)
                 $saverows[] = $row;
             }
 
-            print_arr($saverows);
+            // print_arr($saverows);
         }
         // die;
 
@@ -1666,7 +1666,7 @@ function bi_bulk_submit_form($vars)
             $query = trim($query);
             $query = substr($query, 0, -1);
 
-            if($mode == "new"){
+            if ($mode == "new") {
                 $q = "INSERT INTO " . $table . " SET " . $query . ' ';
                 // echo $q . "<br>";
                 $sql = $conn->query($q);
@@ -1679,11 +1679,11 @@ function bi_bulk_submit_form($vars)
                 } else {
                     $errors++;
                 }
-            } 
-            
+            }
+
             //
-            else if($mode == "update"){
-                $q = " UPDATE " . $table . " SET " . $query . " WHERE ".$primary_column." = '".$r[$primary_column]."' ";
+            else if ($mode == "update") {
+                $q = " UPDATE " . $table . " SET " . $query . " WHERE " . $primary_column . " = '" . $r[$primary_column] . "' ";
                 // echo $q . "<br>";
                 $sql = $conn->query($q);
                 if ($sql) {
@@ -1691,7 +1691,6 @@ function bi_bulk_submit_form($vars)
                     $affected_ids[] = $r[$primary_column];
                     save_product_movements($vars, $r);
                     save_bulk_column_history($vars, $r[$primary_column], $index);
-                    
                 } else {
                     $errors++;
                 }
@@ -1699,6 +1698,7 @@ function bi_bulk_submit_form($vars)
         }
 
         if (sizeof($_REQ["rowindex"]) == sizeof($affected_ids) && $errors == 0) {
+            action_on_submit($vars, "");
             notify_and_redirect_on_submit($vars, 'success', (($mode == "new") ? $msg["success_added"] : $msg["success_updated"]));
             redirect_action($_REQ);
             return true;
@@ -2010,12 +2010,14 @@ function action_on_submit($vars, $primary_id)
         $action = $vars["action_after_submit"]["action"];
         $condition = $vars["action_after_submit"]["condition"];
         // print_arr($condition);
+
+        //
         if ($condition["type"] == "change_to") {
             // print_arr($condition["param"]);
             // echo $action;
             $param = $condition["param"];
-            if (isset($param["column"]) && isset($param["value"])) {
-                $col = $param["column"];
+            if (isset($param["key"]) && isset($param["value"])) {
+                $col = $param["key"];
                 $val = $param["value"];
                 if (isset($_REQ[$col]) && isset($_REQ["old_" . $col])) {
                     if ($_REQ[$col] == $val && $_REQ["old_" . $col] != $_REQ[$col]) {
@@ -2025,24 +2027,62 @@ function action_on_submit($vars, $primary_id)
                 }
             }
         }
-        die;
+
+        //
+        else if ($condition["type"] == "equal") {
+            $param = $condition["param"];
+            if (isset($param["key"]) && isset($param["value"])) {
+                $col = $param["key"];
+                $val = $param["value"];
+                if (isset($_REQ[$col]) && $_REQ[$col] == $val) {
+                    execute_action($action, $vars, $primary_id);
+                }
+            }
+        }
+
+        // die;
     }
 }
 
 function execute_action($action, $vars, $primary_id)
 {
 
+    global $conn;
     $ts = getts();
     $curr_user_id = get_curr_user_id();
 
-    if ($action == "create_invoice_for_dispatch") {
-        echo $primary_id;
-        print_arr($vars);
-        // insert new invoice row
-        // " "
-        // update invoice column for dispatch
+    if ($action == "invoice_items_added") {
+        // echo $action;
+        // print_arr($vars);
+        $_REQ = $vars["submit_data"];
+        $dispatch = $_REQ["dispatch"];
+        $invoice = $_REQ["invoice"];
 
+        // update dispatchs table
+        // echo "invoice attached to dispatch";
+        $sql = " UPDATE dispatchs SET invoice = '" . $invoice . "', status = 'invoice_generated', auth_user = '" . $curr_user_id . "', updated = '" . $ts . "' WHERE id = '" . $dispatch . "' ";
+        if ($conn->query($sql)) {
+            insert_column_history([
+                "table_name" => "dispatchs",
+                "row_id" => $dispatch,
+                "column_name" => "status",
+                "value" => "invoice_generated"
+            ]);
+        }
+
+        // change invoice status        
+        $sql2 = " UPDATE invoices SET status = 'generated', auth_user = '" . $curr_user_id . "', updated = '" . $ts . "' WHERE id = '" . $invoice . "' ";
+        if ($conn->query($sql2)) {
+            insert_column_history([
+                "table_name" => "invoices",
+                "row_id" => $invoice,
+                "column_name" => "status",
+                "value" => "generated"
+            ]);
+        }
     }
+
+    // die;
 }
 
 function save_column_history($vars, $primary_id)
@@ -2083,6 +2123,21 @@ function save_column_history($vars, $primary_id)
         }
     }
     // die;
+}
+
+function insert_column_history($arr)
+{
+    global $conn;
+    $table_name = $arr["table_name"];
+    $row_id = $arr["row_id"];
+    $column_name = $arr["column_name"];
+    $value = $arr["value"];
+    $auth_user = get_curr_user_id();
+    $ts = getts();
+
+    $sql = " INSERT INTO column_history (table_name, row_id, column_name, value, auth_user, updated, created) VALUES ('" . $table_name . "', '" . $row_id . "', '" . $column_name . "', '" . $value . "', '" . $auth_user . "', '" . $ts . "', '" . $ts . "') ";
+    // echo $sql."<br>";
+    $conn->query($sql);
 }
 
 function display_column_history($vars, $row, $history, $columns)
@@ -2372,11 +2427,11 @@ function get_dispatch_products($dispatch, $format = "")
 function get_invoice_item_details($items, $format = "")
 {
 
-   $ret = [];
-   $product_ids = [];
-   $qty = [];
-   $rate = [];
-   $rowindex = [];
+    $ret = [];
+    $product_ids = [];
+    $qty = [];
+    $rate = [];
+    $rowindex = [];
     foreach ($items as $k => $r) {
         $pid = $r["product"];
         $product_ids[] = $pid;

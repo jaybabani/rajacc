@@ -57,7 +57,7 @@ include("../../common/header.php");
   //   "action" => "create_invoice_for_dispatch",
   //   "condition" => [
   //     "type" => "change_to",
-  //     "param" => ["column" => "status", "value" => "ready_for_dispatch"]
+  //     "param" => ["key" => "status", "value" => "packed_and_ready"]
   //   ]
   // ];
 

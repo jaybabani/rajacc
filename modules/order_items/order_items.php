@@ -15,9 +15,14 @@ include("../../common/header.php");
   $actions_html = "";
   $actions_html .= download_xlsx($module_pages["read"]);
 
+  $query = "";
   if (isset($_GET["order_id"]) && $_GET["order_id"] != "") {
     $actions_html .= add_new_form_link(["text" => "Add new order items (Bulk)", "url" => ROOT_PATH . "/modules/order_items/order_item-bulkform.php?order_id=" . $_GET["order_id"] . ""]);
     $actions_html .= add_new_form_link(["text" => "Add new order item (Single)", "url" => ROOT_PATH . "/modules/order_items/order_item-form.php?order_id=" . $_GET["order_id"] . ""]);
+
+    $order_id = $_GET["order_id"];
+    $query = " order_id = '" . $order_id . "' ";
+    
   }
 
   $actions_html .= pagination($module_pages["read"] . ".php");
@@ -70,7 +75,7 @@ include("../../common/header.php");
     "datatable" => true,
     "pagination" => true,
     "pagelimit" => 100,
-    "query" => (isset($_GET["order_id"]) && $_GET["order_id"] != "") ? " order_id = '" . $_GET["order_id"] . "' " : "",
+    "query" => $query,
     "orderby" => "product ASC"
   ]);
 

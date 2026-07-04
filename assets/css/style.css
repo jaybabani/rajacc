@@ -325,7 +325,7 @@ body {
 .badge-no {
 	background-color: rgba(var(--bs-danger-rgb), 1);
 }
-.badge-ready_for_dispatch,
+.badge-packed_and_ready,
 .badge-draft,
 .badge-under_production,
 .badge-order_confirmed{
@@ -337,6 +337,7 @@ body {
 .badge-purchased{
 	background-color: rgba(var(--bs-info-rgb), 1);
 }
+.badge-invoice_generated,
 .badge-order_placed,
 .badge-partially_paid,
 .badge-production_complete,

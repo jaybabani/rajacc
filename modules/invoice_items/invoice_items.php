@@ -15,8 +15,14 @@ include("../../common/header.php");
   $actions_html = "";
   $actions_html .= download_xlsx($module_pages["read"]);
 
+  $query = "";
   if (isset($_GET["invoice"]) && $_GET["invoice"] != "") {
     // $actions_html .= add_new_form_link(["text" => "Add new invoice items (Bulk)", "url" => ROOT_PATH . "/modules/invoice_items/invoice_item-bulkform.php?invoice=" . $_GET["invoice"] . ""]);
+    // (isset($_GET["order_id"]) && $_GET["order_id"] != "") ? " order_id = '" . $_GET["order_id"] . "' " : ""
+
+    $invoice = $_GET["invoice"];
+    $query = " invoice = '" . $invoice . "' ";
+
   }
 
   $actions_html .= pagination($module_pages["read"] . ".php");
@@ -74,7 +80,7 @@ include("../../common/header.php");
     "datatable" => true,
     "pagination" => true,
     "pagelimit" => 100,
-    "query" => (isset($_GET["order_id"]) && $_GET["order_id"] != "") ? " order_id = '" . $_GET["order_id"] . "' " : "",
+    "query" => $query,
     "orderby" => "product ASC"
   ]);
 
