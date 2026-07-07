@@ -97,6 +97,16 @@ function acl_roles($format = "")
 		["payments-create", "Add new payments"],
 		["payments-delete", "Delete payments"],
 
+
+		["boms-read", "View all BOM"],
+		["boms-update", "Update BOM"],
+		["boms-create", "Add new BOM"],
+		["boms-delete", "Delete BOM"],
+		["bom_items-read", "View all BOM items"],
+		["bom_items-update", "Update BOM items"],
+		["bom_items-create", "Add new BOM items"],
+		["bom_items-delete", "Delete BOM items"],		
+
 	];
 
 	if ($format == "raw") {
@@ -290,6 +300,27 @@ function get_module_pages_arr()
 			"bulk_create" => "order_item-bulkform",
 			"delete" => "order_item-delete",
 			"form" => ROOT_PATH . "/modules/order_items/order_item-form.php?id=XXX"
+		],
+		
+		"boms" => [
+			"name" => "BOM",
+			"id_prefix" => "BOM-",
+			"read" => "boms",
+			"update" => "bom-form",
+			"create" => "bom-form",
+			"delete" => "bom-delete",
+			"form" => ROOT_PATH . "/modules/boms/bom-form.php?id=XXX"
+		],
+		"bom_items" => [
+			"name" => "BOM Items",
+			"id_prefix" => "BOMI-",
+			"read" => "bom_items",
+			"update" => "bom_item-form",
+			"create" => "bom_item-form",
+			"bulk_update" => "bom_item-bulkform",
+			"bulk_create" => "bom_item-bulkform",
+			"delete" => "bom_item-delete",
+			"form" => ROOT_PATH . "/modules/bom_items/bom_item-form.php?id=XXX"
 		],
 		"dispatchs" => [
 			"name" => "dispatchs",
@@ -555,3 +586,11 @@ function get_transaction_type_arr(){
 	return $arr;
 }
 
+function get_bom_status_arr(){
+	$arr = [
+		"draft" => "Draft",
+		"active" => "Active",
+		"inactive" => "Inactive",
+	];
+	return $arr;
+}

@@ -315,6 +315,7 @@ body {
 	padding: 5px 10px;
 	font-size: 13px;
 }
+.badge-active,
 .badge-generated,
 .badge-completed,
 .badge-yes {
@@ -332,6 +333,7 @@ body {
 .badge-order_confirmed{
 	background-color: rgba(var(--bs-warning-rgb), 1);
 }
+.badge-inactive,
 .badge-reserve,
 .badge-on_hold,
 .badge-cancelled,

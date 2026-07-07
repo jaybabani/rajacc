@@ -84,6 +84,41 @@ include(__DIR__ . "/common/header.php");
   download as excel
   select field in datatable for bulk delete and highlighting feature of each row.
   
+  -------------------
+
+  bom
+  id
+  product
+  status - draft, active, inactive
+  notes / remarks
+
+  bom items
+  id
+  bom
+  raw material
+  qty
+  unit
+  wastage qty
+
+
+  bom costs
+  id
+  bom
+  description
+  amount
+  cost types:
+  labour
+  machining
+  electricity
+  packaging
+  transport
+  overhead
+  other
+
+
+
+
+
   </pre>";  
 
   widget_end(); ?>

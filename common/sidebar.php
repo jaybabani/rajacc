@@ -93,6 +93,7 @@
     $show_menu["documents"] = "";
     $show_menu["folders"] = "";
     $show_menu["orders"] = "";
+    $show_menu["boms"] = "";
     $show_menu["dispatchs"] = "";
     $show_menu["invoices"] = "";
     
@@ -134,6 +135,9 @@
     }
     else if(in_array($current_page,array("orders","order-form","order-delete","order_items","order_item-form","order_item-bulkform","order_item-delete"))){
       $show_menu["orders"] = "show";
+    }
+    else if(in_array($current_page,array("boms","bom-form","bom-delete","bom_items","bom_item-form","bom_item-bulkform","bom_item-delete"))){
+      $show_menu["boms"] = "show";
     }
     else if(in_array($current_page,array("dispatchs","dispatch-form","dispatch-delete","dispatch_items", "dispatch_item-form", "dispatch_item-bulkform","dispatch_item-delete"))){
       $show_menu["dispatchs"] = "show";
@@ -246,6 +250,19 @@
       </div>
     </li>    
 
+    <?php $menuid = "boms"; ?>
+    <li class="mb-1">
+      <button class="btn btn-toggle align-items-center collapsed" data-bs-toggle="collapse" data-bs-target="#<?php echo $menuid; ?>-collapse"  aria-expanded="<?php echo $show_menu[$menuid] == "show" ? "true" : "false"; ?>">
+        <span class="icon"><i data-feather="archive"></i></span> <span class="txt">Bill of Material (BOM)</span>
+      </button>
+      <div class="collapse <?php echo $show_menu[$menuid]; ?>" id="<?php echo $menuid; ?>-collapse" data-bs-parent="#parent-level">
+        <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
+          <li><a href="<?php echo ROOT_PATH; ?>/modules/boms/boms.php" class="link-dark"><span>All BOM</span></a></li>
+          <li><a href="<?php echo ROOT_PATH; ?>/modules/boms/bom-form.php" class="link-dark"><span>Add new BOM</span></a></li>
+        </ul>
+      </div>
+    </li>
+
     <?php $menuid = "customers"; ?>
     <li class="mb-1">
       <button class="btn btn-toggle align-items-center collapsed" data-bs-toggle="collapse" data-bs-target="#<?php echo $menuid; ?>-collapse"  aria-expanded="<?php echo $show_menu[$menuid] == "show" ? "true" : "false"; ?>">
@@ -335,7 +352,7 @@
     <?php $menuid = "payments"; ?>
     <li class="mb-1">
       <button class="btn btn-toggle align-items-center collapsed" data-bs-toggle="collapse" data-bs-target="#<?php echo $menuid; ?>-collapse"  aria-expanded="<?php echo $show_menu[$menuid] == "show" ? "true" : "false"; ?>">
-        <span class="icon"><i data-feather="credit-card"></i></span> <span class="txt">Payments</span>
+        <span class="icon"><i data-feather="dollar-sign"></i></span> <span class="txt">Payments</span>
       </button>
       <div class="collapse <?php echo $show_menu[$menuid]; ?>" id="<?php echo $menuid; ?>-collapse" data-bs-parent="#parent-level">
         <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
