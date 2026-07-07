@@ -89,6 +89,7 @@
     $show_menu["products"] = "";
     $show_menu["attributes"] = "";
     $show_menu["purchases"] = "";
+    $show_menu["payments"] = "";
     $show_menu["documents"] = "";
     $show_menu["folders"] = "";
     $show_menu["orders"] = "";
@@ -115,6 +116,9 @@
     }
     else if(in_array($current_page,array("purchases","purchase-form","purchase-delete"))){
       $show_menu["purchases"] = "show";
+    }
+    else if(in_array($current_page,array("payments","payment-form","payment-delete"))){
+      $show_menu["payments"] = "show";
     }
     else if(in_array($current_page,array("folders","folder-form","folder-delete"))){
       $show_menu["folders"] = "show";
@@ -149,6 +153,8 @@
         $show_menu["vendors"] = "show";
       } else if(isset($_GET["module"]) && $_GET["module"] == "purchase_category"){
         $show_menu["purchases"] = "show";
+      } else if(isset($_GET["module"]) && $_GET["module"] == "bank_account"){
+        $show_menu["payments"] = "show";
       } else if(isset($_GET["module"]) && $_GET["module"] == "folder_category"){
         $show_menu["folders"] = "show";
       } else if(isset($_GET["module"]) && $_GET["module"] == "document_type"){
@@ -325,6 +331,27 @@
         </ul>
       </div>
     </li>    
+
+    <?php $menuid = "payments"; ?>
+    <li class="mb-1">
+      <button class="btn btn-toggle align-items-center collapsed" data-bs-toggle="collapse" data-bs-target="#<?php echo $menuid; ?>-collapse"  aria-expanded="<?php echo $show_menu[$menuid] == "show" ? "true" : "false"; ?>">
+        <span class="icon"><i data-feather="credit-card"></i></span> <span class="txt">Payments</span>
+      </button>
+      <div class="collapse <?php echo $show_menu[$menuid]; ?>" id="<?php echo $menuid; ?>-collapse" data-bs-parent="#parent-level">
+        <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
+          <li><a href="<?php echo ROOT_PATH; ?>/modules/payments/payments.php?source=sent" class="link-dark"><span>All Sent payments</span></a></li>
+          <li><a href="<?php echo ROOT_PATH; ?>/modules/payments/payment-form.php?source=sent" class="link-dark"><span>Add new sent payment</span></a></li>
+
+          <li><a href="<?php echo ROOT_PATH; ?>/modules/payments/payments.php?source=received" class="link-dark"><span>All Received payments</span></a></li>
+          <li><a href="<?php echo ROOT_PATH; ?>/modules/payments/payment-form.php?source=received" class="link-dark"><span>Add new received payment</span></a></li>
+
+          <li><a href="<?php echo ROOT_PATH; ?>/modules/attributes/attributes.php?module=bank_account" class="link-dark"><span>All bank accounts</span></a></li>
+          <li><a href="<?php echo ROOT_PATH; ?>/modules/attributes/attribute-form.php?module=bank_account" class="link-dark"><span>Add new bank account</span></a></li>
+        </ul>
+      </div>
+    </li>    
+
+
 
     <?php $menuid = "documents"; ?>
     <li class="mb-1">

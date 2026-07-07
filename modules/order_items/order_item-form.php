@@ -32,7 +32,7 @@ include("../../common/header.php");
 
   $save_fields = [
     ["key" => "product"],
-    ["key" => "rate"],
+    // ["key" => "rate"],
     ["key" => "quantity"],
     ["key" => "order_id"],
     ["key" => "auth_user", "type" => "session_user"],
@@ -50,7 +50,7 @@ include("../../common/header.php");
   ];
 
   $save_column_history = [
-    "columns" => ["rate", "quantity"],
+    "columns" => ["quantity"], //"rate", 
   ];
 
 
@@ -108,7 +108,7 @@ include("../../common/header.php");
     // print_arr($purchases);
 
     echo form_field(["type" => "select", "name" => "Product", "key" => "product", "required" => true, "options" => $products, "class" => "col-md-6 col-lg-4 mb-3"], $data);
-    echo form_field(["type" => "number", "name" => "Rate", "key" => "rate", "required" => true, "class" => "col-md-6 col-lg-4 mb-3"], $data);
+    // echo form_field(["type" => "number", "name" => "Rate", "key" => "rate", "required" => true, "class" => "col-md-6 col-lg-4 mb-3"], $data);
     echo form_field(["type" => "number", "name" => "Ordered Quantity", "key" => "quantity", "class" => "col-md-6 col-lg-4 mb-3"], $data);
     // echo form_field(["type" => "hidden", "name" => "", "key" => "order_id", "class" => "col-md-6 col-lg-4 mb-3"], $data);
 

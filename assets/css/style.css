@@ -326,6 +326,7 @@ body {
 	background-color: rgba(var(--bs-danger-rgb), 1);
 }
 .badge-packed_and_ready,
+.badge-sent,
 .badge-draft,
 .badge-under_production,
 .badge-order_confirmed{

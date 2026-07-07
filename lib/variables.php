@@ -54,10 +54,12 @@ function acl_roles($format = "")
 		["purchases-update", "Update purchases"],
 		["purchases-create", "Add new purchases"],
 		["purchases-delete", "Delete purchases"],
+
 		["documents-read", "View all documents"],
 		// ["documents-update", "Update documents"],
 		// ["documents-create", "Add new documents"],
 		// ["documents-delete", "Delete documents"],
+
 		["folders-read", "View all folders"],
 		["folders-update", "Update folders"],
 		["folders-create", "Add new folders"],
@@ -90,8 +92,10 @@ function acl_roles($format = "")
 		["invoice_items-update", "Update invoice items"],
 		["invoice_items-create", "Add new invoice items"],
 		// ["invoice_items-delete", "Delete invoice items"],
-
-
+		["payments-read", "View all payments"],
+		["payments-update", "Update payments"],
+		["payments-create", "Add new payments"],
+		["payments-delete", "Delete payments"],
 
 	];
 
@@ -149,6 +153,15 @@ function get_module_pages_arr()
 			"create" => "purchase-form",
 			"delete" => "purchase-delete",
 			"form" => ROOT_PATH . "/modules/purchases/purchase-form.php?id=XXX"
+		],
+		"payments" => [
+			"name" => "Payments",
+			"id_prefix" => "PAY-",
+			"read" => "payments",
+			"update" => "payment-form",
+			"create" => "payment-form",
+			"delete" => "payment-delete",
+			"form" => ROOT_PATH . "/modules/payments/payment-form.php?id=XXX"
 		],
 		"attributes" => [
 			"name" => "Attributes",
@@ -370,6 +383,7 @@ function get_attribute_category_arr()
 		"product_category" => "Product category",
 		"product_quality" => "Product quality",
 		"document_type" => "Document Type",
+		"bank_account" => "Bank Account",
 	];
 	return $arr;
 }
@@ -493,6 +507,50 @@ function get_invoice_status_arr(){
 		"draft" => "Draft",
 		"generated" => "Generated",
 		"cancelled" => "Cancelled",
+	];
+	return $arr;
+}
+
+function get_payment_status_arr()
+{
+	$arr = [
+		"pending" => "Payment pending",
+		"completed" => "Payment completed",
+		"cancelled" => "Partially cancelled"
+	];
+	return $arr;
+}
+
+function get_payment_type_arr()
+{
+	$arr = [
+		"received" => "Payment received",
+		"sent" => "Payment sent",
+	];
+	return $arr;
+}
+
+
+function get_payment_mode_arr(){
+	$arr = [
+		"cash" => "Cash",
+		"bank_transfer" => "Bank Transfer",
+		"card" => "Credit / Debit Card",
+		"cheque" => "Cheque",
+		"UPI" => "UPI",
+		"other" => "Other",
+	];
+	return $arr;
+}
+
+
+function get_transaction_type_arr(){
+	$arr = [
+		"regular" => "Regular",
+		"advance" => "Advance",
+		"adjustment" => "Adjustment",
+		"refund" => "Refund",
+		"other" => "Other",
 	];
 	return $arr;
 }

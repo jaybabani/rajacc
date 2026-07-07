@@ -47,7 +47,7 @@ include("../../common/header.php");
     ["name" => "Sales Order ID", "column" => "order_id", "class" => "text-center nowrap", "id_prefix" => get_module_id_prefix("orders")],
     ["name" => "Product", "column" => "product", "options" => $products_arr, "type" => "table_id", "option_id" => "id", "option_label" => "product", "class" => "title", "module" => "products"],
     ["name" => "Ordered quantity", "column" => "quantity", "class" => "nowrap"],
-    ["name" => "Rate per unit", "column" => "rate", "class" => "nowrap"],
+    // ["name" => "Rate per unit", "column" => "rate", "class" => "nowrap"],
     ["name" => "Actions", "column" => "", "type" => "edit_delete", "sorting" => false, "search" => false, "class" => "nowrap", "acl" => ["edit" => "order_items-update", "delete" => "order_items-delete"]],
   ];
 
@@ -60,7 +60,7 @@ include("../../common/header.php");
       "type" => "history",
       "history_columns" => [
         ["name" => "Quantity", "column" => "quantity"],
-        ["name" => "Rate", "column" => "rate"]
+        // ["name" => "Rate", "column" => "rate"]
       ],
     ]
   ];

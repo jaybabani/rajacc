@@ -29,7 +29,7 @@ include '../../common/header.php';
     'multi' => [
       ['key' => 'product'],
       ['key' => 'quantity'],
-      ['key' => 'rate']
+      // ['key' => 'rate']
     ],
   ];
 
@@ -44,7 +44,7 @@ include '../../common/header.php';
   ];
 
   $save_column_history = [
-    "columns" => ["rate[]", "quantity[]"],
+    "columns" => ["quantity[]"], //"rate[]", 
   ];
 
 
@@ -66,7 +66,7 @@ include '../../common/header.php';
   ]);
 
   $tableid = 'order_items_table';
-  $column_titles = ['Product', 'Quantity', 'Rate / unit', 'Actions'];
+  $column_titles = ['Product', 'Quantity', 'Actions']; //'Rate / unit', 
 
   function bulk_insert_table_row($index, $save_column_history)
   {
@@ -87,7 +87,7 @@ include '../../common/header.php';
       .  form_field(['type' => 'select', 'name' => 'Product', 'key' => 'product[]', 'required' => true, "options" => $products, 'class' => ''], []);
     $s .= '</td>';
     $s .=  '<td>' . form_field(['type' => 'number', 'name' => 'Quantity', 'key' => 'quantity[]', 'required' => true, 'class' => '',], []) .  '</td>';
-    $s .=  '<td>' . form_field(['type' => 'number', 'name' => 'Rate', 'key' => 'rate[]', 'required' => true, 'class' => '',], []) .  '</td>';
+    // $s .=  '<td>' . form_field(['type' => 'number', 'name' => 'Rate', 'key' => 'rate[]', 'required' => true, 'class' => '',], []) .  '</td>';
     $s .=  '<td>' . form_field(['type' => 'delete_row', 'name' => '', 'class' => '', 'key' => 'delete-row-'.$index.'', 'index' => $index], []) .  '</td>';
     $s .= '</tr>';
 

@@ -747,6 +747,11 @@ function crud_read($vars)
                             }
                         }
 
+                        if (isset($dv["attributes"]) && !isset($dv["type"])) {
+                            if (is_array($dv["attributes"]) && isset($dv["attributes"][$colval])) {
+                                $colval = $dv["attributes"][$colval]["attribute"];
+                            }
+                        }
 
                         //
                         $row_detail .= "<small><i>" . $dv["name"] . ": </i></small><strong>" . $colval . "</strong>" . "<br>";

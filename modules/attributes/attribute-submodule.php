@@ -68,6 +68,14 @@ $submodule = [
     "url_param" => "module=" . $parent . "",
     "id_prefix" => "DOCT-",
   ],
+  "bank_account" => [
+    "page_title" => "Bank account",
+    "column_title" => "Bank account",
+    "column_name" => "category",
+    "query" => "category = '" . $parent . "' ",
+    "url_param" => "module=" . $parent . "",
+    "id_prefix" => "BNK-",
+  ],
 ];
 
 $submod = $submodule[$parent];

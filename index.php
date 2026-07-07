@@ -29,15 +29,15 @@ include(__DIR__ . "/common/header.php");
   
   ------------
   
-  invoice raw materials and products in database.
+                invoice raw materials and products in database.
   make all columns as null for online installation. or default as 0 on int columns
   invoice to be downloaded as pdf
   dashboard widgets for important modules
   acl rights for few different user roles and to be tested.
 
   ---------------
-  column from order items or convert it to salesman committed to this rate. Only for reference in future invoice generation.
-  show as msg at top of invoice generation page.
+            column from order items or convert it to salesman committed to this rate. Only for reference in future invoice generation.
+            show as msg at top of invoice generation page.
 
   -------------------
 
@@ -52,9 +52,11 @@ include(__DIR__ . "/common/header.php");
 
   ------------------
 
-  Create new payments module. It can send and receive payments.
-  For receive payment - Attach payment to invoice. Invoice can have multiple payments.
-  for send payments - on purchase of raw material and products. Attach payment to purchase
+          Create new payments module. It can send and receive payments.
+          For receive payment - Attach payment to invoice. Invoice can have multiple payments.
+          for send payments - on purchase of raw material and products. Attach payment to purchase
+
+  ------------------
 
   For payrolls - add a send payments - attach to employee payroll module.
   Create employee module and attach to user account.
@@ -64,11 +66,8 @@ include(__DIR__ . "/common/header.php");
 
   Raw material rates are stored for each raw material.
   This rates are updated to latest price and price history is stored.
-
   Raw material rate will help in auto calculation of rate in invoice.
-  
   ------------------
-
   Products and raw materail map to be generated. 
   Production process from raw material to finished products need to be created
   this helps in determining materail consumption in production process.
