@@ -87,6 +87,9 @@ include("../../common/header.php");
     $raw_materials = [];
     foreach ($raw_material_arr as $vk => $vv) {
       $raw_materials[$vv["id"]] = $vv["raw_material"];
+      $rm = $vv["raw_material"];
+      // $sql = " UPDATE raw_materials SET raw_material = '".$rm."' WHERE id = '".$vv["id"]."' ";
+      // echo $sql."<br>";
     }
     // print_arr($raw_materials);
 

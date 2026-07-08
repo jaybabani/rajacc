@@ -68,13 +68,18 @@ include '../../common/header.php';
   $tableid = 'order_items_table';
   $column_titles = ['Product', 'Quantity', 'Actions']; //'Rate / unit', 
 
+  // $product_quality = get_attributes_arr("product_quality");
+
   function bulk_insert_table_row($index, $save_column_history)
   {
 
-    $product_arr = fetch_data(["table" => "products", "columns" => "id, product", "condition" => "", "order" => "product ASC", "limit" => ""]);        // print_arr($product_arr);
+    $product_arr = fetch_data(["table" => "products", "columns" => "id, product, quality", "condition" => "", "order" => "product ASC", "limit" => ""]);        // print_arr($product_arr);
     $products = [];
     foreach ($product_arr as $vk => $vv) {
       $products[$vv["id"]] = $vv["product"];
+      // if(isset($product_quality[$vv["quality"]])){
+      //   $products[$vv["id"]] .= " (".$product_quality[$vv["quality"]]["attribute"].")"; 
+      // }
     }
     // print_arr($products); 
 
@@ -90,8 +95,6 @@ include '../../common/header.php';
     // $s .=  '<td>' . form_field(['type' => 'number', 'name' => 'Rate', 'key' => 'rate[]', 'required' => true, 'class' => '',], []) .  '</td>';
     $s .=  '<td>' . form_field(['type' => 'delete_row', 'name' => '', 'class' => '', 'key' => 'delete-row-'.$index.'', 'index' => $index], []) .  '</td>';
     $s .= '</tr>';
-
-
 
     return $s;
   }

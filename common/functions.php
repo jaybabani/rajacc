@@ -644,7 +644,7 @@ function crud_read($vars)
                                 foreach ($dv["options"] as $ok => $ov) {
                                     // print_arr($ov);
                                     if (in_array($ov[$dv["option_id"]], $lnk)) {
-                                        $colval .= $ov[$dv["option_label"]] . ", ";
+                                        $colval .= "<div class='vsele'>".$ov[$dv["option_label"]] . "</div>";
                                     }
                                 }
                                 $colval = trim($colval);
@@ -652,7 +652,7 @@ function crud_read($vars)
                                     $colval = substr($colval, 0, -1);
                                 }
                             }
-                            $html .= "<td class='" . $row_col_class . "'>" . $colval . "</td>";
+                            $html .= "<td class='" . $row_col_class . "'><div class='vertical-scrollbox'>" . $colval . "</div></td>";
                         }
                     }
                 }
@@ -1253,7 +1253,7 @@ function form_field($vars, $data)
         //
 
         else if ($vars["type"] == "text") {
-            $s .= '<input type="text" class="form-control" name="' . $vars["key"] . '" id="' . $vars["key"] . '" value="' . get_value($data, $vars["key"]) . '" ' . ($required ? "required" : "") . '>';
+            $s .= '<input type="text" class="form-control" name="' . $vars["key"] . '" id="' . $vars["key"] . '" value="' . htmlspecialchars(get_value($data, $vars["key"])) . '" ' . ($required ? "required" : "") . '>';
             $s .= '<div class="invalid-feedback">Incorrect ' . $vars["name"] . ' value</div>';
         }
         //
@@ -1278,7 +1278,7 @@ function form_field($vars, $data)
             if (isset($vars["max"])) {
                 $maxno = " max = '" . $vars["max"] . "' ";
             }
-            $s .= '<input type="number" class="form-control" name="' . $vars["key"] . '" id="' . $vars["key"] . '" ' . $maxno . ' value="' . get_value($data, $vars["key"]) . '" ' . ($required ? "required" : "") . '>';
+            $s .= '<input type="number" class="form-control" step="any" name="' . $vars["key"] . '" id="' . $vars["key"] . '" ' . $maxno . ' value="' . get_value($data, $vars["key"]) . '" ' . ($required ? "required" : "") . '>';
             $s .= '<div class="invalid-feedback">Incorrect ' . $vars["name"] . ' value</div>';
         }
         //
@@ -1397,7 +1397,7 @@ function form_field($vars, $data)
         //
         else if ($vars["type"] == "delete_row") {
             $s .= "<span class='icon wtxt bg-info delete-row-btn' id='" . $vars["key"] . "'><i data-feather='trash'></i>Delete</span>
-            <script> $('#" . $vars["key"] . "').on('click', function() {
+            <script> $(document).on('click', '#" . $vars["key"] . "', function () {  
                 $(this).closest('tr').remove();
             }); </script>";
         }
@@ -1556,12 +1556,15 @@ function module_submit_form($vars)
                 // do nothing..
             }
             // 
-            else if (isset($sv["type"]) && $sv["type"] == "implode") {
+            else if (isset($sv["type"]) && $sv["type"] == "implode" && isset($_REQ[$sv['key']])) {
                 $query .= " " . $sv['key'] . " = \"" . implode($sv["sep"], $_REQ[$sv['key']]) . "\", ";
             }
             //
             else {
-                $query .= " " . $sv['key'] . " = \"" . $conn->real_escape_string($_REQ[$sv['key']]) . "\", ";
+
+                if(isset($_REQ[$sv['key']])){
+                    $query .= " " . $sv['key'] . " = \"" . $conn->real_escape_string($_REQ[$sv['key']]) . "\", ";
+                }
             }
         }
 
@@ -2911,10 +2914,7 @@ function get_raw_material_rates_entities($loadtype = "")
 }
 
 
-
-
-
-function  get_product_cost($product_ids)
+function get_product_cost($product_ids)
 {
 
     $cost = [];
@@ -2923,6 +2923,16 @@ function  get_product_cost($product_ids)
     $bom_costs = [];
     $raw_material_ids = [];
     // print_arr($product_ids);
+
+    // product margin / markup
+    $product_margin = [];
+    $products_arr = fetch_data(["table" => "products", "columns" => "id, product, markup_percent", "condition" => " id IN (" . implode(",", $product_ids) . ") ", "order" => "", "limit" => ""]);
+    foreach ($products_arr as $bk => $bv) {
+        $product_margin[$bv["id"]] = $bv["markup_percent"];
+    }
+    // print_arr($product_margin);
+
+
 
     $boms = product_boms($product_ids);
 
@@ -2980,6 +2990,7 @@ function  get_product_cost($product_ids)
     return [
         "costs" => $costs,
         "product_ids" => $product_ids,
+        "product_margin" => $product_margin,
         "boms" => $boms,
         "raw_material_ids" => $raw_material_ids,
         "raw_material_rates" => $raw_material_rates,
@@ -3125,6 +3136,9 @@ function raw_material_rates($raw_material_ids)
 function product_cost_details($costing, $prodid)
 {
 
+    $bom_cost_types = bom_cost_type_arr();
+    // echo $prod["id"];print_arr($prod);
+
     $d = "";
 
     $total = 0;
@@ -3134,27 +3148,55 @@ function product_cost_details($costing, $prodid)
 
         if (sizeof($costarr) > 0) {
             $d .= "<div class='widget-table'><div class='table-responsive'><table class='table table-compact table-bordered'>
-        <tr><th>Raw Material / Cost</th><th>Amount</th><th>Quantity</th></tr>";
+        <tr><th>Raw Material / Cost</th><th>Rate</th><th>Quantity</th><th>Total</th></tr>";
             foreach ($costarr as $ck => $cv) {
-                if ($cv["type"] == "bom_items") {
-                    $d .= "<tr>
-          <td>" . $cv["raw_material_name"] . "</td>
-          <td>" . $cv["raw_material_rate"]["rate"] . "</td>
-          <td>" . ($cv["quantity"] + $cv["wastage_quantity"]) . " " . $cv["raw_material_unit"] . "</td>
-          </tr>";
+                if (isset($cv["type"]) && $cv["type"] != "") {
 
-                    $total += $cv["raw_material_rate"]["rate"] * ($cv["quantity"] + $cv["wastage_quantity"]);
-                } else if ($cv["type"] == "bom_costs") {
-                    $d .= "<tr>
-          <td>" . ($bom_cost_types[$cv["cost_type"]] ?? $cv["cost_type"]) . "</td>
-          <td>" . $cv["amount"] . "</td>
-          <td></td>
-          </tr>";
-                    $total += $cv["amount"];
+                    //
+                    if ($cv["type"] == "bom_items") {
+                        $d .= "<tr>
+                            <td>" . $cv["raw_material_name"] . "</td>
+                            <td>" . $cv["raw_material_rate"]["rate"] . " / " . $cv["raw_material_unit"] . "</td>
+                            <td>" . ($cv["quantity"] + $cv["wastage_quantity"]) . " " . $cv["raw_material_unit"] . "</td>
+                            <td>" . (($cv["quantity"] + $cv["wastage_quantity"]) * $cv["raw_material_rate"]["rate"]) . "</td>
+                            </tr>";
+
+                        $total += ($cv["raw_material_rate"]["rate"] * ($cv["quantity"] + $cv["wastage_quantity"]));
+                    }
+
+                    //
+                    else if ($cv["type"] == "bom_costs") {
+                        $d .= "<tr>
+                            <td>" . ($bom_cost_types[$cv["cost_type"]] ?? $cv["cost_type"]) . "</td>
+                            <td>" . round($cv["amount"], 2) . "</td>
+                            <td></td>
+                            <td>" . round($cv["amount"], 2) . "</td>
+                            </tr>";
+                        $total += $cv["amount"];
+                    }
                 }
             }
+
+            if (isset($costing["product_margin"][$prodid]) && is_numeric($costing["product_margin"][$prodid])) {
+                $markup = $costing["product_margin"][$prodid];
+                $d .= "<tr>
+                            <td>Markup %</td>
+                            <td>" . round($markup, 2) . "% of " . $total . "</td>
+                            <td></td>
+                            <td>" . round((($total * ($markup / 100))), 2) . "</td>
+                            </tr>";
+                $total += round((($total * ($markup / 100))), 2);
+            }
+            $total = round($total);
+            $d .= "<tr>
+                            <td class='title'>Product Cost (Rounded)</td>
+                            <td></td>
+                            <td></td>
+                            <td class='title'>" . ($total) . "</td>
+                            </tr>";
+
             $d .= "</table></div></div>";
         }
     }
-    return ["detail" => $d, "total" => $total];
+    return ["detail" => $d, "total" => ($total)];
 }

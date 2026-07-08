@@ -42,7 +42,8 @@ include("../../common/header.php");
       "class" => "nowrap",
       "acl" => ["edit" => "products-update", "delete" => "products-delete"],
       "links" => [
-        ["text" => "Inventory Movement", "icon" => "clipboard", "url" => ROOT_PATH . "/modules/product_movements/product_movements.php?product={id}", "acl" => "product_movements-read", "class" => "prod-move-link"],
+        ["text" => "Inventory Mvmnt", "icon" => "clipboard", "url" => ROOT_PATH . "/modules/product_movements/product_movements.php?product={id}", "acl" => "product_movements-read", "class" => "prod-move-link"],
+        ["text" => "Cost", "icon" => "clipboard", "url" => ROOT_PATH . "/modules/products/product-costing.php?product={id}", "acl" => "products-costing", "class" => "prod-move-link"],
       ]
     ],
   ];
@@ -55,6 +56,7 @@ include("../../common/header.php");
     ["name" => "IGST (%) (Outer state)", "column" => "igst"],
     ["name" => "CGST (%) (Same state)", "column" => "cgst"],
     ["name" => "SGST (%) (Same state)", "column" => "sgst"],
+    ["name" => "Markup (%) (Profit added on total cost)", "column" => "markup_percent"],
     ["name" => "Description", "column" => "description"],
     ["name" => "Last update", "type" => "last_update_info"],
     ["name" => "Created", "type" => "created_info"],

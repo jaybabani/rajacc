@@ -311,9 +311,9 @@ body {
 
 /* badge */
 .badge {
-	font-weight: 500;
-	padding: 5px 10px;
-	font-size: 13px;
+	font-weight: 400;
+	padding: 6px 10px;
+	font-size: 14px;
 }
 .badge-active,
 .badge-generated,
@@ -1098,4 +1098,20 @@ tr .no-det {
 
 .sorthide{
 	display: none;
+}
+
+.vertical-scrollbox{
+	display: inline-block;
+	width: 100%;
+	height: auto;
+	max-height: 250px;
+	border: 1px solid #ccc;
+	overflow: auto;
+	padding: 5px;
+	border-radius: 5px;
+}
+.vertical-scrollbox .vsele{
+	margin-bottom: 3px;
+	border-bottom: 1px solid #ccc;
+	padding: 0 5px;
 }

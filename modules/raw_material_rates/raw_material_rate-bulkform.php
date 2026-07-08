@@ -96,8 +96,8 @@ include '../../common/header.php';
       .  form_field(['type' => 'display', 'name' => 'Raw Material', 'key' => 'entity_display[]', 'class' => '',], $data);
       // .  form_field(['type' => 'select', 'name' => 'Cost type', 'key' => 'entity[]', 'required' => true, "options" => $pending_entities, 'class' => ''], []);
     $s .= '</td>';
-    $s .=  '<td>' . form_field(['type' => 'number', 'name' => 'Rate per unit', 'key' => 'rate[]', 'required' => true, 'class' => '',], []) .  '</td>';
-    $s .=  '<td>' . form_field(['type' => 'date', 'name' => 'Effective Date', 'key' => 'effective_date[]', 'required' => true, 'class' => '',], []) .  '</td>';
+    $s .=  '<td>' . form_field(['type' => 'number', 'name' => 'Rate per unit', 'key' => 'rate[]', 'class' => '',], []) .  '</td>';
+    $s .=  '<td>' . form_field(['type' => 'date', 'name' => 'Effective Date', 'key' => 'effective_date[]', 'class' => '',], []) .  '</td>';
     $s .=  '<td>' . form_field(['type' => 'delete_row', 'name' => '', 'class' => '', 'key' => 'delete-row-' . $index . '', 'index' => $index], []) .  '</td>';
     $s .= '</tr>';
 

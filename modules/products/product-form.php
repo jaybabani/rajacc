@@ -38,6 +38,7 @@ include("../../common/header.php");
     ["key" => "igst"],
     ["key" => "cgst"],
     ["key" => "sgst"],
+    ["key" => "markup_percent"],
     ["key" => "image", "type" => "image"],
     ["key" => "auth_user", "type" => "session_user"],
     ["key" => "updated", "type" => "time"],
@@ -86,6 +87,7 @@ include("../../common/header.php");
     echo form_field(["type" => "number", "name" => "IGST (%) (Outer state)", "key" => "igst", "class" => "col-md-6 col-lg-4 mb-3"], $data);
     echo form_field(["type" => "number", "name" => "SGST (%) (Same State)", "key" => "sgst", "class" => "col-md-6 col-lg-4 mb-3"], $data);
     echo form_field(["type" => "number", "name" => "CGST (%) (Same State)", "key" => "cgst", "class" => "col-md-6 col-lg-4 mb-3"], $data);
+    echo form_field(["type" => "number", "name" => "Markup (%)", "eg" => "(Profit added on total cost)", "key" => "markup_percent", "class" => "col-md-6 col-lg-4 mb-3"], $data);
 
     echo form_field(["type" => "textarea", "name" => "Description", "key" => "description", "class" => "col-md-6 col-lg-4 mb-3"], $data);
 

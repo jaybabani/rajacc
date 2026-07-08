@@ -54,7 +54,7 @@ include '../../common/header.php';
   ];
 
   $manage_order_quantity = [
-    "action" => "reserve", 
+    "action" => "reserve",
     "quantity_field" => "quantity"
   ];
 
@@ -103,9 +103,34 @@ include '../../common/header.php';
 
   function bulk_header_row($vars, $pid)
   {
+
+    $qtymap = "";
+    // $qtymap .= json_encode($vars["quantities"][$pid]);
+    if(isset($vars["quantities"][$pid])){
+      $map = $vars["quantities"][$pid];
+      if(isset($map["ordered"])){
+        $qtymap .= "&nbsp; <span class='badge bg-accent2'>Ordered: ".$map["ordered"]."</span>";
+      }
+      if(isset($map["available"])){
+        $qtymap .= "&nbsp; <span class='badge bg-accent1'>Available: ".$map["available"]."</span>";
+      }
+      if(isset($map["pending"])){
+        $qtymap .= "&nbsp; <span class='badge bg-accent3'>Pending: ".$map["pending"]."</span>";
+      }
+      if(isset($map["reserve"])){
+        $qtymap .= "&nbsp; <span class='badge bg-success'>Reserved: ".$map["reserve"]."</span>";
+      }
+      if(isset($map["unreserve"])){
+        $qtymap .= "&nbsp; <span class='badge bg-warning'>Unreserved: ".$map["unreserve"]."</span>";
+      }
+      if(isset($map["consume"])){
+        $qtymap .= "&nbsp; <span class='badge bg-info'>Dispatched: ".$map["consume"]."</span>";
+      }
+    }
+
     $s = '';
     $s .= "<tr data-pid='" . $pid . "'>";
-    $data["product_name[]"] = "<h6><span>Product</span>: <strong>" . $vars["products"][$pid] . "</strong> &nbsp; &nbsp; <span>Quantity:</span> <strong>" . json_encode($vars["quantities"][$pid])."</strong></h6>";
+    $data["product_name[]"] = "<h6><span>Product</span>: <strong>" . $vars["products"][$pid] . "</strong> &nbsp; &nbsp; <span>Quantity:</span> <strong>" . $qtymap . "</strong></h6>";
     $s .=  '<td colspan=3>'
       . form_field(['type' => 'display', 'name' => '', 'key' => 'product_name[]', 'class' => '',], $data)
       .  '</td>';
@@ -121,7 +146,7 @@ include '../../common/header.php';
     $s .= "<tr data-index='" . $index . "'>";
     $data["product[]"] = $pid;
     $data["product_lot[]"] = $product_lot["id"];
-    $data["product_lot_info[]"] = get_module_id_prefix("product_lots") . $product_lot["id"]." &nbsp; (Available: ".$product_lot["available_quantity"].")";
+    $data["product_lot_info[]"] = get_module_id_prefix("product_lots") . $product_lot["id"] . " &nbsp; (Available: " . $product_lot["available_quantity"] . ")";
 
     $maxqty = min([$product_lot["available_quantity"], $vars["quantities"][$pid]["pending"]]);
 
@@ -158,9 +183,11 @@ include '../../common/header.php';
                   foreach ($vars["quantities"] as $pid => $qv) {
                     if (isset($qv["pending"]) && $qv["pending"] > 0) {
                       echo bulk_header_row($vars, $pid);
-                      foreach ($vars["product_lots"][$pid] as $lk => $plv) {
-                        $index++;
-                        echo bulk_insert_table_row($index, $save_column_history, $vars, $pid, $plv);
+                      if (isset($vars["product_lots"][$pid])) {
+                        foreach ($vars["product_lots"][$pid] as $lk => $plv) {
+                          $index++;
+                          echo bulk_insert_table_row($index, $save_column_history, $vars, $pid, $plv);
+                        }
                       }
                     }
                   }

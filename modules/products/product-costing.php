@@ -16,23 +16,35 @@ include '../../common/header.php';
   widget_start($widgettitle, '', '', '', '');
   // 
 
+  $condition = "";
+  if (isset($_GET["product"]) && $_GET["product"] != "" && is_numeric($_GET["product"])) {
+
+    $get_prod_ids = [];
+    $exp = explode(",", $_GET["product"]);
+    $get_prod_ids = array_values(array_filter(array_unique($exp)));
+    if (sizeof($get_prod_ids) > 0) {
+      $condition = " id IN (" . implode(",", $get_prod_ids) . ")";
+    }
+  }
+
   $tableid = 'product_costing_table';
   $column_titles = ['Product', 'Total Cost per unit', 'Detail Cost per unit']; //'Rate / unit', 
-  $products_arr = fetch_data(["table" => "products", "columns" => "id, product", "condition" => "", "order" => "product ASC", "limit" => ""]);    // print_arr($products_arr);
+  $products_arr = fetch_data(["table" => "products", "columns" => "id, product", "condition" => $condition, "order" => "product ASC", "limit" => ""]);    // print_arr($products_arr);
   // print_arr($products_arr);
 
   $product_ids = [];
   foreach ($products_arr as $k => $v) {
     $product_ids[] = $v["id"];
   }
+
+  $product_ids = [];
+  $product_ids[] = 30;
+
   $costing = get_product_cost($product_ids);
   // print_arr($costing);
 
   function table_row($index, $prod, $costing)
   {
-
-    $bom_cost_types = bom_cost_type_arr();
-    // echo $prod["id"];print_arr($prod);
 
     $det = product_cost_details($costing, $prod["id"]);
 

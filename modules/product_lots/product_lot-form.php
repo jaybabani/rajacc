@@ -67,8 +67,7 @@ include("../../common/header.php");
   // print_arr($save_fields);
   // die;
 
-  $link_table_rows = [
-  ];
+  $link_table_rows = [];
 
   $msg = [
     "success_update" => "Product Lot updated successfully",
@@ -114,10 +113,15 @@ include("../../common/header.php");
       // print_arr($purchases);
     }
 
-    $product_arr = fetch_data(["table" => "products", "columns" => "id, product", "condition" => "", "order" => "product ASC", "limit" => ""]);        // print_arr($product_arr);
+    $product_quality = get_attributes_arr("product_quality");
+    $product_arr = fetch_data(["table" => "products", "columns" => "id, product, quality", "condition" => "", "order" => "product ASC", "limit" => ""]);        // print_arr($product_arr);
     $products = [];
     foreach ($product_arr as $vk => $vv) {
       $products[$vv["id"]] = $vv["product"];
+      // if (isset($product_quality[$vv["quality"]])) {
+      //   $products[$vv["id"]] .= " (" . $product_quality[$vv["quality"]]["attribute"] . ")";
+      //   // echo " UPDATE products SET product = '".$products[$vv["id"]]."' WHERE id = '".$vv["id"]."'; <br>";
+      // }
     }
     // print_arr($products); 
 

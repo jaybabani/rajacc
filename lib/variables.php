@@ -580,7 +580,7 @@ function get_product_movement_action_arr()
 	$arr = [
 		"reserve" => "Product Reserved",
 		"unreserve" => "Product Unreserved",
-		"consume" => "Product Consumed",
+		"consume" => "Product Dispatched",
 	];
 	return $arr;
 }
