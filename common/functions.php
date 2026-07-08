@@ -1258,9 +1258,10 @@ function form_field($vars, $data)
         }
         //
         else if ($vars["type"] == "date") {
-            $s .= '<input type="text" class="form-control" name="' . $vars["key"] . '" id="' . $vars["key"] . '" value="' . get_value($data, $vars["key"]) . '" ' . ($required ? "required" : "") . '>';
+            $datefield_id = str_replace("[]", "", $vars["key"]) . "-" . rand();
+            $s .= '<input type="text" class="form-control" name="' . $vars["key"] . '" id="' . $datefield_id . '" value="' . get_value($data, $vars["key"]) . '" ' . ($required ? "required" : "") . '>';
             $s .= '<div class="invalid-feedback">Incorrect ' . $vars["name"] . ' value</div>';
-            $s .= '<script>flatpickr("#' . $vars["key"] . '", {altInput: true, altFormat: "d M Y, D", dateFormat: "Ymd"}); </script>';
+            $s .= '<script>flatpickr("#' . $datefield_id . '", {altInput: true, altFormat: "d M Y, D", dateFormat: "Ymd"}); </script>';
         }
         //
         else if ($vars["type"] == "hidden") {
@@ -1494,7 +1495,6 @@ function module_get_data($table, $id)
         }
         $data['mode'] = 'update';
     }
-
     return $data;
 }
 
@@ -1612,6 +1612,8 @@ function module_submit_form($vars)
         elseif ($_REQ['mode'] == 'update') {
             // update
             // $query .= " updated = \"" . $ts . "\" ";
+
+            // echo " UPDATE $table SET " . $query . " WHERE " . $primary_column . " = '" . $_REQ[$primary_column] . "' ";
             $sql = $conn->query(" UPDATE $table SET " . $query . " WHERE " . $primary_column . " = '" . $_REQ[$primary_column] . "' ");
 
             if ($sql) {
@@ -1797,11 +1799,11 @@ function save_link_table_rows($vars, $primary_id)
     global $conn;
 
     $_REQ = $vars["submit_data"];
-    $ltr = $vars["link_table_rows"];
+    $ltr = $vars["link_table_rows"] ?? [];
     $primary_column = $vars["primary_column"];
 
     if (sizeof($ltr) > 0) {
-        $rows = $_REQ[$ltr["multi_column"]["field"]];
+        $rows = $_REQ[$ltr["multi_column"]["field"]] ?? [];
         $single_col = $ltr["single_column"]["column"];
         $multi_col = $ltr["multi_column"]["column"];
         $table = $ltr["table"];
@@ -2016,7 +2018,7 @@ function manage_lot_quantity($table, $row_id, $action, $quantity)
         if ($action == "reserve") {
             $available = $available - $quantity;
             $reserved = $reserved + $quantity;
-        } 
+        }
         //
         else if ($action == "unreserve") {
             $available = $available + $quantity;
@@ -2026,7 +2028,7 @@ function manage_lot_quantity($table, $row_id, $action, $quantity)
         else if ($action == "consume") {
             $consumed = $consumed + $quantity;
             $reserved = $reserved - $quantity;
-        } 
+        }
         //
         else if ($action == "return") {
             $consumed = $consumed - $quantity;
@@ -2165,8 +2167,8 @@ function execute_action($action, $vars, $primary_id)
 
         //
         // die;
-    } 
-    
+    }
+
     //
     else if ($action == "invoice_items_added") {
         // echo $action;
@@ -2209,12 +2211,12 @@ function execute_action($action, $vars, $primary_id)
         $dispatch = $_REQ["id"];
         // print_arr($_REQ);
         // print_arr($vars);
-            $movvars = [
-                "manage_order_quantity" => [
-                    "action" => "consume",
-                    "quantity_field" => "quantity"
-                ]
-            ];
+        $movvars = [
+            "manage_order_quantity" => [
+                "action" => "consume",
+                "quantity_field" => "quantity"
+            ]
+        ];
 
         // find product lots in a dispatch
         $dispatch_items_arr = fetch_data(["table" => "dispatch_items", "columns" => "id, product, quantity, dispatch, order_id, product_lot", "condition" => " dispatch = '" . $dispatch . "' ", "order" => "product ASC", "limit" => ""]);
@@ -2228,7 +2230,7 @@ function execute_action($action, $vars, $primary_id)
         // maintain master quantity of each product lot
 
         // die;
-    } 
+    }
 
     // die;
 }
@@ -2319,9 +2321,17 @@ function display_column_history($vars, $row, $history, $columns)
                     $s .= "<i>" . $cv["name"] . ": </i> ";
 
                     $hisval = $v["value"];
+
+                    if (isset($cv["format"]) && $cv["format"] == "date") {
+                        $hisval = ymd_to_dt($hisval);
+                    }
+
+
                     if (isset($cv["options"]) && is_array($cv["options"]) && isset($cv["options"][$v["value"]])) {
                         $hisval = $cv["options"][$v["value"]];
                     }
+
+
                     if (isset($cv["badge"]) && $cv["badge"] == true) {
                         $hisval = '<span class="badge badge-' . $v["value"] . '">' . $hisval . '</span>';
                     } else {
@@ -2521,6 +2531,7 @@ function fetch_data($vars)
 
     return $ret;
 }
+
 
 function get_invoice_items($invoice)
 {
@@ -2764,12 +2775,11 @@ function fetch_product_movements($arr, $type = "order")
 
     if ($type == "order" && isset($arr["order_id"]) && $arr["order_id"] != "") {
         $condition = " order_id = '" . $arr["dispatch"]["order_id"] . "' ";
-    }
-    else if ($type == "dispatch" && isset($arr["dispatch"]) && is_array($arr["dispatch"]) && sizeof($arr["dispatch"]) > 0) {
+    } else if ($type == "dispatch" && isset($arr["dispatch"]) && is_array($arr["dispatch"]) && sizeof($arr["dispatch"]) > 0) {
         $condition = " dispatch = '" . $arr["dispatch"]["id"] . "' AND order_id = '" . $arr["dispatch"]["order_id"] . "' ";
     }
 
-    if($condition != ""){
+    if ($condition != "") {
         $product_movements_arr = fetch_data([
             "table" => "product_movements",
             "columns" => "id, product, product_lot, quantity, action, action_date ",
@@ -2793,3 +2803,349 @@ function fetch_product_movements($arr, $type = "order")
     // print_arr($status);
     return $status;
 }
+
+
+
+
+function get_raw_material_rate_details($items, $format = "")
+{
+
+    $ret = [];
+    $product_ids = [];
+    $qty = [];
+    $rate = [];
+    // $discount = [];
+    $rowindex = [];
+    foreach ($items as $k => $r) {
+        $pid = $r["product"];
+        $product_ids[] = $pid;
+        $qty[$pid] = $r["quantity"];
+        $rate[$pid] = $r["rate"];
+        // $discount[$pid] = $r["discount"];
+        // $igst[$pid] = $r["igst"];
+        // $cgst[$pid] = $r["cgst"];
+        // $sgst[$pid] = $r["sgst"];
+        $rowindex[$pid] = $r["id"];
+    }
+    $ret["product_ids"] = $product_ids;
+    $ret["quantity"] = $qty;
+    $ret["rate"] = $rate;
+    // $ret["discount"] = $discount;
+    // $ret["igst"] = $igst;
+    // $ret["cgst"] = $cgst;
+    // $ret["sgst"] = $sgst;
+    $ret["rowindex"] = $rowindex;
+
+    return $ret;
+}
+
+
+
+
+function get_raw_material_rates_entities($loadtype = "")
+{
+    $ret = [];
+    $raw_materials = [];
+    // $dispatch_products = [];
+    // $qty = [];
+
+    $raw_materials_arr = fetch_data(["table" => "raw_materials", "columns" => "id, raw_material", "condition" => "", "order" => "raw_material ASC", "limit" => ""]);
+    $raw_materials = [];
+    $individual = [];
+    foreach ($raw_materials_arr as $opk => $opv) {
+        $raw_materials[$opv["id"]] = "" . $opv["raw_material"];
+        $individual[$opv["id"]] = "" . $opv["raw_material"];
+    }
+
+    $raw_material_rate_groups_arr = fetch_data(["table" => "raw_material_rate_groups", "columns" => "id, raw_material_rate_group", "condition" => "", "order" => "raw_material_rate_group ASC", "limit" => ""]);
+    $raw_material_rate_groups = [];
+    foreach ($raw_material_rate_groups_arr as $opk => $opv) {
+        $raw_material_rate_groups[$opv["id"]] = "" . $opv["raw_material_rate_group"];
+    }
+
+    $rn_rate_group_link_arr = fetch_data(["table" => "raw_material_rate_group_link", "columns" => "id, raw_material_rate_group, raw_material", "condition" => "", "order" => "", "limit" => ""]);
+    $rm_group_links = [];
+
+    foreach ($rn_rate_group_link_arr as $opk => $opv) {
+        if (isset($raw_material_rate_groups[$opv["raw_material_rate_group"]])) {
+            if (isset($raw_materials[$opv["raw_material"]])) {
+                $rm_group_links[$opv["raw_material_rate_group"]][] = $opv["raw_material"];
+                if (isset($individual[$opv["raw_material"]])) {
+                    unset($individual[$opv["raw_material"]]);
+                }
+            }
+        }
+    }
+
+    $entities = [];
+    foreach ($raw_material_rate_groups as $k => $v) {
+        $entities["RMRG-" . $k] = "Rate Group: " . $v;
+    }
+    foreach ($individual as $k => $v) {
+        $entities["RM-" . $k] = $v;
+    }
+
+
+    $rates_arr = fetch_data(["table" => "raw_material_rates", "columns" => "id, entity, rate", "condition" => "", "order" => "", "limit" => ""]);
+    $rates = [];
+    foreach ($rates_arr as $k => $v) {
+        $rates[$v["entity"]] = $v["rate"];
+    }
+
+    $pending = [];
+    foreach ($entities as $k => $v) {
+        if (!isset($rates[$k])) {
+            $pending[$k] = $v;
+        }
+    }
+
+    $ret["raw_materials"] = $raw_materials;
+    $ret["raw_material_rate_groups"] = $raw_material_rate_groups;
+    $ret["rm_group_links"] = $rm_group_links;
+    $ret["individual"] = $individual;
+    $ret["entities"] = $entities;
+    $ret["rates"] = $rates;
+    $ret["pending"] = $pending;
+
+    return $ret;
+}
+
+
+
+
+
+function  get_product_cost($product_ids)
+{
+
+    $cost = [];
+    $product_boms = [];
+    $bom_items = [];
+    $bom_costs = [];
+    $raw_material_ids = [];
+    // print_arr($product_ids);
+
+    $boms = product_boms($product_ids);
+    $raw_material_ids = $boms["raw_material_ids"] ?? [];
+    $raw_material_rates = raw_material_rates($raw_material_ids);
+
+    // print_arr($boms["product_boms"][$pid]);
+
+    foreach ($product_ids as $k => $pid) {
+        $costs[$pid] = [];
+        if (isset($boms["product_boms"][$pid])) {
+            $bom = $boms["product_boms"][$pid];
+            if (isset($boms["bom_items"][$bom])) {
+                $bom_items = $boms["bom_items"][$bom];
+                // print_arr($bom_items);
+                foreach ($bom_items as $bik => $biv) {
+                    $c = [];
+                    $rm = $biv["raw_material"];
+                    if (isset($raw_material_rates["raw_material_rates"][$rm])) {
+                        $c["type"] = "bom_items";
+                        $c["raw_material"] = $biv["raw_material"];
+                        $c["quantity"] = $biv["quantity"];
+                        $c["wastage_quantity"] = $biv["wastage_quantity"];
+                        $c["raw_material_rate"] = $raw_material_rates["raw_material_rates"][$rm];
+                        $c["raw_material_name"] = $raw_material_rates["raw_materials"][$rm];
+                        $c["raw_material_unit"] = $raw_material_rates["raw_material_units"][$rm];
+                    }
+                    $costs[$pid][] = $c;
+                }
+
+                $bom_costs = $boms["bom_costs"][$bom];
+                // print_arr($bom_costs);
+                foreach ($bom_costs as $bik => $biv) {
+                    $c = [];
+                    $c["type"] = "bom_costs";
+                    $c["cost_type"] = $biv["cost_type"];
+                    $c["amount"] = $biv["amount"];
+                    // $rm = $biv["raw_material"];
+                    // if (isset($raw_material_rates["raw_material_rates"][$rm])) {
+                    //     $c["raw_material"] = $biv["raw_material"];
+                    //     $c["quantity"] = $biv["quantity"];
+                    //     $c["wastage_quantity"] = $biv["wastage_quantity"];
+                    //     $c["raw_material_rate"] = $raw_material_rates["raw_material_rates"][$rm];
+                    //     $c["raw_material_name"] = $raw_material_rates["raw_materials"][$rm];
+                    // }
+                    $costs[$pid][] = $c;
+                }
+            }
+        }
+    }
+
+    // print_arr($costs);
+
+
+    return [
+        "costs" => $costs,
+        "product_ids" => $product_ids,
+        "boms" => $boms,
+        "raw_material_ids" => $raw_material_ids,
+        "raw_material_rates" => $raw_material_rates,
+    ];
+}
+function product_boms($product_ids)
+{
+    if (sizeof($product_ids) == 0) {
+        return [];
+    }
+
+    $boms_ids = [];
+    if (sizeof($product_ids) > 0) {
+        $boms_arr = fetch_data(["table" => "boms", "columns" => "id, product", "condition" => " product IN (" . implode(",", $product_ids) . ") AND status = 'active' ", "order" => "", "limit" => ""]);
+        foreach ($boms_arr as $bk => $bv) {
+            $product_boms[$bv["product"]] = $bv["id"];
+            $boms_ids[] = $bv["id"];
+        }
+        // print_arr($boms);
+
+        $bom_items_arr = fetch_data(["table" => "bom_items", "columns" => "id, raw_material, quantity, wastage_quantity, bom", "condition" => " bom IN (" . implode(",", $boms_ids) . ") ", "order" => "", "limit" => ""]);
+        foreach ($bom_items_arr as $bik => $biv) {
+            $bom_items[$biv["bom"]][] = $biv;
+            $raw_material_ids[] = $biv["raw_material"];
+        }
+
+        $bom_costs_arr = fetch_data(["table" => "bom_costs", "columns" => "id, cost_type, bom, amount", "condition" => " bom IN (" . implode(",", $boms_ids) . ") ", "order" => "", "limit" => ""]);
+        foreach ($bom_costs_arr as $bik => $biv) {
+            $bom_costs[$biv["bom"]][] = $biv;
+        }
+    }
+
+    return [
+        "product_ids" => $product_ids,
+        "product_boms" => $product_boms,
+        "bom_items" => $bom_items,
+        "bom_costs" => $bom_costs,
+        "raw_material_ids" => $raw_material_ids,
+    ];
+}
+
+function raw_material_rates($raw_material_ids)
+{
+
+    if (sizeof($raw_material_ids) == 0) {
+        return [];
+    }
+
+    $raw_materials_arr = fetch_data(["table" => "raw_materials", "columns" => "id, raw_material, unit", "condition" => " id IN (" . implode(",", $raw_material_ids) . ") ", "order" => "raw_material ASC", "limit" => ""]);
+    $raw_materials = [];
+    $raw_material_units = [];
+    foreach ($raw_materials_arr as $opk => $opv) {
+        $raw_materials[$opv["id"]] = "" . $opv["raw_material"];
+        $raw_material_units[$opv["id"]] = $opv["unit"];
+    }
+
+    $raw_material_rate_group_arr = fetch_data([
+        "table" => "raw_material_rate_group_link",
+        "columns" => "id, raw_material_rate_group, raw_material",
+        "condition" => " raw_material IN (" . implode(",", $raw_material_ids) . ") ",
+        "order" => "",
+        "limit" => ""
+    ]);
+    $raw_material_rate_groups = [];
+    foreach ($raw_material_rate_group_arr as $opk => $opv) {
+        $raw_material_rate_groups[$opv["raw_material"]] = $opv["raw_material_rate_group"];
+    }
+
+    // make rate group entity list
+    $rate_group_entities = [];
+    $rm_rate_condition = "";
+    foreach ($raw_material_ids as $k => $v) {
+        $rate_group_entities[] = "RM-" . $v;
+        $rm_rate_condition .= "'" . ("RM-" . $v) . "', ";
+    }
+    foreach ($raw_material_rate_groups as $k => $v) {
+        $rate_group_entities[] = "RMRG-" . $v;
+        $rm_rate_condition .= "'" . ("RMRG-" . $v) . "', ";
+    }
+
+    if (trim($rm_rate_condition) != "") {
+        $rm_rate_condition = substr(trim($rm_rate_condition), 0, -1);
+    }
+
+    // echo $rm_rate_condition;
+
+    $rm_entity_rates_arr = fetch_data([
+        "table" => "raw_material_rates",
+        "columns" => "id, entity, rate, effective_date",
+        "condition" => " entity IN (" . $rm_rate_condition . ") ",
+        "order" => "",
+        "limit" => ""
+    ]);
+    $rm_entity_rates = [];
+    foreach ($rm_entity_rates_arr as $opk => $opv) {
+        $rm_entity_rates[$opv["entity"]] = $opv;
+    }
+
+
+    $raw_material_rates = [];
+    foreach ($raw_material_ids as $k => $v) {
+        $ent = "";
+        // check if directly set for this raw material only (not in other group)
+        if (isset($rm_entity_rates["RM-" . $v])) {
+            $ent = "RM-" . $v;
+            $raw_material_rates[$v] = ["rate" => $rm_entity_rates[$ent]["rate"], "effective_date" => $rm_entity_rates[$ent]["effective_date"]];
+        }
+
+        // if it is part of rate group
+        else {
+            if (isset($raw_material_rate_groups[$v])) {
+                $ent = "RMRG-" . $raw_material_rate_groups[$v];
+                if (isset($rm_entity_rates[$ent])) {
+                    $raw_material_rates[$v] = ["rate" => $rm_entity_rates[$ent]["rate"], "effective_date" => $rm_entity_rates[$ent]["effective_date"]];
+                }
+            }
+        }
+    }
+
+    return [
+        "raw_material_ids" => $raw_material_ids,
+        "raw_materials" => $raw_materials,
+        "raw_material_units" => $raw_material_units,
+        "raw_material_rate_groups" => $raw_material_rate_groups,
+        "rate_group_entities" => $rate_group_entities,
+        "rm_entity_rates" => $rm_entity_rates,
+        "raw_material_rates" => $raw_material_rates,
+    ];
+}
+
+
+
+
+
+  function product_cost_details($costing, $prodid)
+  {
+
+    $d = "";
+
+    $total = 0;
+    if (isset($costing["costs"][$prodid])) {
+      $costarr = $costing["costs"][$prodid];
+      // $d = json_encode($costarr);
+
+      if (sizeof($costarr) > 0) {
+        $d .= "<div class='widget-table'><div class='table-responsive'><table class='table table-compact table-bordered'>
+        <tr><th>Raw Material / Cost</th><th>Amount</th><th>Quantity</th></tr>";
+        foreach ($costarr as $ck => $cv) {
+          if ($cv["type"] == "bom_items") {
+            $d .= "<tr>
+          <td>" . $cv["raw_material_name"] . "</td>
+          <td>" . $cv["raw_material_rate"]["rate"] . "</td>
+          <td>" . ($cv["quantity"] + $cv["wastage_quantity"]) . " " . $cv["raw_material_unit"] . "</td>
+          </tr>";
+
+            $total += $cv["raw_material_rate"]["rate"] * ($cv["quantity"] + $cv["wastage_quantity"]);
+          } else if ($cv["type"] == "bom_costs") {
+            $d .= "<tr>
+          <td>" . ($bom_cost_types[$cv["cost_type"]] ?? $cv["cost_type"]) . "</td>
+          <td>" . $cv["amount"] . "</td>
+          <td></td>
+          </tr>";
+            $total += $cv["amount"];
+          }
+        }
+        $d .= "</table></div></div>";
+      }
+    }
+    return ["detail" => $d, "total" => $total];
+  }

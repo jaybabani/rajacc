@@ -113,3 +113,12 @@ table.dataTable tbody th, table.dataTable tbody td{
 table.dataTable{
   border-left: 1px dashed #dddddd;
 }
+
+.table-compact.table-bordered{
+  border-color: #bdbdbd;  
+}
+.table-compact.table-bordered th,
+.table-compact.table-bordered td{
+  border-color: #bdbdbd;  
+  padding-left: 10px;
+}

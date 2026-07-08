@@ -127,7 +127,10 @@
     else if(in_array($current_page,array("documents"))){
       $show_menu["documents"] = "show";
     }
-    else if(in_array($current_page,array("raw_materials","raw_material-form","raw_material-delete","raw_material_lots","raw_material_lot-form","raw_material_lot-delete"))){
+    else if(in_array($current_page,array("raw_materials","raw_material-form","raw_material-delete","raw_material_lots","raw_material_lot-form","raw_material_lot-delete",
+    "raw_material_rate_groups","raw_material_rate_group-form","raw_material_rate_group-delete",
+    "raw_material_rates", "raw_material_rate-form", "raw_material_rate-bulkform","raw_material_rate-delete"
+    ))){
       $show_menu["raw_materials"] = "show";
     }
     else if(in_array($current_page,array("products","product-form","product-delete", "product_lots","product_lot-form","product_lot-delete"))){
@@ -136,7 +139,8 @@
     else if(in_array($current_page,array("orders","order-form","order-delete","order_items","order_item-form","order_item-bulkform","order_item-delete"))){
       $show_menu["orders"] = "show";
     }
-    else if(in_array($current_page,array("boms","bom-form","bom-delete","bom_items","bom_item-form","bom_item-bulkform","bom_item-delete"))){
+    else if(in_array($current_page,array("boms","bom-form","bom-delete","bom_items","bom_item-form","bom_item-bulkform","bom_item-delete"
+    ,"bom_costs","bom_cost-form","bom_cost-bulkform","bom_cost-delete"))){
       $show_menu["boms"] = "show";
     }
     else if(in_array($current_page,array("dispatchs","dispatch-form","dispatch-delete","dispatch_items", "dispatch_item-form", "dispatch_item-bulkform","dispatch_item-delete"))){
@@ -226,6 +230,12 @@
           <li><a href="<?php echo ROOT_PATH; ?>/modules/raw_material_lots/raw_material_lot-form.php" class="link-dark"><span>Add new raw material lot</span></a></li>
           <li><a href="<?php echo ROOT_PATH; ?>/modules/attributes/attributes.php?module=raw_material_category" class="link-dark"><span>All raw material category</span></a></li>
           <li><a href="<?php echo ROOT_PATH; ?>/modules/attributes/attribute-form.php?module=raw_material_category" class="link-dark"><span>Add new raw material category</span></a></li>
+
+          <li><a href="<?php echo ROOT_PATH; ?>/modules/raw_material_rate_groups/raw_material_rate_groups.php" class="link-dark"><span>All RM rate groups</span></a></li>
+          <li><a href="<?php echo ROOT_PATH; ?>/modules/raw_material_rate_groups/raw_material_rate_group-form.php" class="link-dark"><span>Add new RM rate group</span></a></li>
+
+          <li><a href="<?php echo ROOT_PATH; ?>/modules/raw_material_rates/raw_material_rates.php" class="link-dark"><span>View RM rates</span></a></li>
+
         </ul>
       </div>
     </li>     
@@ -242,6 +252,9 @@
           <li><a href="<?php echo ROOT_PATH; ?>/modules/product_lots/product_lots.php" class="link-dark"><span>All product lots</span></a></li>
           <li><a href="<?php echo ROOT_PATH; ?>/modules/product_lots/product_lot-form.php?source=purchased" class="link-dark"><span>Add new product lot<br>(purchased)</span></a></li>
           <li><a href="<?php echo ROOT_PATH; ?>/modules/product_lots/product_lot-form.php?source=produced" class="link-dark"><span>Add new product lot<br>(produced internally)</span></a></li>
+
+          <li><a href="<?php echo ROOT_PATH; ?>/modules/products/product-costing.php" class="link-dark"><span>All Product Costing</span></a></li>
+
           <li><a href="<?php echo ROOT_PATH; ?>/modules/attributes/attributes.php?module=product_category" class="link-dark"><span>All product category</span></a></li>
           <li><a href="<?php echo ROOT_PATH; ?>/modules/attributes/attribute-form.php?module=product_category" class="link-dark"><span>Add new product category</span></a></li>
           <li><a href="<?php echo ROOT_PATH; ?>/modules/attributes/attributes.php?module=product_quality" class="link-dark"><span>All product quality</span></a></li>

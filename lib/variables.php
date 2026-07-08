@@ -42,6 +42,7 @@ function acl_roles($format = "")
 		["products-update", "Update products"],
 		["products-create", "Add new products"],
 		["products-delete", "Delete products"],
+		["products-costing", "View all product costs"],
 		["product_lots-read", "View all product lots"],
 		["product_lots-update", "Update product lots"],
 		["product_lots-create", "Add new product lots"],
@@ -72,7 +73,7 @@ function acl_roles($format = "")
 		["order_items-update", "Update order items"],
 		["order_items-create", "Add new order items"],
 		["order_items-delete", "Delete order items"],
-		
+
 		["dispatchs-read", "View all dispatchs"],
 		["dispatchs-update", "Update dispatchs"],
 		["dispatchs-create", "Add new dispatchs"],
@@ -105,7 +106,22 @@ function acl_roles($format = "")
 		["bom_items-read", "View all BOM items"],
 		["bom_items-update", "Update BOM items"],
 		["bom_items-create", "Add new BOM items"],
-		["bom_items-delete", "Delete BOM items"],		
+		["bom_items-delete", "Delete BOM items"],
+		["bom_costs-read", "View all BOM costs"],
+		["bom_costs-update", "Update BOM costs"],
+		["bom_costs-create", "Add new BOM costs"],
+		["bom_costs-delete", "Delete BOM costs"],
+
+		["raw_material_rate_groups-read", "View all raw material rate groups"],
+		["raw_material_rate_groups-update", "Update raw material rate groups"],
+		["raw_material_rate_groups-create", "Add new raw material rate groups"],
+		["raw_material_rate_groups-delete", "Delete raw material rate groups"],
+
+		["raw_material_rates-read", "View all raw material rates"],
+		["raw_material_rates-update", "Update raw material rates"],
+		["raw_material_rates-create", "Add new raw material rates"],
+		["raw_material_rates-delete", "Delete raw material rates"],
+
 
 	];
 
@@ -263,6 +279,16 @@ function get_module_pages_arr()
 			"delete" => "user_role-delete",
 			"form" => ROOT_PATH . "/modules/user_roles/user_role-form.php?id=XXX"
 		],
+		"raw_material_rate_groups" => [
+			"name" => "Raw material rate groups",
+			"id_prefix" => "RMRG-",
+			"read" => "raw_material_rate_groups",
+			"update" => "raw_material_rate_group-form",
+			"create" => "raw_material_rate_group-form",
+			"delete" => "raw_material_rate_group-delete",
+			"form" => ROOT_PATH . "/modules/raw_material_rate_groups/raw_material_rate_group-form.php?id=XXX"
+		],
+
 		"users" => [
 			"name" => "Users",
 			"id_prefix" => "U-",
@@ -301,7 +327,7 @@ function get_module_pages_arr()
 			"delete" => "order_item-delete",
 			"form" => ROOT_PATH . "/modules/order_items/order_item-form.php?id=XXX"
 		],
-		
+
 		"boms" => [
 			"name" => "BOM",
 			"id_prefix" => "BOM-",
@@ -321,6 +347,17 @@ function get_module_pages_arr()
 			"bulk_create" => "bom_item-bulkform",
 			"delete" => "bom_item-delete",
 			"form" => ROOT_PATH . "/modules/bom_items/bom_item-form.php?id=XXX"
+		],
+		"bom_costs" => [
+			"name" => "BOM Costs",
+			"id_prefix" => "BOMC-",
+			"read" => "bom_costs",
+			"update" => "bom_cost-form",
+			"create" => "bom_cost-form",
+			"bulk_update" => "bom_cost-bulkform",
+			"bulk_create" => "bom_cost-bulkform",
+			"delete" => "bom_cost-delete",
+			"form" => ROOT_PATH . "/modules/bom_costs/bom_cost-form.php?id=XXX"
 		],
 		"dispatchs" => [
 			"name" => "dispatchs",
@@ -371,6 +408,18 @@ function get_module_pages_arr()
 			"delete" => "invoice_item-delete",
 			"form" => ROOT_PATH . "/modules/invoice_items/invoice_item-form.php?id=XXX"
 		],
+
+		"raw_material_rates" => [
+			"name" => "invoice items",
+			"id_prefix" => "RMR-",
+			"read" => "raw_material_rates",
+			"update" => "raw_material_rate-form",
+			"create" => "raw_material_rate-form",
+			"bulk_update" => "raw_material_rate-bulkform",
+			"bulk_create" => "raw_material_rate-bulkform",
+			"delete" => "raw_material_rate-delete",
+			"form" => ROOT_PATH . "/modules/raw_material_rates/raw_material_rate-form.php?id=XXX"
+		],
 	];
 	return $arr;
 }
@@ -385,7 +434,8 @@ function get_module_details($module)
 	return $arr;
 }
 
-function get_attribute_category_id_prefix($sm){
+function get_attribute_category_id_prefix($sm)
+{
 	$arr = [];
 	// $module_arr = get_module_pages_arr();
 	foreach ($sm as $key => $value) {
@@ -394,10 +444,11 @@ function get_attribute_category_id_prefix($sm){
 	return $arr;
 }
 
-function get_module_id_prefix($mod){
+function get_module_id_prefix($mod)
+{
 	$pf = "";
 	$module_arr = get_module_pages_arr();
-	if(isset($module_arr[$mod])){
+	if (isset($module_arr[$mod])) {
 		$pf = $module_arr[$mod]["id_prefix"];
 	}
 	return $pf;
@@ -511,7 +562,8 @@ function get_order_status_arr()
 	return $arr;
 }
 
-function get_dispatch_status_arr(){
+function get_dispatch_status_arr()
+{
 	$arr = [
 		"new" => "New Dispatch",
 		"packed_and_ready" => "Packed and Ready",
@@ -533,7 +585,8 @@ function get_product_movement_action_arr()
 	return $arr;
 }
 
-function get_invoice_status_arr(){
+function get_invoice_status_arr()
+{
 	$arr = [
 		"draft" => "Draft",
 		"generated" => "Generated",
@@ -562,7 +615,8 @@ function get_payment_type_arr()
 }
 
 
-function get_payment_mode_arr(){
+function get_payment_mode_arr()
+{
 	$arr = [
 		"cash" => "Cash",
 		"bank_transfer" => "Bank Transfer",
@@ -575,7 +629,8 @@ function get_payment_mode_arr(){
 }
 
 
-function get_transaction_type_arr(){
+function get_transaction_type_arr()
+{
 	$arr = [
 		"regular" => "Regular",
 		"advance" => "Advance",
@@ -586,11 +641,26 @@ function get_transaction_type_arr(){
 	return $arr;
 }
 
-function get_bom_status_arr(){
+function get_bom_status_arr()
+{
 	$arr = [
 		"draft" => "Draft",
 		"active" => "Active",
 		"inactive" => "Inactive",
+	];
+	return $arr;
+}
+
+function bom_cost_type_arr()
+{
+	$arr = [
+		"electricity" => "Electricity cost",
+		"labour" => "Labour cost",
+		"machining" => "Machining cost",
+		"packaging" => "Packaging cost",
+		"transport" => "Transport cost",
+		"overhead" => "Overhead cost",
+		"other" => "Other costs",
 	];
 	return $arr;
 }

@@ -68,6 +68,18 @@ include '../../common/header.php';
       ]
     ],
     [
+      "name" => "BOM Costs",
+      "column" => "",
+      "type" => "link",
+      "sorting" => false,
+      "search" => false,
+      "class" => "nowrap",
+      "links" => [
+        ["text" => "View BOM Costs", "url" => ROOT_PATH . "/modules/bom_costs/bom_costs.php?bom={id}", "acl" => "bom_costs-read"],
+        ["text" => "Add BOM Costs", "url" => ROOT_PATH . "/modules/bom_costs/bom_cost-bulkform.php?bom={id}", "acl" => "bom_costs-create"]
+      ]
+    ],
+    [
       "name" => "Actions",
       "column" => "",
       "type" => "edit_delete",

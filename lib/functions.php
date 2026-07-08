@@ -706,12 +706,14 @@ function notify_after_redirect($type = '', $msg = '')
 
 function notify_and_redirect_on_submit($vars, $type = '', $msg = '')
 {
-    if (
-        isset($vars["redirect_to"]) && $vars["redirect_to"] != ""
-        && isset($vars["url_param"]) && $vars["url_param"] != ""
-    ) {
+    if (isset($vars["redirect_to"]) && $vars["redirect_to"] != "") {
         notify_after_redirect($type, $msg);
-        $urlparam = "?" . $vars["url_param"];
+
+        $urlparam = "";
+        if (isset($vars["url_param"]) && $vars["url_param"] != "") {
+            $urlparam = "?" . $vars["url_param"];
+        }
+
         echo "<script>window.top.location='" . $vars["redirect_to"] . ".php" . $urlparam . "'</script>";
     } else {
         notify($type, $msg);
