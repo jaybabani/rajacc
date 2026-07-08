@@ -44,7 +44,7 @@ include("../../common/header.php");
 
   $display_columns = [
     ["name" => "", "column" => "", "type" => "details", "sorting" => false, "search" => false, "class" => "text-center nowrap"],
-    ["name" => "Select", "column" => "", "type" => "select", "sorting" => false, "search" => false, "class" => "text-center"],
+    //["name" => "Select", "column" => "", "type" => "select", "sorting" => false, "search" => false, "class" => "text-center"],
     ["name" => "ID", "column" => "id", "class" => "text-center nowrap", "id_prefix" => $module_pages["id_prefix"]],
     ["name" => "Raw Material Rate Group", "column" => "raw_material_rate_group", "class" => "title nowrap"],
     ["name" => "Raw materials", "column" => "", "options" => $raw_materials, "type" => "link_table_rows", "links" => $links, "option_id" => "id", "option_label" => "raw_material", "sorting" => false],

@@ -47,7 +47,7 @@ include '../../common/header.php';
 
   $display_columns = [
     ['name' => '', 'column' => '', 'type' => 'details', 'sorting' => false, 'search' => false, 'class' => 'text-center nowrap',],
-    ['name' => 'Select', 'column' => '', 'type' => 'select', 'sorting' => false, 'search' => false, 'class' => 'text-center',],
+    // ['name' => 'Select', 'column' => '', 'type' => 'select', 'sorting' => false, 'search' => false, 'class' => 'text-center',],
     ['name' => 'ID', 'column' => 'id', 'class' => 'text-center nowrap', 'id_prefix' => $module_pages['id_prefix'],],
     ['name' => 'Product', 'column' => 'product', 'options' => $products_arr, 'type' => 'table_id', 'option_id' => 'id', 'option_label' => 'product', 'class' => 'title', 'module' => 'products',],
     // ['name' => 'Sales person', 'column' => 'user', 'options' => $users_arr, 'type' => 'table_id', 'option_id' => 'id', 'option_label' => 'name', 'class' => 'title', 'module' => 'users',],
