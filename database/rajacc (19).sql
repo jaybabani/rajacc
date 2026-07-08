@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1:3306
--- Generation Time: Jul 04, 2026 at 12:43 PM
+-- Generation Time: Jul 08, 2026 at 11:23 AM
 -- Server version: 8.2.0
 -- PHP Version: 8.2.13
 
@@ -39,7 +39,7 @@ CREATE TABLE IF NOT EXISTS `attributes` (
   `updated` int DEFAULT NULL,
   `created` varchar(35) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=53 DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB AUTO_INCREMENT=55 DEFAULT CHARSET=utf8mb3;
 
 --
 -- Dumping data for table `attributes`
@@ -80,7 +80,102 @@ INSERT INTO `attributes` (`id`, `attribute`, `active`, `code`, `category`, `colo
 (49, 'Goods receipt note (GRN)', 'yes', NULL, 'document_type', NULL, 1, 1782734612, '1782734612_1'),
 (50, 'Delivery Challan', 'yes', NULL, 'document_type', NULL, 1, 1782734626, '1782734626_1'),
 (51, 'Eway Bill', 'yes', NULL, 'document_type', NULL, 1, 1782734648, '1782734648_1'),
-(52, 'Purchase docs', 'yes', NULL, 'folder_category', NULL, 1, 1782814369, '1782814369_1');
+(52, 'Purchase docs', 'yes', NULL, 'folder_category', NULL, 1, 1782814369, '1782814369_1'),
+(53, 'HDFC', 'yes', NULL, 'bank_account', NULL, 1, 1783425606, '1783425606_1'),
+(54, 'SBI', 'yes', NULL, 'bank_account', NULL, 1, 1783425610, '1783425610_1');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `boms`
+--
+
+DROP TABLE IF EXISTS `boms`;
+CREATE TABLE IF NOT EXISTS `boms` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `product` int NOT NULL,
+  `notes` text CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci,
+  `status` varchar(255) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
+  `auth_user` int NOT NULL,
+  `updated` int NOT NULL,
+  `created` varchar(35) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM AUTO_INCREMENT=14 DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_unicode_ci;
+
+--
+-- Dumping data for table `boms`
+--
+
+INSERT INTO `boms` (`id`, `product`, `notes`, `status`, `auth_user`, `updated`, `created`) VALUES
+(13, 15, 'tasfas', 'active', 1, 1783434537, '1783434537_1');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `bom_costs`
+--
+
+DROP TABLE IF EXISTS `bom_costs`;
+CREATE TABLE IF NOT EXISTS `bom_costs` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `cost_type` varchar(30) COLLATE utf8mb3_unicode_ci NOT NULL,
+  `amount` decimal(10,2) NOT NULL,
+  `bom` int NOT NULL,
+  `auth_user` int NOT NULL,
+  `updated` int NOT NULL,
+  `created` varchar(35) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM AUTO_INCREMENT=69 DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_unicode_ci;
+
+--
+-- Dumping data for table `bom_costs`
+--
+
+INSERT INTO `bom_costs` (`id`, `cost_type`, `amount`, `bom`, `auth_user`, `updated`, `created`) VALUES
+(54, 'labour', 31.00, 12, 1, 1783485661, '1783434358_1'),
+(68, 'machining', 50.00, 13, 1, 1783485896, '1783485896_1'),
+(67, 'electricity', 20.00, 13, 1, 1783485866, '1783485866_1'),
+(63, 'machining', 40.00, 12, 1, 1783485676, '1783485676_1'),
+(64, 'electricity', 50.00, 12, 1, 1783485699, '1783485699_1'),
+(65, 'packaging', 60.00, 12, 1, 1783485699, '1783485699_1'),
+(66, 'overhead', 70.00, 12, 1, 1783485699, '1783485699_1');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `bom_items`
+--
+
+DROP TABLE IF EXISTS `bom_items`;
+CREATE TABLE IF NOT EXISTS `bom_items` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `raw_material` int NOT NULL,
+  `quantity` decimal(10,2) NOT NULL,
+  `wastage_quantity` decimal(10,2) NOT NULL,
+  `bom` int NOT NULL,
+  `rate` decimal(10,2) DEFAULT NULL,
+  `auth_user` int NOT NULL,
+  `updated` int NOT NULL,
+  `created` varchar(35) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM AUTO_INCREMENT=60 DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_unicode_ci;
+
+--
+-- Dumping data for table `bom_items`
+--
+
+INSERT INTO `bom_items` (`id`, `raw_material`, `quantity`, `wastage_quantity`, `bom`, `rate`, `auth_user`, `updated`, `created`) VALUES
+(49, 17, 300.00, 0.00, 11, 1.00, 1, 1783178868, '1783178868_1'),
+(48, 16, 200.00, 0.00, 11, 1.00, 1, 1783178868, '1783178868_1'),
+(47, 15, 110.00, 0.00, 11, 1.00, 1, 1783431706, '1783178868_1'),
+(50, 15, 101.00, 0.00, 11, NULL, 1, 1783421325, '1783421319_1'),
+(51, 15, 223.00, 0.00, 11, NULL, 1, 1783431730, '1783431724_1'),
+(52, 7, 12.00, 0.00, 12, NULL, 1, 1783434521, '1783434358_1'),
+(53, 16, 20.00, 0.00, 12, NULL, 1, 1783434358, '1783434358_1'),
+(54, 17, 30.00, 0.00, 12, NULL, 1, 1783434358, '1783434358_1'),
+(55, 7, 1.00, 0.00, 13, NULL, 1, 1783434554, '1783434554_1'),
+(56, 6, 5.00, 1.00, 13, NULL, 1, 1783435214, '1783434554_1'),
+(59, 11, 11.00, 3.00, 13, NULL, 1, 1783435249, '1783435239_1');
 
 -- --------------------------------------------------------
 
@@ -95,12 +190,12 @@ CREATE TABLE IF NOT EXISTS `column_history` (
   `row_id` int DEFAULT NULL,
   `column_name` varchar(100) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci DEFAULT NULL,
   `value` text CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci,
-  `notes` text COLLATE utf8mb3_unicode_ci,
+  `notes` text CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci,
   `auth_user` int DEFAULT NULL,
   `updated` int DEFAULT NULL,
   `created` varchar(35) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=287 DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_unicode_ci;
+) ENGINE=MyISAM AUTO_INCREMENT=500 DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_unicode_ci;
 
 --
 -- Dumping data for table `column_history`
@@ -392,7 +487,220 @@ INSERT INTO `column_history` (`id`, `table_name`, `row_id`, `column_name`, `valu
 (283, 'invoice_items', 149, 'rate', '300', NULL, 1, 1783168559, '1783168559'),
 (284, 'invoice_items', 149, 'discount', '3', NULL, 1, 1783168559, '1783168559'),
 (285, 'dispatchs', 14, 'status', 'invoice_generated', '', 1, 1783168559, '1783168559'),
-(286, 'invoices', 15, 'status', 'generated', '', 1, 1783168559, '1783168559');
+(286, 'invoices', 15, 'status', 'generated', '', 1, 1783168559, '1783168559'),
+(287, 'dispatchs', 14, 'status', 'dispatched', NULL, 1, 1783175704, '1783175704'),
+(288, 'dispatchs', 14, 'status', 'dispatched', NULL, 1, 1783175722, '1783175722'),
+(289, 'dispatchs', 15, 'status', 'new', NULL, 1, 1783175922, '1783175922'),
+(290, 'dispatch_items', 108, 'quantity', '1', NULL, 1, 1783175959, '1783175959'),
+(291, 'dispatch_items', 109, 'quantity', '2', NULL, 1, 1783175959, '1783175959'),
+(292, 'dispatch_items', 110, 'quantity', '3', NULL, 1, 1783175959, '1783175959'),
+(293, 'dispatch_items', 111, 'quantity', '4', NULL, 1, 1783175959, '1783175959'),
+(294, 'dispatch_items', 112, 'quantity', '5', NULL, 1, 1783175959, '1783175959'),
+(295, 'dispatchs', 14, 'status', 'packed_and_ready', NULL, 1, 1783176270, '1783176270'),
+(296, 'dispatchs', 14, 'status', 'invoice_generated', NULL, 1, 1783176278, '1783176278'),
+(297, 'dispatchs', 14, 'status', 'dispatched', NULL, 1, 1783176284, '1783176284'),
+(298, 'dispatchs', 14, 'status', 'dispatched', NULL, 1, 1783176304, '1783176304'),
+(299, 'dispatchs', 14, 'status', 'dispatched', NULL, 1, 1783176365, '1783176365'),
+(300, 'dispatchs', 14, 'status', 'dispatched', NULL, 1, 1783177106, '1783177106'),
+(301, 'dispatchs', 14, 'status', 'dispatched', NULL, 1, 1783177270, '1783177270'),
+(302, 'dispatchs', 15, 'status', 'packed_and_ready', NULL, 1, 1783177369, '1783177369'),
+(303, 'dispatchs', 15, 'status', 'dispatched', NULL, 1, 1783177374, '1783177374'),
+(304, 'dispatchs', 16, 'status', 'new', NULL, 1, 1783177582, '1783177582'),
+(305, 'dispatch_items', 113, 'quantity', '5', NULL, 1, 1783177598, '1783177598'),
+(306, 'dispatch_items', 114, 'quantity', '10', NULL, 1, 1783177598, '1783177598'),
+(307, 'dispatch_items', 115, 'quantity', '15', NULL, 1, 1783177598, '1783177598'),
+(308, 'dispatch_items', 116, 'quantity', '20', NULL, 1, 1783177598, '1783177598'),
+(309, 'dispatch_items', 117, 'quantity', '25', NULL, 1, 1783177598, '1783177598'),
+(310, 'dispatchs', 16, 'status', 'invoice_generated', NULL, 1, 1783177618, '1783177618'),
+(311, 'dispatchs', 16, 'status', 'dispatched', NULL, 1, 1783177622, '1783177622'),
+(312, 'dispatchs', 17, 'status', 'new', NULL, 1, 1783178095, '1783178095'),
+(313, 'dispatch_items', 118, 'quantity', '54', NULL, 1, 1783178467, '1783178467'),
+(314, 'dispatch_items', 119, 'quantity', '63', NULL, 1, 1783178467, '1783178467'),
+(315, 'dispatch_items', 120, 'quantity', '78', NULL, 1, 1783178467, '1783178467'),
+(316, 'dispatch_items', 121, 'quantity', '76', NULL, 1, 1783178467, '1783178467'),
+(317, 'dispatch_items', 122, 'quantity', '65', NULL, 1, 1783178467, '1783178467'),
+(318, 'dispatchs', 17, 'status', 'packed_and_ready', NULL, 1, 1783178483, '1783178483'),
+(319, 'dispatchs', 17, 'status', 'invoice_generated', NULL, 1, 1783178485, '1783178485'),
+(320, 'dispatchs', 17, 'status', 'dispatched', NULL, 1, 1783178494, '1783178494'),
+(321, 'dispatchs', 18, 'status', 'new', NULL, 1, 1783178554, '1783178554'),
+(322, 'orders', 11, 'status', 'order_placed', NULL, 1, 1783178807, '1783178807'),
+(323, 'orders', 11, 'payment_status', 'pending', NULL, 1, 1783178807, '1783178807'),
+(324, 'orders', 11, 'status', 'order_confirmed', NULL, 1, 1783178814, '1783178814'),
+(325, 'order_items', 47, 'rate', '1', NULL, 1, 1783178868, '1783178868'),
+(326, 'order_items', 47, 'quantity', '100', NULL, 1, 1783178868, '1783178868'),
+(327, 'order_items', 48, 'rate', '1', NULL, 1, 1783178868, '1783178868'),
+(328, 'order_items', 48, 'quantity', '200', NULL, 1, 1783178868, '1783178868'),
+(329, 'order_items', 49, 'rate', '1', NULL, 1, 1783178868, '1783178868'),
+(330, 'order_items', 49, 'quantity', '300', NULL, 1, 1783178868, '1783178868'),
+(331, 'dispatchs', 19, 'status', 'new', NULL, 1, 1783178923, '1783178923'),
+(332, 'dispatch_items', 123, 'quantity', '10', NULL, 1, 1783178966, '1783178966'),
+(333, 'dispatch_items', 124, 'quantity', '20', NULL, 1, 1783178966, '1783178966'),
+(334, 'dispatch_items', 125, 'quantity', '30', NULL, 1, 1783178966, '1783178966'),
+(335, 'dispatch_items', 126, 'quantity', '40', NULL, 1, 1783178966, '1783178966'),
+(336, 'dispatch_items', 127, 'quantity', '50', NULL, 1, 1783178966, '1783178966'),
+(337, 'dispatch_items', 128, 'quantity', '20', NULL, 1, 1783179017, '1783179017'),
+(338, 'dispatchs', 19, 'status', 'packed_and_ready', NULL, 1, 1783179145, '1783179145'),
+(339, 'invoices', 17, 'status', 'draft', NULL, 1, 1783179156, '1783179156'),
+(340, 'invoice_items', 150, 'rate', '100', NULL, 1, 1783179183, '1783179183'),
+(341, 'invoice_items', 150, 'discount', '5', NULL, 1, 1783179183, '1783179183'),
+(342, 'invoice_items', 151, 'rate', '200', NULL, 1, 1783179183, '1783179183'),
+(343, 'invoice_items', 151, 'discount', '6', NULL, 1, 1783179183, '1783179183'),
+(344, 'invoice_items', 152, 'rate', '300', NULL, 1, 1783179183, '1783179183'),
+(345, 'invoice_items', 152, 'discount', '7', NULL, 1, 1783179183, '1783179183'),
+(346, 'dispatchs', 19, 'status', 'invoice_generated', '', 1, 1783179183, '1783179183'),
+(347, 'invoices', 17, 'status', 'generated', '', 1, 1783179183, '1783179183'),
+(348, 'invoices', 17, 'status', 'cancelled', NULL, 1, 1783179231, '1783179231'),
+(349, 'dispatchs', 19, 'status', 'new', 'Status changed because invoice was cancelled', 1, 1783179231, '1783179231'),
+(350, 'invoices', 18, 'status', 'draft', NULL, 1, 1783179254, '1783179254'),
+(351, 'invoice_items', 153, 'rate', '1000', NULL, 1, 1783179275, '1783179275'),
+(352, 'invoice_items', 153, 'discount', '5', NULL, 1, 1783179275, '1783179275'),
+(353, 'invoice_items', 154, 'rate', '2000', NULL, 1, 1783179275, '1783179275'),
+(354, 'invoice_items', 154, 'discount', '10', NULL, 1, 1783179275, '1783179275'),
+(355, 'invoice_items', 155, 'rate', '3000', NULL, 1, 1783179275, '1783179275'),
+(356, 'invoice_items', 155, 'discount', '15', NULL, 1, 1783179275, '1783179275'),
+(357, 'dispatchs', 19, 'status', 'invoice_generated', '', 1, 1783179275, '1783179275'),
+(358, 'invoices', 18, 'status', 'generated', '', 1, 1783179275, '1783179275'),
+(359, 'dispatchs', 19, 'status', 'dispatched', NULL, 1, 1783179327, '1783179327'),
+(360, 'dispatchs', 20, 'status', 'new', NULL, 1, 1783179405, '1783179405'),
+(361, 'order_items', 50, 'quantity', '100', NULL, 1, 1783421319, '1783421319'),
+(362, 'order_items', 50, 'quantity', '101', NULL, 1, 1783421325, '1783421325'),
+(363, 'payments', 22, 'status', 'pending', NULL, 1, 1783426314, '1783426314'),
+(364, 'payments', 22, 'status', 'completed', NULL, 1, 1783426368, '1783426368'),
+(365, 'payments', 23, 'status', 'pending', NULL, 1, 1783428355, '1783428355'),
+(366, 'payments', 24, 'status', 'completed', NULL, 1, 1783428467, '1783428467'),
+(367, 'payments', 25, 'status', 'completed', NULL, 1, 1783428501, '1783428501'),
+(368, 'payments', 26, 'status', 'completed', NULL, 1, 1783429504, '1783429504'),
+(369, 'dispatch_items', 129, 'quantity', '20', NULL, 1, 1783431610, '1783431610'),
+(370, 'dispatch_items', 130, 'quantity', '30', NULL, 1, 1783431610, '1783431610'),
+(371, 'dispatch_items', 131, 'quantity', '40', NULL, 1, 1783431610, '1783431610'),
+(372, 'dispatch_items', 132, 'quantity', '50', NULL, 1, 1783431610, '1783431610'),
+(373, 'dispatch_items', 133, 'quantity', '60', NULL, 1, 1783431610, '1783431610'),
+(374, 'order_items', 47, 'quantity', '110.00', NULL, 1, 1783431706, '1783431706'),
+(375, 'order_items', 51, 'quantity', '222', NULL, 1, 1783431724, '1783431724'),
+(376, 'order_items', 51, 'quantity', '223', NULL, 1, 1783431730, '1783431730'),
+(377, 'boms', 11, 'status', 'active', NULL, 1, 1783433858, '1783433858'),
+(378, 'boms', 11, 'status', 'draft', NULL, 1, 1783433937, '1783433937'),
+(379, 'boms', 11, 'status', 'inactive', NULL, 1, 1783433942, '1783433942'),
+(380, 'boms', 12, 'status', 'active', NULL, 1, 1783433954, '1783433954'),
+(381, 'bom_items', 52, 'quantity', '10', NULL, 1, 1783434358, '1783434358'),
+(382, 'bom_items', 53, 'quantity', '20', NULL, 1, 1783434358, '1783434358'),
+(383, 'bom_items', 54, 'quantity', '30', NULL, 1, 1783434358, '1783434358'),
+(384, 'bom_items', 52, 'quantity', '11', NULL, 1, 1783434368, '1783434368'),
+(385, 'bom_items', 52, 'quantity', '12', NULL, 1, 1783434521, '1783434521'),
+(386, 'boms', 13, 'status', 'active', NULL, 1, 1783434537, '1783434537'),
+(387, 'bom_items', 55, 'quantity', '1', NULL, 1, 1783434554, '1783434554'),
+(388, 'bom_items', 56, 'quantity', '2', NULL, 1, 1783434554, '1783434554'),
+(389, 'bom_items', 57, 'quantity', '3', NULL, 1, 1783434554, '1783434554'),
+(390, 'bom_items', 56, 'quantity', '5', NULL, 1, 1783434592, '1783434592'),
+(391, 'bom_items', 58, 'quantity', '10', NULL, 1, 1783434617, '1783434617'),
+(392, 'bom_items', 56, 'wastage_quantity', '1', NULL, 1, 1783435214, '1783435214'),
+(393, 'bom_items', 59, 'quantity', '10', NULL, 1, 1783435239, '1783435239'),
+(394, 'bom_items', 59, 'wastage_quantity', '2', NULL, 1, 1783435239, '1783435239'),
+(395, 'bom_items', 59, 'quantity', '11', NULL, 1, 1783435249, '1783435249'),
+(396, 'bom_items', 59, 'wastage_quantity', '3', NULL, 1, 1783435249, '1783435249'),
+(397, 'bom_costs', 60, 'quantity', '20', NULL, 1, 1783484467, '1783484467'),
+(398, 'bom_costs', 60, 'wastage_quantity', '2', NULL, 1, 1783484467, '1783484467'),
+(399, 'bom_costs', 61, 'quantity', '30', NULL, 1, 1783484467, '1783484467'),
+(400, 'bom_costs', 61, 'wastage_quantity', '3', NULL, 1, 1783484467, '1783484467'),
+(401, 'bom_costs', 62, 'quantity', '40', NULL, 1, 1783484467, '1783484467'),
+(402, 'bom_costs', 62, 'wastage_quantity', '4', NULL, 1, 1783484467, '1783484467'),
+(403, 'bom_costs', 60, 'quantity', '24', NULL, 1, 1783484483, '1783484483'),
+(404, 'bom_costs', 54, 'amount', '31', NULL, 1, 1783485641, '1783485641'),
+(405, 'bom_costs', 63, 'amount', '40', NULL, 1, 1783485676, '1783485676'),
+(406, 'bom_costs', 64, 'amount', '50', NULL, 1, 1783485699, '1783485699'),
+(407, 'bom_costs', 65, 'amount', '60', NULL, 1, 1783485699, '1783485699'),
+(408, 'bom_costs', 66, 'amount', '70', NULL, 1, 1783485699, '1783485699'),
+(409, 'bom_costs', 67, 'amount', '20', NULL, 1, 1783485866, '1783485866'),
+(410, 'bom_costs', 68, 'amount', '50', NULL, 1, 1783485896, '1783485896'),
+(411, 'raw_material_rates', 153, 'rate', '1001', NULL, 1, 1783490397, '1783490397'),
+(412, 'raw_material_rates', 154, 'rate', '2001', NULL, 1, 1783490397, '1783490397'),
+(413, 'raw_material_rates', 155, 'rate', '3001', NULL, 1, 1783490397, '1783490397'),
+(414, 'raw_material_rates', 153, 'quantity', '20260708', NULL, 1, 1783490434, '1783490434'),
+(415, 'raw_material_rates', 154, 'quantity', '20260708', NULL, 1, 1783490434, '1783490434'),
+(416, 'raw_material_rates', 155, 'quantity', '20260708', NULL, 1, 1783490434, '1783490434'),
+(417, 'raw_material_rates', 69, 'amount', '50', NULL, 1, 1783492030, '1783492030'),
+(418, 'raw_material_rates', 70, 'amount', '100', NULL, 1, 1783492030, '1783492030'),
+(419, 'raw_material_rates', 71, 'amount', '33', NULL, 1, 1783492109, '1783492109'),
+(420, 'raw_material_rates', 72, 'amount', '222', NULL, 1, 1783492109, '1783492109'),
+(421, 'raw_material_rates', 73, 'amount', '33', NULL, 1, 1783492133, '1783492133'),
+(422, 'raw_material_rates', 74, 'amount', '44', NULL, 1, 1783492133, '1783492133'),
+(423, 'raw_material_rates', 75, 'amount', '55', NULL, 1, 1783492133, '1783492133'),
+(424, 'raw_material_rates', 76, 'amount', '666', NULL, 1, 1783492218, '1783492218'),
+(425, 'raw_material_rates', 77, 'amount', '555', NULL, 1, 1783492218, '1783492218'),
+(426, 'raw_material_rates', 72, 'amount', '224', NULL, 1, 1783492403, '1783492403'),
+(427, 'raw_material_rates', 77, 'amount', '558', NULL, 1, 1783492433, '1783492433'),
+(428, 'raw_material_rates', 76, 'amount', '668', NULL, 1, 1783492437, '1783492437'),
+(429, 'raw_material_rates', 78, 'amount', '100', NULL, 1, 1783494587, '1783494587'),
+(430, 'raw_material_rates', 79, 'amount', '200', NULL, 1, 1783494587, '1783494587'),
+(431, 'raw_material_rates', 80, 'amount', '300', NULL, 1, 1783494587, '1783494587'),
+(432, 'raw_material_rates', 78, 'amount', '101', NULL, 1, 1783494763, '1783494763'),
+(433, 'raw_material_rates', 80, 'amount', '301', NULL, 1, 1783495419, '1783495419'),
+(434, 'raw_material_rates', 79, 'amount', '202', NULL, 1, 1783495429, '1783495429'),
+(435, 'raw_material_rates', 81, 'amount', '523', NULL, 1, 1783496221, '1783496221'),
+(436, 'raw_material_rates', 81, 'amount', '525', NULL, 1, 1783496324, '1783496324'),
+(437, 'raw_material_rates', 82, 'amount', '560', NULL, 1, 1783496640, '1783496640'),
+(438, 'raw_material_rates', 81, 'amount', '663', NULL, 1, 1783496651, '1783496651'),
+(439, 'raw_material_rates', 83, 'amount', '965', NULL, 1, 1783496664, '1783496664'),
+(440, 'raw_material_rates', 84, 'amount', '784', NULL, 1, 1783497006, '1783497006'),
+(441, 'raw_material_rates', 84, 'amount', '786', NULL, 1, 1783497093, '1783497093'),
+(442, 'raw_material_rates', 82, 'amount', '562', NULL, 1, 1783497101, '1783497101'),
+(443, 'raw_material_rates', 80, 'amount', '304', NULL, 1, 1783497104, '1783497104'),
+(444, 'raw_material_rates', 85, 'amount', '784', NULL, 1, 1783497114, '1783497114'),
+(445, 'raw_material_rates', 85, 'rate', '786', NULL, 1, 1783497370, '1783497370'),
+(446, 'raw_material_rates', 86, 'rate', '32222', NULL, 1, 1783497378, '1783497378'),
+(447, 'raw_material_rates', 86, 'rate', '32224', NULL, 1, 1783497381, '1783497381'),
+(448, 'raw_material_rates', 87, 'rate', '32', NULL, 1, 1783497422, '1783497422'),
+(449, 'raw_material_rates', 88, 'rate', '1', NULL, 1, 1783497431, '1783497431'),
+(450, 'raw_material_rates', 89, 'rate', '3', NULL, 1, 1783497440, '1783497440'),
+(451, 'raw_material_rates', 90, 'rate', '12', NULL, 1, 1783497440, '1783497440'),
+(452, 'raw_material_rates', 90, 'rate', '13', NULL, 1, 1783497444, '1783497444'),
+(453, 'raw_material_rates', 89, 'rate', '54', NULL, 1, 1783497449, '1783497449'),
+(454, 'raw_material_rates', 91, 'rate', '12', NULL, 1, 1783497716, '1783497716'),
+(455, 'raw_material_rates', 91, 'effective_date', '232320', NULL, 1, 1783497716, '1783497716'),
+(456, 'raw_material_rates', 92, 'rate', '20', NULL, 1, 1783497716, '1783497716'),
+(457, 'raw_material_rates', 92, 'effective_date', '5656', NULL, 1, 1783497716, '1783497716'),
+(458, 'raw_material_rates', 91, 'effective_date', '20260708', NULL, 1, 1783497897, '1783497897'),
+(459, 'raw_material_rates', 91, 'effective_date', '20260709', NULL, 1, 1783497902, '1783497902'),
+(460, 'raw_material_rates', 91, 'rate', '15', NULL, 1, 1783497912, '1783497912'),
+(461, 'raw_material_rates', 91, 'effective_date', '20260708', NULL, 1, 1783497916, '1783497916'),
+(462, 'raw_material_rates', 91, 'effective_date', '20260709', NULL, 1, 1783497957, '1783497957'),
+(463, 'raw_material_rates', 88, 'effective_date', '20260710', NULL, 1, 1783498203, '1783498203'),
+(464, 'raw_material_rates', 93, 'rate', '22', NULL, 1, 1783498214, '1783498214'),
+(465, 'raw_material_rates', 93, 'effective_date', '20260708', NULL, 1, 1783498214, '1783498214'),
+(466, 'raw_material_rates', 93, 'effective_date', '20260710', NULL, 1, 1783498220, '1783498220'),
+(467, 'raw_material_rates', 93, 'rate', '24', NULL, 1, 1783498230, '1783498230'),
+(468, 'raw_material_rates', 94, 'rate', '1', NULL, 1, 1783498336, '1783498336'),
+(469, 'raw_material_rates', 94, 'effective_date', '11', NULL, 1, 1783498336, '1783498336'),
+(470, 'raw_material_rates', 95, 'rate', '111', NULL, 1, 1783498806, '1783498806'),
+(471, 'raw_material_rates', 95, 'effective_date', '20260708', NULL, 1, 1783498806, '1783498806'),
+(472, 'raw_material_rates', 96, 'rate', '123', NULL, 1, 1783498806, '1783498806'),
+(473, 'raw_material_rates', 96, 'effective_date', '20260716', NULL, 1, 1783498806, '1783498806'),
+(474, 'raw_material_rates', 96, 'effective_date', '20260715', NULL, 1, 1783498819, '1783498819'),
+(475, 'raw_material_rates', 97, 'rate', '63', NULL, 1, 1783498831, '1783498831'),
+(476, 'raw_material_rates', 97, 'effective_date', '20260725', NULL, 1, 1783498831, '1783498831'),
+(477, 'raw_material_rates', 97, 'effective_date', '20260713', NULL, 1, 1783498836, '1783498836'),
+(478, 'invoices', 19, 'status', 'draft', NULL, 1, 1783508265, '1783508265'),
+(479, 'invoice_items', 156, 'discount', '0', NULL, 1, 1783508604, '1783508604'),
+(480, 'invoice_items', 157, 'rate', '1200', NULL, 1, 1783508604, '1783508604'),
+(481, 'invoice_items', 157, 'discount', '0', NULL, 1, 1783508604, '1783508604'),
+(482, 'invoice_items', 158, 'rate', '300', NULL, 1, 1783508604, '1783508604'),
+(483, 'invoice_items', 158, 'discount', '0', NULL, 1, 1783508604, '1783508604'),
+(484, 'dispatchs', 20, 'status', 'invoice_generated', '', 1, 1783508604, '1783508604'),
+(485, 'invoices', 19, 'status', 'generated', '', 1, 1783508604, '1783508604'),
+(486, 'invoice_items', 156, 'rate', '909', NULL, 1, 1783508676, '1783508676'),
+(487, 'dispatchs', 20, 'status', 'packed_and_ready', NULL, 1, 1783508700, '1783508700'),
+(488, 'invoices', 19, 'status', 'cancelled', NULL, 1, 1783508715, '1783508715'),
+(489, 'dispatchs', 20, 'status', 'new', 'Status changed because invoice was cancelled', 1, 1783508715, '1783508715'),
+(490, 'invoices', 20, 'status', 'draft', NULL, 1, 1783508725, '1783508725'),
+(491, 'invoice_items', 159, 'rate', '907', NULL, 1, 1783509012, '1783509012'),
+(492, 'invoice_items', 159, 'discount', '1', NULL, 1, 1783509012, '1783509012'),
+(493, 'invoice_items', 160, 'rate', '111', NULL, 1, 1783509012, '1783509012'),
+(494, 'invoice_items', 160, 'discount', '2', NULL, 1, 1783509012, '1783509012'),
+(495, 'invoice_items', 161, 'rate', '222', NULL, 1, 1783509012, '1783509012'),
+(496, 'invoice_items', 161, 'discount', '3', NULL, 1, 1783509012, '1783509012'),
+(497, 'dispatchs', 20, 'status', 'invoice_generated', '', 1, 1783509012, '1783509012'),
+(498, 'invoices', 20, 'status', 'generated', '', 1, 1783509012, '1783509012'),
+(499, 'invoice_items', 159, 'rate', '909', NULL, 1, 1783509056, '1783509056');
 
 -- --------------------------------------------------------
 
@@ -414,7 +722,7 @@ CREATE TABLE IF NOT EXISTS `customers` (
   `zone` varchar(100) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci DEFAULT NULL,
   `gst` varchar(20) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci DEFAULT NULL,
   `category` varchar(30) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci DEFAULT NULL,
-  `gst_type` varchar(10) COLLATE utf8mb3_unicode_ci DEFAULT NULL,
+  `gst_type` varchar(10) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci DEFAULT NULL,
   `price_allotment` varchar(10) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci DEFAULT NULL,
   `active` varchar(5) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci DEFAULT NULL,
   `auth_user` int NOT NULL,
@@ -449,14 +757,15 @@ CREATE TABLE IF NOT EXISTS `dispatchs` (
   `updated` int NOT NULL,
   `created` varchar(35) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=15 DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_unicode_ci;
+) ENGINE=MyISAM AUTO_INCREMENT=21 DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_unicode_ci;
 
 --
 -- Dumping data for table `dispatchs`
 --
 
 INSERT INTO `dispatchs` (`id`, `order_id`, `notes`, `status`, `created_on_date`, `xxxinvoice`, `auth_user`, `updated`, `created`) VALUES
-(14, 10, '', 'invoice_generated', 20260702, 0, 1, 1783168559, '1782985688_1');
+(20, 11, '', 'invoice_generated', 20260705, 0, 1, 1783509012, '1783179405_1'),
+(19, 11, '', 'dispatched', 20260704, 0, 1, 1783179327, '1783178923_1');
 
 -- --------------------------------------------------------
 
@@ -476,22 +785,23 @@ CREATE TABLE IF NOT EXISTS `dispatch_items` (
   `updated` int NOT NULL,
   `created` varchar(35) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=108 DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_unicode_ci;
+) ENGINE=MyISAM AUTO_INCREMENT=134 DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_unicode_ci;
 
 --
 -- Dumping data for table `dispatch_items`
 --
 
 INSERT INTO `dispatch_items` (`id`, `dispatch`, `product`, `quantity`, `order_id`, `product_lot`, `auth_user`, `updated`, `created`) VALUES
-(107, 14, 17, 5.00, 10, 18, 1, 1783062016, '1783062016_1'),
-(105, 14, 16, 4.00, 10, 15, 1, 1783062016, '1783062016_1'),
-(104, 14, 15, 35.00, 10, 14, 1, 1783062016, '1783062016_1'),
-(103, 14, 15, 40.00, 10, 16, 1, 1783062016, '1783062016_1'),
-(101, 14, 17, 85.00, 10, 18, 1, 1783061253, '1783061253_1'),
-(100, 14, 16, 90.00, 10, 17, 1, 1783061253, '1783061253_1'),
-(99, 14, 16, 83.00, 10, 15, 1, 1783061253, '1783061253_1'),
-(98, 14, 15, 22.00, 10, 14, 1, 1783061253, '1783061253_1'),
-(102, 14, 15, 33.00, 10, 16, 1, 1783061388, '1783061388_1');
+(127, 19, 17, 50.00, 11, 18, 1, 1783178966, '1783178966_1'),
+(126, 19, 16, 40.00, 11, 17, 1, 1783178966, '1783178966_1'),
+(125, 19, 16, 30.00, 11, 15, 1, 1783178966, '1783178966_1'),
+(124, 19, 15, 20.00, 11, 14, 1, 1783178966, '1783178966_1'),
+(123, 19, 15, 10.00, 11, 16, 1, 1783178966, '1783178966_1'),
+(129, 20, 15, 20.00, 11, 16, 1, 1783431610, '1783431610_1'),
+(130, 20, 15, 30.00, 11, 14, 1, 1783431610, '1783431610_1'),
+(131, 20, 16, 40.00, 11, 15, 1, 1783431610, '1783431610_1'),
+(132, 20, 16, 50.00, 11, 17, 1, 1783431610, '1783431610_1'),
+(133, 20, 17, 60.00, 11, 18, 1, 1783431610, '1783431610_1');
 
 -- --------------------------------------------------------
 
@@ -535,15 +845,17 @@ CREATE TABLE IF NOT EXISTS `invoices` (
   `updated` int NOT NULL,
   `created` varchar(35) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=17 DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_unicode_ci;
+) ENGINE=MyISAM AUTO_INCREMENT=21 DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_unicode_ci;
 
 --
 -- Dumping data for table `invoices`
 --
 
 INSERT INTO `invoices` (`id`, `dispatch`, `notes`, `status`, `created_on_date`, `auth_user`, `updated`, `created`) VALUES
-(15, 14, 'test1131133317', 'generated', 20260703, 1, 1783168559, '1783078688_1'),
-(16, 14, 'new gen', 'generated', 20260704, 1, 1783162005, '1783160920_1');
+(18, 19, '', 'generated', 20260704, 1, 1783179275, '1783179254_1'),
+(17, 19, '', 'cancelled', 20260704, 1, 1783179231, '1783179156_1'),
+(19, 20, 'testtest', 'cancelled', 20260708, 1, 1783508715, '1783508265_1'),
+(20, 20, '', 'generated', 20260709, 1, 1783509012, '1783508725_1');
 
 -- --------------------------------------------------------
 
@@ -568,16 +880,25 @@ CREATE TABLE IF NOT EXISTS `invoice_items` (
   `updated` int NOT NULL,
   `created` varchar(35) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=150 DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_unicode_ci;
+) ENGINE=MyISAM AUTO_INCREMENT=162 DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_unicode_ci;
 
 --
 -- Dumping data for table `invoice_items`
 --
 
 INSERT INTO `invoice_items` (`id`, `invoice`, `dispatch`, `product`, `quantity`, `rate`, `discount`, `igst`, `cgst`, `sgst`, `order_id`, `auth_user`, `updated`, `created`) VALUES
-(149, 15, 14, 17, 90.00, 300.00, 3.00, 28.00, 14.00, 14.00, 10, 1, 1783168559, '1783168559_1'),
-(148, 15, 14, 16, 177.00, 200.00, 2.00, 18.00, 9.00, 9.00, 10, 1, 1783168559, '1783168559_1'),
-(147, 15, 14, 15, 130.00, 100.00, 1.00, 18.00, 9.00, 9.00, 10, 1, 1783168559, '1783168559_1');
+(152, 17, 19, 17, 50.00, 300.00, 7.00, 28.00, 14.00, 14.00, 11, 1, 1783179183, '1783179183_1'),
+(151, 17, 19, 16, 70.00, 200.00, 6.00, 18.00, 9.00, 9.00, 11, 1, 1783179183, '1783179183_1'),
+(150, 17, 19, 15, 30.00, 100.00, 5.00, 18.00, 9.00, 9.00, 11, 1, 1783179183, '1783179183_1'),
+(153, 18, 19, 15, 30.00, 1000.00, 5.00, 18.00, 9.00, 9.00, 11, 1, 1783179275, '1783179275_1'),
+(154, 18, 19, 16, 70.00, 2000.00, 10.00, 18.00, 9.00, 9.00, 11, 1, 1783179275, '1783179275_1'),
+(155, 18, 19, 17, 50.00, 3000.00, 15.00, 28.00, 14.00, 14.00, 11, 1, 1783179275, '1783179275_1'),
+(156, 19, 20, 15, 50.00, 909.00, 0.00, 18.00, 9.00, 9.00, 11, 1, 1783508676, '1783508604_1'),
+(157, 19, 20, 16, 90.00, 1200.00, 0.00, 18.00, 9.00, 9.00, 11, 1, 1783508676, '1783508604_1'),
+(158, 19, 20, 17, 60.00, 300.00, 0.00, 28.00, 14.00, 14.00, 11, 1, 1783508676, '1783508604_1'),
+(159, 20, 20, 15, 50.00, 909.00, 1.00, 18.00, 9.00, 9.00, 11, 1, 1783509056, '1783509012_1'),
+(160, 20, 20, 16, 90.00, 111.00, 2.00, 18.00, 9.00, 9.00, 11, 1, 1783509056, '1783509012_1'),
+(161, 20, 20, 17, 60.00, 222.00, 3.00, 28.00, 14.00, 14.00, 11, 1, 1783509056, '1783509012_1');
 
 -- --------------------------------------------------------
 
@@ -596,81 +917,89 @@ CREATE TABLE IF NOT EXISTS `ipadd` (
   `sessionid` varchar(255) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
   `accounttype` varchar(255) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=93 DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_unicode_ci;
+) ENGINE=MyISAM AUTO_INCREMENT=101 DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_unicode_ci;
 
 --
 -- Dumping data for table `ipadd`
 --
 
 INSERT INTO `ipadd` (`id`, `ip`, `mac`, `userId`, `logged_on`, `loggedout_on`, `sessionid`, `accounttype`) VALUES
-(48, '::1', '', 1, '2026-06-22 10:53:36', '2026-07-03 11:46:49', 'f3ln87nbgi9iae5pt5o4qe800m', ''),
-(47, '::1', '', 1, '2026-06-22 10:53:32', '2026-07-03 11:46:49', 'f3ln87nbgi9iae5pt5o4qe800m', ''),
-(46, '::1', '', 1, '2026-06-22 10:53:22', '2026-07-03 11:46:49', 'f3ln87nbgi9iae5pt5o4qe800m', ''),
-(45, '::1', '', 1, '2026-06-22 10:52:19', '2026-07-03 11:46:49', 'f3ln87nbgi9iae5pt5o4qe800m', ''),
-(44, '::1', '', 1, '2026-06-22 10:50:46', '2026-07-03 11:46:49', 'f3ln87nbgi9iae5pt5o4qe800m', ''),
-(43, '::1', '', 1, '2026-06-22 10:50:37', '2026-07-03 11:46:49', 'f3ln87nbgi9iae5pt5o4qe800m', ''),
-(42, '::1', '', 1, '2026-06-22 10:50:20', '2026-07-03 11:46:49', 'f3ln87nbgi9iae5pt5o4qe800m', ''),
-(41, '::1', '', 1, '2026-06-22 10:50:05', '2026-07-03 11:46:49', 'f3ln87nbgi9iae5pt5o4qe800m', ''),
-(40, '::1', '', 1, '2026-06-22 10:46:54', '2026-07-03 11:46:49', 'f3ln87nbgi9iae5pt5o4qe800m', ''),
-(39, '::1', '', 1, '2026-06-22 10:46:51', '2026-07-03 11:46:49', 'f3ln87nbgi9iae5pt5o4qe800m', ''),
-(38, '::1', '', 1, '2026-06-22 10:46:15', '2026-07-03 11:46:49', 'f3ln87nbgi9iae5pt5o4qe800m', ''),
-(37, '::1', '', 1, '2026-06-22 10:45:02', '2026-07-03 11:46:49', 'f3ln87nbgi9iae5pt5o4qe800m', ''),
-(36, '::1', '', 1, '2026-06-22 10:44:38', '2026-07-03 11:46:49', 'f3ln87nbgi9iae5pt5o4qe800m', ''),
-(35, '::1', '', 1, '2026-06-22 10:43:53', '2026-07-03 11:46:49', 'f3ln87nbgi9iae5pt5o4qe800m', ''),
-(34, '::1', '', 1, '2026-06-22 10:42:20', '2026-07-03 11:46:49', 'f3ln87nbgi9iae5pt5o4qe800m', ''),
-(33, '::1', '', 1, '2026-06-22 10:41:39', '2026-07-03 11:46:49', 'f3ln87nbgi9iae5pt5o4qe800m', ''),
-(32, '::1', '', 1, '2026-06-22 10:41:26', '2026-07-03 11:46:49', 'f3ln87nbgi9iae5pt5o4qe800m', ''),
-(31, '::1', '', 1, '2026-06-22 10:40:16', '2026-07-03 11:46:49', 'f3ln87nbgi9iae5pt5o4qe800m', ''),
-(30, '::1', '', 1, '2026-06-22 16:09:56', '2026-07-03 11:46:49', 'f3ln87nbgi9iae5pt5o4qe800m', ''),
-(29, '::1', '', 1, '2026-06-22 10:39:05', '2026-07-03 11:46:49', 'f3ln87nbgi9iae5pt5o4qe800m', ''),
-(28, '::1', '', 1, '2026-06-22 07:03:28', '2026-07-03 11:46:49', 'f3ln87nbgi9iae5pt5o4qe800m', ''),
-(27, '::1', '', 1, '2026-06-22 03:02:47', '2026-07-03 11:46:49', 'f3ln87nbgi9iae5pt5o4qe800m', ''),
-(25, '::1', '', 1, '2026-06-20 11:45:48', '2026-07-03 11:46:49', 'f3ln87nbgi9iae5pt5o4qe800m', ''),
-(26, '::1', '', 1, '2026-06-20 12:17:37', '2026-07-03 11:46:49', 'f3ln87nbgi9iae5pt5o4qe800m', ''),
-(49, '::1', '', 1, '2026-06-22 10:54:12', '2026-07-03 11:46:49', 'f3ln87nbgi9iae5pt5o4qe800m', ''),
-(50, '::1', '', 1, '2026-06-22 10:54:46', '2026-07-03 11:46:49', 'f3ln87nbgi9iae5pt5o4qe800m', ''),
-(51, '::1', '', 1, '2026-06-22 11:09:21', '2026-07-03 11:46:49', 'f3ln87nbgi9iae5pt5o4qe800m', ''),
-(52, '::1', '', 1, '2026-06-22 11:11:02', '2026-07-03 11:46:49', 'f3ln87nbgi9iae5pt5o4qe800m', ''),
-(53, '::1', '', 1, '2026-06-22 11:11:17', '2026-07-03 11:46:49', 'f3ln87nbgi9iae5pt5o4qe800m', ''),
-(54, '::1', '', 1, '2026-06-22 11:36:12', '2026-07-03 11:46:49', 'f3ln87nbgi9iae5pt5o4qe800m', ''),
-(55, '::1', '', 1, '2026-06-22 11:37:47', '2026-07-03 11:46:49', 'f3ln87nbgi9iae5pt5o4qe800m', ''),
-(56, '::1', '', 1, '2026-06-22 11:37:54', '2026-07-03 11:46:49', 'f3ln87nbgi9iae5pt5o4qe800m', ''),
-(57, '::1', '', 1, '2026-06-22 11:38:06', '2026-07-03 11:46:49', 'f3ln87nbgi9iae5pt5o4qe800m', ''),
-(58, '::1', '', 1, '2026-06-22 11:38:17', '2026-07-03 11:46:49', 'f3ln87nbgi9iae5pt5o4qe800m', ''),
-(59, '::1', '', 1, '2026-06-22 11:38:23', '2026-07-03 11:46:49', 'f3ln87nbgi9iae5pt5o4qe800m', ''),
-(60, '::1', '', 1, '2026-06-22 11:38:28', '2026-07-03 11:46:49', 'f3ln87nbgi9iae5pt5o4qe800m', ''),
-(61, '::1', '', 1, '2026-06-22 12:14:38', '2026-07-03 11:46:49', 'f3ln87nbgi9iae5pt5o4qe800m', ''),
-(62, '::1', '', 1, '2026-06-22 12:51:24', '2026-07-03 11:46:49', 'f3ln87nbgi9iae5pt5o4qe800m', ''),
-(63, '::1', '', 1, '2026-06-23 05:01:00', '2026-07-03 11:46:49', 'f3ln87nbgi9iae5pt5o4qe800m', ''),
-(64, '::1', '', 1, '2026-06-23 05:27:08', '2026-07-03 11:46:49', 'f3ln87nbgi9iae5pt5o4qe800m', ''),
-(65, '::1', '', 1, '2026-06-23 06:17:12', '2026-07-03 11:46:49', 'f3ln87nbgi9iae5pt5o4qe800m', ''),
+(48, '::1', '', 1, '2026-06-22 10:53:36', '2026-07-08 08:35:19', 'f3ln87nbgi9iae5pt5o4qe800m', ''),
+(47, '::1', '', 1, '2026-06-22 10:53:32', '2026-07-08 08:35:19', 'f3ln87nbgi9iae5pt5o4qe800m', ''),
+(46, '::1', '', 1, '2026-06-22 10:53:22', '2026-07-08 08:35:19', 'f3ln87nbgi9iae5pt5o4qe800m', ''),
+(45, '::1', '', 1, '2026-06-22 10:52:19', '2026-07-08 08:35:19', 'f3ln87nbgi9iae5pt5o4qe800m', ''),
+(44, '::1', '', 1, '2026-06-22 10:50:46', '2026-07-08 08:35:19', 'f3ln87nbgi9iae5pt5o4qe800m', ''),
+(43, '::1', '', 1, '2026-06-22 10:50:37', '2026-07-08 08:35:19', 'f3ln87nbgi9iae5pt5o4qe800m', ''),
+(42, '::1', '', 1, '2026-06-22 10:50:20', '2026-07-08 08:35:19', 'f3ln87nbgi9iae5pt5o4qe800m', ''),
+(41, '::1', '', 1, '2026-06-22 10:50:05', '2026-07-08 08:35:19', 'f3ln87nbgi9iae5pt5o4qe800m', ''),
+(40, '::1', '', 1, '2026-06-22 10:46:54', '2026-07-08 08:35:19', 'f3ln87nbgi9iae5pt5o4qe800m', ''),
+(39, '::1', '', 1, '2026-06-22 10:46:51', '2026-07-08 08:35:19', 'f3ln87nbgi9iae5pt5o4qe800m', ''),
+(38, '::1', '', 1, '2026-06-22 10:46:15', '2026-07-08 08:35:19', 'f3ln87nbgi9iae5pt5o4qe800m', ''),
+(37, '::1', '', 1, '2026-06-22 10:45:02', '2026-07-08 08:35:19', 'f3ln87nbgi9iae5pt5o4qe800m', ''),
+(36, '::1', '', 1, '2026-06-22 10:44:38', '2026-07-08 08:35:19', 'f3ln87nbgi9iae5pt5o4qe800m', ''),
+(35, '::1', '', 1, '2026-06-22 10:43:53', '2026-07-08 08:35:19', 'f3ln87nbgi9iae5pt5o4qe800m', ''),
+(34, '::1', '', 1, '2026-06-22 10:42:20', '2026-07-08 08:35:19', 'f3ln87nbgi9iae5pt5o4qe800m', ''),
+(33, '::1', '', 1, '2026-06-22 10:41:39', '2026-07-08 08:35:19', 'f3ln87nbgi9iae5pt5o4qe800m', ''),
+(32, '::1', '', 1, '2026-06-22 10:41:26', '2026-07-08 08:35:19', 'f3ln87nbgi9iae5pt5o4qe800m', ''),
+(31, '::1', '', 1, '2026-06-22 10:40:16', '2026-07-08 08:35:19', 'f3ln87nbgi9iae5pt5o4qe800m', ''),
+(30, '::1', '', 1, '2026-06-22 16:09:56', '2026-07-08 08:35:19', 'f3ln87nbgi9iae5pt5o4qe800m', ''),
+(29, '::1', '', 1, '2026-06-22 10:39:05', '2026-07-08 08:35:19', 'f3ln87nbgi9iae5pt5o4qe800m', ''),
+(28, '::1', '', 1, '2026-06-22 07:03:28', '2026-07-08 08:35:19', 'f3ln87nbgi9iae5pt5o4qe800m', ''),
+(27, '::1', '', 1, '2026-06-22 03:02:47', '2026-07-08 08:35:19', 'f3ln87nbgi9iae5pt5o4qe800m', ''),
+(25, '::1', '', 1, '2026-06-20 11:45:48', '2026-07-08 08:35:19', 'f3ln87nbgi9iae5pt5o4qe800m', ''),
+(26, '::1', '', 1, '2026-06-20 12:17:37', '2026-07-08 08:35:19', 'f3ln87nbgi9iae5pt5o4qe800m', ''),
+(49, '::1', '', 1, '2026-06-22 10:54:12', '2026-07-08 08:35:19', 'f3ln87nbgi9iae5pt5o4qe800m', ''),
+(50, '::1', '', 1, '2026-06-22 10:54:46', '2026-07-08 08:35:19', 'f3ln87nbgi9iae5pt5o4qe800m', ''),
+(51, '::1', '', 1, '2026-06-22 11:09:21', '2026-07-08 08:35:19', 'f3ln87nbgi9iae5pt5o4qe800m', ''),
+(52, '::1', '', 1, '2026-06-22 11:11:02', '2026-07-08 08:35:19', 'f3ln87nbgi9iae5pt5o4qe800m', ''),
+(53, '::1', '', 1, '2026-06-22 11:11:17', '2026-07-08 08:35:19', 'f3ln87nbgi9iae5pt5o4qe800m', ''),
+(54, '::1', '', 1, '2026-06-22 11:36:12', '2026-07-08 08:35:19', 'f3ln87nbgi9iae5pt5o4qe800m', ''),
+(55, '::1', '', 1, '2026-06-22 11:37:47', '2026-07-08 08:35:19', 'f3ln87nbgi9iae5pt5o4qe800m', ''),
+(56, '::1', '', 1, '2026-06-22 11:37:54', '2026-07-08 08:35:19', 'f3ln87nbgi9iae5pt5o4qe800m', ''),
+(57, '::1', '', 1, '2026-06-22 11:38:06', '2026-07-08 08:35:19', 'f3ln87nbgi9iae5pt5o4qe800m', ''),
+(58, '::1', '', 1, '2026-06-22 11:38:17', '2026-07-08 08:35:19', 'f3ln87nbgi9iae5pt5o4qe800m', ''),
+(59, '::1', '', 1, '2026-06-22 11:38:23', '2026-07-08 08:35:19', 'f3ln87nbgi9iae5pt5o4qe800m', ''),
+(60, '::1', '', 1, '2026-06-22 11:38:28', '2026-07-08 08:35:19', 'f3ln87nbgi9iae5pt5o4qe800m', ''),
+(61, '::1', '', 1, '2026-06-22 12:14:38', '2026-07-08 08:35:19', 'f3ln87nbgi9iae5pt5o4qe800m', ''),
+(62, '::1', '', 1, '2026-06-22 12:51:24', '2026-07-08 08:35:19', 'f3ln87nbgi9iae5pt5o4qe800m', ''),
+(63, '::1', '', 1, '2026-06-23 05:01:00', '2026-07-08 08:35:19', 'f3ln87nbgi9iae5pt5o4qe800m', ''),
+(64, '::1', '', 1, '2026-06-23 05:27:08', '2026-07-08 08:35:19', 'f3ln87nbgi9iae5pt5o4qe800m', ''),
+(65, '::1', '', 1, '2026-06-23 06:17:12', '2026-07-08 08:35:19', 'f3ln87nbgi9iae5pt5o4qe800m', ''),
 (66, '::1', '', 1, '2026-06-23 14:09:03', '2026-07-03 15:43:11', 'j7hqruivd767m89j9sk0t6i6tp', ''),
 (67, '::1', '', 1, '2026-06-23 14:25:51', '2026-07-03 15:43:11', 'j7hqruivd767m89j9sk0t6i6tp', ''),
-(68, '::1', '', 1, '2026-06-24 04:36:01', '2026-07-03 11:46:49', 'f3ln87nbgi9iae5pt5o4qe800m', ''),
-(69, '::1', '', 1, '2026-06-24 12:13:41', '2026-07-03 11:46:49', 'f3ln87nbgi9iae5pt5o4qe800m', ''),
-(70, '::1', '', 1, '2026-06-25 08:23:18', '2026-07-03 11:46:49', 'f3ln87nbgi9iae5pt5o4qe800m', ''),
-(71, '::1', '', 1, '2026-06-25 11:49:02', '2026-07-03 11:46:49', 'f3ln87nbgi9iae5pt5o4qe800m', ''),
-(72, '::1', '', 1, '2026-06-29 06:46:24', '2026-07-03 11:46:49', 'f3ln87nbgi9iae5pt5o4qe800m', ''),
-(73, '::1', '', 1, '2026-06-30 05:25:25', '2026-07-03 11:46:49', 'f3ln87nbgi9iae5pt5o4qe800m', ''),
-(74, '::1', '', 1, '2026-06-30 05:25:56', '2026-07-03 11:46:49', 'f3ln87nbgi9iae5pt5o4qe800m', ''),
-(75, '::1', '', 1, '2026-06-30 10:04:18', '2026-07-03 11:46:49', 'f3ln87nbgi9iae5pt5o4qe800m', ''),
+(68, '::1', '', 1, '2026-06-24 04:36:01', '2026-07-08 08:35:19', 'f3ln87nbgi9iae5pt5o4qe800m', ''),
+(69, '::1', '', 1, '2026-06-24 12:13:41', '2026-07-08 08:35:19', 'f3ln87nbgi9iae5pt5o4qe800m', ''),
+(70, '::1', '', 1, '2026-06-25 08:23:18', '2026-07-08 08:35:19', 'f3ln87nbgi9iae5pt5o4qe800m', ''),
+(71, '::1', '', 1, '2026-06-25 11:49:02', '2026-07-08 08:35:19', 'f3ln87nbgi9iae5pt5o4qe800m', ''),
+(72, '::1', '', 1, '2026-06-29 06:46:24', '2026-07-08 08:35:19', 'f3ln87nbgi9iae5pt5o4qe800m', ''),
+(73, '::1', '', 1, '2026-06-30 05:25:25', '2026-07-08 08:35:19', 'f3ln87nbgi9iae5pt5o4qe800m', ''),
+(74, '::1', '', 1, '2026-06-30 05:25:56', '2026-07-08 08:35:19', 'f3ln87nbgi9iae5pt5o4qe800m', ''),
+(75, '::1', '', 1, '2026-06-30 10:04:18', '2026-07-08 08:35:19', 'f3ln87nbgi9iae5pt5o4qe800m', ''),
 (76, '::1', '', 1, '2026-07-01 07:02:37', '2026-07-03 15:43:11', 'j7hqruivd767m89j9sk0t6i6tp', ''),
-(77, '::1', '', 1, '2026-07-01 10:41:01', '2026-07-03 11:46:49', 'f3ln87nbgi9iae5pt5o4qe800m', ''),
-(78, '::1', '', 1, '2026-07-01 11:51:28', '2026-07-03 11:46:49', 'f3ln87nbgi9iae5pt5o4qe800m', ''),
-(79, '::1', '', 1, '2026-07-01 12:05:01', '2026-07-03 11:46:49', 'f3ln87nbgi9iae5pt5o4qe800m', ''),
-(80, '::1', '', 1, '2026-07-02 05:58:37', '2026-07-03 11:46:49', 'f3ln87nbgi9iae5pt5o4qe800m', ''),
-(81, '::1', '', 1, '2026-07-02 08:12:24', '2026-07-03 11:46:49', 'f3ln87nbgi9iae5pt5o4qe800m', ''),
-(82, '::1', '', 1, '2026-07-02 08:37:03', '2026-07-03 11:46:49', 'f3ln87nbgi9iae5pt5o4qe800m', ''),
+(77, '::1', '', 1, '2026-07-01 10:41:01', '2026-07-08 08:35:19', 'f3ln87nbgi9iae5pt5o4qe800m', ''),
+(78, '::1', '', 1, '2026-07-01 11:51:28', '2026-07-08 08:35:19', 'f3ln87nbgi9iae5pt5o4qe800m', ''),
+(79, '::1', '', 1, '2026-07-01 12:05:01', '2026-07-08 08:35:19', 'f3ln87nbgi9iae5pt5o4qe800m', ''),
+(80, '::1', '', 1, '2026-07-02 05:58:37', '2026-07-08 08:35:19', 'f3ln87nbgi9iae5pt5o4qe800m', ''),
+(81, '::1', '', 1, '2026-07-02 08:12:24', '2026-07-08 08:35:19', 'f3ln87nbgi9iae5pt5o4qe800m', ''),
+(82, '::1', '', 1, '2026-07-02 08:37:03', '2026-07-08 08:35:19', 'f3ln87nbgi9iae5pt5o4qe800m', ''),
 (83, '::1', '', 1, '2026-07-02 13:55:32', '2026-07-03 15:43:11', 'j7hqruivd767m89j9sk0t6i6tp', ''),
 (84, '127.0.0.1', '', 1, '2026-07-02 14:06:02', '', 'vocgmugsv28g60c1avqec34j4v', ''),
-(85, '::1', '', 1, '2026-07-03 05:51:44', '2026-07-03 11:46:49', 'f3ln87nbgi9iae5pt5o4qe800m', ''),
-(86, '::1', '', 1, '2026-07-03 08:03:49', '2026-07-03 11:46:49', 'f3ln87nbgi9iae5pt5o4qe800m', ''),
-(87, '::1', '', 1, '2026-07-03 11:12:34', '2026-07-03 11:46:49', 'f3ln87nbgi9iae5pt5o4qe800m', ''),
-(88, '::1', '', 1, '2026-07-03 11:46:52', '', 'f3ln87nbgi9iae5pt5o4qe800m', ''),
+(85, '::1', '', 1, '2026-07-03 05:51:44', '2026-07-08 08:35:19', 'f3ln87nbgi9iae5pt5o4qe800m', ''),
+(86, '::1', '', 1, '2026-07-03 08:03:49', '2026-07-08 08:35:19', 'f3ln87nbgi9iae5pt5o4qe800m', ''),
+(87, '::1', '', 1, '2026-07-03 11:12:34', '2026-07-08 08:35:19', 'f3ln87nbgi9iae5pt5o4qe800m', ''),
+(88, '::1', '', 1, '2026-07-03 11:46:52', '2026-07-08 08:35:19', 'f3ln87nbgi9iae5pt5o4qe800m', ''),
 (89, '::1', '', 1, '2026-07-03 14:16:33', '2026-07-03 15:43:11', 'j7hqruivd767m89j9sk0t6i6tp', ''),
 (90, '::1', '', 1, '2026-07-03 15:43:03', '2026-07-03 15:43:11', 'j7hqruivd767m89j9sk0t6i6tp', ''),
 (91, '::1', '', 1, '2026-07-03 15:43:37', '', 'j7hqruivd767m89j9sk0t6i6tp', ''),
-(92, '::1', '', 1, '2026-07-04 07:10:32', '', 'f3ln87nbgi9iae5pt5o4qe800m', '');
+(92, '::1', '', 1, '2026-07-04 07:10:32', '2026-07-08 08:35:19', 'f3ln87nbgi9iae5pt5o4qe800m', ''),
+(93, '::1', '', 1, '2026-07-07 11:35:52', '2026-07-08 08:35:19', 'f3ln87nbgi9iae5pt5o4qe800m', ''),
+(94, '::1', '', 1, '2026-07-07 14:15:38', '2026-07-08 08:35:19', 'f3ln87nbgi9iae5pt5o4qe800m', ''),
+(95, '::1', '', 1, '2026-07-08 04:15:21', '2026-07-08 08:35:19', 'f3ln87nbgi9iae5pt5o4qe800m', ''),
+(96, '::1', '', 1, '2026-07-08 04:20:11', '2026-07-08 08:35:19', 'f3ln87nbgi9iae5pt5o4qe800m', ''),
+(97, '::1', '', 1, '2026-07-08 05:24:12', '2026-07-08 08:35:19', 'f3ln87nbgi9iae5pt5o4qe800m', ''),
+(98, '::1', '', 1, '2026-07-08 05:43:34', '2026-07-08 08:35:19', 'f3ln87nbgi9iae5pt5o4qe800m', ''),
+(99, '::1', '', 1, '2026-07-08 07:40:12', '2026-07-08 08:35:19', 'f3ln87nbgi9iae5pt5o4qe800m', ''),
+(100, '::1', '', 1, '2026-07-08 08:35:22', '', 'f3ln87nbgi9iae5pt5o4qe800m', '');
 
 -- --------------------------------------------------------
 
@@ -692,14 +1021,14 @@ CREATE TABLE IF NOT EXISTS `orders` (
   `updated` int NOT NULL,
   `created` varchar(35) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=11 DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_unicode_ci;
+) ENGINE=MyISAM AUTO_INCREMENT=12 DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_unicode_ci;
 
 --
 -- Dumping data for table `orders`
 --
 
 INSERT INTO `orders` (`id`, `customer`, `notes`, `status`, `user`, `order_date`, `delivery_due_date`, `payment_status`, `auth_user`, `updated`, `created`) VALUES
-(10, 6, '', 'order_confirmed', 4, 20260702, 20260723, 'pending', 1, 1782985656, '1782985519_1');
+(11, 6, '', 'order_confirmed', 4, 20260704, 20260713, 'pending', 1, 1783178910, '1783178807_1');
 
 -- --------------------------------------------------------
 
@@ -718,33 +1047,57 @@ CREATE TABLE IF NOT EXISTS `order_items` (
   `updated` int NOT NULL,
   `created` varchar(35) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=47 DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_unicode_ci;
+) ENGINE=MyISAM AUTO_INCREMENT=52 DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_unicode_ci;
 
 --
 -- Dumping data for table `order_items`
 --
 
 INSERT INTO `order_items` (`id`, `product`, `quantity`, `order_id`, `rate`, `auth_user`, `updated`, `created`) VALUES
-(33, 8, 400.00, 9, 10.00, 1, 1782976723, '1782976471_1'),
-(36, 13, 1.00, 9, 111.00, 1, 1782977901, '1782977901_1'),
-(31, 7, 112.00, 9, 2.00, 1, 1782976490, '1782976471_1'),
-(30, 7, 111.00, 9, 11.00, 1, 1782976378, '1782976378_1'),
-(11, 7, 102.00, 7, 21.00, 1, 1782974773, '1782909237_1'),
-(29, 7, 111.00, 9, 1.00, 1, 1782976316, '1782976316_1'),
-(27, 6, 200.00, 9, 20.00, 1, 1782976264, '1782976264_1'),
-(28, 7, 111.00, 9, 1.00, 1, 1782976302, '1782976302_1'),
-(26, 7, 100.00, 9, 10.00, 1, 1782976264, '1782976264_1'),
-(37, 15, 500.00, 10, 50.00, 1, 1782985568, '1782985568_1'),
-(35, 14, 5.00, 9, 500.00, 1, 1782977108, '1782977108_1'),
-(38, 16, 200.00, 10, 150.00, 1, 1782985568, '1782985568_1'),
-(39, 17, 100.00, 10, 30.00, 1, 1782985568, '1782985568_1'),
-(40, 15, 100.00, 10, 50.00, 1, 1782986545, '1782986545_1'),
-(41, 15, 10.00, 10, 50.00, 1, 1783061563, '1783061563_1'),
-(42, 16, 10.00, 10, 200.00, 1, 1783061563, '1783061563_1'),
-(43, 17, 10.00, 10, 150.00, 1, 1783061563, '1783061563_1'),
-(44, 15, 20.00, 10, 50.00, 1, 1783061910, '1783061910_1'),
-(45, 16, 20.00, 10, 200.00, 1, 1783061910, '1783061910_1'),
-(46, 17, 20.00, 10, 150.00, 1, 1783061910, '1783061910_1');
+(49, 17, 300.00, 11, 1.00, 1, 1783178868, '1783178868_1'),
+(48, 16, 200.00, 11, 1.00, 1, 1783178868, '1783178868_1'),
+(47, 15, 110.00, 11, 1.00, 1, 1783431706, '1783178868_1'),
+(50, 15, 101.00, 11, NULL, 1, 1783421325, '1783421319_1'),
+(51, 15, 223.00, 11, NULL, 1, 1783431730, '1783431724_1');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `payments`
+--
+
+DROP TABLE IF EXISTS `payments`;
+CREATE TABLE IF NOT EXISTS `payments` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `type` varchar(20) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
+  `notes` text CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci,
+  `status` varchar(100) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
+  `purchase` int DEFAULT NULL,
+  `vendor` int DEFAULT NULL,
+  `customer` int NOT NULL,
+  `invoice` int NOT NULL,
+  `payment_mode` varchar(20) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
+  `reference_no` varchar(200) COLLATE utf8mb3_unicode_ci NOT NULL,
+  `bank_account` varchar(100) COLLATE utf8mb3_unicode_ci NOT NULL,
+  `amount` decimal(10,2) NOT NULL,
+  `payment_date` int DEFAULT NULL,
+  `transaction_type` varchar(30) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci DEFAULT NULL,
+  `attachment` int NOT NULL,
+  `auth_user` int NOT NULL,
+  `updated` int NOT NULL,
+  `created` varchar(35) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM AUTO_INCREMENT=27 DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_unicode_ci;
+
+--
+-- Dumping data for table `payments`
+--
+
+INSERT INTO `payments` (`id`, `type`, `notes`, `status`, `purchase`, `vendor`, `customer`, `invoice`, `payment_mode`, `reference_no`, `bank_account`, `amount`, `payment_date`, `transaction_type`, `attachment`, `auth_user`, `updated`, `created`) VALUES
+(23, 'sent', '2222', 'pending', 21, 6, 0, 0, 'bank_transfer', 'tetststse1122222', '53', 155000.00, 20260707, 'advance', 0, 1, 1783430356, '1783428354_1'),
+(22, 'received', 'sadfdasfsdafsadsafsda12111', 'completed', 21, 8, 6, 18, 'bank_transfer', 'tetststse112', '54', 1322.00, 20260702, NULL, 101, 1, 1783428242, '1783426313_1'),
+(24, 'received', '2222', 'completed', NULL, NULL, 5, 18, 'card', '2222', '', 11112.00, 20260707, NULL, 0, 1, 1783429464, '1783428467_1'),
+(26, 'received', 'test', 'completed', NULL, NULL, 5, 18, 'bank_transfer', 'tetststse', '53', 300.00, 20260708, NULL, 108, 1, 1783429502, '1783429502_1');
 
 -- --------------------------------------------------------
 
@@ -814,11 +1167,11 @@ CREATE TABLE IF NOT EXISTS `product_lots` (
 --
 
 INSERT INTO `product_lots` (`id`, `product`, `ordered_quantity`, `received_quantity`, `accepted_quantity`, `rejected_quantity`, `available_quantity`, `reserved_quantity`, `consumed_quantity`, `notes`, `source`, `status`, `purchase`, `buy_price`, `auth_user`, `updated`, `created`) VALUES
-(15, 16, 2000, 2000, 1900, 100, 1696, 204, 0, 'lot ready', 'produced', 'ready', NULL, NULL, 1, 1783062016, '1782984999_1'),
-(16, 15, 1250, 1240, 1200, 40, 760, 440, 0, '', 'produced', 'ready', NULL, NULL, 1, 1783062016, '1782985060_1'),
-(14, 15, 1000, 1000, 980, 20, 765, 215, 0, 'Inventory ready', 'produced', 'ready', NULL, NULL, 1, 1783062016, '1782984941_1'),
-(17, 16, 550, 550, 500, 50, 300, 200, 0, '', 'produced', 'ready', NULL, NULL, 1, 1783062177, '1782985096_1'),
-(18, 17, 1100, 1100, 1000, 100, 795, 205, 0, 'mirror ready', 'purchased', 'ready', 21, 100.00, 1, 1783062016, '1782985194_1');
+(15, 16, 2000, 2000, 1900, 100, 1830, 40, 30, 'lot ready', 'produced', 'ready', NULL, NULL, 1, 1783431610, '1782984999_1'),
+(16, 15, 1250, 1240, 1200, 40, 1170, 20, 10, '', 'produced', 'ready', NULL, NULL, 1, 1783431610, '1782985060_1'),
+(14, 15, 1000, 1000, 980, 20, 930, 30, 20, 'Inventory ready', 'produced', 'ready', NULL, NULL, 1, 1783431610, '1782984941_1'),
+(17, 16, 550, 550, 500, 50, 410, 50, 40, '', 'produced', 'ready', NULL, NULL, 1, 1783431610, '1782985096_1'),
+(18, 17, 1100, 1100, 1000, 100, 890, 60, 50, 'mirror ready', 'purchased', 'ready', 21, 100.00, 1, 1783431610, '1782985194_1');
 
 -- --------------------------------------------------------
 
@@ -840,26 +1193,30 @@ CREATE TABLE IF NOT EXISTS `product_movements` (
   `updated` int NOT NULL,
   `created` varchar(30) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=43 DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_unicode_ci;
+) ENGINE=MyISAM AUTO_INCREMENT=18 DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_unicode_ci;
 
 --
 -- Dumping data for table `product_movements`
 --
 
 INSERT INTO `product_movements` (`id`, `order_id`, `product`, `product_lot`, `dispatch`, `quantity`, `action`, `action_date`, `auth_user`, `updated`, `created`) VALUES
-(42, 10, 16, 17, 14, 3, 'unreserve', 1783062177, 1, 1783062177, '1783062177_1'),
-(41, 10, 17, 18, 14, 5, 'reserve', 1783062016, 1, 1783062016, '1783062016_1'),
-(40, 10, 16, 17, 14, 3, 'reserve', 1783062016, 1, 1783062016, '1783062016_1'),
-(39, 10, 16, 15, 14, 4, 'reserve', 1783062016, 1, 1783062016, '1783062016_1'),
-(38, 10, 15, 14, 14, 35, 'reserve', 1783062016, 1, 1783062016, '1783062016_1'),
-(37, 10, 15, 16, 14, 40, 'reserve', 1783062016, 1, 1783062016, '1783062016_1'),
-(36, 10, 15, 16, 14, 33, 'reserve', 1783061388, 1, 1783061388, '1783061388_1'),
-(35, 10, 15, 16, 14, 33, 'unreserve', 1783061320, 1, 1783061320, '1783061320_1'),
-(34, 10, 17, 18, 14, 85, 'reserve', 1783061253, 1, 1783061253, '1783061253_1'),
-(33, 10, 16, 17, 14, 90, 'reserve', 1783061253, 1, 1783061253, '1783061253_1'),
-(32, 10, 16, 15, 14, 83, 'reserve', 1783061253, 1, 1783061253, '1783061253_1'),
-(31, 10, 15, 14, 14, 22, 'reserve', 1783061253, 1, 1783061253, '1783061253_1'),
-(30, 10, 15, 16, 14, 33, 'reserve', 1783061253, 1, 1783061253, '1783061253_1');
+(1, 11, 15, 16, 19, 10, 'reserve', 1783178966, 1, 1783178966, '1783178966_1'),
+(2, 11, 15, 14, 19, 20, 'reserve', 1783178966, 1, 1783178966, '1783178966_1'),
+(3, 11, 16, 15, 19, 30, 'reserve', 1783178966, 1, 1783178966, '1783178966_1'),
+(4, 11, 16, 17, 19, 40, 'reserve', 1783178966, 1, 1783178966, '1783178966_1'),
+(5, 11, 17, 18, 19, 50, 'reserve', 1783178966, 1, 1783178966, '1783178966_1'),
+(6, 11, 15, 16, 19, 20, 'reserve', 1783179017, 1, 1783179017, '1783179017_1'),
+(7, 11, 15, 16, 19, 20, 'unreserve', 1783179030, 1, 1783179030, '1783179030_1'),
+(8, 11, 15, 14, 19, 20, 'consume', 1783179327, 1, 1783179327, '1783179327_1'),
+(9, 11, 15, 16, 19, 10, 'consume', 1783179327, 1, 1783179327, '1783179327_1'),
+(10, 11, 16, 17, 19, 40, 'consume', 1783179327, 1, 1783179327, '1783179327_1'),
+(11, 11, 16, 15, 19, 30, 'consume', 1783179327, 1, 1783179327, '1783179327_1'),
+(12, 11, 17, 18, 19, 50, 'consume', 1783179327, 1, 1783179327, '1783179327_1'),
+(13, 11, 15, 16, 20, 20, 'reserve', 1783431610, 1, 1783431610, '1783431610_1'),
+(14, 11, 15, 14, 20, 30, 'reserve', 1783431610, 1, 1783431610, '1783431610_1'),
+(15, 11, 16, 15, 20, 40, 'reserve', 1783431610, 1, 1783431610, '1783431610_1'),
+(16, 11, 16, 17, 20, 50, 'reserve', 1783431610, 1, 1783431610, '1783431610_1'),
+(17, 11, 17, 18, 20, 60, 'reserve', 1783431610, 1, 1783431610, '1783431610_1');
 
 -- --------------------------------------------------------
 
@@ -925,11 +1282,11 @@ CREATE TABLE IF NOT EXISTS `raw_materials` (
 --
 
 INSERT INTO `raw_materials` (`id`, `raw_material`, `code`, `unit`, `description`, `category`, `image`, `auth_user`, `updated`, `created`) VALUES
-(6, 'SS Pipes', '', '', '', NULL, 0, 0, 1782126673, '0'),
-(7, 'MS Pipes', '', '', '', NULL, 0, 0, 1782126673, '0'),
-(8, 'SS Rods', '', '', '', NULL, 0, 0, 1782126673, '0'),
-(10, 'raw m', '', 'kg', '', NULL, 12, 0, 1782132815, '0'),
-(11, 'raw m1', '', 'kg', 'fteststets', 'ss_pipes', 18, 0, 1782223927, '0');
+(6, 'SS Pipes', 'test', 'meter', '', '13', 0, 1, 1783434841, '0'),
+(7, 'MS Pipes', 'test', 'meter', '', '12', 0, 1, 1783434823, '0'),
+(8, 'SS Rods', 'ssss', 'meter', '', '17', 0, 1, 1783434862, '0'),
+(10, 'Saliya', 'sss', 'kg', '', '17', 12, 1, 1783493348, '0'),
+(11, 'Saliya Long', 'sasfadfa', 'kg', 'fteststets', '17', 18, 1, 1783493374, '0');
 
 -- --------------------------------------------------------
 
@@ -967,6 +1324,81 @@ INSERT INTO `raw_material_lots` (`id`, `raw_material`, `ordered_quantity`, `rece
 (3, 6, 111, 100, 90, 10, 80, 10, 0, 'tast12', 'ready', 20, 222.00, 1, 1782803622, '0'),
 (4, 7, 34343, 0, 0, 0, 0, 0, 0, '', 'received', 0, 333.00, 0, 1782286889, '0'),
 (6, 7, 33331, 0, 0, 0, 0, 0, 0, 'tttt3', 'received', 0, 3333.00, 1, 1782296557, '0');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `raw_material_rates`
+--
+
+DROP TABLE IF EXISTS `raw_material_rates`;
+CREATE TABLE IF NOT EXISTS `raw_material_rates` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `entity` varchar(30) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
+  `rate` decimal(10,2) NOT NULL,
+  `effective_date` int NOT NULL,
+  `auth_user` int NOT NULL,
+  `updated` int NOT NULL,
+  `created` varchar(35) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM AUTO_INCREMENT=98 DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_unicode_ci;
+
+--
+-- Dumping data for table `raw_material_rates`
+--
+
+INSERT INTO `raw_material_rates` (`id`, `entity`, `rate`, `effective_date`, `auth_user`, `updated`, `created`) VALUES
+(97, 'RMRG-9', 63.00, 20260713, 1, 1783498836, '1783498831_1'),
+(93, 'RMRG-8', 24.00, 20260710, 1, 1783498230, '1783498214_1'),
+(96, 'RM-7', 123.00, 20260715, 1, 1783498819, '1783498806_1');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `raw_material_rate_groups`
+--
+
+DROP TABLE IF EXISTS `raw_material_rate_groups`;
+CREATE TABLE IF NOT EXISTS `raw_material_rate_groups` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `raw_material_rate_group` varchar(200) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
+  `auth_user` int NOT NULL,
+  `updated` int NOT NULL,
+  `created` varchar(35) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM AUTO_INCREMENT=12 DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_unicode_ci;
+
+--
+-- Dumping data for table `raw_material_rate_groups`
+--
+
+INSERT INTO `raw_material_rate_groups` (`id`, `raw_material_rate_group`, `auth_user`, `updated`, `created`) VALUES
+(9, 'SS', 1, 1783502841, '1783488994_1'),
+(8, 'Saliya', 1, 1783502847, '1783488666_1');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `raw_material_rate_group_link`
+--
+
+DROP TABLE IF EXISTS `raw_material_rate_group_link`;
+CREATE TABLE IF NOT EXISTS `raw_material_rate_group_link` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `raw_material_rate_group` int NOT NULL,
+  `raw_material` int NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_unicode_ci;
+
+--
+-- Dumping data for table `raw_material_rate_group_link`
+--
+
+INSERT INTO `raw_material_rate_group_link` (`id`, `raw_material_rate_group`, `raw_material`) VALUES
+(1, 9, 6),
+(2, 9, 8),
+(3, 8, 10),
+(4, 8, 11);
 
 -- --------------------------------------------------------
 
@@ -1107,7 +1539,7 @@ CREATE TABLE IF NOT EXISTS `uploads` (
   `updated` int DEFAULT NULL,
   `created` varchar(35) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=99 DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=111 DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_unicode_ci;
 
 --
 -- Dumping data for table `uploads`
@@ -1194,7 +1626,19 @@ INSERT INTO `uploads` (`id`, `name`, `title`, `brief`, `module`, `module_id`, `t
 (95, 'uploads/2004828393-4.png', NULL, NULL, NULL, NULL, 'image/png', 69397, 'uploads/2004828393-thumb-4.png', 'uploads/2004828393-small-4.png', NULL, NULL, NULL, NULL, NULL, 1, 1782985154, NULL),
 (96, 'uploads/1884243746-IMG-20250630-WA0001.jpg', NULL, NULL, NULL, NULL, 'image/jpeg', 198802, 'uploads/1884243746-thumb-IMG-20250630-WA0001.jpg', 'uploads/1884243746-small-IMG-20250630-WA0001.jpg', NULL, NULL, NULL, NULL, NULL, 1, 1782985343, NULL),
 (97, 'uploads/1202491184-Wealth Seeds Flexi cap introduction.docx', NULL, NULL, NULL, NULL, 'application/vnd.openxmlformats-officedocument.wordprocessingml.document', 14347, '', '', 'purchases', 21, 'document', '50', 'doc1', 1, 1782985343, '1782985343_1'),
-(98, 'uploads/1672217156-Factsheet (WSFP).pdf', NULL, NULL, NULL, NULL, 'application/pdf', 325240, '', '', 'purchases', 21, 'document', '51', 'doc2', 1, 1782985343, '1782985343_1');
+(98, 'uploads/1672217156-Factsheet (WSFP).pdf', NULL, NULL, NULL, NULL, 'application/pdf', 325240, '', '', 'purchases', 21, 'document', '51', 'doc2', 1, 1782985343, '1782985343_1'),
+(99, 'uploads/51148253-IMG-20250630-WA0001.jpg', NULL, NULL, NULL, NULL, 'image/jpeg', 198802, 'uploads/51148253-thumb-IMG-20250630-WA0001.jpg', 'uploads/51148253-small-IMG-20250630-WA0001.jpg', NULL, NULL, NULL, NULL, NULL, 1, 1783426058, NULL),
+(100, 'uploads/1537039010-WhatsApp Image 2025-06-30 at 3.43.03 PM (1).jpeg', NULL, NULL, NULL, NULL, 'image/jpeg', 194314, 'uploads/1537039010-thumb-WhatsApp Image 2025-06-30 at 3.43.03 PM (1).jpeg', 'uploads/1537039010-small-WhatsApp Image 2025-06-30 at 3.43.03 PM (1).jpeg', NULL, NULL, NULL, NULL, NULL, 1, 1783426297, NULL),
+(101, 'uploads/1681997835-WhatsApp Image 2025-06-30 at 3.43.03 PM (1).jpeg', NULL, NULL, NULL, NULL, 'image/jpeg', 194314, 'uploads/1681997835-thumb-WhatsApp Image 2025-06-30 at 3.43.03 PM (1).jpeg', 'uploads/1681997835-small-WhatsApp Image 2025-06-30 at 3.43.03 PM (1).jpeg', NULL, NULL, NULL, NULL, NULL, 1, 1783426314, NULL),
+(102, 'uploads/355106788-download-1415972908-1773137224.png', NULL, NULL, NULL, NULL, 'image/png', 377465, 'uploads/355106788-thumb-download-1415972908-1773137224.png', 'uploads/355106788-small-download-1415972908-1773137224.png', 'payments', 22, 'document', '51', 'fsd', 1, 1783426314, '1783426314_1'),
+(103, 'uploads/2133307258-download-857515597-1773137110.png', NULL, NULL, NULL, NULL, 'image/png', 1958148, 'uploads/2133307258-thumb-download-857515597-1773137110.png', 'uploads/2133307258-small-download-857515597-1773137110.png', 'payments', 22, 'document', '48', 'asdf', 1, 1783426314, '1783426314_1'),
+(104, 'uploads/1331135825-WhatsApp Image 2026-06-02 at 12.57.16 PM.jpeg', NULL, NULL, NULL, NULL, 'image/jpeg', 186840, 'uploads/1331135825-thumb-WhatsApp Image 2026-06-02 at 12.57.16 PM.jpeg', 'uploads/1331135825-small-WhatsApp Image 2026-06-02 at 12.57.16 PM.jpeg', NULL, NULL, NULL, NULL, NULL, 1, 1783428354, NULL),
+(105, 'uploads/651540210-WhatsApp Image 2025-06-30 at 3.43.03 PM (1).jpeg', NULL, NULL, NULL, NULL, 'image/jpeg', 194314, 'uploads/651540210-thumb-WhatsApp Image 2025-06-30 at 3.43.03 PM (1).jpeg', 'uploads/651540210-small-WhatsApp Image 2025-06-30 at 3.43.03 PM (1).jpeg', 'payments', 23, 'document', '51', '', 1, 1783428355, '1783428354_1'),
+(106, 'uploads/1436828408-WhatsApp Image 2025-07-26 at 6.37.13 PM (2).jpeg', NULL, NULL, NULL, NULL, 'image/jpeg', 594300, 'uploads/1436828408-thumb-WhatsApp Image 2025-07-26 at 6.37.13 PM (2).jpeg', 'uploads/1436828408-small-WhatsApp Image 2025-07-26 at 6.37.13 PM (2).jpeg', 'payments', 23, 'document', '48', '', 1, 1783428355, '1783428354_1'),
+(107, 'uploads/31042588-WhatsApp Image 2026-06-02 at 12.57.16 PM.jpeg', NULL, NULL, NULL, NULL, 'image/jpeg', 186840, 'uploads/31042588-thumb-WhatsApp Image 2026-06-02 at 12.57.16 PM.jpeg', 'uploads/31042588-small-WhatsApp Image 2026-06-02 at 12.57.16 PM.jpeg', NULL, NULL, NULL, NULL, NULL, 1, 1783428512, NULL),
+(108, 'uploads/1086988908-WhatsApp Image 2026-03-31 at 10.58.45 AM.jpeg', NULL, NULL, NULL, NULL, 'image/jpeg', 101857, 'uploads/1086988908-thumb-WhatsApp Image 2026-03-31 at 10.58.45 AM.jpeg', 'uploads/1086988908-small-WhatsApp Image 2026-03-31 at 10.58.45 AM.jpeg', NULL, NULL, NULL, NULL, NULL, 1, 1783429502, NULL),
+(109, 'uploads/429970366-3d-rendering-money-tree (1).jpg', NULL, NULL, NULL, NULL, 'image/jpeg', 3020383, 'uploads/429970366-thumb-3d-rendering-money-tree (1).jpg', 'uploads/429970366-small-3d-rendering-money-tree (1).jpg', 'payments', 26, 'document', '50', 'test', 1, 1783429504, '1783429502_1'),
+(110, 'uploads/1686250374-3d-rendering-money-tree.jpg', NULL, NULL, NULL, NULL, 'image/jpeg', 4572020, 'uploads/1686250374-thumb-3d-rendering-money-tree.jpg', 'uploads/1686250374-small-3d-rendering-money-tree.jpg', 'payments', 26, 'document', '48', 'test32', 1, 1783429504, '1783429502_1');
 
 -- --------------------------------------------------------
 

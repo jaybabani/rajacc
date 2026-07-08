@@ -1,3 +1,4 @@
+<?php /* 
 <div class="bg-white topbar">
 
   <ul class="topnav">
@@ -27,17 +28,17 @@
 
     <?php if ($layout == "layout1") { ?>
     
-    <?php } else { /* ?>
-      <li class="nav-item dropdown right profile" id="myDropdown3">
+    <?php } else {  ?>
+      <!-- <li class="nav-item dropdown right profile" id="myDropdown3">
         <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown"><?php avatar(40); ?></a>
         <ul class="dropdown-menu dropdown-menu-end">
           <li> <a class="dropdown-item" href="#"> Dropdown item 1 </a></li>
           <li><a class="dropdown-item" href="#"> Dropdown item 3 </a></li>
           <li><a class="dropdown-item" href="#"> Dropdown item 4 </a></li>
         </ul>
-      </li>
+      </li> -->
     <?php
-    */ } 
+    } 
     ?>
 
     <!-- <li class="nav-item nav-icon right display-side-nav-right">
@@ -45,4 +46,4 @@
     </li> -->
 
   </ul>
-</div>
+</div> */ ?>

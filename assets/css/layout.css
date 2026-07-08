@@ -8,7 +8,7 @@ body.login_page {
   width: calc(100% - var(--side-nav-width));
   overflow: auto;
   margin-left: var(--side-nav-width);
-  padding-top: 60px;
+  padding-top: 0px;
   /* background-color: #aaa; */
 }
 
