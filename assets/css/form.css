@@ -243,7 +243,8 @@ input:checked + .slider:before {
   padding: 10px;
   border-radius: 10px;
   height: auto;
-  max-height: 200px;
+  min-height: 50px;
+  max-height: 300px;
   border: 1px solid #dddddd;
   background-color: var(--form-bg);
   padding: 12px 20px;

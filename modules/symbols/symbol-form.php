@@ -69,7 +69,7 @@ include("../../common/header.php");
 
     <?php
 
-    echo form_field(["type" => "text", "name" => "Symbol", "key" => "symbol", "eg" => "INFY_NSE", "required" => true, "class" => "col-md-6 col-lg-4 mb-3"], $data);
+    echo form_field(["type" => "text", "name" => "Symbol", "key" => "symbol", "required" => true, "class" => "col-md-6 col-lg-4 mb-3"], $data);
     echo form_field(["type" => "text", "name" => "Exchange", "key" => "exchange", "class" => "col-md-6 col-lg-4 mb-3"], $data);
     echo form_field(["type" => "select", "name" => "Active", "key" => "active", "required" => true, "options" => get_active_arr(), "class" => "col-md-6 col-lg-4 mb-3"], $data);
 

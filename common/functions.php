@@ -467,7 +467,7 @@ function crud_read($vars)
                                     $colval = $dv["options"][$r["category"]] . $colval;
                                 }
                             } else {
-                                $colval = trim($dv["id_prefix"]) . $colval;
+                                $colval = "<span class='sorthide'>" . str_pad($colval, 11, '0', STR_PAD_LEFT) . "</span>" . trim($dv["id_prefix"]) . $colval;
                             }
                         }
 
@@ -2925,6 +2925,7 @@ function  get_product_cost($product_ids)
     // print_arr($product_ids);
 
     $boms = product_boms($product_ids);
+
     $raw_material_ids = $boms["raw_material_ids"] ?? [];
     $raw_material_rates = raw_material_rates($raw_material_ids);
 
@@ -2990,6 +2991,11 @@ function product_boms($product_ids)
         return [];
     }
 
+    $product_boms = [];
+    $bom_items = [];
+    $bom_costs = [];
+    $raw_material_ids = [];
+
     $boms_ids = [];
     if (sizeof($product_ids) > 0) {
         $boms_arr = fetch_data(["table" => "boms", "columns" => "id, product", "condition" => " product IN (" . implode(",", $product_ids) . ") AND status = 'active' ", "order" => "", "limit" => ""]);
@@ -2997,17 +3003,20 @@ function product_boms($product_ids)
             $product_boms[$bv["product"]] = $bv["id"];
             $boms_ids[] = $bv["id"];
         }
-        // print_arr($boms);
+        // print_arr($boms_ids);
+        // die;
 
-        $bom_items_arr = fetch_data(["table" => "bom_items", "columns" => "id, raw_material, quantity, wastage_quantity, bom", "condition" => " bom IN (" . implode(",", $boms_ids) . ") ", "order" => "", "limit" => ""]);
-        foreach ($bom_items_arr as $bik => $biv) {
-            $bom_items[$biv["bom"]][] = $biv;
-            $raw_material_ids[] = $biv["raw_material"];
-        }
+        if (sizeof($boms_ids)) {
+            $bom_items_arr = fetch_data(["table" => "bom_items", "columns" => "id, raw_material, quantity, wastage_quantity, bom", "condition" => " bom IN (" . implode(",", $boms_ids) . ") ", "order" => "", "limit" => ""]);
+            foreach ($bom_items_arr as $bik => $biv) {
+                $bom_items[$biv["bom"]][] = $biv;
+                $raw_material_ids[] = $biv["raw_material"];
+            }
 
-        $bom_costs_arr = fetch_data(["table" => "bom_costs", "columns" => "id, cost_type, bom, amount", "condition" => " bom IN (" . implode(",", $boms_ids) . ") ", "order" => "", "limit" => ""]);
-        foreach ($bom_costs_arr as $bik => $biv) {
-            $bom_costs[$biv["bom"]][] = $biv;
+            $bom_costs_arr = fetch_data(["table" => "bom_costs", "columns" => "id, cost_type, bom, amount", "condition" => " bom IN (" . implode(",", $boms_ids) . ") ", "order" => "", "limit" => ""]);
+            foreach ($bom_costs_arr as $bik => $biv) {
+                $bom_costs[$biv["bom"]][] = $biv;
+            }
         }
     }
 
@@ -3113,39 +3122,39 @@ function raw_material_rates($raw_material_ids)
 
 
 
-  function product_cost_details($costing, $prodid)
-  {
+function product_cost_details($costing, $prodid)
+{
 
     $d = "";
 
     $total = 0;
     if (isset($costing["costs"][$prodid])) {
-      $costarr = $costing["costs"][$prodid];
-      // $d = json_encode($costarr);
+        $costarr = $costing["costs"][$prodid];
+        // $d = json_encode($costarr);
 
-      if (sizeof($costarr) > 0) {
-        $d .= "<div class='widget-table'><div class='table-responsive'><table class='table table-compact table-bordered'>
+        if (sizeof($costarr) > 0) {
+            $d .= "<div class='widget-table'><div class='table-responsive'><table class='table table-compact table-bordered'>
         <tr><th>Raw Material / Cost</th><th>Amount</th><th>Quantity</th></tr>";
-        foreach ($costarr as $ck => $cv) {
-          if ($cv["type"] == "bom_items") {
-            $d .= "<tr>
+            foreach ($costarr as $ck => $cv) {
+                if ($cv["type"] == "bom_items") {
+                    $d .= "<tr>
           <td>" . $cv["raw_material_name"] . "</td>
           <td>" . $cv["raw_material_rate"]["rate"] . "</td>
           <td>" . ($cv["quantity"] + $cv["wastage_quantity"]) . " " . $cv["raw_material_unit"] . "</td>
           </tr>";
 
-            $total += $cv["raw_material_rate"]["rate"] * ($cv["quantity"] + $cv["wastage_quantity"]);
-          } else if ($cv["type"] == "bom_costs") {
-            $d .= "<tr>
+                    $total += $cv["raw_material_rate"]["rate"] * ($cv["quantity"] + $cv["wastage_quantity"]);
+                } else if ($cv["type"] == "bom_costs") {
+                    $d .= "<tr>
           <td>" . ($bom_cost_types[$cv["cost_type"]] ?? $cv["cost_type"]) . "</td>
           <td>" . $cv["amount"] . "</td>
           <td></td>
           </tr>";
-            $total += $cv["amount"];
-          }
+                    $total += $cv["amount"];
+                }
+            }
+            $d .= "</table></div></div>";
         }
-        $d .= "</table></div></div>";
-      }
     }
     return ["detail" => $d, "total" => $total];
-  }
+}

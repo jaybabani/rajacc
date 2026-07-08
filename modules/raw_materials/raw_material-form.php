@@ -72,7 +72,7 @@ include("../../common/header.php");
     <?php
 
     echo form_field(["type" => "text", "name" => "Raw material", "key" => "raw_material", "required" => true, "class" => "col-md-6 col-lg-4 mb-3"], $data);
-    echo form_field(["type" => "text", "name" => "Item Code", "key" => "code", "required" => true, "class" => "col-md-6 col-lg-4 mb-3"], $data);
+    echo form_field(["type" => "text", "name" => "Item Code", "key" => "code", "class" => "col-md-6 col-lg-4 mb-3"], $data);
     echo form_field(["type" => "text", "name" => "Unit", "key" => "unit", "required" => true, "class" => "col-md-6 col-lg-4 mb-3"], $data);
     echo form_field(["type" => "select-attribute", "name" => "Category", "key" => "category", "required" => true, "attributes" => get_attributes_arr("raw_material_category"), "class" => "col-md-6 col-lg-4 mb-3"], $data);
     echo form_field(["type" => "textarea", "name" => "Description", "key" => "description", "class" => "col-md-6 col-lg-4 mb-3"], $data);
