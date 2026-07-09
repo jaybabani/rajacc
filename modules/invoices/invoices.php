@@ -53,8 +53,14 @@ include '../../common/header.php';
       "search" => false,
       "class" => "nowrap",
       "acl" => ["edit" => "invoices-update"],
+      "links" => [
+        ["text" => "Tax", "icon" => "download", "url" => ROOT_PATH . "/modules/invoices/invoice-build.php?invoice={random_string}{random_string}-t-{random_string}-{id}-{random_string}", "acl" => "invoices-downloadtax", "class" => "prod-move-link"],
+        ["text" => "", "icon" => "shield", "url" => ROOT_PATH . "/modules/invoices/invoice-build.php?invoice={random_string}{random_string}-s-{random_string}-{id}-{random_string}", "acl" => "invoices-downloadsummary", "class" => "prod-move-link"],
+      ],
     ],
   ];
+
+  // 
 
   $fetch_columns = [];
 

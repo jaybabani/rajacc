@@ -1,0 +1,159 @@
+<h2 class="heading">TAX INVOICE</h2>
+
+<div class="row">
+
+  <table border="0" cellspacing="0" cellpadding="0" class="main">
+    <tr>
+      <td colspan="2" rowspan="3" class="w50">
+        <p><strong>%company%</strong></p>
+        <p>%address%</p>
+      </td>
+      <td class="w25">
+        <p>Invoice No.</p><strong>%invoice_no%</strong>
+      </td>
+      <td class="w25">
+        <p>Dated</p><strong>%invoice_date%</strong>
+      </td>
+    </tr>
+    <tr>
+      <td class="w25">
+        <p>Delivery Note</p><strong>%delivery_note%</strong>
+      </td>
+      <td class="w25">
+        <p>Mode/Terms of payment</p><strong>%terms_of_payment%</strong>
+      </td>
+    </tr>
+    <tr>
+      <td class="w25">
+        <p>Reference No.</p><strong>%reference_no%</strong>
+      </td>
+      <td class="w25">
+        <p>Other Reference(s)</p><strong>%other_reference%</strong>
+      </td>
+    </tr>
+
+    <tr>
+      <td colspan="2" rowspan="3" class="w50">
+        <p>Consignee (Ship to)</p>
+        <p><strong>%ship_to_company%</strong></p>
+        %ship_to_address%
+        %ship_to_taxinfo%
+      </td>
+      <td class="w25">
+        <p>Buyer's Order No.</p><strong>%buyer_order_no%</strong>
+      </td>
+      <td class="w25">
+        <p>Dated</p><strong>%buyer_order_date%</strong>
+      </td>
+    </tr>
+    <tr>
+      <td class="w25">
+        <p>Dispatch Doc No.</p><strong>%dispatch_doc_no%</strong>
+      </td>
+      <td class="w25">
+        <p>Delivery Note Date</p><strong>%delivery_note_date%</strong>
+      </td>
+    </tr>
+    <tr>
+      <td class="w25">
+        Dispatched through <strong>%dispatched_through%</strong>
+      </td>
+      <td class="w25">
+        Destination <strong>%destination%</strong>
+      </td>
+    </tr>
+
+
+    <tr>
+      <td colspan="2" rowspan="2" class="w50">
+        <p>Buyer (Bill to)</p>
+        <p><strong>%buyer_company%</strong></p>
+        %buyer_address%
+        %buyer_taxinfo%
+      </td>
+      <td class="w25">
+        <p>Bill of lading/LR-RR No.</p><strong>%transport_document_no%</strong>
+      </td>
+      <td class="w25">
+        <p>Motor Vehicle No.</p><strong>%vehicle_no%</strong>
+      </td>
+    </tr>
+    <tr>
+      <td class="w50" colspan="2">
+        <p>Terms of delivery</p><strong>%terms_of_delivery%</strong>
+      </td>
+    </tr>
+
+  </table>
+
+
+  <table border="0" cellspacing="0" cellpadding="0" class="items">
+    <tr>
+      <th class="w5">Sr<br>No.</th>
+      <th class="w50">Description of Goods/Service</th>
+      <th class="w5">HSN/<br>SAC</th>
+      <th class="w5">Quantity</th>
+      <th class="w10">Rate<br>(₹) </th>
+      <th class="w5">Per</th>
+      <th class="w5">Discount<br>(%)</th>
+      <th class="w15">Amount</th>
+    </tr>
+    %invoice_items%
+    %packing_cost%
+    %transport_cost%
+    %loading_cost%
+    %other_cost%
+    
+    <tr>
+      <td></td>
+      <td>%tax_cost_title%</td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td class="right"><strong>%tax_cost%</strong></td>
+    </tr>
+    <tr>
+      <td></td>
+      <td>Total</td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td class="right"><strong>₹ %total%</strong></td>
+    </tr>
+
+    <tr>
+      <td colspan="8" class="bt">
+        <p>Amount Chargeable (in words)</p>
+        <strong>%total_in_words%</strong>
+      </td>
+    </tr>
+  </table>
+
+  %tax_summary_table%
+
+  <table border="0" cellspacing="0" cellpadding="0" class="footer">
+    <tr>
+      <td colspan="2">
+        <p>Company's GST No.: %seller_gst%</p>
+        <p>Company's PAN: %seller_pan%</p>
+      </td>
+    </tr>
+    <tr>
+      <td class="w70">
+        <p>Declaration<br>We declare that this invoice shows the actual price of the goods<br>described and that all particulars are true and correct<p>
+      </td>
+      <td class="w30">
+        <p><strong>For %company%</strong></p>
+        <p><br></p>
+        <p>Authorized Signatory</p>
+      </td>
+    </tr>
+  </table>
+
+  <p class="disc">This is a Computer Generated Invoice</p>
+  
+</div>

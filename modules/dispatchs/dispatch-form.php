@@ -34,6 +34,16 @@ include("../../common/header.php");
     ["key" => "order_id"],
     ["key" => "notes"],
     ["key" => "status"],
+
+    ["key" => "packing_cost"],
+    ["key" => "loading_cost"],
+    ["key" => "transport_cost"],
+    ["key" => "other_cost"],
+    ["key" => "transporter_name"],
+    ["key" => "vehicle_no"],
+    ["key" => "transport_document_no"],
+    ["key" => "documents", "type" => "multi-file"],
+
     ["key" => "created_on_date", "type" => "date"],
     ["key" => "auth_user", "type" => "session_user"],
     ["key" => "updated", "type" => "time"],
@@ -94,6 +104,41 @@ include("../../common/header.php");
     echo form_field(["type" => "select", "name" => "Status", "key" => "status", "required" => true, "options" => get_dispatch_status_arr(), "class" => "col-md-6 col-lg-4 mb-3"], $data);
     echo form_field(["type" => "date", "name" => "Created on date", "key" => "created_on_date", "class" => "col-md-6 col-lg-4 mb-3"], $data);
     echo form_field(["type" => "textarea", "name" => "Notes", "key" => "notes", "class" => "col-md-6 col-lg-4 mb-3"], $data);
+
+    echo form_field(["type" => "number", "name" => "Packing Cost", "key" => "packing_cost", "class" => "col-md-6 col-lg-4 mb-3"], $data);
+    echo form_field(["type" => "number", "name" => "Loading Cost", "key" => "loading_cost", "class" => "col-md-6 col-lg-4 mb-3"], $data);
+    echo form_field(["type" => "number", "name" => "Transport Cost", "key" => "transport_cost", "class" => "col-md-6 col-lg-4 mb-3"], $data);
+    echo form_field(["type" => "number", "name" => "Any Other Cost", "key" => "other_cost", "class" => "col-md-6 col-lg-4 mb-3"], $data);
+    echo form_field(["type" => "text", "name" => "Transporter Name", "key" => "transporter_name", "class" => "col-md-6 col-lg-4 mb-3"], $data);
+    echo form_field(["type" => "text", "name" => "Transporter Vehicle No.", "key" => "vehicle_no", "class" => "col-md-6 col-lg-4 mb-3"], $data);
+    echo form_field(["type" => "text", "name" => "Transporter Document No.", "eg" => "(LR / GRN / AWB / RR)", "key" => "transport_document_no", "class" => "col-md-6 col-lg-4 mb-3"], $data);
+
+
+    $data["documents"] = [];
+    if ($mode == 'update' && isset($id) && $id != "" && $id != NULL) {
+      $documents_arr = fetch_data([
+        "table" => "uploads",
+        "columns" => "id, name, thumb, type, small, caption, other",
+        "condition" => " table_name = '" . $tablename . "' AND row_id = '" . $id . "' AND file_type = 'document' ",
+        "order" => "",
+        "limit" => ""
+      ]);    // print_arr($documents_arr);
+      $data["documents"] = $documents_arr;
+    }
+    // print_arr($data);
+
+    // print_arr(get_attributes_arr("document_type"));
+
+    // print_arr(get_attributes_arr("raw_material_category"));
+
+    echo form_field([
+      "type" => "multi-file",
+      "name" => "Documents",
+      "key" => "documents",
+      "attributes" => get_attributes_arr("document_type"),
+      "display_size" => "small",
+      "class" => "col-md-6 col-lg-4 mb-3"
+    ], $data);
 
     echo form_field(["type" => "submit", "name" => "Save", "key" => "save", "class" => "col-md-12 col-sm-12 col-xs-12 text-center"], $data);
 

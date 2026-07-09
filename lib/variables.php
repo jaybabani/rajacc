@@ -7,6 +7,9 @@ $table_trades = "trades";
 $GLOBALS['ALLOW_UPLOAD_TYPE'] = ['image/*', 'application/pdf'];
 global $ALLOW_UPLOAD_TYPE;
 
+$inv_adjust = 0.5;
+global $inv_adjust;
+
 function acl_roles($format = "")
 {
 	$acl_roles = [
@@ -89,6 +92,9 @@ function acl_roles($format = "")
 		["invoices-update", "Update invoices"],
 		["invoices-create", "Add new invoices"],
 		// ["invoices-delete", "Delete invoices"],
+		["invoices-downloadtax", "Download tax invoices pdf"],
+		["invoices-downloadsummary", "Download invoice summary pdf"],
+
 		["invoice_items-read", "View all invoice items"],
 		["invoice_items-update", "Update invoice items"],
 		["invoice_items-create", "Add new invoice items"],
@@ -661,6 +667,52 @@ function bom_cost_type_arr()
 		"transport" => "Transport cost",
 		"overhead" => "Overhead cost",
 		"other" => "Other costs",
+	];
+	return $arr;
+}
+
+
+function get_gst_states_arr()
+{
+	$arr = [
+		'01' => 'Jammu & Kashmir',
+		'02' => 'Himachal Pradesh',
+		'03' => 'Punjab',
+		'04' => 'Chandigarh',
+		'05' => 'Uttarakhand',
+		'06' => 'Haryana',
+		'07' => 'Delhi',
+		'08' => 'Rajasthan',
+		'09' => 'Uttar Pradesh',
+		'10' => 'Bihar',
+		'11' => 'Sikkim',
+		'12' => 'Arunachal Pradesh',
+		'13' => 'Nagaland',
+		'14' => 'Manipur',
+		'15' => 'Mizoram',
+		'16' => 'Tripura',
+		'17' => 'Meghalaya',
+		'18' => 'Assam',
+		'19' => 'West Bengal',
+		'20' => 'Jharkhand',
+		'21' => 'Odisha',
+		'22' => 'Chhattisgarh',
+		'23' => 'Madhya Pradesh',
+		'24' => 'Gujarat',
+		'26' => 'Dadra & Nagar Haveli and Daman & Diu',
+		'27' => 'Maharashtra',
+		'29' => 'Karnataka',
+		'30' => 'Goa',
+		'31' => 'Lakshadweep',
+		'32' => 'Kerala',
+		'33' => 'Tamil Nadu',
+		'34' => 'Puducherry',
+		'35' => 'Andaman & Nicobar Islands',
+		'36' => 'Telangana',
+		'37' => 'Andhra Pradesh',
+		'38' => 'Ladakh',
+		'97' => 'Other Territory',
+		'99' => 'Centre Jurisdiction'
 	];
 	return $arr;
 }

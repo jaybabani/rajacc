@@ -76,6 +76,16 @@ include '../../common/header.php';
 
   $detail_columns = [
     ['name' => 'Notes', 'column' => 'notes'],
+
+    ["name" => "Packing Cost", "column" => "packing_cost"],
+    ["name" => "Loading Cost", "column" => "loading_cost"],
+    ["name" => "Any Other Cost", "column" => "other_cost"],
+    ["name" => "Transport Cost", "column" => "transport_cost"],
+    ["name" => "Transporter Name", "column" => "transporter_name"],
+    ["name" => "Transporter Vehicle No.", "column" => "vehicle_no"],
+    ["name" => "Transporter Document No.", "column" => "transport_document_no"],
+    ["name" => "Documents", "type" => "multi-file", "attributes" => get_attributes_arr("document_type"),],
+
     // ["name" => "Purchase Details", "column" => "purchase", "options" => $purchases_arr, "type" => "table_id", "option_id" => "id", "option_label" => "title", "module" => "purchases"],['name' => 'Last update', 'type' => 'last_update_info'],['name' => 'History','type' => 'history','history_columns' => [  [    'name' => 'Status',    'column' => 'status',    'options' => get_dispatch_status_arr(),    'badge' => true,  ],  [    'name' => 'Payment Status',    'column' => 'payment_status',    'options' => get_dispatch_payment_status_arr(),    'badge' => true,  ],  // ["name" => "Quantity", "column" => "quantity"]],],
     ["name" => "Last update", "type" => "last_update_info"],
     [

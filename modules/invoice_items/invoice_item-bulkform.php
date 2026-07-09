@@ -49,6 +49,7 @@ include '../../common/header.php';
       ['key' => 'igst'],
       ['key' => 'cgst'],
       ['key' => 'sgst'],
+      ['key' => 'hsn_sac'],
       ['key' => 'quantity'],
     ],
   ];
@@ -64,6 +65,7 @@ include '../../common/header.php';
       ['key' => 'igst'],
       ['key' => 'cgst'],
       ['key' => 'sgst'],
+      ['key' => 'hsn_sac'],
     ],
   ];
 
@@ -147,6 +149,7 @@ include '../../common/header.php';
     $igsts = $products_arr["igsts"];
     $cgsts = $products_arr["cgsts"];
     $sgsts = $products_arr["sgsts"];
+    $hsn_sacs = $products_arr["hsn_sacs"];
     $rowindex = [];
     $costing = get_product_cost($product_ids);
     // print_arr($costing);
@@ -164,6 +167,7 @@ include '../../common/header.php';
     $igsts = $invoice_item_details["igst"];
     $cgsts = $invoice_item_details["cgst"];
     $sgsts = $invoice_item_details["sgst"];
+    $hsn_sacs = $invoice_item_details["hsn_sac"];
     $rowindex = $invoice_item_details["rowindex"];
   }
 
@@ -181,6 +185,7 @@ include '../../common/header.php';
   $vars["igsts"] = $igsts;
   $vars["cgsts"] = $cgsts;
   $vars["sgsts"] = $sgsts;
+  $vars["hsn_sacs"] = $hsn_sacs;
   $vars["rowindex"] = $rowindex;
 
   $display_new_rows = sizeof($product_ids);
@@ -194,7 +199,7 @@ include '../../common/header.php';
     $s = '';
     $s .= "<tr data-index='" . $index . "'>";
     $data["product_name[]"] = $vars["products"][$pid];
-    $data["gst_info[]"] = "<small><i>(IGST: " . $vars["igsts"][$pid] . "% CGST:" . $vars["cgsts"][$pid] . "% SGST:" . $vars["sgsts"][$pid] . "%)</i></small>";
+    $data["gst_info[]"] = "<small><i>(IGST: " . $vars["igsts"][$pid] . "% CGST:" . $vars["cgsts"][$pid] . "% SGST:" . $vars["sgsts"][$pid] . "%  HSN/SAC: " . $vars["hsn_sacs"][$pid] . ")</i></small>";
     $data["product[]"] = $pid;
     $data["quantity[]"] = $vars["quantities"][$pid];
     $data["rate[]"] = "";
@@ -202,6 +207,7 @@ include '../../common/header.php';
     $data["igst[]"] = $vars["igsts"][$pid];
     $data["cgst[]"] = $vars["cgsts"][$pid];
     $data["sgst[]"] = $vars["sgsts"][$pid];
+    $data["hsn_sac[]"] = $vars["hsn_sacs"][$pid];
     $data["rowindex[]"] = "";
 
     if ($mode == "update") {
@@ -228,7 +234,8 @@ include '../../common/header.php';
       . form_field(['type' => 'display', 'name' => '', 'key' => 'gst_info[]', 'class' => '',], $data)
       . form_field(['type' => 'hidden', 'name' => 'IGST (%)', 'key' => 'igst[]', 'required' => true, 'class' => '',], $data)
       . form_field(['type' => 'hidden', 'name' => 'CGST (%)', 'key' => 'cgst[]', 'required' => true, 'class' => '',], $data)
-      . form_field(['type' => 'hidden', 'name' => 'SGST (%)', 'key' => 'sgst[]', 'required' => true, 'class' => '',], $data);
+      . form_field(['type' => 'hidden', 'name' => 'SGST (%)', 'key' => 'sgst[]', 'required' => true, 'class' => '',], $data)
+      . form_field(['type' => 'hidden', 'name' => 'HSN / SAC', 'key' => 'hsn_sac[]', 'required' => true, 'class' => '',], $data);
     $s .=  '</td>';
     $s .= '<td>'
       . form_field(['type' => 'hidden', 'name' => 'Quantity', 'key' => 'quantity[]', 'class' => '',], $data)

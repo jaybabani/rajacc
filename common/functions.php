@@ -590,8 +590,10 @@ function crud_read($vars)
                                 foreach ($dv["links"] as $lk => $lv) {
                                     if (isset($lv["acl"]) && in_array($lv["acl"], $_SESSION["acl"])) {
                                         $url = $lv["url"];
+                                        // $url = str_replace("{random_string}",randomString(10),$url);
                                         $url = preg_replace_callback('/\{([a-zA-Z0-9_]+)\}/', function ($matches) use ($r) {
                                             $key = $matches[1];
+                                            if($key == "random_string"){ return randomString(rand(25,40)); }
                                             return $r[$key] ?? $matches[0]; // keep original if key missing
                                         }, $url);
                                         $text = $lv["text"];
@@ -778,6 +780,18 @@ function crud_read($vars)
     // return $ret;
 }
 
+function randomString($length = 16)
+{
+    $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+    $charactersLength = strlen($characters);
+    $randomString = '';
+
+    for ($i = 0; $i < $length; $i++) {
+        $randomString .= $characters[random_int(0, $charactersLength - 1)];
+    }
+
+    return $randomString;
+}
 
 function check_row_condition($r, $condition)
 {
@@ -2538,7 +2552,7 @@ function fetch_data($vars)
 
 function get_invoice_items($invoice)
 {
-    $invoice_items_arr = fetch_data(["table" => "invoice_items", "columns" => "id, product, quantity, rate, discount, igst, cgst, sgst", "condition" => " invoice = '" . $invoice . "' ", "order" => "product ASC", "limit" => ""]);
+    $invoice_items_arr = fetch_data(["table" => "invoice_items", "columns" => "id, product, quantity, rate, discount, igst, cgst, sgst, hsn_sac", "condition" => " invoice = '" . $invoice . "' ", "order" => "product ASC", "limit" => ""]);
     // foreach ($invoice_items_arr as $opk => $opv) {
     //     $product_ids[] = $opv["product"];
     //     $order_products[] = $opv;
@@ -2609,6 +2623,7 @@ function get_invoice_item_details($items, $format = "")
         $igst[$pid] = $r["igst"];
         $cgst[$pid] = $r["cgst"];
         $sgst[$pid] = $r["sgst"];
+        $hsn_sac[$pid] = $r["hsn_sac"];
         $rowindex[$pid] = $r["id"];
     }
     $ret["product_ids"] = $product_ids;
@@ -2618,6 +2633,7 @@ function get_invoice_item_details($items, $format = "")
     $ret["igst"] = $igst;
     $ret["cgst"] = $cgst;
     $ret["sgst"] = $sgst;
+    $ret["hsn_sac"] = $hsn_sac;
     $ret["rowindex"] = $rowindex;
 
     return $ret;
@@ -2630,11 +2646,12 @@ function get_products_by_ids($ids)
         $condition = " id IN (" . implode(",", $ids) . ")";
     }
 
-    $product_arr = fetch_data(["table" => "products", "columns" => "id, product, igst, cgst, sgst", "condition" => $condition, "order" => "product ASC", "limit" => ""]);        // print_arr($product_arr);
+    $product_arr = fetch_data(["table" => "products", "columns" => "id, product, igst, cgst, sgst, hsn_sac", "condition" => $condition, "order" => "product ASC", "limit" => ""]);        // print_arr($product_arr);
     $products = [];
     $igsts = [];
     $cgsts = [];
     $sgsts = [];
+    $hsn_sacs = [];
 
     $prodgst = [];
     foreach ($product_arr as $vk => $vv) {
@@ -2642,11 +2659,13 @@ function get_products_by_ids($ids)
         $igsts[$vv["id"]] = $vv["igst"];
         $cgsts[$vv["id"]] = $vv["cgst"];
         $sgsts[$vv["id"]] = $vv["sgst"];
-
+        $hsn_sacs[$vv["id"]] = $vv["hsn_sac"];
+               
         $prodgst[$vv["id"]] = [];
         $prodgst[$vv["id"]]["igst"] = $vv["igst"];
         $prodgst[$vv["id"]]["cgst"] = $vv["cgst"];
         $prodgst[$vv["id"]]["sgst"] = $vv["sgst"];
+        $prodgst[$vv["id"]]["hsn_sac"] = $vv["hsn_sac"];
     }
     // print_arr($products); 
 
@@ -2655,6 +2674,7 @@ function get_products_by_ids($ids)
         "igsts" => $igsts,
         "cgsts" => $cgsts,
         "sgsts" => $sgsts,
+        "hsn_sacs" => $hsn_sacs,
         "prod_gst" => $prodgst
     ];
 }
@@ -3199,4 +3219,33 @@ function product_cost_details($costing, $prodid)
         }
     }
     return ["detail" => $d, "total" => ($total)];
+}
+
+
+function getFinancialYears($ymd)
+{
+    $year = (int)substr($ymd, 0, 4);
+    $month = (int)substr($ymd, 4, 2);
+
+    // Financial Year starts on 1st April
+    if ($month >= 4) {
+        $fyStart = $year;
+        $fyEnd   = $year + 1;
+    } else {
+        $fyStart = $year - 1;
+        $fyEnd   = $year;
+    }
+
+    $fy = substr($fyStart, -2) . '-' . substr($fyEnd, -2);
+
+    // Assessment Year = FY + 1
+    $ayStart = $fyStart + 1;
+    $ayEnd   = $fyEnd + 1;
+
+    $ay = substr($ayStart, -2) . '-' . substr($ayEnd, -2);
+
+    return [
+        'fy' => $fy,
+        'ay' => $ay
+    ];
 }
