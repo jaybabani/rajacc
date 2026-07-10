@@ -37,8 +37,8 @@ include '../../common/header.php';
     $product_ids[] = $v["id"];
   }
 
-  $product_ids = [];
-  $product_ids[] = 30;
+  // $product_ids = [];
+  // $product_ids[] = 30;
 
   $costing = get_product_cost($product_ids);
   // print_arr($costing);

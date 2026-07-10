@@ -77,16 +77,36 @@ function acl_roles($format = "")
 		["order_items-create", "Add new order items"],
 		["order_items-delete", "Delete order items"],
 
-		["dispatchs-read", "View all dispatchs"],
-		["dispatchs-update", "Update dispatchs"],
-		["dispatchs-create", "Add new dispatchs"],
-		// ["dispatchs-delete", "Delete dispatchs"],
+		["productions-read", "View all productions"],
+		["productions-update", "Update productions"],
+		["productions-create", "Add new productions"],
+		["productions-delete", "Delete productions"],
+		["production_items-read", "View all production items"],
+		["production_items-update", "Update production items"],
+		["production_items-create", "Add new production items"],
+		["production_items-delete", "Delete production items"],
+
+
+		["production_batchs-read", "View all production batches"],
+		["production_batchs-update", "Update production batches"],
+		["production_batchs-create", "Add new production batches"],
+		// ["production_batchs-delete", "Delete production batches"],
+		["production_batch_items-read", "View all production batch items"],
+		["production_batch_items-update", "Update production batch items"],
+		["production_batch_items-create", "Add new production batch items"],
+		["production_batch_items-delete", "Delete production batch items"],
+
+		["dispatchs-read", "View all dispatches"],
+		["dispatchs-update", "Update dispatches"],
+		["dispatchs-create", "Add new dispatches"],
+		// ["dispatchs-delete", "Delete dispatches"],
 		["dispatch_items-read", "View all dispatch items"],
 		["dispatch_items-update", "Update dispatch items"],
 		["dispatch_items-create", "Add new dispatch items"],
 		["dispatch_items-delete", "Delete dispatch items"],
 
 		["product_movements-read", "View all product movements"],
+		["raw_material_movements-read", "View all raw material movements"],
 
 		["invoices-read", "View all invoices"],
 		["invoices-update", "Update invoices"],
@@ -333,7 +353,26 @@ function get_module_pages_arr()
 			"delete" => "order_item-delete",
 			"form" => ROOT_PATH . "/modules/order_items/order_item-form.php?id=XXX"
 		],
-
+		"productions" => [
+			"name" => "Productions",
+			"id_prefix" => "PDC-",
+			"read" => "productions",
+			"update" => "production-form",
+			"create" => "production-form",
+			"delete" => "production-delete",
+			"form" => ROOT_PATH . "/modules/productions/production-form.php?id=XXX"
+		],
+		"production_items" => [
+			"name" => "Production Items",
+			"id_prefix" => "PDCI-",
+			"read" => "production_items",
+			"update" => "production_item-form",
+			"create" => "production_item-form",
+			"bulk_update" => "production_item-bulkform",
+			"bulk_create" => "production_item-bulkform",
+			"delete" => "production_item-delete",
+			"form" => ROOT_PATH . "/modules/production_items/production_item-form.php?id=XXX"
+		],
 		"boms" => [
 			"name" => "BOM",
 			"id_prefix" => "BOM-",
@@ -385,6 +424,29 @@ function get_module_pages_arr()
 			"delete" => "dispatch_item-delete",
 			"form" => ROOT_PATH . "/modules/dispatch_items/dispatch_item-form.php?id=XXX"
 		],
+
+
+		"production_batchs" => [
+			"name" => "production batches",
+			"id_prefix" => "PRB-",
+			"read" => "production_batchs",
+			"update" => "production_batch-form",
+			"create" => "production_batch-form",
+			// "delete" => "production_batch-delete",
+			"form" => ROOT_PATH . "/modules/production_batchs/production_batch-form.php?id=XXX"
+		],
+		"production_batch_items" => [
+			"name" => "production batch items",
+			"id_prefix" => "PRBI-",
+			"read" => "production_batch_items",
+			// "update" => "production_batch_item-form",
+			// "create" => "production_batch_item-form",
+			"bulk_update" => "production_batch_item-bulkform",
+			"bulk_create" => "production_batch_item-bulkform",
+			"delete" => "production_batch_item-delete",
+			"form" => ROOT_PATH . "/modules/production_batch_items/dispatch_item-form.php?id=XXX"
+		],
+
 		"product_movements" => [
 			"name" => "product_movements",
 			"id_prefix" => "PMOV-",
@@ -393,6 +455,15 @@ function get_module_pages_arr()
 			// "create" => "dispatch-form",
 			// "delete" => "dispatch-delete",
 			// "form" => ROOT_PATH . "/modules/product_movements/product_movement-form.php?id=XXX"
+		],
+		"raw_material_movements" => [
+			"name" => "raw_material_movements",
+			"id_prefix" => "RMMOV-",
+			"read" => "raw_material_movements",
+			// "update" => "dispatch-form",
+			// "create" => "dispatch-form",
+			// "delete" => "dispatch-delete",
+			// "form" => ROOT_PATH . "/modules/raw_material_movements/raw_material_movement-form.php?id=XXX"
 		],
 		"invoices" => [
 			"name" => "invoices",
@@ -543,6 +614,19 @@ function get_purchase_payment_status_arr()
 	return $arr;
 }
 
+function get_production_status_arr()
+{
+	$arr = [
+		"production_placed" => "New Production",
+		"production_started" => "Production started",
+		"partially_completed" => "Partially completed",
+		"completed" => "Completed",
+		"cancelled" => "Cancelled",
+	];
+	return $arr;
+}
+
+
 
 function get_order_payment_status_arr()
 {
@@ -568,6 +652,17 @@ function get_order_status_arr()
 	return $arr;
 }
 
+function get_production_batch_status_arr()
+{
+	$arr = [
+		"new" => "New Production batch",
+		"production_ready" => "Production Ready",
+		"delivered" => "Delivered",
+		"cancelled" => "Cancelled",
+	];
+	return $arr;
+}
+
 function get_dispatch_status_arr()
 {
 	$arr = [
@@ -587,6 +682,16 @@ function get_product_movement_action_arr()
 		"reserve" => "Product Reserved",
 		"unreserve" => "Product Unreserved",
 		"consume" => "Product Dispatched",
+	];
+	return $arr;
+}
+
+function get_raw_material_movement_action_arr()
+{
+	$arr = [
+		"reserve" => "Raw material Reserved",
+		"unreserve" => "Raw material Unreserved",
+		"consume" => "Raw material Consumed",
 	];
 	return $arr;
 }

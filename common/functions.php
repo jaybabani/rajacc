@@ -2605,6 +2605,26 @@ function get_dispatch_products($dispatch, $format = "")
     return $ret;
 }
 
+
+function get_production_products($production, $format = "")
+{
+    $ret = [];
+    $product_ids = [];
+    $production_products = [];
+    $production_products_arr = fetch_data(["table" => "production_items", "columns" => "id, product, quantity, rate", "condition" => "production = '" . $production . "' ", "order" => "product ASC", "limit" => ""]);
+    foreach ($production_products_arr as $opk => $opv) {
+        $product_ids[] = $opv["product"];
+        $production_products[] = $opv;
+    }
+
+    $product_ids = array_values(array_filter(array_unique($product_ids)));
+
+    $ret["production_products"] = $production_products;
+    $ret["product_ids"] = $product_ids;
+
+    return $ret;
+}
+
 function get_invoice_item_details($items, $format = "")
 {
 
@@ -2638,6 +2658,59 @@ function get_invoice_item_details($items, $format = "")
 
     return $ret;
 }
+
+
+
+function get_raw_material_lot_quantities($raw_material_ids, $format = "")
+{
+
+    // fetch raw_material lots 
+    $condition = "";
+    if (is_array($raw_material_ids) && sizeof($raw_material_ids) > 0) {
+        $condition = " raw_material IN (" . implode(",", $raw_material_ids) . ") AND status = 'ready' AND available_quantity > 0 ";
+    }
+
+    $raw_material_lots_arr = fetch_data([
+        "table" => "raw_material_lots",
+        "columns" => "id, raw_material, available_quantity, reserved_quantity, consumed_quantity",
+        "condition" => $condition,
+        "order" => "raw_material ASC",
+        "limit" => ""
+    ]);        // print_arr($raw_material_arr);
+
+    if ($format == "merged_by_raw_material") {
+        $rm_qty = [];
+        foreach ($raw_material_lots_arr as $k => $v) {
+            $rmid = $v["raw_material"];
+            if (!isset($rm_qty[$rmid])) {
+                $rm_qty[$rmid] = [];
+            }
+            $rm_qty[$rmid][] = $v;
+        }
+
+        $lots = [];
+        foreach ($rm_qty as $rmid => $parr) {
+
+            $lots[$rmid] = [];
+            $lots[$rmid]["available"] = 0;
+            $lots[$rmid]["reserved"] = 0;
+            $lots[$rmid]["consumed"] = 0;
+
+            foreach ($parr as $k => $p) {
+                $lots[$rmid]["available"] += $p["available_quantity"];
+                $lots[$rmid]["reserved"] += $p["reserved_quantity"];
+                $lots[$rmid]["consumed"] += $p["consumed_quantity"];
+            }
+        }
+
+        return ["raw_material_lots" => $rm_qty, "raw_material_quantity" => $lots];
+    }
+    //
+    else {
+        return $raw_material_lots_arr;
+    }
+}
+
 
 function get_products_by_ids($ids)
 {
@@ -2678,6 +2751,29 @@ function get_products_by_ids($ids)
         "prod_gst" => $prodgst
     ];
 }
+
+
+function get_raw_materials_by_ids($ids)
+{
+    $condition = "";
+    if (is_array($ids) && sizeof($ids) > 0) {
+        $condition = " id IN (" . implode(",", $ids) . ")";
+    }
+
+    $raw_material_arr = fetch_data(["table" => "raw_materials", "columns" => "id, raw_material", "condition" => $condition, "order" => "raw_material ASC", "limit" => ""]);        // print_arr($raw_material_arr);
+    $raw_materials = [];
+
+    $prodgst = [];
+    foreach ($raw_material_arr as $vk => $vv) {
+        $raw_materials[$vv["id"]] = $vv["raw_material"];
+    }
+    // print_arr($raw_materials); 
+
+    return [
+        "raw_materials" => $raw_materials,
+    ];
+}
+
 
 
 function get_product_lot_quantities($product_ids, $format = "")
@@ -3026,7 +3122,7 @@ function product_boms($product_ids)
     $bom_items = [];
     $bom_costs = [];
     $raw_material_ids = [];
-
+    // print_arr($product_ids);
     $boms_ids = [];
     if (sizeof($product_ids) > 0) {
         $boms_arr = fetch_data(["table" => "boms", "columns" => "id, product", "condition" => " product IN (" . implode(",", $product_ids) . ") AND status = 'active' ", "order" => "", "limit" => ""]);

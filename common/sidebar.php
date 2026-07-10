@@ -93,8 +93,10 @@
     $show_menu["documents"] = "";
     $show_menu["folders"] = "";
     $show_menu["orders"] = "";
+    $show_menu["productions"] = "";
     $show_menu["boms"] = "";
     $show_menu["dispatchs"] = "";
+    $show_menu["production_batchs"] = "";
     $show_menu["invoices"] = "";
     
     $current_page = str_replace(".php","",basename($_SERVER['PHP_SELF']));
@@ -138,6 +140,12 @@
     }
     else if(in_array($current_page,array("orders","order-form","order-delete","order_items","order_item-form","order_item-bulkform","order_item-delete"))){
       $show_menu["orders"] = "show";
+    }
+    else if(in_array($current_page,array("productions","production-form","production-delete","production_items","production_item-form","production_item-bulkform","production_item-delete"))){
+      $show_menu["productions"] = "show";
+    }
+    else if(in_array($current_page,array("production_batchs","production_batch-form","production_batch-delete","production_batch_items", "production_batch_item-form", "production_batch_item-bulkform","production_batch_item-delete"))){
+      $show_menu["production_batchs"] = "show";
     }
     else if(in_array($current_page,array("boms","bom-form","bom-delete","bom_items","bom_item-form","bom_item-bulkform","bom_item-delete"
     ,"bom_costs","bom_cost-form","bom_cost-bulkform","bom_cost-delete"))){
@@ -202,6 +210,21 @@
     </li>
 
 
+    <?php $menuid = "purchases"; ?>
+    <li class="mb-1">
+      <button class="btn btn-toggle align-items-center collapsed" data-bs-toggle="collapse" data-bs-target="#<?php echo $menuid; ?>-collapse"  aria-expanded="<?php echo $show_menu[$menuid] == "show" ? "true" : "false"; ?>">
+        <span class="icon"><i data-feather="credit-card"></i></span> <span class="txt">Purchases</span>
+      </button>
+      <div class="collapse <?php echo $show_menu[$menuid]; ?>" id="<?php echo $menuid; ?>-collapse" data-bs-parent="#parent-level">
+        <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
+          <li><a href="<?php echo ROOT_PATH; ?>/modules/purchases/purchases.php" class="link-dark"><span>All purchases</span></a></li>
+          <li><a href="<?php echo ROOT_PATH; ?>/modules/purchases/purchase-form.php" class="link-dark"><span>Add new purchase</span></a></li>
+          <!-- <li><a href="<?php echo ROOT_PATH; ?>/modules/attributes/attributes.php?module=purchase_category" class="link-dark"><span>All purchase category</span></a></li>
+          <li><a href="<?php echo ROOT_PATH; ?>/modules/attributes/attribute-form.php?module=purchase_category" class="link-dark"><span>Add new purchase category</span></a></li> -->
+        </ul>
+      </div>
+    </li>    
+
     <?php $menuid = "raw_materials"; ?>
     <li class="mb-1">
       <button class="btn btn-toggle align-items-center collapsed" data-bs-toggle="collapse" data-bs-target="#<?php echo $menuid; ?>-collapse"  aria-expanded="<?php echo $show_menu[$menuid] == "show" ? "true" : "false"; ?>">
@@ -224,6 +247,38 @@
         </ul>
       </div>
     </li>     
+
+
+
+    <?php $menuid = "productions"; ?>
+    <li class="mb-1">
+      <button class="btn btn-toggle align-items-center collapsed" data-bs-toggle="collapse" data-bs-target="#<?php echo $menuid; ?>-collapse"  aria-expanded="<?php echo $show_menu[$menuid] == "show" ? "true" : "false"; ?>">
+        <span class="icon"><i data-feather="globe"></i></span> <span class="txt">Productions</span>
+      </button>
+      <div class="collapse <?php echo $show_menu[$menuid]; ?>" id="<?php echo $menuid; ?>-collapse" data-bs-parent="#parent-level">
+        <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
+          <li><a href="<?php echo ROOT_PATH; ?>/modules/productions/productions.php" class="link-dark"><span>All productions</span></a></li>
+          <li><a href="<?php echo ROOT_PATH; ?>/modules/productions/production-form.php" class="link-dark"><span>Add new production</span></a></li>
+        </ul>
+      </div>
+    </li>
+
+
+    <?php $menuid = "production_batchs"; ?>
+    <li class="mb-1">
+      <button class="btn btn-toggle align-items-center collapsed" data-bs-toggle="collapse" data-bs-target="#<?php echo $menuid; ?>-collapse"  aria-expanded="<?php echo $show_menu[$menuid] == "show" ? "true" : "false"; ?>">
+        <span class="icon"><i data-feather="package"></i></span> <span class="txt">Production Batches</span>
+      </button>
+      <div class="collapse <?php echo $show_menu[$menuid]; ?>" id="<?php echo $menuid; ?>-collapse" data-bs-parent="#parent-level">
+        <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
+          <li><a href="<?php echo ROOT_PATH; ?>/modules/production_batchs/production_batchs.php" class="link-dark"><span>All production batches</span></a></li>
+          <li><a href="<?php echo ROOT_PATH; ?>/modules/production_batchs/production_batch-form.php" class="link-dark"><span>Add new production batch</span></a></li>
+        </ul>
+      </div>
+    </li>    
+
+
+
 
     <?php $menuid = "products"; ?>
     <li class="mb-1">
@@ -288,21 +343,6 @@
           <li><a href="<?php echo ROOT_PATH; ?>/modules/vendors/vendor-form.php" class="link-dark"><span>Add new vendor</span></a></li>
           <li><a href="<?php echo ROOT_PATH; ?>/modules/attributes/attributes.php?module=vendor_category" class="link-dark"><span>All vendor category</span></a></li>
           <li><a href="<?php echo ROOT_PATH; ?>/modules/attributes/attribute-form.php?module=vendor_category" class="link-dark"><span>Add new vendor category</span></a></li>
-        </ul>
-      </div>
-    </li>    
-
-    <?php $menuid = "purchases"; ?>
-    <li class="mb-1">
-      <button class="btn btn-toggle align-items-center collapsed" data-bs-toggle="collapse" data-bs-target="#<?php echo $menuid; ?>-collapse"  aria-expanded="<?php echo $show_menu[$menuid] == "show" ? "true" : "false"; ?>">
-        <span class="icon"><i data-feather="credit-card"></i></span> <span class="txt">Purchases</span>
-      </button>
-      <div class="collapse <?php echo $show_menu[$menuid]; ?>" id="<?php echo $menuid; ?>-collapse" data-bs-parent="#parent-level">
-        <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
-          <li><a href="<?php echo ROOT_PATH; ?>/modules/purchases/purchases.php" class="link-dark"><span>All purchases</span></a></li>
-          <li><a href="<?php echo ROOT_PATH; ?>/modules/purchases/purchase-form.php" class="link-dark"><span>Add new purchase</span></a></li>
-          <!-- <li><a href="<?php echo ROOT_PATH; ?>/modules/attributes/attributes.php?module=purchase_category" class="link-dark"><span>All purchase category</span></a></li>
-          <li><a href="<?php echo ROOT_PATH; ?>/modules/attributes/attribute-form.php?module=purchase_category" class="link-dark"><span>Add new purchase category</span></a></li> -->
         </ul>
       </div>
     </li>    

@@ -321,11 +321,14 @@ body {
 .badge-yes {
 	background-color: rgba(var(--bs-success-rgb), 1);
 }
+.badge-production_placed,
 .badge-pending,
 .badge-new,
 .badge-no {
 	background-color: rgba(var(--bs-danger-rgb), 1);
 }
+.badge-production_ready,
+.badge-production_started,
 .badge-packed_and_ready,
 .badge-sent,
 .badge-draft,
@@ -340,6 +343,7 @@ body {
 .badge-purchased{
 	background-color: rgba(var(--bs-info-rgb), 1);
 }
+.badge-delivered,
 .badge-return,
 .badge-invoice_generated,
 .badge-order_placed,
@@ -348,6 +352,7 @@ body {
 .badge-received{
 	background-color: rgba(var(--bs-accent1-rgb), 1);
 }
+.badge-partially_completed,
 .badge-unreserve,
 .badge-dispatched,
 .badge-partially_received,
