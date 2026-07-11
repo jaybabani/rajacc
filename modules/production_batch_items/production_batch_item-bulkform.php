@@ -54,6 +54,7 @@ include '../../common/header.php';
   ];
 
   $manage_order_quantity = [
+    "type" => "raw_material",
     "action" => "reserve",
     "quantity_field" => "quantity"
   ];
@@ -86,11 +87,17 @@ include '../../common/header.php';
   $boms = product_boms($product_ids);
   $raw_material_ids = $boms["raw_material_ids"];  // print_arr($raw_material_ids);
   $raw_material_lots = get_raw_material_lot_quantities($raw_material_ids, "merged_by_raw_material");
+  // print_arr($raw_material_lots);
   $products_arr = get_products_by_ids($product_ids);
   $raw_materials_arr = get_raw_materials_by_ids($raw_material_ids);
+  $production_raw_materials_arr = get_production_raw_materials($production_products, $boms);
+  // print_arr($production_raw_materials_arr);
+  $production_raw_materials = $production_raw_materials_arr["production_raw_materials"];
+  
+  $raw_material_movements = fetch_raw_material_movements(["production" => $production, "production_batch" => $production_batch_data]);
+  // print_arr($raw_material_movements);
 
-  // $raw_material_movements = fetch_raw_material_movements(["production" => $production, "production_batch" => $production_batch_data]);
-  // $quantities = get_quantities_summary(["production" => $production, "production_products" => $production_products, "raw_material_lots" => $raw_material_lots, "product_movements" => $product_movements]);
+  $quantities = get_production_batch_quantities_summary(["production" => $production, "production_raw_materials" => $production_raw_materials, "raw_material_lots" => $raw_material_lots, "raw_material_movements" => $raw_material_movements]);
 
   $vars = [];
   $vars["production_batch"] = $production_batch_data;
@@ -100,20 +107,20 @@ include '../../common/header.php';
   $vars["boms"] = $boms;
   $vars["products"] = $products_arr["products"];
   $vars["raw_materials"] = $raw_materials_arr["raw_materials"];
-  // $vars["quantities"] = $quantities;
+  $vars["quantities"] = $quantities;
   $vars["raw_material_lots"] = $raw_material_lots["raw_material_lots"];
 
-  print_arrbox($vars, 500);
-  print_arrbox($vars["quantities"], 500);
-  die;
+  // print_arrbox($vars, 500);
+  // print_arrbox($vars["quantities"], 500);
+  // die;
 
-  function bulk_header_row($vars, $pid)
+  function bulk_header_row($vars, $rmid)
   {
 
     $qtymap = "";
-    // $qtymap .= json_encode($vars["quantities"][$pid]);
-    if(isset($vars["quantities"][$pid])){
-      $map = $vars["quantities"][$pid];
+    // $qtymap .= json_encode($vars["quantities"][$rmid]);
+    if(isset($vars["quantities"][$rmid])){
+      $map = $vars["quantities"][$rmid];
       if(isset($map["ordered"])){
         $qtymap .= "&nbsp; <span class='badge bg-accent2'>Ordered: ".$map["ordered"]."</span>";
       }
@@ -130,39 +137,39 @@ include '../../common/header.php';
         $qtymap .= "&nbsp; <span class='badge bg-warning'>Unreserved: ".$map["unreserve"]."</span>";
       }
       if(isset($map["consume"])){
-        $qtymap .= "&nbsp; <span class='badge bg-info'>Production Batched: ".$map["consume"]."</span>";
+        $qtymap .= "&nbsp; <span class='badge bg-info'>Consumed: ".$map["consume"]."</span>";
       }
     }
 
     $s = '';
-    $s .= "<tr data-pid='" . $pid . "'>";
-    $data["product_name[]"] = "<h6><span>Product</span>: <strong>" . $vars["products"][$pid] . "</strong> &nbsp; &nbsp; <span>Quantity:</span> <strong>" . $qtymap . "</strong></h6>";
+    $s .= "<tr data-rmid='" . $rmid . "'>";
+    $data["raw_material_name[]"] = "<h6><span>Raw material</span>: <strong>" . $vars["raw_materials"][$rmid] . "</strong> &nbsp; &nbsp; <span>Quantity:</span> <strong>" . $qtymap . "</strong></h6>";
     $s .=  '<td colspan=3>'
-      . form_field(['type' => 'display', 'name' => '', 'key' => 'product_name[]', 'class' => '',], $data)
+      . form_field(['type' => 'display', 'name' => '', 'key' => 'raw_material_name[]', 'class' => '',], $data)
       .  '</td>';
     $s .= '</tr>';
 
     return $s;
   }
 
-  function bulk_insert_table_row($index, $save_column_history, $vars, $pid, $raw_material_lot)
+  function bulk_insert_table_row($index, $save_column_history, $vars, $rmid, $raw_material_lot)
   {
 
     $s = '';
     $s .= "<tr data-index='" . $index . "'>";
-    $data["product[]"] = $pid;
+    $data["raw_material[]"] = $rmid;
     $data["raw_material_lot[]"] = $raw_material_lot["id"];
     $data["raw_material_lot_info[]"] = get_module_id_prefix("raw_material_lots") . $raw_material_lot["id"] . " &nbsp; (Available: " . $raw_material_lot["available_quantity"] . ")";
 
-    $maxqty = min([$raw_material_lot["available_quantity"], $vars["quantities"][$pid]["pending"]]);
+    $maxqty = min([$raw_material_lot["available_quantity"], $vars["quantities"][$rmid]["pending"]]);
 
     $s .=  '<td>'
       .  form_field(['type' => 'hidden', 'name' => '', 'key' => 'rowindex[]', 'class' => '',], [])
       .  column_history_fields($save_column_history, [])
-      . form_field(['type' => 'hidden', 'name' => 'Product', 'key' => 'product[]', 'class' => '',], $data);
+      . form_field(['type' => 'hidden', 'name' => 'Raw material', 'key' => 'raw_material[]', 'class' => '',], $data);
     $s .= form_field(['type' => 'number', 'name' => 'Reserve Quantity', 'key' => 'quantity[]', 'max' => $maxqty, 'required' => true, 'class' => '',], []) .  '</td>';
     $s .= '<td>'
-      . form_field(['type' => 'display', 'name' => 'Product Lot', 'key' => 'raw_material_lot_info[]', 'class' => ''], $data)
+      . form_field(['type' => 'display', 'name' => 'Raw material Lot', 'key' => 'raw_material_lot_info[]', 'class' => ''], $data)
       . form_field(['type' => 'hidden', 'name' => '', 'key' => 'raw_material_lot[]', 'class' => ''], $data)
       .  '</td>';
     $s .=  '<td>' . form_field(['type' => 'delete_row', 'name' => '', 'class' => '', 'key' => 'delete-row-' . $index . '', 'index' => $index], []) .  '</td>';
@@ -186,13 +193,13 @@ include '../../common/header.php';
           </thead>
           <tbody> <?php
                   $index = 0;
-                  foreach ($vars["quantities"] as $pid => $qv) {
+                  foreach ($vars["quantities"] as $rmid => $qv) {
                     if (isset($qv["pending"]) && $qv["pending"] > 0) {
-                      echo bulk_header_row($vars, $pid);
-                      if (isset($vars["raw_material_lots"][$pid])) {
-                        foreach ($vars["raw_material_lots"][$pid] as $lk => $plv) {
+                      echo bulk_header_row($vars, $rmid);
+                      if (isset($vars["raw_material_lots"][$rmid])) {
+                        foreach ($vars["raw_material_lots"][$rmid] as $lk => $rmlv) {
                           $index++;
-                          echo bulk_insert_table_row($index, $save_column_history, $vars, $pid, $plv);
+                          echo bulk_insert_table_row($index, $save_column_history, $vars, $rmid, $rmlv);
                         }
                       }
                     }

@@ -593,7 +593,9 @@ function crud_read($vars)
                                         // $url = str_replace("{random_string}",randomString(10),$url);
                                         $url = preg_replace_callback('/\{([a-zA-Z0-9_]+)\}/', function ($matches) use ($r) {
                                             $key = $matches[1];
-                                            if($key == "random_string"){ return randomString(rand(25,40)); }
+                                            if ($key == "random_string") {
+                                                return randomString(rand(25, 40));
+                                            }
                                             return $r[$key] ?? $matches[0]; // keep original if key missing
                                         }, $url);
                                         $text = $lv["text"];
@@ -646,7 +648,7 @@ function crud_read($vars)
                                 foreach ($dv["options"] as $ok => $ov) {
                                     // print_arr($ov);
                                     if (in_array($ov[$dv["option_id"]], $lnk)) {
-                                        $colval .= "<div class='vsele'>".$ov[$dv["option_label"]] . "</div>";
+                                        $colval .= "<div class='vsele'>" . $ov[$dv["option_label"]] . "</div>";
                                     }
                                 }
                                 $colval = trim($colval);
@@ -1576,7 +1578,7 @@ function module_submit_form($vars)
             //
             else {
 
-                if(isset($_REQ[$sv['key']])){
+                if (isset($_REQ[$sv['key']])) {
                     $query .= " " . $sv['key'] . " = \"" . $conn->real_escape_string($_REQ[$sv['key']]) . "\", ";
                 }
             }
@@ -1771,7 +1773,7 @@ function bi_bulk_submit_form($vars)
                     $insid = $conn->insert_id;
                     $affected_ids[] = $insid;
                     // save column history here
-                    save_product_movements($vars, $r);
+                    save_inventory_movements($vars, $r);
                     save_bulk_column_history($vars, $insid, $index);
                 } else {
                     $errors++;
@@ -1786,7 +1788,7 @@ function bi_bulk_submit_form($vars)
                 if ($sql) {
                     // $insid = $conn->insert_id;
                     $affected_ids[] = $r[$primary_column];
-                    save_product_movements($vars, $r);
+                    save_inventory_movements($vars, $r);
                     save_bulk_column_history($vars, $r[$primary_column], $index);
                 } else {
                     $errors++;
@@ -1974,7 +1976,7 @@ function save_multi_document_upload($vars, $primary_id)
 }
 
 
-function save_product_movements($vars, $r)
+function save_inventory_movements($vars, $r)
 {
 
     if (isset($vars["manage_order_quantity"])) {
@@ -1988,23 +1990,37 @@ function save_product_movements($vars, $r)
         // die;
 
         $action = $manage["action"];
-        $table = "product_movements";
+        $type = $manage["type"];
+        $table = "";
         $ts = getts();
         $curr_user_id = get_curr_user_id();
         $created = $ts . "_" . $curr_user_id;
-
         $quantity = $r[$manage["quantity_field"]];
 
-        // $action_date = $ts;
+        if ($type == "raw_material") {
+            $table = "raw_material_movements";
 
-        $sql = " INSERT INTO " . $table . " (order_id, dispatch, product, product_lot, quantity, action, action_date, auth_user, updated, created) 
-        VALUES ('" . $r["order_id"] . "', '" . $r["dispatch"] . "', '" . $r["product"] . "', '" . $r["product_lot"] . "', '" . $quantity . "', 
-         '" . $action . "', '" . $ts . "', '" . $curr_user_id . "', '" . $ts . "', '" . $created . "' ) ";
+            $sql = " INSERT INTO " . $table . " (production, production_batch, raw_material, raw_material_lot, quantity, action, action_date, auth_user, updated, created) 
+                        VALUES ('" . $r["production"] . "', '" . $r["production_batch"] . "', '" . $r["raw_material"] . "', '" . $r["raw_material_lot"] . "', '" . $quantity . "', 
+                        '" . $action . "', '" . $ts . "', '" . $curr_user_id . "', '" . $ts . "', '" . $created . "' ) ";
 
-        if ($conn->query($sql)) {
-            manage_lot_quantity("product_lots", $r["product_lot"], $action, $quantity);
+            if ($conn->query($sql)) {
+                manage_lot_quantity("raw_material_lots", $r["raw_material_lot"], $action, $quantity);
+            }
         }
 
+        //
+        else if ($type == "product") {
+            $table = "product_movements";
+
+            $sql = " INSERT INTO " . $table . " (order_id, dispatch, product, product_lot, quantity, action, action_date, auth_user, updated, created) 
+                        VALUES ('" . $r["order_id"] . "', '" . $r["dispatch"] . "', '" . $r["product"] . "', '" . $r["product_lot"] . "', '" . $quantity . "', 
+                        '" . $action . "', '" . $ts . "', '" . $curr_user_id . "', '" . $ts . "', '" . $created . "' ) ";
+
+            if ($conn->query($sql)) {
+                manage_lot_quantity("product_lots", $r["product_lot"], $action, $quantity);
+            }
+        }
         // print_arr($vars);
         // die;
     }
@@ -2230,6 +2246,7 @@ function execute_action($action, $vars, $primary_id)
         // print_arr($vars);
         $movvars = [
             "manage_order_quantity" => [
+                "type" => "product",
                 "action" => "consume",
                 "quantity_field" => "quantity"
             ]
@@ -2240,7 +2257,38 @@ function execute_action($action, $vars, $primary_id)
         foreach ($dispatch_items_arr as $opk => $opv) {
             // enter product movement as consumed for each product lot
             // print_arr($opv);
-            save_product_movements($movvars, $opv);
+            save_inventory_movements($movvars, $opv);
+            // $pid = $opv["product"];
+        }
+
+        // maintain master quantity of each product lot
+
+        // die;
+    }
+
+    //
+    else if ($action == "production_batch_delivered") {
+
+        // echo "invoice_cancelled";
+        $_REQ = $vars["submit_data"];
+        // $production_batch = $_REQ["production_batch"];
+        $production_batch = $_REQ["id"];
+        // print_arr($_REQ);
+        // print_arr($vars);
+        $movvars = [
+            "manage_order_quantity" => [
+                "type" => "raw_material",
+                "action" => "consume",
+                "quantity_field" => "quantity"
+            ]
+        ];
+
+        // find product lots in a production_batch
+        $production_batch_items_arr = fetch_data(["table" => "production_batch_items", "columns" => "id, raw_material, quantity, production_batch, production, raw_material_lot", "condition" => " production_batch = '" . $production_batch . "' ", "order" => "raw_material ASC", "limit" => ""]);
+        foreach ($production_batch_items_arr as $opk => $opv) {
+            // enter product movement as consumed for each product lot
+            // print_arr($opv);
+            save_inventory_movements($movvars, $opv);
             // $pid = $opv["product"];
         }
 
@@ -2468,7 +2516,7 @@ function module_submit_delete_form($vars)
 
         if (isset($vars["manage_order_quantity"])) {
             $data_row = module_get_data($table, $_REQ[$vars["primary_column"]]);
-            save_product_movements($vars, $data_row);
+            save_inventory_movements($vars, $data_row);
         }
 
         $query = " id = \"" . $_REQ[$vars["primary_column"]] . "\" ";
@@ -2625,6 +2673,59 @@ function get_production_products($production, $format = "")
     return $ret;
 }
 
+function get_production_raw_materials($products, $boms)
+{
+    $ret = [];
+    $map = [];
+    foreach ($products as $pk => $pv) {
+        $pid = $pv["product"];
+        $pqty = $pv["quantity"];
+        if (isset($boms["product_boms"][$pid])) {
+            $bomid = $boms["product_boms"][$pid];
+            if (isset($boms["bom_items"][$bomid])) {
+                $rm_arr = $boms["bom_items"][$bomid];
+                $map[$pid] = [];
+                $map[$pid]["product"] = $pid;
+                $map[$pid]["quantity"] = $pqty;
+                $map[$pid]["raw_materials"] = $rm_arr;
+            }
+        }
+    }
+
+    // print_arr($map);
+
+    $rm_qty = [];
+    foreach ($map as $pid => $v) {
+        if (isset($v["raw_materials"])) {
+            foreach ($v["raw_materials"] as $rmk => $rmv) {
+                $rmid = $rmv["raw_material"];
+                if (!isset($rm_qty[$rmid])) {
+                    $rm_qty[$rmid] = 0;
+                }
+                $rm_qty[$rmid] += (($rmv["quantity"] + $rmv["wastage_quantity"]) * $v["quantity"]);
+            }
+        }
+    }
+    // print_arr($rm_qty);
+
+    $prdc_rm = [];
+    $index = 0;
+    foreach ($rm_qty as $rmid => $rmq) {
+        $prdc_rm[$index]["raw_material"] = $rmid;
+        $prdc_rm[$index]["quantity"] = $rmq;
+        $index++;
+    }
+
+    return [
+        "production_raw_materials" => $prdc_rm,
+        "product_raw_materials" => $map,
+        "raw_material_qty" => $rm_qty
+    ];
+
+    // return $ret;
+}
+
+
 function get_invoice_item_details($items, $format = "")
 {
 
@@ -2733,7 +2834,7 @@ function get_products_by_ids($ids)
         $cgsts[$vv["id"]] = $vv["cgst"];
         $sgsts[$vv["id"]] = $vv["sgst"];
         $hsn_sacs[$vv["id"]] = $vv["hsn_sac"];
-               
+
         $prodgst[$vv["id"]] = [];
         $prodgst[$vv["id"]]["igst"] = $vv["igst"];
         $prodgst[$vv["id"]]["cgst"] = $vv["cgst"];
@@ -2827,8 +2928,7 @@ function get_product_lot_quantities($product_ids, $format = "")
 }
 
 
-
-function get_quantities_summary($arr)
+function get_dispatch_quantities_summary($arr)
 {
 
     // ["order_id" => $order_id, "order_products" => $order_products];
@@ -2854,7 +2954,8 @@ function get_quantities_summary($arr)
     // Get product lot quantities
     // $product_ids = array_keys($qty);    // print_arr($product_ids);
     // $product_lots = get_product_lot_quantities($product_ids, "merged_by_product");
-    // print_arrbox($product_lots, 300);
+
+    // print_arrbox($arr, 300);
 
     foreach ($arr["product_lots"]["product_quantity"] as $pid => $parr) {
         $qty[$pid]["available"] += $parr["available"];
@@ -2879,6 +2980,64 @@ function get_quantities_summary($arr)
     foreach ($qty as $pid => $v) {
         // $qty[$pid]["pending"] = $qty[$pid]["ordered"] - $qty[$pid]["consume"];
         $qty[$pid]["pending"] = $qty[$pid]["ordered"] - $qty[$pid]["reserve"] + $qty[$pid]["unreserve"];
+    }
+
+    return $qty;
+}
+
+
+
+function get_production_batch_quantities_summary($arr)
+{
+
+    // ["order_id" => $order_id, "order_products" => $order_products];
+    $qty = [];
+
+    // Ordered product quantities
+    if (isset($arr["production_raw_materials"]) && is_array($arr["production_raw_materials"]) && sizeof($arr["production_raw_materials"]) > 0) {
+        $prdc_rms = $arr["production_raw_materials"];
+        foreach ($prdc_rms as $k => $rm) {
+            $rmid = $rm["raw_material"];
+            if (!isset($qty[$rmid])) {
+                $qty[$rmid]["available"] = 0;
+                $qty[$rmid]["ordered"] = 0;
+                $qty[$rmid]["pending"] = 0;
+                $qty[$rmid]["reserve"] = 0;
+                $qty[$rmid]["unreserve"] = 0;
+                $qty[$rmid]["consume"] = 0;
+            }
+            $qty[$rmid]["ordered"] += $rm["quantity"];
+        }
+    }
+
+    // Get product lot quantities
+    // $product_ids = array_keys($qty);    // print_arr($product_ids);
+    // $product_lots = get_product_lot_quantities($product_ids, "merged_by_product");
+    // print_arrbox($product_lots, 300);
+
+    foreach ($arr["raw_material_lots"]["raw_material_quantity"] as $rmid => $rmarr) {
+        $qty[$rmid]["available"] += $rmarr["available"];
+    }
+
+    // fetch reserved and dispatched then do final calculation of pending.
+    if (isset($arr["raw_material_movements"]) && is_array($arr["raw_material_movements"])) {
+        foreach ($arr["raw_material_movements"] as $rmid => $val) {
+            if (isset($val["reserve"])) {
+                $qty[$rmid]["reserve"] += $val["reserve"];
+            }
+            if (isset($val["unreserve"])) {
+                $qty[$rmid]["unreserve"] += $val["unreserve"];
+            }
+            if (isset($val["consume"])) {
+                $qty[$rmid]["consume"] += $val["consume"];
+            }
+        }
+    }
+
+    // manage pending quantities
+    foreach ($qty as $rmid => $v) {
+        // $qty[$rmid]["pending"] = $qty[$rmid]["ordered"] - $qty[$rmid]["consume"];
+        $qty[$rmid]["pending"] = $qty[$rmid]["ordered"] - $qty[$rmid]["reserve"] + $qty[$rmid]["unreserve"];
     }
 
     return $qty;
@@ -2923,6 +3082,45 @@ function fetch_product_movements($arr, $type = "order")
     return $status;
 }
 
+
+
+function fetch_raw_material_movements($arr, $type = "production")
+{
+    // print_arr($arr); 
+    $status = [];
+
+    $condition = "";
+
+    if ($type == "production" && isset($arr["production"]) && $arr["production"] != "") {
+        $condition = " production = '" . $arr["production_batch"]["production"] . "' ";
+    } else if ($type == "production_batch" && isset($arr["production_batch"]) && is_array($arr["production_batch"]) && sizeof($arr["production_batch"]) > 0) {
+        $condition = " production_batch = '" . $arr["production_batch"]["id"] . "' AND production = '" . $arr["production_batch"]["production"] . "' ";
+    }
+
+    if ($condition != "") {
+        $raw_material_movements_arr = fetch_data([
+            "table" => "raw_material_movements",
+            "columns" => "id, raw_material, raw_material_lot, quantity, action, action_date ",
+            "condition" => $condition,
+            "order" => "",
+            "limit" => ""
+        ]);
+        // print_arr($raw_material_movements_arr);
+        if (sizeof($raw_material_movements_arr) > 0) {
+            foreach ($raw_material_movements_arr as $k => $v) {
+                $rmid = $v["raw_material"];
+                $action = $v["action"];
+                $quantity = $v["quantity"];
+                if (!isset($status[$rmid][$action])) {
+                    $status[$rmid][$action] = 0;
+                }
+                $status[$rmid][$action] += $quantity;
+            }
+        }
+    }
+    // print_arr($status);
+    return $status;
+}
 
 
 

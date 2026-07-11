@@ -63,10 +63,10 @@ include("../../common/header.php");
   ];
 
   $action_after_submit = [
-    "action" => "production_batch_done",
+    "action" => "production_batch_delivered",
     "condition" => [
       "type" => "change_to",
-      "param" => ["key" => "status", "value" => "production_batched"]
+      "param" => ["key" => "status", "value" => "delivered"]
     ]
   ];
 

@@ -54,6 +54,7 @@ include '../../common/header.php';
   ];
 
   $manage_order_quantity = [
+    "type" => "product",
     "action" => "reserve",
     "quantity_field" => "quantity"
   ];
@@ -87,7 +88,7 @@ include '../../common/header.php';
   $product_lots = get_product_lot_quantities($product_ids, "merged_by_product");
   $products_arr = get_products_by_ids($product_ids);
   $product_movements = fetch_product_movements(["order_id" => $order_id, "dispatch" => $dispatch_data]);
-  $quantities = get_quantities_summary(["order_id" => $order_id, "order_products" => $order_products, "product_lots" => $product_lots, "product_movements" => $product_movements]);
+  $quantities = get_dispatch_quantities_summary(["order_id" => $order_id, "order_products" => $order_products, "product_lots" => $product_lots, "product_movements" => $product_movements]);
 
   $vars = [];
   $vars["dispatch"] = $dispatch_data;
@@ -106,25 +107,25 @@ include '../../common/header.php';
 
     $qtymap = "";
     // $qtymap .= json_encode($vars["quantities"][$pid]);
-    if(isset($vars["quantities"][$pid])){
+    if (isset($vars["quantities"][$pid])) {
       $map = $vars["quantities"][$pid];
-      if(isset($map["ordered"])){
-        $qtymap .= "&nbsp; <span class='badge bg-accent2'>Ordered: ".$map["ordered"]."</span>";
+      if (isset($map["ordered"])) {
+        $qtymap .= "&nbsp; <span class='badge bg-accent2'>Ordered: " . $map["ordered"] . "</span>";
       }
-      if(isset($map["available"])){
-        $qtymap .= "&nbsp; <span class='badge bg-accent1'>Available: ".$map["available"]."</span>";
+      if (isset($map["available"])) {
+        $qtymap .= "&nbsp; <span class='badge bg-accent1'>Available: " . $map["available"] . "</span>";
       }
-      if(isset($map["pending"])){
-        $qtymap .= "&nbsp; <span class='badge bg-accent3'>Pending: ".$map["pending"]."</span>";
+      if (isset($map["pending"])) {
+        $qtymap .= "&nbsp; <span class='badge bg-accent3'>Pending: " . $map["pending"] . "</span>";
       }
-      if(isset($map["reserve"])){
-        $qtymap .= "&nbsp; <span class='badge bg-success'>Reserved: ".$map["reserve"]."</span>";
+      if (isset($map["reserve"])) {
+        $qtymap .= "&nbsp; <span class='badge bg-success'>Reserved: " . $map["reserve"] . "</span>";
       }
-      if(isset($map["unreserve"])){
-        $qtymap .= "&nbsp; <span class='badge bg-warning'>Unreserved: ".$map["unreserve"]."</span>";
+      if (isset($map["unreserve"])) {
+        $qtymap .= "&nbsp; <span class='badge bg-warning'>Unreserved: " . $map["unreserve"] . "</span>";
       }
-      if(isset($map["consume"])){
-        $qtymap .= "&nbsp; <span class='badge bg-info'>Dispatched: ".$map["consume"]."</span>";
+      if (isset($map["consume"])) {
+        $qtymap .= "&nbsp; <span class='badge bg-info'>Dispatched: " . $map["consume"] . "</span>";
       }
     }
 

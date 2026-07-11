@@ -28,6 +28,7 @@ include '../../common/header.php';
     }
 
     $manage_order_quantity = [
+        "type" => "product",
         "action" => "unreserve",
         "quantity_field" => "quantity"
     ];

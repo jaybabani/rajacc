@@ -51,7 +51,7 @@ include '../../common/header.php';
               [
                 "column" => "status",
                 "is" => "not_in_array",
-                "value" => ["invoice_generated", "production_batched"]
+                "value" => ["delivered"]
               ]
             ]
           ]

@@ -28,6 +28,7 @@ include '../../common/header.php';
     }
 
     $manage_order_quantity = [
+        "type" => "raw_material",
         "action" => "unreserve",
         "quantity_field" => "quantity"
     ];
@@ -46,10 +47,10 @@ include '../../common/header.php';
     $data = module_get_data($tablename, $id);
     // print_arr($data);
 
-    $products_arr = fetch_data(["table" => "products", "columns" => "id, product", "condition" => " id = '" . $data["product"] . "' ", "order" => "", "limit" => ""]);
-    // print_arr($products_arr);
-    if (isset($products_arr[0]["product"])) {
-        $data["product"] = $products_arr[0]["product"];
+    $raw_materials_arr = fetch_data(["table" => "raw_materials", "columns" => "id, raw_material", "condition" => " id = '" . $data["raw_material"] . "' ", "order" => "", "limit" => ""]);
+    // print_arr($raw_materials_arr);
+    if (isset($raw_materials_arr[0]["raw_material"])) {
+        $data["raw_material"] = $raw_materials_arr[0]["raw_material"];
     }
 
 
@@ -66,11 +67,11 @@ include '../../common/header.php';
             <div class="row">
                 <div class="col-md-9 col-sm-10 col-xs-12">
                     <div class="form-group">
-                        <label class="form-label" for="field-4">Are You sure you want to delete production_batch item?
-                            <?php echo "<br>ID: <strong>" . get_module_id_prefix("production_batch_items") . get_value($data, 'id') . "</strong>";
+                        <label class="form-label" for="field-4">Are You sure you want to delete production batch item?
+                            <?php echo "<br>Production Batch Item ID: <strong>" . get_module_id_prefix("production_batch_items") . get_value($data, 'id') . "</strong>";
                             echo "<br>From Production Batch: <strong>" . get_module_id_prefix("production_batchs") . get_value($data, 'production_batch') . "</strong>";
-                            echo "<br>From Order: <strong>" . get_module_id_prefix("orders") . get_value($data, 'production') . "</strong>";
-                            echo "<br>Product: <strong>" . get_value($data, 'product') . "</strong>";
+                            echo "<br>From Production: <strong>" . get_module_id_prefix("productions") . get_value($data, 'production') . "</strong>";
+                            echo "<br>Raw Material: <strong>" . get_value($data, 'raw_material') . "</strong>";
                             echo "<br>Quantity: <strong>" . get_value($data, 'quantity') . "</strong>"; ?>
                         </label>
                     </div>

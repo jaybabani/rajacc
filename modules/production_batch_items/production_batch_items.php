@@ -34,7 +34,7 @@ include("../../common/header.php");
     }
 
     // allow delete column
-    $allow_delete = in_array($production_batch_status, ["invoice_generated", "production_batched"]) ? false : true;
+    $allow_delete = in_array($production_batch_status, ["delivered"]) ? false : true;
 
   }
 
@@ -47,18 +47,18 @@ include("../../common/header.php");
 
   $primary_column = "id";
 
-  $products_arr = fetch_data(["table" => "products", "columns" => "id, product", "condition" => "", "order" => "product ASC", "limit" => ""]);    // print_arr($products_arr);
-  // print_arr($products_arr);
+  $raw_materials_arr = fetch_data(["table" => "raw_materials", "columns" => "id, raw_material", "condition" => "", "order" => "raw_material ASC", "limit" => ""]);    // print_arr($raw_materials_arr);
+  // print_arr($raw_materials_arr);
 
   $display_columns = [
     ["name" => "", "column" => "", "type" => "details", "sorting" => false, "search" => false, "class" => "text-center nowrap"],
     //["name" => "Select", "column" => "", "type" => "select", "sorting" => false, "search" => false, "class" => "text-center"],
     ["name" => "ID", "column" => "id", "class" => "text-center nowrap", "id_prefix" => $module_pages["id_prefix"]],
-    ["name" => "Sales Order", "column" => "production", "class" => "text-center nowrap", "id_prefix" => get_module_id_prefix("orders")],
+    ["name" => "Production", "column" => "production", "class" => "text-center nowrap", "id_prefix" => get_module_id_prefix("productions")],
     ["name" => "Production Batch", "column" => "production_batch", "class" => "text-center nowrap", "id_prefix" => get_module_id_prefix("production_batchs")],
-    ["name" => "Product", "column" => "product", "options" => $products_arr, "type" => "table_id", "option_id" => "id", "option_label" => "product", "class" => "title", "module" => "products"],
+    ["name" => "Raw Material", "column" => "raw_material", "options" => $raw_materials_arr, "type" => "table_id", "option_id" => "id", "option_label" => "raw_material", "class" => "title", "module" => "raw_materials"],
     ["name" => "Quantity", "column" => "quantity", "class" => "text-center nowrap"],
-    ["name" => "Product Lot", "column" => "raw_material_lot", "class" => "text-center nowrap", "id_prefix" => get_module_id_prefix("raw_material_lots")],
+    ["name" => "Raw Material Lot", "column" => "raw_material_lot", "class" => "text-center nowrap", "id_prefix" => get_module_id_prefix("raw_material_lots")],
     // ["name" => "Ordered quantity", "column" => "quantity", "class" => "nowrap"],
     // ["name" => "Rate per unit", "column" => "rate", "class" => "nowrap"],
     $allow_delete ? ["name" => "Actions", "column" => "", "type" => "delete", "sorting" => false, "search" => false, "class" => "nowrap", "acl" => ["delete" => "production_batch_items-delete"]] : [],
@@ -73,7 +73,7 @@ include("../../common/header.php");
       "type" => "history",
       "history_columns" => [
         ["name" => "Quantity", "column" => "quantity"],
-        ["name" => "Rate", "column" => "rate"]
+        // ["name" => "Rate", "column" => "rate"]
       ],
     ]
   ];
@@ -89,7 +89,7 @@ include("../../common/header.php");
     "pagination" => true,
     "pagelimit" => 100,
     "query" => $query,
-    "orderby" => "product ASC"
+    "orderby" => "raw_material ASC"
   ]);
 
   $load_datatable = true;
