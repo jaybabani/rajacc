@@ -19,4 +19,12 @@ function acl_check($pageid)
 	}
 }
 
+function acl_right($acl)
+{
+	if (isset($_SESSION['acl']) && $acl != "" && in_array($acl, $_SESSION["acl"])) {
+		return true;
+	}
+	return false;
+}
+
 include_once("variables.php");

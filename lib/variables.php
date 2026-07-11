@@ -46,6 +46,7 @@ function acl_roles($format = "")
 		["products-create", "Add new products"],
 		["products-delete", "Delete products"],
 		["products-costing", "View all product costs"],
+		["products-costing-details", "View all product cost (with detail calculations)"],
 		["product_lots-read", "View all product lots"],
 		["product_lots-update", "Update product lots"],
 		["product_lots-create", "Add new product lots"],

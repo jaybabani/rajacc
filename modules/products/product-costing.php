@@ -28,7 +28,11 @@ include '../../common/header.php';
   }
 
   $tableid = 'product_costing_table';
-  $column_titles = ['Product', 'Total Cost per unit', 'Detail Cost per unit']; //'Rate / unit', 
+  $column_titles = ['Product', 'Total Cost per unit'];
+  if (acl_right("products-costing-details")) {
+    $column_titles[] = 'Detail Cost per unit';
+  }
+
   $products_arr = fetch_data(["table" => "products", "columns" => "id, product", "condition" => $condition, "order" => "product ASC", "limit" => ""]);    // print_arr($products_arr);
   // print_arr($products_arr);
 
@@ -53,7 +57,10 @@ include '../../common/header.php';
     $s .= '<td class="title">' . $prod["product"];
     $s .= '</td>';
     $s .=  '<td class="title">' . $det["total"] .  '</td>';
-    $s .=  '<td>' . $det["detail"] .  '</td>';
+
+    if (acl_right("products-costing-details")) {
+      $s .=  '<td>' . $det["detail"] .  '</td>';
+    }
     $s .= '</tr>';
 
     return $s;
